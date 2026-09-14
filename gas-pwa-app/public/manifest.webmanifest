@@ -1,0 +1,24 @@
+{
+  "name": "가스기능사 용기색상 암기게임",
+  "short_name": "가스 암기",
+  "description": "가스기능사 필기시험 필수 암기 - 가스 이름, 원소기호, 용기 색상 매칭 게임",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D1117",
+  "theme_color": "#0D1117",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

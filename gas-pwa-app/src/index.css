@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@600;800;900&display=swap');
+
+:root {
+  --bg-color: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --border-color: #E2E8F0;
+  --accent-cyan: #0284C7;
+  --accent-green: #059669;
+  --accent-gold: #D97706;
+  --accent-orange: #EA580C;
+  --accent-red: #E11D48;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --font-family: 'Pretendard', 'Noto Sans KR', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-family);
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Glass & Clean Panel - 치매 예방 센터 스타일 */
+.glass-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+}
+
+/* Vibrations & Animations */
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-12px, 0); }
+  40% { transform: translate(12px, 0); }
+  60% { transform: translate(-8px, 0); }
+  80% { transform: translate(8px, 0); }
+}
+
+.shake-anim {
+  animation: shake 0.45s ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(2, 132, 199, 0.4), 0 0 30px rgba(2, 132, 199, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(2, 132, 199, 0.7), 0 0 40px rgba(2, 132, 199, 0.4); }
+}
+
+.selected-glow {
+  animation: pulseGlow 1.2s infinite ease-in-out;
+  border-color: #0284C7 !important;
+  background-color: #F0F9FF !important;
+}
+
+@keyframes floatScore {
+  0% { transform: translateY(0) scale(0.8); opacity: 1; }
+  50% { transform: translateY(-30px) scale(1.3); opacity: 1; }
+  100% { transform: translateY(-60px) scale(1); opacity: 0; }
+}
+
+.floating-score {
+  position: absolute;
+  pointer-events: none;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 2rem;
+  color: #059669;
+  text-shadow: 0 0 10px rgba(5, 150, 105, 0.4);
+  animation: floatScore 1s forwards ease-out;
+  z-index: 999;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
