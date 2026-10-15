@@ -473,27 +473,31 @@ if main_tab.startswith("🎯 실전 4지선다"):
             st.info(f"**{cur_q['question']}**")
 
             saved_ans = st.session_state.prog["mcq_answers"].get(str(q_id))
-            
-            cols = st.columns(2)
-            for i, opt in enumerate(cur_q["options"]):
-                btn_label = f"**{i+1}.** {opt}"
-                col_target = cols[i % 2]
-                with col_target:
-                    if st.button(btn_label, key=f"mcq_{q_id}_{i}", use_container_width=True):
-                        chosen = i + 1
-                        correct = cur_q["answer"]
-                        st.session_state.prog["mcq_answers"][str(q_id)] = chosen
-                        st.session_state.mcq_feedback_id = q_id
-                        
-                        if chosen == correct:
-                            if q_id in st.session_state.prog["wrong_mcqs"]:
-                                st.session_state.prog["wrong_mcqs"].remove(q_id)
-                        else:
-                            if q_id not in st.session_state.prog["wrong_mcqs"]:
-                                st.session_state.prog["wrong_mcqs"].append(q_id)
+
+            # 보기 선택지 버튼 (2개씩 행 단위 배치하여 모바일에서도 1->2->3->4 순서 완벽 유지)
+            opts = cur_q["options"]
+            for r in range(0, len(opts), 2):
+                row_cols = st.columns(2)
+                for c in range(2):
+                    idx = r + c
+                    if idx < len(opts):
+                        btn_label = f"**{idx+1}.** {opts[idx]}"
+                        with row_cols[c]:
+                            if st.button(btn_label, key=f"mcq_{q_id}_{idx}", use_container_width=True):
+                                chosen = idx + 1
+                                correct = cur_q["answer"]
+                                st.session_state.prog["mcq_answers"][str(q_id)] = chosen
+                                st.session_state.mcq_feedback_id = q_id
                                 
-                        save_progress(st.session_state.prog)
-                        st.rerun()
+                                if chosen == correct:
+                                    if q_id in st.session_state.prog["wrong_mcqs"]:
+                                        st.session_state.prog["wrong_mcqs"].remove(q_id)
+                                else:
+                                    if q_id not in st.session_state.prog["wrong_mcqs"]:
+                                        st.session_state.prog["wrong_mcqs"].append(q_id)
+                                        
+                                save_progress(st.session_state.prog)
+                                st.rerun()
 
             # 4지 선다 아래: 모르는 문제일 때 정답 및 해설을 먼저 확인할 수 있는 접이식 버튼 (기본 닫힘 & 고유 key)
             if saved_ans is None:
