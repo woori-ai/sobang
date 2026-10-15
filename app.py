@@ -19,6 +19,29 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# 모바일/PC 버튼 텍스트 자동 줄바꿈(잘림 방지) 커스텀 CSS
+st.markdown("""
+<style>
+div[data-testid="stButton"] button {
+    white-space: normal !important;
+    word-break: break-word !important;
+    height: auto !important;
+    min-height: 48px !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    padding: 12px 14px !important;
+    line-height: 1.5 !important;
+}
+div[data-testid="stButton"] button p {
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-align: left !important;
+    margin: 0 !important;
+    font-size: 15px !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 PROGRESS_FILE = "user_progress.json"
 GAME_FILE = "game_data.json"
 
