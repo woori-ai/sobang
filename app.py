@@ -59,8 +59,15 @@ def load_game_data():
             return json.load(f)
     return {}
 
+def load_75_cards():
+    if os.path.exists("cards_75.json"):
+        with open("cards_75.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
 mcq_data, ox_data = load_questions()
 game_data = load_game_data()
+cards_75_data = load_75_cards()
 
 # 진행상황 로컬 저장/로드
 def load_progress():
@@ -157,8 +164,9 @@ main_tab = st.sidebar.radio(
     "학습 모드 선택",
     [
         f"🎯 실전 4지선다 퀴즈 ({len(mcq_data)}제)",
+        "📖 주제별 핵심 75제 (답 가리기)",
         f"⚡ 지엽적 방어선 OX ({len(ox_data)}제)",
-        "📖 핵심 연상 암기장 (10대 암기법 & 필수 족보)",
+        "📑 핵심 연상 암기장 (10대 암기법 & 필수 족보)",
         "🎮 핵심 수치 짝맞추기 게임 (10대 테마)",
         "📊 내 학습 현황 & 오답노트"
     ],
@@ -904,6 +912,125 @@ if main_tab.startswith("🎯 실전 4지선다"):
             st.markdown("### 🎮 우측 수치 암기 놀이터")
             st.caption("문제를 풀며 옆에서 즉시 짝맞추기 암기!")
             render_matching_game(is_compact=True)
+
+
+# ==========================================================
+# 탭 1.5: 📖 주제별 핵심 75제 (답 가리기 회독노트)
+# ==========================================================
+elif main_tab.startswith("📖 주제별 핵심 75제"):
+    st.title("📖 소방안전관리자 1급 주제별 통합 75제")
+    st.caption("영상 2편 + 실전 문제집 통합 & 오류 정정본 | 문제·보기는 보이고, [💡 정답 및 상세 해설 보기]를 눌러 답을 확인하세요.")
+
+    tab_q75, tab_cov75, tab_corr75 = st.tabs([
+        "📑 75제 단권화 회독 (답 가리기)",
+        "📊 커버리지 & 출제 빈도 분석",
+        "⚠️ 오류 정정표 & 보강 요약"
+    ])
+
+    with tab_q75:
+        # 단원 필터
+        ch_list = ["전체 단원 보기"] + sorted(list(set(c["chapter_name"] for c in cards_75_data)))
+        f_col1, f_col2, f_col3 = st.columns([2, 1, 1])
+        with f_col1:
+            sel_ch = st.selectbox("📚 대단원 선택", ch_list, key="c75_ch")
+        with f_col2:
+            f_dup = st.checkbox("🔥 최우선 암기 (중복 출제만)", value=False, key="c75_dup")
+        with f_col3:
+            f_corr = st.checkbox("⚠️ 오류 정정 문항만", value=False, key="c75_corr")
+        
+        search_q = st.text_input("🔎 키워드 검색 (문제·해설·암기법)", "", key="c75_search")
+
+        f_cards = cards_75_data
+        if sel_ch != "전체 단원 보기":
+            f_cards = [c for c in f_cards if c["chapter_name"] == sel_ch]
+        if f_dup:
+            f_cards = [c for c in f_cards if c.get("is_duplicate")]
+        if f_corr:
+            f_cards = [c for c in f_cards if c.get("correction")]
+        if search_q.strip():
+            sq = search_q.strip().lower()
+            f_cards = [
+                c for c in f_cards
+                if sq in c["title"].lower()
+                or sq in c["question"].lower()
+                or sq in c["explanation"].lower()
+                or sq in c.get("memo", "").lower()
+                or any(sq in opt.lower() for opt in c["options"])
+            ]
+
+        ctrl_c1, ctrl_c2 = st.columns([3, 1])
+        with ctrl_c1:
+            st.markdown(f"**현재 표시된 문항**: 총 **{len(f_cards)}문항** / 전체 75문항")
+        with ctrl_c2:
+            exp_all = st.toggle("📂 전체 정답 일괄 열기", value=False, key="c75_toggle_all")
+
+        st.markdown("---")
+
+        if not f_cards:
+            st.info("조건에 맞는 문항이 없습니다. 필터를 변경해 보세요.")
+        else:
+            for c_idx, item in enumerate(f_cards):
+                b_source = f"`출처: {item['source']}`"
+                b_dup = " &nbsp;`🔥 최우선 암기(중복 출제)`" if item.get("is_duplicate") else ""
+                
+                st.markdown(f"#### [{item['id']}] {item['title']} &nbsp; {b_source}{b_dup}")
+                st.markdown(f"**{item['question']}**")
+                
+                if item["options"]:
+                    for opt in item["options"]:
+                        st.markdown(f"- {opt}")
+                
+                with st.expander("💡 [정답 및 상세 해설 보기]", expanded=exp_all):
+                    st.success(f"📌 **정답: {item['answer']}**")
+                    st.info(f"💡 **상세 해설**: {item['explanation']}")
+                    if item.get("memo"):
+                        st.warning(f"**💡 암기 공식 / 두문자 꿀팁**:\n\n{item['memo']}")
+                    if item.get("correction"):
+                        st.error(f"**⚠️ [원자료 오류 정정]**:\n\n{item['correction']}")
+
+                st.markdown("---")
+
+    with tab_cov75:
+        st.subheader("📊 3대 원자료 커버리지 & 문항 분포")
+        st.markdown("""
+        - **통합 원자료**: 영상 강의 2편(A, B) + 실전 문제집(P)
+        - **원자료 총 문항**: 91문항 ➡️ 중복 통합 후 **75개 핵심 카드**
+        - **출처 표기 안내**:
+          - `A`: 잔머리머리 영상(xlMj9jz9gFQ)
+          - `B`: 잔머리머리 영상 1/2(Ij__JNUyOG8)
+          - `P`: 실전 문제집 (T=테마, S=특강, R=복원)
+        """)
+        st.markdown("### 🏆 여러 자료에 겹쳐 나온 주제 (최우선 암기 14개)")
+        dup_table = [
+            {"주제": "실무교육 이수 기한", "출처": "B-4 · P-07", "번호": "2-6"},
+            {"주제": "작동·종합점검 시기", "출처": "B-5 · P-10", "번호": "3-1"},
+            {"주제": "방화구획 기준 및 개수 산정", "출처": "B-8 · P-20", "번호": "5-1"},
+            {"주제": "건폐율·용적률", "출처": "P-17 · P-49", "번호": "5-3"},
+            {"주제": "종합방재실 위치", "출처": "P-25 · P-T09", "번호": "5-7"},
+            {"주제": "가연물의 구비조건", "출처": "B-11 · P-21", "번호": "6-1"},
+            {"주제": "연소범위(폭발한계)", "출처": "B-12 · P-T10 · P-24", "번호": "6-2"},
+            {"주제": "제4류 위험물 지정수량", "출처": "A-2 · P-14 · P-T05", "번호": "7-1"},
+            {"주제": "LPG·LNG 특성과 누설경보기", "출처": "A-3 · P-24", "번호": "7-4"},
+            {"주제": "소화기 능력단위·개수 산정", "출처": "P-27 · P-T14", "번호": "8-1"},
+            {"주제": "옥내소화전 방수압력", "출처": "A-4 · P-30", "번호": "8-4"},
+            {"주제": "스프링클러 방수 기준·기준개수", "출처": "A-5 · P-34 · P-35", "번호": "8-8"},
+            {"주제": "습식 스프링클러 작동 순서", "출처": "P-32 · P-33", "번호": "8-10"},
+            {"주제": "소방계획 수립 절차", "출처": "A-9 · P-42", "번호": "10-2"},
+        ]
+        st.table(dup_table)
+
+    with tab_corr75:
+        st.subheader("⚠️ 원자료 오류 정정표")
+        corrections_list = [
+            {"출처": "A-2 (7-1)", "원자료 내용": "유황 200kg, 휘발유 1,000L", "바른 내용": "황 100kg, 휘발유 200L"},
+            {"출처": "B-3 (2-1)", "원자료 내용": "지하층 포함 30층 아파트 = 특급", "바른 내용": "아파트 층수는 지하층 제외. 특급 아파트는 50층 이상"},
+            {"출처": "B-12 (6-2)", "원자료 내용": "등유는 가솔린보다 연소범위가 '높다'", "바른 내용": "등유 0.7~5% (가솔린 1.4~7.6%보다 낮고 좁음)"},
+            {"출처": "A-1 (6-3)", "원자료 내용": "3~5m/s = 농연일 때", "바른 내용": "3~5m/s = 계단실 내 수직 이동"},
+            {"출처": "A-5 (8-8)", "원자료 내용": "8m 이상 판매시설 20개", "바른 내용": "판매시설은 30개"},
+            {"출처": "P-11 (4-4)", "원자료 내용": "보기 ③ 선임신고 태만 = 100만원 벌금", "바른 내용": "선임신고 미이행은 200만원 과태료 (보기 구성 오류)"},
+            {"출처": "P-36 (9-1)", "원자료 내용": "해설 내 조건 혼선", "바른 내용": "부착높이 4~8m, 기준면적 45㎡ → 7개로 정리"}
+        ]
+        st.table(corrections_list)
 
 
 # ==========================================================
