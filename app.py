@@ -189,7 +189,7 @@ status_filter = st.sidebar.radio(
     "어떤 문제를 볼까요?",
     [
         "🆕 1. 안 푼 문제만 보기 (기본값)",
-        "❌ 2. 내가 틀린 문제만 보기 (오답 복습)",
+        "❌ 2. 틀렸거나 모른 문제 보기 (오답·취약점 복습)",
         "⭐ 3. 헷갈림(별표) 문제만 보기",
         "📖 4. 전체 문제 보기 (풀었던 문제 포함)"
     ],
@@ -281,7 +281,7 @@ def apply_filter(items, is_mcq=True):
     
     if "1. 안 푼 문제만 보기" in status_filter:
         filtered = [x for x in filtered if (str(x["id"]) not in solved_map) or (x["id"] == feedback_id)]
-    elif "2. 내가 틀린 문제만 보기" in status_filter:
+    elif "2. 틀렸거나 모른 문제" in status_filter or "2. 내가 틀린 문제" in status_filter:
         filtered = [x for x in filtered if x["id"] in wrong_keys]
     elif "3. 헷갈림(별표)" in status_filter:
         filtered = [x for x in filtered if x["id"] in starred_keys]
@@ -818,14 +818,16 @@ if main_tab.startswith("🎯 실전 4지선다"):
                                 save_progress(st.session_state.prog)
                                 st.rerun()
 
-            # 4지 선다 아래: 모르는 문제일 때 정답 및 해설을 먼저 확인할 수 있는 접이식 버튼 (기본 닫힘 & 고유 key)
+            # 4지 선다 아래: '잘 모르겠어요' 버튼 (오답 및 취약점 바구니에 자동 저장)
             if saved_ans is None:
-                with st.expander("💡 잘 모르겠다면? [정답 및 상세 해설 먼저 보기]", expanded=False, key=f"pre_expander_mcq_{q_id}"):
-                    c_ans = cur_q["answer"]
-                    c_opt = cur_q["options"][c_ans - 1]
-                    st.markdown(f"### 📌 정답: **{c_ans}번. {c_opt}**")
-                    st.markdown(f"**💡 상세 해설**: {cur_q['explanation']}")
-                    st.warning(f"**⚠️ 시험장 함정 팁**: {cur_q['trap_tip']}")
+                st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
+                if st.button("❓ 잘 모르겠어요 (정답 확인 & 취약점 복습 등록)", key=f"unknown_mcq_{q_id}", use_container_width=True):
+                    st.session_state.prog["mcq_answers"][str(q_id)] = 0  # 0: 모름 표시
+                    st.session_state.mcq_feedback_id = q_id
+                    if q_id not in st.session_state.prog["wrong_mcqs"]:
+                        st.session_state.prog["wrong_mcqs"].append(q_id)
+                    save_progress(st.session_state.prog)
+                    st.rerun()
 
             # ★ 풀이 후 정답 및 상세 해설 카드 표시 ★
             if saved_ans is not None:
@@ -836,7 +838,10 @@ if main_tab.startswith("🎯 실전 4지선다"):
                 # 방금 문제를 푼 직후(feedback_id == q_id)에는 해설 카드가 활짝 열리고, 다음 문제로 넘어가면 자동으로 닫히게 처리
                 is_fresh_feedback = (st.session_state.mcq_feedback_id == q_id)
                 
-                if saved_ans == correct_ans:
+                if saved_ans == 0:
+                    st.warning(f"### ❓ '모름'으로 체크되었습니다! (실제 정답: {correct_ans}번. {correct_text})")
+                    st.info("📌 찍어서 맞추는 실수를 방지하고 다음에 다시 확실히 풀 수 있도록 **[오답·취약점 복습 바구니]**에 저장되었습니다. 아래 핵심 원리를 암기하세요!")
+                elif saved_ans == correct_ans:
                     st.success(f"### ⭕ 정답입니다! (선택: {saved_ans}번)")
                 else:
                     st.error(f"### ❌ 오답입니다! (내가 찍은 답: {saved_ans}번 / 실제 정답: {correct_ans}번)")
@@ -1110,14 +1115,17 @@ elif main_tab.startswith("⚡ 지엽적 방어선 OX"):
                     save_progress(st.session_state.prog)
                     st.rerun()
 
-            # 모르는 OX일 때 정답 및 해설을 먼저 확인할 수 있는 접이식 버튼 (기본 닫힘 & 고유 key)
+            # OX 아래: '잘 모르겠어요' 버튼 (오답 및 취약점 바구니에 자동 저장)
             if saved_ox_ans is None:
-                with st.expander("💡 잘 모르겠다면? [정답 및 해설 먼저 보기]", expanded=False, key=f"pre_expander_ox_{ox_id}"):
-                    o_ans = "⭕ 그렇다 (O)" if cur_ox["answer"] else "❌ 아니다 (X)"
-                    st.markdown(f"### 📌 정답: **{o_ans}**")
-                    st.markdown(f"**💡 핵심 팩트 해설**: {cur_ox['explanation']}")
-                    st.warning(f"**⚠️ 시험장 함정 팁**: {cur_ox['trap_tip']}")
-                    
+                st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
+                if st.button("❓ 잘 모르겠어요 (정답 확인 & 취약점 복습 등록)", key=f"unknown_ox_{ox_id}", use_container_width=True):
+                    st.session_state.prog["ox_answers"][str(ox_id)] = "unknown"
+                    st.session_state.ox_feedback_id = ox_id
+                    if ox_id not in st.session_state.prog["wrong_oxs"]:
+                        st.session_state.prog["wrong_oxs"].append(ox_id)
+                    save_progress(st.session_state.prog)
+                    st.rerun()
+
             if saved_ox_ans is not None:
                 st.markdown("---")
                 correct_ox = cur_ox["answer"]
@@ -1126,7 +1134,10 @@ elif main_tab.startswith("⚡ 지엽적 방어선 OX"):
                 
                 is_fresh_ox_feedback = (st.session_state.ox_feedback_id == ox_id)
                 
-                if user_is_correct:
+                if saved_ox_ans == "unknown":
+                    st.warning(f"### ❓ '모름'으로 체크되었습니다! (실제 정답: {ans_str})")
+                    st.info("📌 찍어서 맞추는 실수를 방지하고 다음에 다시 확실히 풀 수 있도록 **[오답·취약점 복습 바구니]**에 저장되었습니다. 아래 핵심 팩트를 암기하세요!")
+                elif user_is_correct:
                     st.success("### 🎉 정답입니다!")
                 else:
                     st.error("### ⚠️ 오답입니다! 출제자의 함정을 조심하세요.")
@@ -1240,33 +1251,40 @@ elif main_tab == "📊 내 학습 현황 & 오답노트":
     ox_correct = ox_solved - ox_wrong
     ox_acc = (ox_correct / ox_solved * 100) if ox_solved > 0 else 0.0
 
+    mcq_unknown = sum(1 for v in st.session_state.prog["mcq_answers"].values() if v == 0)
+    ox_unknown = sum(1 for v in st.session_state.prog["ox_answers"].values() if v == "unknown")
+
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("4지선다 진척도", f"{mcq_solved} / {mcq_total}문항", f"{mcq_solved/mcq_total*100:.1f}%")
-    m2.metric("4지선다 정답률", f"{mcq_acc:.1f}%", f"{mcq_correct}정답 / {mcq_wrong}오답")
+    m2.metric("4지선다 정답률", f"{mcq_acc:.1f}%", f"{mcq_correct}정답 / 취약 {mcq_wrong} (모름 {mcq_unknown})")
     m3.metric("OX 족보 진척도", f"{ox_solved} / {ox_total}문항", f"{ox_solved/ox_total*100:.1f}%")
-    m4.metric("OX 족보 정답률", f"{ox_acc:.1f}%", f"{ox_correct}정답 / {ox_wrong}오답")
+    m4.metric("OX 족보 정답률", f"{ox_acc:.1f}%", f"{ox_correct}정답 / 취약 {ox_wrong} (모름 {ox_unknown})")
 
     st.markdown("---")
-    st.subheader("🚨 집중 공략: 내 오답 바구니 리스트")
-    st.caption("오답을 완벽히 복습하여 정답으로 바꾸면 이 리스트에서 자동으로 지워집니다.")
+    st.subheader("🚨 집중 공략: 내 오답 및 취약점(모름) 바구니 리스트")
+    st.caption("틀렸거나 모른 문제를 완벽히 복습하여 정답으로 맞추면 이 리스트에서 자동으로 지워집니다.")
 
     if mcq_wrong == 0 and ox_wrong == 0:
-        st.success("🎉 현재 오답 바구니가 비어 있습니다! 완벽합니다.")
+        st.success("🎉 현재 오답·취약점 바구니가 비어 있습니다! 완벽합니다.")
     else:
         if mcq_wrong > 0:
-            st.markdown(f"#### 🔴 4지선다 오답 ({mcq_wrong}개)")
+            st.markdown(f"#### 🔴 4지선다 취약 문제 ({mcq_wrong}개, 모름 {mcq_unknown}개)")
             for q in mcq_data:
                 if q["id"] in st.session_state.prog["wrong_mcqs"]:
-                    st.error(f"**[ID:{q['id']}] [{q['chapter']}]** {q['question']}")
+                    is_unk = (st.session_state.prog["mcq_answers"].get(str(q["id"])) == 0)
+                    tag = "❓ [모름]" if is_unk else "❌ [오답]"
+                    st.error(f"**{tag} [ID:{q['id']}] [{q['chapter']}]** {q['question']}")
                     st.write(f"- 정답: **{q['answer']}번** ({q['options'][q['answer']-1]})")
                     st.write(f"- 💡 {q['explanation']}")
                     st.markdown("---")
 
         if ox_wrong > 0:
-            st.markdown(f"#### 🔴 OX 족보 오답 ({ox_wrong}개)")
+            st.markdown(f"#### 🔴 OX 족보 취약 문제 ({ox_wrong}개, 모름 {ox_unknown}개)")
             for ox in ox_data:
                 if ox["id"] in st.session_state.prog["wrong_oxs"]:
+                    is_unk_ox = (st.session_state.prog["ox_answers"].get(str(ox["id"])) == "unknown")
+                    tag_ox = "❓ [모름]" if is_unk_ox else "❌ [오답]"
                     ans_char = "O" if ox["answer"] else "X"
-                    st.error(f"**[ID:{ox['id']}] [{ox['chapter']}]** {ox['statement']}")
+                    st.error(f"**{tag_ox} [ID:{ox['id']}] [{ox['chapter']}]** {ox['statement']}")
                     st.write(f"- 정답: **{ans_char}** | 💡 {ox['explanation']}")
                     st.markdown("---")
