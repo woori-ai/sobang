@@ -943,8 +943,8 @@ elif main_tab.startswith("📖 주제별 핵심 75제"):
     st.caption("영상 2편 + 실전 문제집 통합 & 75문항 완전 4지선다 객관식화 완료! 실전 퀴즈 풀이와 회독 노트를 모두 지원합니다.")
 
     tab_quiz75, tab_notes75, tab_cov75, tab_corr75 = st.tabs([
-        "🎯 75제 실전 4지선다 퀴즈",
-        "📑 75제 단권화 회독 (답 가리기)",
+        "🎯 75제 1문제씩 실전 퀴즈 (카드 뷰)",
+        "📑 75제 전체 리스트 회독 (즉석 정오답 채점)",
         "📊 커버리지 & 출제 빈도 분석",
         "⚠️ 오류 정정표 & 보강 요약"
     ])
@@ -1253,20 +1253,69 @@ elif main_tab.startswith("📖 주제별 핵심 75제"):
             st.info("조건에 맞는 문항이 없습니다. 필터를 변경해 보세요.")
         else:
             for c_idx, item in enumerate(f_cards):
+                q_id = item['id']
                 b_source = f"`출처: {item['source']}`"
                 b_dup = " &nbsp;`🔥 최우선 암기(중복 출제)`" if item.get("is_duplicate") else ""
+                saved_ans = st.session_state.prog.get("c75_answers", {}).get(str(q_id))
+                correct_ans = item['answer']
+                correct_text = item['options'][correct_ans - 1] if 1 <= correct_ans <= len(item['options']) else ""
 
-                st.markdown(f"#### [{item['id']}] {item['title']} &nbsp; {b_source}{b_dup}")
-                st.markdown(f"**{item['question']}**")
+                st.markdown(f"#### [{q_id}] {item['title']} &nbsp; {b_source}{b_dup}")
+                st.info(f"**{item['question']}**")
 
-                if item["options"]:
-                    for opt_i, opt in enumerate(item["options"]):
-                        st.markdown(f"- **{opt_i+1}.** {opt}")
+                # 보기 선택지 버튼 (2열 배치)
+                opts = item.get("options", [])
+                if opts:
+                    row_c1, row_c2 = st.columns(2)
+                    for opt_i, opt in enumerate(opts):
+                        target_col = row_c1 if opt_i % 2 == 0 else row_c2
+                        with target_col:
+                            if saved_ans is not None:
+                                if opt_i + 1 == correct_ans:
+                                    st.success(f"**{opt_i+1}.** {opt} &nbsp; **(⭕ 정답)**")
+                                elif saved_ans == opt_i + 1:
+                                    st.error(f"**{opt_i+1}.** {opt} &nbsp; **(❌ 내가 고른 오답)**")
+                                else:
+                                    st.markdown(f"- **{opt_i+1}.** {opt}")
+                            else:
+                                if st.button(f"**{opt_i+1}.** {opt}", key=f"c75_note_opt_{q_id}_{opt_i}", use_container_width=True):
+                                    if "c75_answers" not in st.session_state.prog:
+                                        st.session_state.prog["c75_answers"] = {}
+                                    if "wrong_c75s" not in st.session_state.prog:
+                                        st.session_state.prog["wrong_c75s"] = []
 
-                with st.expander("💡 [정답 및 상세 해설 보기]", expanded=exp_all):
-                    ans_num = item['answer']
-                    ans_text = item['options'][ans_num - 1] if 1 <= ans_num <= len(item['options']) else ""
-                    st.success(f"📌 **정답: {ans_num}번. {ans_text}**")
+                                    chosen = opt_i + 1
+                                    st.session_state.prog["c75_answers"][str(q_id)] = chosen
+                                    if chosen == correct_ans:
+                                        if q_id in st.session_state.prog["wrong_c75s"]:
+                                            st.session_state.prog["wrong_c75s"].remove(q_id)
+                                    else:
+                                        if q_id not in st.session_state.prog["wrong_c75s"]:
+                                            st.session_state.prog["wrong_c75s"].append(q_id)
+
+                                    save_progress(st.session_state.prog)
+                                    st.rerun()
+
+                # 문제 풀이 후 즉시 채점 결과 피드백 배너 노출
+                if saved_ans is not None:
+                    if saved_ans == correct_ans:
+                        st.success(f"### ⭕ 정답입니다! (선택: {saved_ans}번. {correct_text})")
+                    elif saved_ans == 0:
+                        st.warning(f"### ❓ '모름' 체크됨 (실제 정답: {correct_ans}번. {correct_text})")
+                    else:
+                        st.error(f"### ❌ 오답입니다! (내가 찍은 답: {saved_ans}번 / 실제 정답: {correct_ans}번. {correct_text})")
+
+                    # 다시 풀기 버튼
+                    if st.button("🔄 이 문제 다시 풀기", key=f"retry_c75_note_{q_id}"):
+                        if str(q_id) in st.session_state.prog.get("c75_answers", {}):
+                            del st.session_state.prog["c75_answers"][str(q_id)]
+                        save_progress(st.session_state.prog)
+                        st.rerun()
+
+                # 정답 및 상세 해설 (문제를 풀었거나, 일괄 열기 토글 시 자동으로 열림)
+                is_auto_expand = exp_all or (saved_ans is not None)
+                with st.expander("💡 [정답 및 상세 해설 보기]", expanded=is_auto_expand):
+                    st.success(f"📌 **정답: {correct_ans}번. {correct_text}**")
                     st.info(f"💡 **상세 해설**: {item['explanation']}")
                     if item.get("memo"):
                         st.warning(f"**💡 암기 공식 / 두문자 꿀팁**:\n\n{item['memo']}")
