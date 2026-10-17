@@ -74,10 +74,13 @@ def load_progress():
     default_prog = {
         "mcq_answers": {},
         "ox_answers": {},
+        "c75_answers": {},
         "wrong_mcqs": [],
         "wrong_oxs": [],
+        "wrong_c75s": [],
         "starred_mcqs": [],
-        "starred_oxs": []
+        "starred_oxs": [],
+        "starred_c75s": []
     }
     if os.path.exists(PROGRESS_FILE):
         try:
@@ -104,12 +107,18 @@ if "card_idx" not in st.session_state:
 if "ox_idx" not in st.session_state:
     st.session_state.ox_idx = 0
 
+if "c75_card_idx" not in st.session_state:
+    st.session_state.c75_card_idx = 0
+
 # 피드백 노출 상태 유지용 세션 키
 if "mcq_feedback_id" not in st.session_state:
     st.session_state.mcq_feedback_id = None
 
 if "ox_feedback_id" not in st.session_state:
     st.session_state.ox_feedback_id = None
+
+if "c75_feedback_id" not in st.session_state:
+    st.session_state.c75_feedback_id = None
 
 # 우측 암기 게임 패널 상태
 if "show_right_game_panel" not in st.session_state:
@@ -164,7 +173,7 @@ main_tab = st.sidebar.radio(
     "학습 모드 선택",
     [
         f"🎯 실전 4지선다 퀴즈 ({len(mcq_data)}제)",
-        "📖 주제별 핵심 75제 (답 가리기)",
+        f"📖 주제별 핵심 75제 ({len(cards_75_data)}제 4지선다·회독)",
         f"⚡ 지엽적 방어선 OX ({len(ox_data)}제)",
         "📑 핵심 연상 암기장 (10대 암기법 & 필수 족보)",
         "🎮 핵심 수치 짝맞추기 게임 (10대 테마)",
@@ -229,8 +238,10 @@ with col_rst1:
     if st.button("❌ 오답만 초기화", use_container_width=True):
         st.session_state.prog["wrong_mcqs"] = []
         st.session_state.prog["wrong_oxs"] = []
+        st.session_state.prog["wrong_c75s"] = []
         st.session_state.mcq_feedback_id = None
         st.session_state.ox_feedback_id = None
+        st.session_state.c75_feedback_id = None
         save_progress(st.session_state.prog)
         st.sidebar.success("오답 목록이 비워졌습니다.")
         st.rerun()
@@ -239,16 +250,21 @@ with col_rst2:
         st.session_state.prog = {
             "mcq_answers": {},
             "ox_answers": {},
+            "c75_answers": {},
             "wrong_mcqs": [],
             "wrong_oxs": [],
+            "wrong_c75s": [],
             "starred_mcqs": [],
-            "starred_oxs": []
+            "starred_oxs": [],
+            "starred_c75s": []
         }
         st.session_state.mcq_feedback_id = None
         st.session_state.ox_feedback_id = None
+        st.session_state.c75_feedback_id = None
         save_progress(st.session_state.prog)
         st.session_state.card_idx = 0
         st.session_state.ox_idx = 0
+        st.session_state.c75_card_idx = 0
         st.sidebar.success("모든 기록이 초기화되었습니다.")
         st.rerun()
 
@@ -923,37 +939,299 @@ if main_tab.startswith("🎯 실전 4지선다"):
 # 탭 1.5: 📖 주제별 핵심 75제 (답 가리기 회독노트)
 # ==========================================================
 elif main_tab.startswith("📖 주제별 핵심 75제"):
-    st.title("📖 소방안전관리자 1급 주제별 통합 75제")
-    st.caption("영상 2편 + 실전 문제집 통합 & 오류 정정본 | 문제·보기는 보이고, [💡 정답 및 상세 해설 보기]를 눌러 답을 확인하세요.")
+    st.title("📖 소방안전관리자 1급 주제별 핵심 75제 (실전 4지선다)")
+    st.caption("영상 2편 + 실전 문제집 통합 & 75문항 완전 4지선다 객관식화 완료! 실전 퀴즈 풀이와 회독 노트를 모두 지원합니다.")
 
-    tab_q75, tab_cov75, tab_corr75 = st.tabs([
+    tab_quiz75, tab_notes75, tab_cov75, tab_corr75 = st.tabs([
+        "🎯 75제 실전 4지선다 퀴즈",
         "📑 75제 단권화 회독 (답 가리기)",
         "📊 커버리지 & 출제 빈도 분석",
         "⚠️ 오류 정정표 & 보강 요약"
     ])
 
-    with tab_q75:
-        # 단원 필터
-        ch_list = ["전체 단원 보기"] + sorted(list(set(c["chapter_name"] for c in cards_75_data)))
+    # ----------------------------------------------------
+    # 공통 필터링 로직 (단원, 중복출제, 오류정정, 검색어)
+    # ----------------------------------------------------
+    ch_list_75 = ["전체 단원 보기"] + sorted(list(set(c["chapter_name"] for c in cards_75_data)))
+
+    # ====================================================
+    # 서브 탭 1: 🎯 75제 실전 4지선다 퀴즈
+    # ====================================================
+    with tab_quiz75:
+        # 상단 필터 & 모드 컨트롤
+        q_fc1, q_fc2, q_fc3 = st.columns([2, 1, 1])
+        with q_fc1:
+            sel_ch_q = st.selectbox("📚 대단원 선택", ch_list_75, key="c75_quiz_ch")
+        with q_fc2:
+            f_dup_q = st.checkbox("🔥 최우선 암기 (중복)", value=False, key="c75_quiz_dup")
+        with q_fc3:
+            f_corr_q = st.checkbox("⚠️ 오류 정정 문항만", value=False, key="c75_quiz_corr")
+
+        search_quiz = st.text_input("🔎 키워드 검색 (문제·해설·암기법)", "", key="c75_quiz_search")
+
+        # 필터링 적용
+        filtered_75 = cards_75_data
+        if sel_ch_q != "전체 단원 보기":
+            filtered_75 = [c for c in filtered_75 if c["chapter_name"] == sel_ch_q]
+        if f_dup_q:
+            filtered_75 = [c for c in filtered_75 if c.get("is_duplicate")]
+        if f_corr_q:
+            filtered_75 = [c for c in filtered_75 if c.get("correction")]
+        if search_quiz.strip():
+            sq = search_quiz.strip().lower()
+            filtered_75 = [
+                c for c in filtered_75
+                if sq in c["title"].lower()
+                or sq in c["question"].lower()
+                or sq in c["explanation"].lower()
+                or sq in c.get("memo", "").lower()
+                or any(sq in opt.lower() for opt in c["options"])
+            ]
+
+        # 사이드바의 4대 상태 필터(안 푼 문제, 오답, 별표, 전체) 연동
+        if "1. 안 푼 문제만 보기" in status_filter:
+            filtered_75 = [c for c in filtered_75 if str(c["id"]) not in st.session_state.prog.get("c75_answers", {})]
+        elif "2. 틀렸거나 모른 문제 보기" in status_filter:
+            filtered_75 = [c for c in filtered_75 if c["id"] in st.session_state.prog.get("wrong_c75s", [])]
+        elif "3. 헷갈림(별표)" in status_filter:
+            filtered_75 = [c for c in filtered_75 if c["id"] in st.session_state.prog.get("starred_c75s", [])]
+
+        # 상단 정보 헤더 & 뷰 모드
+        h_col1, h_col2, h_col3 = st.columns([2, 1, 1])
+        with h_col1:
+            st.write(f"📌 **잔여 문제**: **{len(filtered_75)}문항** / 전체 75 &nbsp;|&nbsp; 모드: `{status_filter}`")
+        with h_col2:
+            view_mode_75 = st.radio("화면 모드", ["🃏 카드 뷰", "📜 리스트 뷰"], horizontal=True, key="c75_view_mode")
+        with h_col3:
+            panel_on_75 = st.toggle("🎮 우측 암기창", value=st.session_state.show_right_game_panel, key="c75_panel_toggle")
+            if panel_on_75 != st.session_state.show_right_game_panel:
+                st.session_state.show_right_game_panel = panel_on_75
+                st.rerun()
+
+        st.markdown("---")
+
+        # 우측 분할 레이아웃
+        if st.session_state.show_right_game_panel:
+            col_main_75, col_side_75 = st.columns([65, 35])
+        else:
+            col_main_75 = st.container()
+            col_side_75 = None
+
+        with col_main_75:
+            if len(filtered_75) == 0:
+                if "1. 안 푼 문제만 보기" in status_filter:
+                    st.balloons()
+                    st.success("🎉 **축하합니다! 현재 조건의 모든 75제 문제를 다 풀었습니다!**")
+                    st.markdown("""
+                    - 왼쪽 사이드바에서 **`❌ 2. 내가 틀린 문제만 보기 (오답 복습)`**를 선택하여 오답을 집중 복습하시거나,
+                    - **`📖 4. 전체 문제 보기`**로 전환하여 전체 75제를 족보처럼 다시 풀어보실 수 있습니다.
+                    """)
+                elif "2. 틀렸거나 모른 문제 보기" in status_filter:
+                    st.success("🎉 **현재 75제 중 틀린 문제(오답)가 없습니다! 완벽하게 마스터하셨습니다.**")
+                elif "3. 헷갈림(별표)" in status_filter:
+                    st.info("⭐ 아직 헷갈림(별표)으로 등록한 75제 문제가 없습니다.")
+                else:
+                    st.warning("선택한 조건에 해당하는 문제가 없습니다. 단원이나 검색 필터를 조정해 보세요.")
+
+            # --- [모드 A] 1문제씩 카드 뷰 ---
+            elif view_mode_75 == "🃏 카드 뷰":
+                if st.session_state.c75_feedback_id is not None:
+                    matching_75 = [i for i, q in enumerate(filtered_75) if q["id"] == st.session_state.c75_feedback_id]
+                    if matching_75:
+                        st.session_state.c75_card_idx = matching_75[0]
+
+                if st.session_state.c75_card_idx >= len(filtered_75):
+                    st.session_state.c75_card_idx = max(0, len(filtered_75) - 1)
+
+                cur_q = filtered_75[st.session_state.c75_card_idx]
+                q_id = cur_q["id"]
+
+                b_col1, b_col2 = st.columns([3, 1])
+                with b_col1:
+                    b_dup = " &nbsp;`🔥 최우선 암기(중복 출제)`" if cur_q.get("is_duplicate") else ""
+                    st.markdown(f"### [ Q{st.session_state.c75_card_idx + 1} / {len(filtered_75)} ] &nbsp; `ID: {q_id}` {b_dup}")
+                    st.markdown(f"🏷️ **{cur_q['chapter_name']}** | 출처: `{cur_q['source']}`")
+                with b_col2:
+                    is_starred = q_id in st.session_state.prog.get("starred_c75s", [])
+                    star_label = "⭐ 헷갈림 해제" if is_starred else "☆ 헷갈림(별표) 등록"
+                    if st.button(star_label, key=f"star_c75_{q_id}"):
+                        if "starred_c75s" not in st.session_state.prog:
+                            st.session_state.prog["starred_c75s"] = []
+                        if is_starred:
+                            st.session_state.prog["starred_c75s"].remove(q_id)
+                        else:
+                            st.session_state.prog["starred_c75s"].append(q_id)
+                        save_progress(st.session_state.prog)
+                        st.rerun()
+
+                st.info(f"**{cur_q['question']}**")
+
+                saved_ans = st.session_state.prog.get("c75_answers", {}).get(str(q_id))
+
+                # 보기 선택지 버튼 (2열 배치)
+                opts = cur_q["options"]
+                for r in range(0, len(opts), 2):
+                    row_cols = st.columns(2)
+                    for c in range(2):
+                        idx = r + c
+                        if idx < len(opts):
+                            btn_label = f"**{idx+1}.** {opts[idx]}"
+                            with row_cols[c]:
+                                if st.button(btn_label, key=f"btn_c75_{q_id}_{idx}", use_container_width=True):
+                                    chosen = idx + 1
+                                    correct = cur_q["answer"]
+                                    if "c75_answers" not in st.session_state.prog:
+                                        st.session_state.prog["c75_answers"] = {}
+                                    if "wrong_c75s" not in st.session_state.prog:
+                                        st.session_state.prog["wrong_c75s"] = []
+
+                                    st.session_state.prog["c75_answers"][str(q_id)] = chosen
+                                    st.session_state.c75_feedback_id = q_id
+
+                                    if chosen == correct:
+                                        if q_id in st.session_state.prog["wrong_c75s"]:
+                                            st.session_state.prog["wrong_c75s"].remove(q_id)
+                                    else:
+                                        if q_id not in st.session_state.prog["wrong_c75s"]:
+                                            st.session_state.prog["wrong_c75s"].append(q_id)
+
+                                    save_progress(st.session_state.prog)
+                                    st.rerun()
+
+                # '잘 모르겠어요' 버튼
+                if saved_ans is None:
+                    st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
+                    if st.button("❓ 잘 모르겠어요 (정답 확인 & 취약점 복습 등록)", key=f"unk_c75_{q_id}", use_container_width=True):
+                        if "c75_answers" not in st.session_state.prog:
+                            st.session_state.prog["c75_answers"] = {}
+                        if "wrong_c75s" not in st.session_state.prog:
+                            st.session_state.prog["wrong_c75s"] = []
+
+                        st.session_state.prog["c75_answers"][str(q_id)] = 0
+                        st.session_state.c75_feedback_id = q_id
+                        if q_id not in st.session_state.prog["wrong_c75s"]:
+                            st.session_state.prog["wrong_c75s"].append(q_id)
+                        save_progress(st.session_state.prog)
+                        st.rerun()
+
+                # 풀이 후 채점 피드백 & 상세 해설 카드
+                if saved_ans is not None:
+                    st.markdown("---")
+                    correct_ans = cur_q["answer"]
+                    correct_text = cur_q["options"][correct_ans - 1]
+
+                    if saved_ans == 0:
+                        st.warning(f"### ❓ '모름'으로 체크되었습니다! (실제 정답: {correct_ans}번. {correct_text})")
+                        st.info("📌 찍어서 맞추는 실수를 방지하기 위해 **[오답·취약점 복습 바구니]**에 저장되었습니다.")
+                    elif saved_ans == correct_ans:
+                        st.success(f"### ⭕ 정답입니다! (선택: {saved_ans}번. {correct_text})")
+                    else:
+                        st.error(f"### ❌ 오답입니다! (내가 찍은 답: {saved_ans}번 / 실제 정답: {correct_ans}번. {correct_text})")
+
+                    st.markdown(f"""
+                    <div style="background-color: #f0f7ff; border-left: 6px solid #0066cc; padding: 16px 20px; border-radius: 8px; margin: 12px 0;">
+                        <h4 style="color: #004085; margin: 0 0 8px 0;">💡 정답 및 핵심 해설</h4>
+                        <p style="color: #111; margin: 0; line-height: 1.6; font-size: 1.05rem;">{cur_q['explanation']}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                    if cur_q.get("memo"):
+                        st.warning(f"💡 **암기 공식 / 두문자 꿀팁**:\n\n{cur_q['memo']}")
+                    if cur_q.get("correction"):
+                        st.error(f"⚠️ **[원자료 오류 정정]**:\n\n{cur_q['correction']}")
+
+                # 하단 이전 / 다음 네비게이션
+                st.markdown("<br>", unsafe_allow_html=True)
+                nav_c1, nav_c2, nav_c3 = st.columns([1, 2, 1])
+                with nav_c1:
+                    if st.button("⬅️ 이전 문제", key="c75_prev_btn", use_container_width=True):
+                        st.session_state.c75_card_idx = max(0, st.session_state.c75_card_idx - 1)
+                        st.session_state.c75_feedback_id = None
+                        st.rerun()
+                with nav_c2:
+                    st.markdown(f"<div style='text-align: center; color: #666; padding-top: 8px;'>문제 이동 ({st.session_state.c75_card_idx + 1} / {len(filtered_75)})</div>", unsafe_allow_html=True)
+                with nav_c3:
+                    if st.button("다음 문제 ➡️", key="c75_next_btn", use_container_width=True):
+                        st.session_state.c75_card_idx = min(len(filtered_75) - 1, st.session_state.c75_card_idx + 1)
+                        st.session_state.c75_feedback_id = None
+                        st.rerun()
+
+            # --- [모드 B] 리스트 뷰 ---
+            else:
+                for idx, q in enumerate(filtered_75):
+                    q_id = q["id"]
+                    saved_ans = st.session_state.prog.get("c75_answers", {}).get(str(q_id))
+                    correct_ans = q["answer"]
+                    b_dup = " `🔥 최우선 암기`" if q.get("is_duplicate") else ""
+
+                    st.markdown(f"#### [{q_id}] {q['title']} &nbsp; `출처: {q['source']}`{b_dup}")
+                    st.info(f"**{q['question']}**")
+
+                    opts = q["options"]
+                    row_c1, row_c2 = st.columns(2)
+                    for opt_i, opt in enumerate(opts):
+                        target_col = row_c1 if opt_i % 2 == 0 else row_c2
+                        with target_col:
+                            if saved_ans is not None:
+                                if opt_i + 1 == correct_ans:
+                                    st.success(f"**{opt_i+1}.** {opt} &nbsp; **(⭕ 정답)**")
+                                elif saved_ans == opt_i + 1:
+                                    st.error(f"**{opt_i+1}.** {opt} &nbsp; **(❌ 내가 고른 오답)**")
+                                else:
+                                    st.markdown(f"- **{opt_i+1}.** {opt}")
+                            else:
+                                if st.button(f"**{opt_i+1}.** {opt}", key=f"c75_list_{q_id}_{opt_i}", use_container_width=True):
+                                    if "c75_answers" not in st.session_state.prog:
+                                        st.session_state.prog["c75_answers"] = {}
+                                    if "wrong_c75s" not in st.session_state.prog:
+                                        st.session_state.prog["wrong_c75s"] = []
+                                    chosen = opt_i + 1
+                                    st.session_state.prog["c75_answers"][str(q_id)] = chosen
+                                    if chosen == correct_ans:
+                                        if q_id in st.session_state.prog["wrong_c75s"]:
+                                            st.session_state.prog["wrong_c75s"].remove(q_id)
+                                    else:
+                                        if q_id not in st.session_state.prog["wrong_c75s"]:
+                                            st.session_state.prog["wrong_c75s"].append(q_id)
+                                    save_progress(st.session_state.prog)
+                                    st.rerun()
+
+                    if saved_ans is not None:
+                        st.markdown(f"💡 **해설**: {q['explanation']}")
+                        if q.get("memo"):
+                            st.caption(f"💡 암기 공식: {q['memo']}")
+                    st.markdown("---")
+
+        # 우측 암기 놀이터 패널
+        if col_side_75 is not None:
+            with col_side_75:
+                st.markdown("### 🎮 우측 수치 암기 놀이터")
+                st.caption("75제를 풀며 옆에서 즉시 짝맞추기 암기!")
+                render_matching_game(is_compact=True)
+
+    # ====================================================
+    # 서브 탭 2: 📑 75제 단권화 회독 (답 가리기 모드)
+    # ====================================================
+    with tab_notes75:
         f_col1, f_col2, f_col3 = st.columns([2, 1, 1])
         with f_col1:
-            sel_ch = st.selectbox("📚 대단원 선택", ch_list, key="c75_ch")
+            sel_ch_n = st.selectbox("📚 대단원 선택", ch_list_75, key="c75_note_ch")
         with f_col2:
-            f_dup = st.checkbox("🔥 최우선 암기 (중복 출제만)", value=False, key="c75_dup")
+            f_dup_n = st.checkbox("🔥 최우선 암기 (중복 출제만)", value=False, key="c75_note_dup")
         with f_col3:
-            f_corr = st.checkbox("⚠️ 오류 정정 문항만", value=False, key="c75_corr")
-        
-        search_q = st.text_input("🔎 키워드 검색 (문제·해설·암기법)", "", key="c75_search")
+            f_corr_n = st.checkbox("⚠️ 오류 정정 문항만", value=False, key="c75_note_corr")
+
+        search_note = st.text_input("🔎 키워드 검색", "", key="c75_note_search")
 
         f_cards = cards_75_data
-        if sel_ch != "전체 단원 보기":
-            f_cards = [c for c in f_cards if c["chapter_name"] == sel_ch]
-        if f_dup:
+        if sel_ch_n != "전체 단원 보기":
+            f_cards = [c for c in f_cards if c["chapter_name"] == sel_ch_n]
+        if f_dup_n:
             f_cards = [c for c in f_cards if c.get("is_duplicate")]
-        if f_corr:
+        if f_corr_n:
             f_cards = [c for c in f_cards if c.get("correction")]
-        if search_q.strip():
-            sq = search_q.strip().lower()
+        if search_note.strip():
+            sq = search_note.strip().lower()
             f_cards = [
                 c for c in f_cards
                 if sq in c["title"].lower()
@@ -977,16 +1255,18 @@ elif main_tab.startswith("📖 주제별 핵심 75제"):
             for c_idx, item in enumerate(f_cards):
                 b_source = f"`출처: {item['source']}`"
                 b_dup = " &nbsp;`🔥 최우선 암기(중복 출제)`" if item.get("is_duplicate") else ""
-                
+
                 st.markdown(f"#### [{item['id']}] {item['title']} &nbsp; {b_source}{b_dup}")
                 st.markdown(f"**{item['question']}**")
-                
+
                 if item["options"]:
-                    for opt in item["options"]:
-                        st.markdown(f"- {opt}")
-                
+                    for opt_i, opt in enumerate(item["options"]):
+                        st.markdown(f"- **{opt_i+1}.** {opt}")
+
                 with st.expander("💡 [정답 및 상세 해설 보기]", expanded=exp_all):
-                    st.success(f"📌 **정답: {item['answer']}**")
+                    ans_num = item['answer']
+                    ans_text = item['options'][ans_num - 1] if 1 <= ans_num <= len(item['options']) else ""
+                    st.success(f"📌 **정답: {ans_num}번. {ans_text}**")
                     st.info(f"💡 **상세 해설**: {item['explanation']}")
                     if item.get("memo"):
                         st.warning(f"**💡 암기 공식 / 두문자 꿀팁**:\n\n{item['memo']}")
@@ -1240,49 +1520,76 @@ elif main_tab == "📊 내 학습 현황 & 오답노트":
     st.caption("10월 23일 시험 합격(평균 70점 이상)을 위한 실시간 달성률 분석")
 
     mcq_total = len(mcq_data)
-    mcq_solved = len(st.session_state.prog["mcq_answers"])
-    mcq_wrong = len(st.session_state.prog["wrong_mcqs"])
+    mcq_solved = len(st.session_state.prog.get("mcq_answers", {}))
+    mcq_wrong = len(st.session_state.prog.get("wrong_mcqs", []))
     mcq_correct = mcq_solved - mcq_wrong
     mcq_acc = (mcq_correct / mcq_solved * 100) if mcq_solved > 0 else 0.0
 
+    c75_total = len(cards_75_data)
+    c75_solved = len(st.session_state.prog.get("c75_answers", {}))
+    c75_wrong = len(st.session_state.prog.get("wrong_c75s", []))
+    c75_correct = c75_solved - c75_wrong
+    c75_acc = (c75_correct / c75_solved * 100) if c75_solved > 0 else 0.0
+
     ox_total = len(ox_data)
-    ox_solved = len(st.session_state.prog["ox_answers"])
-    ox_wrong = len(st.session_state.prog["wrong_oxs"])
+    ox_solved = len(st.session_state.prog.get("ox_answers", {}))
+    ox_wrong = len(st.session_state.prog.get("wrong_oxs", []))
     ox_correct = ox_solved - ox_wrong
     ox_acc = (ox_correct / ox_solved * 100) if ox_solved > 0 else 0.0
 
-    mcq_unknown = sum(1 for v in st.session_state.prog["mcq_answers"].values() if v == 0)
-    ox_unknown = sum(1 for v in st.session_state.prog["ox_answers"].values() if v == "unknown")
+    mcq_unknown = sum(1 for v in st.session_state.prog.get("mcq_answers", {}).values() if v == 0)
+    c75_unknown = sum(1 for v in st.session_state.prog.get("c75_answers", {}).values() if v == 0)
+    ox_unknown = sum(1 for v in st.session_state.prog.get("ox_answers", {}).values() if v == "unknown")
 
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("4지선다 진척도", f"{mcq_solved} / {mcq_total}문항", f"{mcq_solved/mcq_total*100:.1f}%")
-    m2.metric("4지선다 정답률", f"{mcq_acc:.1f}%", f"{mcq_correct}정답 / 취약 {mcq_wrong} (모름 {mcq_unknown})")
-    m3.metric("OX 족보 진척도", f"{ox_solved} / {ox_total}문항", f"{ox_solved/ox_total*100:.1f}%")
-    m4.metric("OX 족보 정답률", f"{ox_acc:.1f}%", f"{ox_correct}정답 / 취약 {ox_wrong} (모름 {ox_unknown})")
+    # 상단 6개 메트릭 (2행 또는 3개씩 분할)
+    col_stat1, col_stat2, col_stat3 = st.columns(3)
+    col_stat1.metric("🎯 실전 4지선다 진척도", f"{mcq_solved} / {mcq_total}문항", f"{mcq_solved/mcq_total*100:.1f}%")
+    col_stat2.metric("📖 핵심 75제 진척도", f"{c75_solved} / {c75_total}문항", f"{c75_solved/c75_total*100:.1f}%")
+    col_stat3.metric("⚡ OX 족보 진척도", f"{ox_solved} / {ox_total}문항", f"{ox_solved/ox_total*100:.1f}%")
+
+    col_acc1, col_acc2, col_acc3 = st.columns(3)
+    col_acc1.metric("🎯 4지선다 정답률", f"{mcq_acc:.1f}%", f"{mcq_correct}정답 / 취약 {mcq_wrong} (모름 {mcq_unknown})")
+    col_acc2.metric("📖 75제 정답률", f"{c75_acc:.1f}%", f"{c75_correct}정답 / 취약 {c75_wrong} (모름 {c75_unknown})")
+    col_acc3.metric("⚡ OX 족보 정답률", f"{ox_acc:.1f}%", f"{ox_correct}정답 / 취약 {ox_wrong} (모름 {ox_unknown})")
 
     st.markdown("---")
     st.subheader("🚨 집중 공략: 내 오답 및 취약점(모름) 바구니 리스트")
     st.caption("틀렸거나 모른 문제를 완벽히 복습하여 정답으로 맞추면 이 리스트에서 자동으로 지워집니다.")
 
-    if mcq_wrong == 0 and ox_wrong == 0:
-        st.success("🎉 현재 오답·취약점 바구니가 비어 있습니다! 완벽합니다.")
+    if mcq_wrong == 0 and c75_wrong == 0 and ox_wrong == 0:
+        st.success("🎉 현재 모든 오답·취약점 바구니가 비어 있습니다! 완벽합니다.")
     else:
         if mcq_wrong > 0:
-            st.markdown(f"#### 🔴 4지선다 취약 문제 ({mcq_wrong}개, 모름 {mcq_unknown}개)")
+            st.markdown(f"#### 🔴 실전 4지선다 취약 문제 ({mcq_wrong}개, 모름 {mcq_unknown}개)")
             for q in mcq_data:
-                if q["id"] in st.session_state.prog["wrong_mcqs"]:
-                    is_unk = (st.session_state.prog["mcq_answers"].get(str(q["id"])) == 0)
+                if q["id"] in st.session_state.prog.get("wrong_mcqs", []):
+                    is_unk = (st.session_state.prog.get("mcq_answers", {}).get(str(q["id"])) == 0)
                     tag = "❓ [모름]" if is_unk else "❌ [오답]"
                     st.error(f"**{tag} [ID:{q['id']}] [{q['chapter']}]** {q['question']}")
                     st.write(f"- 정답: **{q['answer']}번** ({q['options'][q['answer']-1]})")
                     st.write(f"- 💡 {q['explanation']}")
                     st.markdown("---")
 
+        if c75_wrong > 0:
+            st.markdown(f"#### 🔴 주제별 핵심 75제 취약 문제 ({c75_wrong}개, 모름 {c75_unknown}개)")
+            for q in cards_75_data:
+                if q["id"] in st.session_state.prog.get("wrong_c75s", []):
+                    is_unk_75 = (st.session_state.prog.get("c75_answers", {}).get(str(q["id"])) == 0)
+                    tag_75 = "❓ [모름]" if is_unk_75 else "❌ [오답]"
+                    ans_n = q["answer"]
+                    ans_t = q["options"][ans_n - 1] if 1 <= ans_n <= len(q["options"]) else ""
+                    st.error(f"**{tag_75} [ID:{q['id']}] [{q['chapter_name']}]** {q['question']}")
+                    st.write(f"- 정답: **{ans_n}번** ({ans_t})")
+                    st.write(f"- 💡 {q['explanation']}")
+                    if q.get("memo"):
+                        st.caption(f"💡 암기 팁: {q['memo']}")
+                    st.markdown("---")
+
         if ox_wrong > 0:
             st.markdown(f"#### 🔴 OX 족보 취약 문제 ({ox_wrong}개, 모름 {ox_unknown}개)")
             for ox in ox_data:
-                if ox["id"] in st.session_state.prog["wrong_oxs"]:
-                    is_unk_ox = (st.session_state.prog["ox_answers"].get(str(ox["id"])) == "unknown")
+                if ox["id"] in st.session_state.prog.get("wrong_oxs", []):
+                    is_unk_ox = (st.session_state.prog.get("ox_answers", {}).get(str(ox["id"])) == "unknown")
                     tag_ox = "❓ [모름]" if is_unk_ox else "❌ [오답]"
                     ans_char = "O" if ox["answer"] else "X"
                     st.error(f"**{tag_ox} [ID:{ox['id']}] [{ox['chapter']}]** {ox['statement']}")
