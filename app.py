@@ -989,12 +989,17 @@ elif main_tab.startswith("📖 주제별 핵심 75제"):
             ]
 
         # 사이드바의 4대 상태 필터(안 푼 문제, 오답, 별표, 전체) 연동
+        c75_f_id = st.session_state.c75_feedback_id
+        solved_c75 = st.session_state.prog.get("c75_answers", {})
+        wrong_c75 = st.session_state.prog.get("wrong_c75s", [])
+        starred_c75 = st.session_state.prog.get("starred_c75s", [])
+
         if "1. 안 푼 문제만 보기" in status_filter:
-            filtered_75 = [c for c in filtered_75 if str(c["id"]) not in st.session_state.prog.get("c75_answers", {})]
-        elif "2. 틀렸거나 모른 문제 보기" in status_filter:
-            filtered_75 = [c for c in filtered_75 if c["id"] in st.session_state.prog.get("wrong_c75s", [])]
+            filtered_75 = [c for c in filtered_75 if (str(c["id"]) not in solved_c75) or (c["id"] == c75_f_id)]
+        elif "2. 틀렸거나 모른 문제 보기" in status_filter or "2. 내가 틀린 문제" in status_filter:
+            filtered_75 = [c for c in filtered_75 if (c["id"] in wrong_c75) or (c["id"] == c75_f_id)]
         elif "3. 헷갈림(별표)" in status_filter:
-            filtered_75 = [c for c in filtered_75 if c["id"] in st.session_state.prog.get("starred_c75s", [])]
+            filtered_75 = [c for c in filtered_75 if c["id"] in starred_c75]
 
         # 상단 정보 헤더 & 뷰 모드
         h_col1, h_col2, h_col3 = st.columns([2, 1, 1])
@@ -1114,7 +1119,7 @@ elif main_tab.startswith("📖 주제별 핵심 75제"):
                         save_progress(st.session_state.prog)
                         st.rerun()
 
-                # 풀이 후 채점 피드백 & 상세 해설 카드
+                # 풀이 후 채점 피드백 & 상세 해설 카드 (100% 즉시 표시)
                 if saved_ans is not None:
                     st.markdown("---")
                     correct_ans = cur_q["answer"]
@@ -1130,8 +1135,8 @@ elif main_tab.startswith("📖 주제별 핵심 75제"):
 
                     st.markdown(f"""
                     <div style="background-color: #f0f7ff; border-left: 6px solid #0066cc; padding: 16px 20px; border-radius: 8px; margin: 12px 0;">
-                        <h4 style="color: #004085; margin: 0 0 8px 0;">💡 정답 및 핵심 해설</h4>
-                        <p style="color: #111; margin: 0; line-height: 1.6; font-size: 1.05rem;">{cur_q['explanation']}</p>
+                        <h4 style="color: #004085; margin: 0 0 8px 0;">📌 [정답 확인] : {correct_ans}번. {correct_text}</h4>
+                        <p style="color: #111; margin: 0; line-height: 1.6; font-size: 1.05rem;"><strong>💡 상세 해설 및 원리</strong><br>{cur_q['explanation']}</p>
                     </div>
                     """, unsafe_allow_html=True)
 
@@ -1139,6 +1144,19 @@ elif main_tab.startswith("📖 주제별 핵심 75제"):
                         st.warning(f"💡 **암기 공식 / 두문자 꿀팁**:\n\n{cur_q['memo']}")
                     if cur_q.get("correction"):
                         st.error(f"⚠️ **[원자료 오류 정정]**:\n\n{cur_q['correction']}")
+
+                    # 👉 다음 안 푼 문제로 이동 버튼 (136제와 동일한 UX)
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    btn_c75_next_label = "👉 [암기 완료!] 다음 안 푼 문제로 이동 ▶" if "1. 안 푼 문제만 보기" in status_filter else "👉 [암기 완료!] 다음 문제로 이동 ▶"
+                    if st.button(btn_c75_next_label, type="primary", use_container_width=True, key=f"c75_next_action_{q_id}"):
+                        st.session_state.c75_feedback_id = None
+                        if "1. 안 푼 문제만 보기" in status_filter:
+                            if st.session_state.c75_card_idx >= len(filtered_75) - 1:
+                                st.session_state.c75_card_idx = 0
+                        else:
+                            if st.session_state.c75_card_idx < len(filtered_75) - 1:
+                                st.session_state.c75_card_idx += 1
+                        st.rerun()
 
                 # 하단 이전 / 다음 네비게이션
                 st.markdown("<br>", unsafe_allow_html=True)
