@@ -65,9 +65,16 @@ def load_75_cards():
             return json.load(f)
     return []
 
+def load_calc_data():
+    if os.path.exists("calc_37.json"):
+        with open("calc_37.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
 mcq_data, ox_data = load_questions()
 game_data = load_game_data()
 cards_75_data = load_75_cards()
+calc_data = load_calc_data()
 
 # 진행상황 로컬 저장/로드
 def load_progress():
@@ -75,12 +82,15 @@ def load_progress():
         "mcq_answers": {},
         "ox_answers": {},
         "c75_answers": {},
+        "calc_answers": {},
         "wrong_mcqs": [],
         "wrong_oxs": [],
         "wrong_c75s": [],
+        "wrong_calcs": [],
         "starred_mcqs": [],
         "starred_oxs": [],
-        "starred_c75s": []
+        "starred_c75s": [],
+        "starred_calcs": []
     }
     if os.path.exists(PROGRESS_FILE):
         try:
@@ -110,6 +120,9 @@ if "ox_idx" not in st.session_state:
 if "c75_card_idx" not in st.session_state:
     st.session_state.c75_card_idx = 0
 
+if "calc_card_idx" not in st.session_state:
+    st.session_state.calc_card_idx = 0
+
 # 피드백 노출 상태 유지용 세션 키
 if "mcq_feedback_id" not in st.session_state:
     st.session_state.mcq_feedback_id = None
@@ -119,6 +132,9 @@ if "ox_feedback_id" not in st.session_state:
 
 if "c75_feedback_id" not in st.session_state:
     st.session_state.c75_feedback_id = None
+
+if "calc_feedback_id" not in st.session_state:
+    st.session_state.calc_feedback_id = None
 
 # 우측 암기 게임 패널 상태
 if "show_right_game_panel" not in st.session_state:
@@ -174,6 +190,7 @@ main_tab = st.sidebar.radio(
     [
         f"🎯 실전 4지선다 퀴즈 ({len(mcq_data)}제)",
         f"📖 주제별 핵심 75제 ({len(cards_75_data)}제 4지선다·회독)",
+        f"🧮 1급 계산문제 37제 집중 정복 ({len(calc_data)}제)",
         f"⚡ 지엽적 방어선 OX ({len(ox_data)}제)",
         "📑 핵심 연상 암기장 (10대 암기법 & 필수 족보)",
         "🎮 핵심 수치 짝맞추기 게임 (10대 테마)",
@@ -239,9 +256,11 @@ with col_rst1:
         st.session_state.prog["wrong_mcqs"] = []
         st.session_state.prog["wrong_oxs"] = []
         st.session_state.prog["wrong_c75s"] = []
+        st.session_state.prog["wrong_calcs"] = []
         st.session_state.mcq_feedback_id = None
         st.session_state.ox_feedback_id = None
         st.session_state.c75_feedback_id = None
+        st.session_state.calc_feedback_id = None
         save_progress(st.session_state.prog)
         st.sidebar.success("오답 목록이 비워졌습니다.")
         st.rerun()
@@ -251,20 +270,25 @@ with col_rst2:
             "mcq_answers": {},
             "ox_answers": {},
             "c75_answers": {},
+            "calc_answers": {},
             "wrong_mcqs": [],
             "wrong_oxs": [],
             "wrong_c75s": [],
+            "wrong_calcs": [],
             "starred_mcqs": [],
             "starred_oxs": [],
-            "starred_c75s": []
+            "starred_c75s": [],
+            "starred_calcs": []
         }
         st.session_state.mcq_feedback_id = None
         st.session_state.ox_feedback_id = None
         st.session_state.c75_feedback_id = None
+        st.session_state.calc_feedback_id = None
         save_progress(st.session_state.prog)
         st.session_state.card_idx = 0
         st.session_state.ox_idx = 0
         st.session_state.c75_card_idx = 0
+        st.session_state.calc_card_idx = 0
         st.sidebar.success("모든 기록이 초기화되었습니다.")
         st.rerun()
 
@@ -1386,6 +1410,422 @@ elif main_tab.startswith("📖 주제별 핵심 75제"):
 
 
 # ==========================================================
+# 탭: 🧮 1급 계산문제 37제 집중 정복 (신규 페이지)
+# ==========================================================
+elif main_tab.startswith("🧮 1급 계산문제 37제"):
+    st.title("🧮 1급 소방안전관리자 계산문제 37제 집중 정복")
+    st.caption("소방안전관리자 1급 계산 공식 8대 유형 전수 수록 (총 37문항 4지선다 실전 퀴즈 + 공식 한 장 요약 치트시트)")
+
+    tab_cheat_calc, tab_quiz_calc = st.tabs([
+        "📋 8대 공식 한 장 요약 치트시트",
+        f"🎯 37제 실전 퀴즈 & 회독 ({len(calc_data)}문항)"
+    ])
+
+    # ====================================================
+    # 서브 탭 1: 📋 8대 공식 한 장 요약 치트시트
+    # ====================================================
+    with tab_cheat_calc:
+        st.subheader("📋 1급 소방안전관리자 계산 공식 한 장 요약 족보")
+        st.markdown("시험장에 들고 가는 **8대 핵심 계산 공식 & 소수점 처리 기준** 총정리입니다. 반드시 암기 후 문제를 풀어보세요!")
+
+        col_c1, col_c2 = st.columns(2)
+
+        with col_c1:
+            st.markdown("""
+            <div style="background-color: #f8f9fa; border-left: 5px solid #d9534f; padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 8px 0; color: #d9534f;">🎯 1. 소수점 처리 3대 절대 원칙</h4>
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
+                    <li><strong>소방안전관리보조자 수</strong>: <span style="color: #c9302c; font-weight: bold;">버림 (절사)</span> <em>(사람은 자를 수 없음)</em></li>
+                    <li><strong>수용인원 산정</strong>: <span style="color: #337ab7; font-weight: bold;">반올림</span></li>
+                    <li><strong>각종 설비 개수 (소화기·감지기·유도등·구획 수)</strong>: <span style="color: #28a745; font-weight: bold;">올림 (절상)</span> <em>(안전을 위해 넉넉히)</em></li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown("""
+            <div style="background-color: #f8f9fa; border-left: 5px solid #0275d8; padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 8px 0; color: #0275d8;">👥 2. 보조자 최소 인원 계산식</h4>
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
+                    <li><strong>아파트</strong>: <code>세대수 ÷ 300</code> (버림)</li>
+                    <li><strong>특정소방대상물 (아파트 제외)</strong>: <code>연면적 ÷ 15,000㎡</code> (버림)</li>
+                    <li><strong>의무 선임 대상</strong>: 30층 이상(100m 이상) 아파트, 연면적 15,000㎡ 이상, 노유자·수련·숙박시설(바닥면적 합계 1,500㎡ 이상), 공동주택(기숙사)</li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown("""
+            <div style="background-color: #f8f9fa; border-left: 5px solid #f0ad4e; padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 8px 0; color: #ec971f;">🚶 3. 수용인원 산정 공식</h4>
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
+                    <li><strong>침대 없는 숙박시설</strong>: <code>종사자 수 + (바닥면적 ÷ 3㎡)</code></li>
+                    <li><strong>강의실·교무실·휴게실</strong>: <code>바닥면적 ÷ 1.9㎡</code></li>
+                    <li><strong>강당·운동시설·종교시설</strong>: <code>바닥면적 ÷ 4.6㎡</code> (고정식 의자는 의자 수)</li>
+                    <li><em>※ 결과값은 모두 <strong>반올림</strong></em></li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown("""
+            <div style="background-color: #f8f9fa; border-left: 5px solid #5cb85c; padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 8px 0; color: #449d44;">🧯 4. 소화기 소요단위 산정 기준</h4>
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
+                    <li><strong>위락시설</strong>: 바닥면적 <code>30㎡</code> 당 1단위</li>
+                    <li><strong>공연·집회·관람·의료·운동</strong>: 바닥면적 <code>50㎡</code> 당 1단위</li>
+                    <li><strong>근생·판매·숙박·업무·전시·공장</strong>: 바닥면적 <code>100㎡</code> 당 1단위</li>
+                    <li><strong>그 밖의 대상물</strong>: 바닥면적 <code>200㎡</code> 당 1단위</li>
+                    <li><strong>내화구조 + 불연재료 마감</strong>: 기준면적 <code>× 2배</code> 적용!</li>
+                    <li><strong>부속용도 추가</strong>: 33㎡ 이상 구획된 실(보일러실·주방·발전실 등)은 <strong>소화기 1개 이상 별도 추가</strong></li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_c2:
+            st.markdown("""
+            <div style="background-color: #f8f9fa; border-left: 5px solid #6f42c1; padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 8px 0; color: #6f42c1;">🚨 5. 감지기 수량 & 경계구역 산정</h4>
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
+                    <li><strong>차동식 스포트형 2종 (내화구조 기준)</strong>:
+                        <ul>
+                            <li>부착높이 4m 미만: <code>바닥면적 ÷ 70㎡</code> (올림)</li>
+                            <li>부착높이 4m 이상 8m 미만: <code>바닥면적 ÷ 35㎡</code> (올림)</li>
+                        </ul>
+                    </li>
+                    <li><strong>경계구역 기본 원칙</strong>:
+                        <ul>
+                            <li>하나의 경계구역 면적: <code>600㎡ 이하</code>, 한 변의 길이: <code>50m 이하</code></li>
+                            <li>출입구에서 내부 전체가 보일 때: <code>1,000㎡ 이하</code></li>
+                            <li>2개 층 합계 바닥면적 <code>500㎡ 이하</code>: 1개 경계구역 묶기 가능</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown("""
+            <div style="background-color: #f8f9fa; border-left: 5px solid #20c997; padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 8px 0; color: #17a2b8;">💡 6. 객석유도등 & 🧱 7. 방화구획·건폐율</h4>
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
+                    <li><strong>객석유도등 설치 개수</strong>: <code>(객석통로 직선길이 ÷ 4) - 1</code> (올림)</li>
+                    <li><strong>방화구획 기준</strong>:
+                        <ul>
+                            <li>10층 이하: <code>1,000㎡</code> 마다</li>
+                            <li>11층 이상: <code>200㎡</code> (불연재료 마감 시 <code>500㎡</code>) 마다</li>
+                            <li>스프링클러 등 자동소화설비 설치 시: <strong>기준면적 3배</strong> 완화!</li>
+                        </ul>
+                    </li>
+                    <li><strong>건폐율 & 용적률</strong>:
+                        <ul>
+                            <li>건폐율 = <code>(건축면적 ÷ 대지면적) × 100(%)</code></li>
+                            <li>용적률 = <code>(지상층 연면적 ÷ 대지면적) × 100(%)</code> <em>(지하층 면적 제외!)</em></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown("""
+            <div style="background-color: #f8f9fa; border-left: 5px solid #fd7e14; padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 8px 0; color: #fd7e14;">💧 8. 수계설비 펌프 성능 & 압력스위치 설정</h4>
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
+                    <li><strong>옥내소화전 기본 규격</strong>: 방수압 <code>0.17 ~ 0.7 MPa</code>, 토출량 <code>130 L/min</code></li>
+                    <li><strong>방수압과 양정 관계</strong>: <code>방수압 0.17 MPa ≒ 수두 양정 17m</code></li>
+                    <li><strong>펌프 성능시험 기준</strong>:
+                        <ul>
+                            <li>체절운전 (유량 0%): 체절압력 ≤ <strong>정격압력의 140%</strong></li>
+                            <li>정격운전 (유량 100%): 방수압력 ≥ <strong>정격압력의 100%</strong></li>
+                            <li>피크운전 (유량 150%): 방수압력 ≥ <strong>정격압력의 65%</strong></li>
+                        </ul>
+                    </li>
+                    <li><strong>압력챔버 압력스위치 셋팅</strong>:
+                        <ul>
+                            <li><strong>정지점 (펌프 STOP)</strong>: <code>Range 값</code> (주펌프 정지점 = 충압펌프 정지점)</li>
+                            <li><strong>기동점 (펌프 START)</strong>: <code>Range - Diff 값</code></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown("""
+            <div style="background-color: #f8f9fa; border-left: 5px solid #6c757d; padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 8px 0; color: #495057;">🛢️ 9. 제4류 위험물 지정수량 & 배수 계산</h4>
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
+                    <li><strong>특수인화물</strong>: <code>50L</code> (이황화탄소, 디에틸에테르)</li>
+                    <li><strong>제1석유류</strong>: 비수용성 <code>200L</code> (휘발유, 톨루엔) / 수용성 <code>400L</code> (아세톤)</li>
+                    <li><strong>알코올류</strong>: <code>400L</code> (메탄올, 에탄올)</li>
+                    <li><strong>제2석유류</strong>: 비수용성 <code>1,000L</code> (등유, 경유) / 수용성 <code>2,000L</code></li>
+                    <li><strong>제3석유류</strong>: 비수용성 <code>2,000L</code> (중유, 클레오소트유) / 수용성 <code>4,000L</code></li>
+                    <li><strong>제4석유류</strong>: <code>6,000L</code> (기어유, 실린더유) | <strong>동식물유류</strong>: <code>10,000L</code></li>
+                    <li><strong>배수 계산식</strong>: <code>지정수량의 배수 = 저장·취급량 ÷ 품명별 지정수량</code> (합계 ≥ 1 위험물안전관리법 적용)</li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # ====================================================
+    # 서브 탭 2: 🎯 37제 실전 퀴즈 & 회독
+    # ====================================================
+    with tab_quiz_calc:
+        # 상단 필터 & 컨트롤
+        type_list_calc = ["전체 유형 보기"] + sorted(list(set(c["type_name"] for c in calc_data)))
+
+        c_fc1, c_fc2 = st.columns([2, 1])
+        with c_fc1:
+            sel_type_calc = st.selectbox("📂 8대 계산 유형 선택", type_list_calc, key="calc_type_sel")
+        with c_fc2:
+            search_calc = st.text_input("🔎 키워드 검색 (문제·공식·풀이)", "", key="calc_search_input")
+
+        # 필터링 적용
+        filtered_calc = calc_data
+        if sel_type_calc != "전체 유형 보기":
+            filtered_calc = [c for c in filtered_calc if c["type_name"] == sel_type_calc]
+        if search_calc.strip():
+            sc = search_calc.strip().lower()
+            filtered_calc = [
+                c for c in filtered_calc
+                if sc in c["title"].lower()
+                or sc in c["question"].lower()
+                or sc in c["explanation"].lower()
+                or sc in c.get("memo", "").lower()
+                or any(sc in opt.lower() for opt in c["options"])
+            ]
+
+        # 4대 상태 필터(안 푼 문제, 오답, 별표, 전체) 연동
+        calc_f_id = st.session_state.calc_feedback_id
+        solved_calc = st.session_state.prog.get("calc_answers", {})
+        wrong_calc = st.session_state.prog.get("wrong_calcs", [])
+        starred_calc = st.session_state.prog.get("starred_calcs", [])
+
+        if "1. 안 푼 문제만 보기" in status_filter:
+            filtered_calc = [c for c in filtered_calc if (str(c["id"]) not in solved_calc) or (c["id"] == calc_f_id)]
+        elif "2. 틀렸거나 모른 문제 보기" in status_filter or "2. 내가 틀린 문제" in status_filter:
+            filtered_calc = [c for c in filtered_calc if (c["id"] in wrong_calc) or (c["id"] == calc_f_id)]
+        elif "3. 헷갈림(별표)" in status_filter:
+            filtered_calc = [c for c in filtered_calc if c["id"] in starred_calc]
+
+        # 상단 정보 헤더 & 뷰 모드
+        h_col1, h_col2, h_col3 = st.columns([2, 1, 1])
+        with h_col1:
+            st.write(f"📌 **현재 계산문제 잔여**: **{len(filtered_calc)}문항** / 전체 {len(calc_data)} &nbsp;|&nbsp; 모드: `{status_filter}`")
+        with h_col2:
+            view_mode_calc = st.radio("화면 모드", ["🃏 카드 뷰", "📜 리스트 뷰"], horizontal=True, key="calc_view_mode")
+        with h_col3:
+            panel_on_calc = st.toggle("🎮 우측 암기창", value=st.session_state.show_right_game_panel, key="calc_panel_toggle")
+            if panel_on_calc != st.session_state.show_right_game_panel:
+                st.session_state.show_right_game_panel = panel_on_calc
+                st.rerun()
+
+        st.markdown("---")
+
+        # 레이아웃 분할
+        if st.session_state.show_right_game_panel:
+            col_main_calc, col_side_calc = st.columns([65, 35])
+        else:
+            col_main_calc = st.container()
+            col_side_calc = None
+
+        with col_main_calc:
+            if len(filtered_calc) == 0:
+                if "1. 안 푼 문제만 보기" in status_filter:
+                    st.balloons()
+                    st.success("🎉 **축하합니다! 현재 조건의 모든 계산문제를 다 풀었습니다!**")
+                    st.markdown("""
+                    - 왼쪽 사이드바에서 **`❌ 2. 내가 틀린 문제만 보기 (오답 복습)`**를 선택하여 취약 계산문제를 집중 복습하시거나,
+                    - **`📖 4. 전체 문제 보기`**로 전환하여 37제 계산문제를 공식과 함께 다시 점검해보세요.
+                    """)
+                elif "2. 틀렸거나 모른 문제 보기" in status_filter:
+                    st.success("🎉 **현재 계산문제 중 틀린 문제가 없습니다! 계산 공식 마스터입니다.**")
+                elif "3. 헷갈림(별표)" in status_filter:
+                    st.info("⭐ 아직 헷갈림(별표)으로 등록한 계산문제가 없습니다.")
+                else:
+                    st.warning("선택한 조건에 해당하는 계산문제가 없습니다. 유형 또는 검색 필터를 조정해 보세요.")
+
+            # --- [모드 A] 1문제씩 카드 뷰 ---
+            elif view_mode_calc == "🃏 카드 뷰":
+                if st.session_state.calc_feedback_id is not None:
+                    matching_calc = [i for i, q in enumerate(filtered_calc) if q["id"] == st.session_state.calc_feedback_id]
+                    if matching_calc:
+                        st.session_state.calc_card_idx = matching_calc[0]
+
+                if st.session_state.calc_card_idx >= len(filtered_calc):
+                    st.session_state.calc_card_idx = max(0, len(filtered_calc) - 1)
+
+                cur_cq = filtered_calc[st.session_state.calc_card_idx]
+                cq_id = cur_cq["id"]
+
+                cb_col1, cb_col2 = st.columns([3, 1])
+                with cb_col1:
+                    st.markdown(f"### [ Q{st.session_state.calc_card_idx + 1} / {len(filtered_calc)} ] &nbsp; `ID: {cq_id}`")
+                    st.markdown(f"🏷️ **{cur_cq['type_name']}** | `{cur_cq['title']}` | 출처: `{cur_cq['source']}`")
+                with cb_col2:
+                    is_starred_c = cq_id in st.session_state.prog.get("starred_calcs", [])
+                    star_lbl = "⭐ 헷갈림 해제" if is_starred_c else "☆ 헷갈림(별표) 등록"
+                    if st.button(star_lbl, key=f"star_calc_{cq_id}"):
+                        if "starred_calcs" not in st.session_state.prog:
+                            st.session_state.prog["starred_calcs"] = []
+                        if is_starred_c:
+                            st.session_state.prog["starred_calcs"].remove(cq_id)
+                        else:
+                            st.session_state.prog["starred_calcs"].append(cq_id)
+                        save_progress(st.session_state.prog)
+                        st.rerun()
+
+                st.info(f"**{cur_cq['question']}**")
+
+                saved_calc_ans = st.session_state.prog.get("calc_answers", {}).get(str(cq_id))
+
+                # 보기 선택지 버튼 (2열 배치)
+                opts_c = cur_cq["options"]
+                for r in range(0, len(opts_c), 2):
+                    row_c = st.columns(2)
+                    for c_idx in range(2):
+                        i_idx = r + c_idx
+                        if i_idx < len(opts_c):
+                            btn_l = f"**{i_idx+1}.** {opts_c[i_idx]}"
+                            with row_c[c_idx]:
+                                if st.button(btn_l, key=f"btn_calc_{cq_id}_{i_idx}", use_container_width=True):
+                                    chosen = i_idx + 1
+                                    correct = cur_cq["answer"]
+                                    if "calc_answers" not in st.session_state.prog:
+                                        st.session_state.prog["calc_answers"] = {}
+                                    if "wrong_calcs" not in st.session_state.prog:
+                                        st.session_state.prog["wrong_calcs"] = []
+
+                                    st.session_state.prog["calc_answers"][str(cq_id)] = chosen
+                                    st.session_state.calc_feedback_id = cq_id
+
+                                    if chosen == correct:
+                                        if cq_id in st.session_state.prog["wrong_calcs"]:
+                                            st.session_state.prog["wrong_calcs"].remove(cq_id)
+                                    else:
+                                        if cq_id not in st.session_state.prog["wrong_calcs"]:
+                                            st.session_state.prog["wrong_calcs"].append(cq_id)
+
+                                    save_progress(st.session_state.prog)
+                                    st.rerun()
+
+                # '잘 모르겠어요' 버튼
+                if saved_calc_ans is None:
+                    st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
+                    if st.button("❓ 잘 모르겠어요 (정답 공식 확인 & 취약점 복습 등록)", key=f"unk_calc_{cq_id}", use_container_width=True):
+                        if "calc_answers" not in st.session_state.prog:
+                            st.session_state.prog["calc_answers"] = {}
+                        if "wrong_calcs" not in st.session_state.prog:
+                            st.session_state.prog["wrong_calcs"] = []
+
+                        st.session_state.prog["calc_answers"][str(cq_id)] = 0
+                        st.session_state.calc_feedback_id = cq_id
+                        if cq_id not in st.session_state.prog["wrong_calcs"]:
+                            st.session_state.prog["wrong_calcs"].append(cq_id)
+                        save_progress(st.session_state.prog)
+                        st.rerun()
+
+                # 풀이 후 즉시 채점 피드백 & 상세 해설 카드
+                if saved_calc_ans is not None:
+                    st.markdown("---")
+                    c_correct_ans = cur_cq["answer"]
+                    c_correct_text = cur_cq["options"][c_correct_ans - 1]
+
+                    if saved_calc_ans == 0:
+                        st.warning(f"### ❓ '모름'으로 체크되었습니다! (실제 정답: {c_correct_ans}번. {c_correct_text})")
+                        st.info("📌 정확한 공식 풀이를 위해 **[오답·취약점 복습 바구니]**에 등록되었습니다.")
+                    elif saved_calc_ans == c_correct_ans:
+                        st.success(f"### ⭕ 정답입니다! (선택: {saved_calc_ans}번. {c_correct_text})")
+                    else:
+                        st.error(f"### ❌ 오답입니다! (내가 고른 답: {saved_calc_ans}번 / 실제 정답: {c_correct_ans}번. {c_correct_text})")
+
+                    st.markdown(f"""
+                    <div style="background-color: #f0f7ff; border-left: 6px solid #0066cc; padding: 16px 20px; border-radius: 8px; margin: 12px 0;">
+                        <h4 style="color: #004085; margin: 0 0 8px 0;">📌 [정답] : {c_correct_ans}번. {c_correct_text}</h4>
+                        <p style="color: #111; margin: 0; line-height: 1.6; font-size: 1.05rem;"><strong>💡 상세 계산 풀이 과정</strong><br>{cur_cq['explanation']}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                    if cur_cq.get("memo"):
+                        st.warning(f"💡 **계산 공식 & 암기 꿀팁**:\n\n{cur_cq['memo']}")
+
+                    # 👉 다음 안 푼 문제로 이동 버튼
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    btn_calc_next_lbl = "👉 [공식 이해 완료!] 다음 안 푼 계산문제로 이동 ▶" if "1. 안 푼 문제만 보기" in status_filter else "👉 [공식 이해 완료!] 다음 계산문제로 이동 ▶"
+                    if st.button(btn_calc_next_lbl, type="primary", use_container_width=True, key=f"calc_next_action_{cq_id}"):
+                        st.session_state.calc_feedback_id = None
+                        if "1. 안 푼 문제만 보기" in status_filter:
+                            if st.session_state.calc_card_idx >= len(filtered_calc) - 1:
+                                st.session_state.calc_card_idx = 0
+                        else:
+                            if st.session_state.calc_card_idx < len(filtered_calc) - 1:
+                                st.session_state.calc_card_idx += 1
+                        st.rerun()
+
+                # 하단 이전 / 다음 네비게이션
+                st.markdown("<br>", unsafe_allow_html=True)
+                cnav_c1, cnav_c2, cnav_c3 = st.columns([1, 2, 1])
+                with cnav_c1:
+                    if st.button("⬅️ 이전 문제", key="calc_prev_btn", use_container_width=True):
+                        st.session_state.calc_card_idx = max(0, st.session_state.calc_card_idx - 1)
+                        st.session_state.calc_feedback_id = None
+                        st.rerun()
+                with cnav_c2:
+                    st.markdown(f"<div style='text-align: center; color: #666; padding-top: 8px;'>계산문제 이동 ({st.session_state.calc_card_idx + 1} / {len(filtered_calc)})</div>", unsafe_allow_html=True)
+                with cnav_c3:
+                    if st.button("다음 문제 ➡️", key="calc_next_btn", use_container_width=True):
+                        st.session_state.calc_card_idx = min(len(filtered_calc) - 1, st.session_state.calc_card_idx + 1)
+                        st.session_state.calc_feedback_id = None
+                        st.rerun()
+
+            # --- [모드 B] 리스트 뷰 ---
+            else:
+                for idx, q in enumerate(filtered_calc):
+                    q_id = q["id"]
+                    saved_ans_c = st.session_state.prog.get("calc_answers", {}).get(str(q_id))
+                    correct_ans_c = q["answer"]
+
+                    st.markdown(f"#### [{q_id}] {q['title']} &nbsp; `유형: {q['type_name']}` `출처: {q['source']}`")
+                    st.info(f"**{q['question']}**")
+
+                    opts_l = q["options"]
+                    row_c1, row_c2 = st.columns(2)
+                    for opt_i, opt in enumerate(opts_l):
+                        target_col = row_c1 if opt_i % 2 == 0 else row_c2
+                        with target_col:
+                            if saved_ans_c is not None:
+                                if opt_i + 1 == correct_ans_c:
+                                    st.success(f"**{opt_i+1}.** {opt} &nbsp; **(⭕ 정답)**")
+                                elif saved_ans_c == opt_i + 1:
+                                    st.error(f"**{opt_i+1}.** {opt} &nbsp; **(❌ 내가 고른 오답)**")
+                                else:
+                                    st.markdown(f"- **{opt_i+1}.** {opt}")
+                            else:
+                                if st.button(f"**{opt_i+1}.** {opt}", key=f"calc_list_{q_id}_{opt_i}", use_container_width=True):
+                                    if "calc_answers" not in st.session_state.prog:
+                                        st.session_state.prog["calc_answers"] = {}
+                                    if "wrong_calcs" not in st.session_state.prog:
+                                        st.session_state.prog["wrong_calcs"] = []
+                                    chosen = opt_i + 1
+                                    st.session_state.prog["calc_answers"][str(q_id)] = chosen
+                                    if chosen == correct_ans_c:
+                                        if q_id in st.session_state.prog["wrong_calcs"]:
+                                            st.session_state.prog["wrong_calcs"].remove(q_id)
+                                    else:
+                                        if q_id not in st.session_state.prog["wrong_calcs"]:
+                                            st.session_state.prog["wrong_calcs"].append(q_id)
+                                    save_progress(st.session_state.prog)
+                                    st.rerun()
+
+                    if saved_ans_c is not None:
+                        st.markdown(f"💡 **계산 풀이**: {q['explanation']}")
+                        if q.get("memo"):
+                            st.caption(f"💡 공식 팁: {q['memo']}")
+                    st.markdown("---")
+
+        # 우측 암기 놀이터 패널
+        if col_side_calc is not None:
+            with col_side_calc:
+                st.markdown("### 🎮 우측 수치 암기 놀이터")
+                st.caption("계산문제를 풀며 옆에서 즉시 짝맞추기 암기!")
+                render_matching_game(is_compact=True)
+
+
+# ==========================================================
 # 탭 2: 지엽적 방어선 OX 족보
 # ==========================================================
 elif main_tab.startswith("⚡ 지엽적 방어선 OX"):
@@ -1598,6 +2038,12 @@ elif main_tab == "📊 내 학습 현황 & 오답노트":
     c75_correct = c75_solved - c75_wrong
     c75_acc = (c75_correct / c75_solved * 100) if c75_solved > 0 else 0.0
 
+    calc_total = len(calc_data)
+    calc_solved = len(st.session_state.prog.get("calc_answers", {}))
+    calc_wrong = len(st.session_state.prog.get("wrong_calcs", []))
+    calc_correct = calc_solved - calc_wrong
+    calc_acc = (calc_correct / calc_solved * 100) if calc_solved > 0 else 0.0
+
     ox_total = len(ox_data)
     ox_solved = len(st.session_state.prog.get("ox_answers", {}))
     ox_wrong = len(st.session_state.prog.get("wrong_oxs", []))
@@ -1606,24 +2052,27 @@ elif main_tab == "📊 내 학습 현황 & 오답노트":
 
     mcq_unknown = sum(1 for v in st.session_state.prog.get("mcq_answers", {}).values() if v == 0)
     c75_unknown = sum(1 for v in st.session_state.prog.get("c75_answers", {}).values() if v == 0)
+    calc_unknown = sum(1 for v in st.session_state.prog.get("calc_answers", {}).values() if v == 0)
     ox_unknown = sum(1 for v in st.session_state.prog.get("ox_answers", {}).values() if v == "unknown")
 
-    # 상단 6개 메트릭 (2행 또는 3개씩 분할)
-    col_stat1, col_stat2, col_stat3 = st.columns(3)
+    # 상단 8개 메트릭 (4개씩 2행)
+    col_stat1, col_stat2, col_stat3, col_stat4 = st.columns(4)
     col_stat1.metric("🎯 실전 4지선다 진척도", f"{mcq_solved} / {mcq_total}문항", f"{mcq_solved/mcq_total*100:.1f}%")
     col_stat2.metric("📖 핵심 75제 진척도", f"{c75_solved} / {c75_total}문항", f"{c75_solved/c75_total*100:.1f}%")
-    col_stat3.metric("⚡ OX 족보 진척도", f"{ox_solved} / {ox_total}문항", f"{ox_solved/ox_total*100:.1f}%")
+    col_stat3.metric("🧮 계산 37제 진척도", f"{calc_solved} / {calc_total}문항", f"{calc_solved/calc_total*100:.1f}%" if calc_total > 0 else "0.0%")
+    col_stat4.metric("⚡ OX 족보 진척도", f"{ox_solved} / {ox_total}문항", f"{ox_solved/ox_total*100:.1f}%")
 
-    col_acc1, col_acc2, col_acc3 = st.columns(3)
+    col_acc1, col_acc2, col_acc3, col_acc4 = st.columns(4)
     col_acc1.metric("🎯 4지선다 정답률", f"{mcq_acc:.1f}%", f"{mcq_correct}정답 / 취약 {mcq_wrong} (모름 {mcq_unknown})")
     col_acc2.metric("📖 75제 정답률", f"{c75_acc:.1f}%", f"{c75_correct}정답 / 취약 {c75_wrong} (모름 {c75_unknown})")
-    col_acc3.metric("⚡ OX 족보 정답률", f"{ox_acc:.1f}%", f"{ox_correct}정답 / 취약 {ox_wrong} (모름 {ox_unknown})")
+    col_acc3.metric("🧮 계산 37제 정답률", f"{calc_acc:.1f}%", f"{calc_correct}정답 / 취약 {calc_wrong} (모름 {calc_unknown})")
+    col_acc4.metric("⚡ OX 족보 정답률", f"{ox_acc:.1f}%", f"{ox_correct}정답 / 취약 {ox_wrong} (모름 {ox_unknown})")
 
     st.markdown("---")
     st.subheader("🚨 집중 공략: 내 오답 및 취약점(모름) 바구니 리스트")
     st.caption("틀렸거나 모른 문제를 완벽히 복습하여 정답으로 맞추면 이 리스트에서 자동으로 지워집니다.")
 
-    if mcq_wrong == 0 and c75_wrong == 0 and ox_wrong == 0:
+    if mcq_wrong == 0 and c75_wrong == 0 and calc_wrong == 0 and ox_wrong == 0:
         st.success("🎉 현재 모든 오답·취약점 바구니가 비어 있습니다! 완벽합니다.")
     else:
         if mcq_wrong > 0:
@@ -1650,6 +2099,21 @@ elif main_tab == "📊 내 학습 현황 & 오답노트":
                     st.write(f"- 💡 {q['explanation']}")
                     if q.get("memo"):
                         st.caption(f"💡 암기 팁: {q['memo']}")
+                    st.markdown("---")
+
+        if calc_wrong > 0:
+            st.markdown(f"#### 🔴 1급 계산문제 37제 취약 문제 ({calc_wrong}개, 모름 {calc_unknown}개)")
+            for cq in calc_data:
+                if cq["id"] in st.session_state.prog.get("wrong_calcs", []):
+                    is_unk_c = (st.session_state.prog.get("calc_answers", {}).get(str(cq["id"])) == 0)
+                    tag_c = "❓ [모름]" if is_unk_c else "❌ [오답]"
+                    ans_cn = cq["answer"]
+                    ans_ct = cq["options"][ans_cn - 1] if 1 <= ans_cn <= len(cq["options"]) else ""
+                    st.error(f"**{tag_c} [ID:{cq['id']}] [{cq['type_name']}]** {cq['question']}")
+                    st.write(f"- 정답: **{ans_cn}번** ({ans_ct})")
+                    st.write(f"- 💡 계산 풀이: {cq['explanation']}")
+                    if cq.get("memo"):
+                        st.caption(f"💡 공식 팁: {cq['memo']}")
                     st.markdown("---")
 
         if ox_wrong > 0:
