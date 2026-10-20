@@ -228,6 +228,21 @@
     background: var(--accent-orange);
     color: #fff;
   }
+  .back-step-btn {
+    background: #334155;
+    border: 1px solid #64748b;
+    color: #cbd5e1;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .back-step-btn:hover {
+    background: #475569;
+    color: #fff;
+  }
 
   /* 선택 버튼 그리드들 */
   .grid-choice-4 {
@@ -585,8 +600,9 @@
 
     <!-- STEP 2: 감지기 종류 -->
     <div class="step-section disabled-step" id="sec-step2">
-      <div class="section-label">
-        <span class="num">2</span> 감지기 종류 선택
+      <div class="section-label" style="display:flex; justify-content:space-between; align-items:center;">
+        <div><span class="num">2</span> 감지기 종류 선택</div>
+        <button class="back-step-btn" onclick="goBackStep(1)">↩️ [1단계] 높이·구조 다시 선택 (Back)</button>
       </div>
       <div class="grid-choice-5" id="opts-step2">
         <button class="btn-select" onclick="handleSelectStep2(0)" data-idx="0">
@@ -614,8 +630,9 @@
 
     <!-- STEP 3: 기준면적(㎡) 숫자 선택 -->
     <div class="step-section disabled-step" id="sec-step3">
-      <div class="section-label">
-        <span class="num">3</span> 해당 감지기의 1개당 기준면적(㎡) 선택
+      <div class="section-label" style="display:flex; justify-content:space-between; align-items:center;">
+        <div><span class="num">3</span> 해당 감지기의 1개당 기준면적(㎡) 선택</div>
+        <button class="back-step-btn" onclick="goBackStep(2)">↩️ [2단계] 감지기 다시 선택 (Back)</button>
       </div>
       <div class="grid-choice-nums" id="opts-step3">
         <button class="btn-select btn-num" onclick="handleSelectStep3('90')">90</button>
@@ -906,6 +923,25 @@ function pickNextTarget() {
   updateChainStepsUI(1);
 
   document.getElementById("round-counter").innerText = `ROUND ${round} / ${maxRounds}`;
+}
+
+// 이전 단계로 되돌아가기 (Back)
+function goBackStep(targetStep) {
+  playSound('click');
+  if (targetStep === 1) {
+    selectedRow = null;
+    document.querySelectorAll("#opts-step1 .btn-select").forEach(b => b.classList.remove("selected", "correct-glow", "wrong-glow"));
+    document.querySelectorAll("#opts-step2 .btn-select").forEach(b => b.classList.remove("selected", "correct-glow", "wrong-glow"));
+    highlightCell(null, null);
+    updateChainStepsUI(1);
+    showToast("↩️ [Step 1] 부착높이·구조를 다시 선택합니다.", "normal");
+  } else if (targetStep === 2) {
+    selectedCol = null;
+    document.querySelectorAll("#opts-step2 .btn-select").forEach(b => b.classList.remove("selected", "correct-glow", "wrong-glow"));
+    highlightCell(selectedRow, null);
+    updateChainStepsUI(2);
+    showToast("↩️ [Step 2] 감지기 종류를 다시 선택합니다.", "normal");
+  }
 }
 
 // Step 1: 부착높이 구조 클릭 핸들러

@@ -179,11 +179,14 @@ BUBBLE_GAME_HTML = """
     font-weight: bold;
     font-size: 12px;
     cursor: pointer;
-    margin-left: 6px;
+    margin-left: 4px;
+    transition: background 0.15s ease;
   }
   .btn:hover { background: #2563eb; }
   .btn-next { background: #10b981; }
   .btn-next:hover { background: #059669; }
+  .btn-back { background: #475569; }
+  .btn-back:hover { background: #334155; }
 
   /* 완료 오버레이 */
   #clear-overlay {
@@ -217,7 +220,10 @@ BUBBLE_GAME_HTML = """
     <div id="mission-card">
       <div id="target-title">
         <span id="target-category-name">특수인화물 (50 L)</span>
-        <button class="btn btn-next" id="btn-skip" onclick="nextStage()">다음 품명 ⏩</button>
+        <div style="display:flex; align-items:center; gap:4px;">
+          <button class="btn btn-back" id="btn-prev" onclick="prevStage()" title="이전 품명으로 되돌아가기">◀ 이전 (Back)</button>
+          <button class="btn btn-next" id="btn-skip" onclick="nextStage()" title="다음 품명으로 건너뛰기">다음 ▶</button>
+        </div>
       </div>
       <div id="target-mnemonic">💡 암기: "특수하게 디·이·아·산 (특수 다이아 산다!)"</div>
     </div>
@@ -236,7 +242,10 @@ BUBBLE_GAME_HTML = """
   <div id="clear-overlay">
     <h2>🎉 스테이지 퍼펙트 클리어!</h2>
     <p id="clear-msg">모든 타겟을 완벽하게 찾아냈습니다!</p>
-    <button class="btn btn-next" style="font-size: 16px; padding: 10px 20px;" onclick="nextStage()">다음 품명 도전하기 ▶</button>
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-back" style="font-size: 15px; padding: 10px 18px;" onclick="prevStage()">◀ 이전 품명</button>
+      <button class="btn btn-next" style="font-size: 15px; padding: 10px 20px;" onclick="nextStage()">다음 품명 도전하기 ▶</button>
+    </div>
   </div>
 </div>
 
@@ -550,6 +559,11 @@ function showStageClear() {
   const cur = DATA[stageIdx];
   clearMsg.innerHTML = `<strong>${cur.name}</strong>의 모든 위험물을 완벽하게 잡았습니다!<br><br><span style="color:#fef08a;">💡 ${cur.mnemonic}</span>`;
   clearOverlay.style.display = "flex";
+}
+
+function prevStage() {
+  const newIdx = (stageIdx - 1 + DATA.length) % DATA.length;
+  initStage(newIdx);
 }
 
 function nextStage() {
