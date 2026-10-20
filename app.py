@@ -12,6 +12,7 @@
 import streamlit as st
 import json, os, random, time
 from bubble_game import render_bubble_game
+from detector_game import render_detector_game
 
 st.set_page_config(
     page_title="1급 소방안전관리자 합격 튜터",
@@ -2006,14 +2007,17 @@ elif main_tab.startswith("🎮 핵심 수치 짝맞추기"):
     game_play_mode = st.radio(
         "🕹️ 플레이할 게임을 선택하세요",
         [
-            "🎈 1. 제4류 위험물 버블 팝(Catch) 아케이드 (신규!)",
-            "🧩 2. 1:1 수치 짝맞추기 카드 게임 (10대 테마)"
+            "🔥 1. 열감지기 기준면적 3-Step 매칭 (신규!)",
+            "🎈 2. 제4류 위험물 버블 팝(Catch) 아케이드",
+            "🧩 3. 1:1 수치 짝맞추기 카드 게임 (10대 테마)"
         ],
         horizontal=True
     )
     st.markdown("---")
 
-    if game_play_mode.startswith("🎈 1. 제4류 위험물 버블 팝"):
+    if game_play_mode.startswith("🔥 1. 열감지기"):
+        render_detector_game()
+    elif game_play_mode.startswith("🎈 2. 제4류"):
         render_bubble_game()
     else:
         render_matching_game(is_compact=False)
