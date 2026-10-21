@@ -1549,15 +1549,16 @@ elif main_tab.startswith("🧮 1급 계산문제 37제"):
 
             st.markdown("""
             <div style="background-color: #f8f9fa; border-left: 5px solid #6c757d; padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;">
-                <h4 style="margin: 0 0 8px 0; color: #495057;">🛢️ 9. 제4류 위험물 지정수량 & 배수 계산</h4>
-                <ul style="margin: 0; padding-left: 20px; line-height: 1.7;">
-                    <li><strong>특수인화물</strong>: <code>50L</code> (이황화탄소, 디에틸에테르)</li>
-                    <li><strong>제1석유류</strong>: 비수용성 <code>200L</code> (휘발유, 톨루엔) / 수용성 <code>400L</code> (아세톤)</li>
-                    <li><strong>알코올류</strong>: <code>400L</code> (메탄올, 에탄올)</li>
-                    <li><strong>제2석유류</strong>: 비수용성 <code>1,000L</code> (등유, 경유) / 수용성 <code>2,000L</code></li>
-                    <li><strong>제3석유류</strong>: 비수용성 <code>2,000L</code> (중유, 클레오소트유) / 수용성 <code>4,000L</code></li>
-                    <li><strong>제4석유류</strong>: <code>6,000L</code> (기어유, 실린더유) | <strong>동식물유류</strong>: <code>10,000L</code></li>
-                    <li><strong>배수 계산식</strong>: <code>지정수량의 배수 = 저장·취급량 ÷ 품명별 지정수량</code> (합계 ≥ 1 위험물안전관리법 적용)</li>
+                <h4 style="margin: 0 0 8px 0; color: #be123c;">🛢️ 9. 교재 수록 6대 핵심 위험물 지정수량 & 배수 계산</h4>
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 15px;">
+                    <li>🔥 <strong>휘발유</strong> (제4류 제1석유류): <code>200 L</code></li>
+                    <li>🔥 <strong>알코올류</strong> (제4류 알코올류): <code>400 L</code></li>
+                    <li>🔥 <strong>등유 · 경유</strong> (제4류 제2석유류): <code>1,000 L</code></li>
+                    <li>🔥 <strong>중유</strong> (제4류 제3석유류): <code>2,000 L</code></li>
+                    <li>🪨 <strong>황 (유황)</strong> (제2류 가연성 고체): <code>100 kg</code></li>
+                    <li>🧪 <strong>질산</strong> (제6류 산화성 액체): <code>300 kg</code></li>
+                    <li style="margin-top: 6px; color: #1e3a8a;"><strong>배수 계산식</strong>: <code>지정수량의 배수 = 저장·취급량 ÷ 품명별 지정수량</code> (합계 ≥ 1 위험물안전관리법 적용)</li>
+                    <li style="color: #047857;">💡 <strong>초간단 6대 암기 비법</strong>: <em>황(100) ➔ 휘(200) ➔ 질(300) ➔ 알(400) ➔ 등·경(1,000) ➔ 중(2,000)</em></li>
                 </ul>
             </div>
             """, unsafe_allow_html=True)
