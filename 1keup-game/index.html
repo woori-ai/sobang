@@ -90,6 +90,56 @@
       background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 100%);
     }
 
+    /* 5초 지문 읽기 카운트다운 오버레이 */
+    #countdown-overlay {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+      z-index: 50;
+      cursor: pointer;
+    }
+    .countdown-bubble {
+      background: rgba(13, 17, 23, 0.9);
+      border: 2px solid #58a6ff;
+      box-shadow: 0 0 25px rgba(88, 166, 255, 0.4);
+      padding: 16px 28px;
+      border-radius: 20px;
+      text-align: center;
+    }
+    .countdown-title {
+      font-size: 1rem;
+      color: #8b949e;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .countdown-num {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #58a6ff;
+      line-height: 1;
+      animation: pulseNum 1s ease-in-out infinite;
+    }
+    @keyframes pulseNum {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); color: #79c0ff; }
+    }
+    .countdown-skip {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #e3b341;
+      background: rgba(227, 179, 65, 0.15);
+      border: 1px solid rgba(227, 179, 65, 0.4);
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
     /* 낙하물 (등급 타겟 블록) */
     .drop-item {
       position: absolute;
@@ -112,7 +162,6 @@
     }
 
     /* 스케치 반영: 등급별 시각적 형태 및 디자인 */
-    /* 특급: 묵직한 직사각형 (금빛/다크블루) */
     .drop-item.type-특급 {
       width: 105px;
       height: 52px;
@@ -122,7 +171,6 @@
       color: #f0f6fc;
       font-size: 1.15rem;
     }
-    /* 1급: 스케치의 핵심인 강렬한 빨간 원형/타원 */
     .drop-item.type-1급 {
       width: 90px;
       height: 60px;
@@ -132,7 +180,6 @@
       color: #ff7b72;
       font-size: 1.15rem;
     }
-    /* 2급: 라운드 직사각형 (청록) */
     .drop-item.type-2급 {
       width: 95px;
       height: 54px;
@@ -142,7 +189,6 @@
       color: #79c0ff;
       font-size: 1.15rem;
     }
-    /* 3급: 부드러운 타원형 (퍼플) */
     .drop-item.type-3급 {
       width: 105px;
       height: 54px;
@@ -181,17 +227,43 @@
       justify-content: center;
       z-index: 20;
       box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.5);
+      position: relative;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    #question-panel.focus-read {
+      border-top-color: #58a6ff;
+      box-shadow: 0 -10px 30px rgba(88, 166, 255, 0.3);
+    }
+
+    /* 읽기 카운트다운 게이지 바 */
+    #read-progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: #58a6ff;
+      transition: width 0.1s linear;
+    }
+
+    .question-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
     }
     .question-tag {
-      display: inline-block;
-      align-self: flex-start;
       font-size: 0.75rem;
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 4px;
       background: #1f6feb;
       color: #ffffff;
-      margin-bottom: 8px;
+    }
+    .reading-status-badge {
+      font-size: 0.8rem;
+      color: #58a6ff;
+      font-weight: 700;
     }
     .question-text {
       font-size: 1.25rem;
@@ -218,7 +290,6 @@
       animation: boxShake 0.4s ease-in-out infinite;
       filter: contrast(1.5) drop-shadow(0 0 8px #f85149);
     }
-    /* 금 가는 선 오버레이 */
     .crack-svg {
       position: absolute;
       top: 0;
@@ -239,7 +310,6 @@
       to { stroke-dashoffset: 0; }
     }
 
-    /* 부서진 파편 파티클 */
     .shatter-piece {
       position: absolute;
       pointer-events: none;
@@ -247,7 +317,6 @@
       border-radius: 2px;
     }
 
-    /* 피드백 토스트 */
     #feedback-toast {
       position: absolute;
       top: 50%;
@@ -282,7 +351,6 @@
       box-shadow: 0 0 25px rgba(248, 81, 73, 0.6);
     }
 
-    /* 모달 (시작 및 게임오버 화면) */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -337,7 +405,7 @@
     <div class="hud-left">
       <div class="score-badge">SCORE: <span id="score-val">0</span></div>
       <div class="lives" id="lives-display">❤️❤️❤️</div>
-      <div class="progress-text" id="progress-val">1 / 15</div>
+      <div class="progress-text" id="progress-val">1 / 13</div>
     </div>
     <div class="hud-right">
       <label class="speed-control-label" for="speed-slider">
@@ -350,17 +418,29 @@
 
   <!-- 2. 낙하 플레이 영역 -->
   <main id="game-stage">
+    <!-- 5초 카운트다운 오버레이 -->
+    <div id="countdown-overlay" onclick="skipCountdown()">
+      <div class="countdown-bubble">
+        <div class="countdown-title">📖 지문을 읽고 정답을 준비하세요</div>
+        <div class="countdown-num" id="countdown-num">5</div>
+        <div class="countdown-skip">⚡ 클릭 시 즉시 낙하 시작</div>
+      </div>
+    </div>
     <div class="danger-line"></div>
   </main>
 
   <!-- 3. 하단 문제 지문 영역 -->
   <section id="question-panel">
-    <span class="question-tag" id="q-tag">선임대상물 퀴즈</span>
+    <div id="read-progress-bar"></div>
+    <div class="question-header-row">
+      <span class="question-tag" id="q-tag">선임대상물 퀴즈</span>
+      <span class="reading-status-badge" id="reading-status-badge">지문 확인 중...</span>
+    </div>
     <div class="question-text" id="q-text">문제를 불러오는 중...</div>
-    <div class="question-hint">👇 위에서 떨어지는 올바른 등급 블록을 클릭(터치)하세요!</div>
+    <div class="question-hint" id="q-hint">👇 지문을 읽어두세요! 카운트다운 후 공중에서 블록이 떨어집니다.</div>
   </section>
 
-  <!-- 피드백 토스트 (성공 / 실패) -->
+  <!-- 피드백 토스트 -->
   <div id="feedback-toast"></div>
 
   <!-- 시작 / 게임 오버 모달 -->
@@ -368,9 +448,10 @@
     <div class="modal-card">
       <h2 id="modal-title">소방안전관리자 1탄</h2>
       <p id="modal-desc">
-        하단에 제시되는 대상물 지문을 읽고,<br>
-        공중에서 떨어지는 <b>[특급 / 1급 / 2급 / 3급]</b> 블록 중<br>
-        정답을 바닥에 닿기 전에 클릭하여 격추하세요!<br><br>
+        문제 시작 전 <b>5초 동안 지문을 먼저 읽을 시간</b>이 주어집니다.<br><br>
+        카운트다운 후 공중에서 떨어지는<br>
+        <b>[특급 / 1급 / 2급 / 3급]</b> 블록 중 정답을 클릭해 격추하세요!<br>
+        (바닥에 닿으면 금이 가고 부서집니다)<br><br>
         ⏱️ 우측 상단에서 낙하 시간을 조절할 수 있습니다.
       </p>
       <button class="btn-action" id="modal-btn" onclick="startGame()">게임 시작</button>
@@ -449,7 +530,6 @@
       }
     ];
 
-    // 전체 선택지 목록
     const ALL_CATEGORIES = ["특급", "1급", "2급", "3급"];
 
     // ----------------------------------------------------
@@ -459,14 +539,24 @@
     let lives = 3;
     let questionPool = [];
     let currentQ = null;
-    let dropDuration = 8; // 기본 8초 (우측 상단 슬라이더로 조절)
+    let dropDuration = 8;
     let isGameOver = false;
-    let activeDrops = []; // 현재 화면에 떨어진 블록들
+    let activeDrops = [];
     let animationFrameId = null;
-    let isTransitioning = false; // 정답/오답 후 다음 문제 대기 여부
+    let isTransitioning = false;
+    let isReadingPhase = false; // 지문 읽기 카운트다운 상태
+    let countdownTimer = null;
+    let countdownSec = 5;
 
     const stageEl = document.getElementById("game-stage");
     const qTextEl = document.getElementById("q-text");
+    const qHintEl = document.getElementById("q-hint");
+    const qPanelEl = document.getElementById("question-panel");
+    const readingBadgeEl = document.getElementById("reading-status-badge");
+    const readProgressBar = document.getElementById("read-progress-bar");
+    const countdownOverlay = document.getElementById("countdown-overlay");
+    const countdownNum = document.getElementById("countdown-num");
+
     const scoreValEl = document.getElementById("score-val");
     const livesDisplayEl = document.getElementById("lives-display");
     const progressValEl = document.getElementById("progress-val");
@@ -476,7 +566,7 @@
     const modalEl = document.getElementById("modal");
 
     // ----------------------------------------------------
-    // 속도 조절 슬라이더 이벤트 & LocalStorage 유지
+    // 속도 조절 슬라이더 & LocalStorage
     // ----------------------------------------------------
     const savedSpeed = localStorage.getItem("sobang_drop_speed");
     if (savedSpeed) {
@@ -492,7 +582,7 @@
     });
 
     // ----------------------------------------------------
-    // 게임 시작 및 라운드 세팅
+    // 게임 시작
     // ----------------------------------------------------
     function startGame() {
       modalEl.style.display = "none";
@@ -503,6 +593,7 @@
       questionPool = [...QUESTIONS].sort(() => Math.random() - 0.5);
       updateHUD();
       nextQuestion();
+      lastTime = performance.now();
       gameLoop();
     }
 
@@ -513,7 +604,9 @@
       progressValEl.textContent = `${qIndex} / ${QUESTIONS.length}`;
     }
 
-    // 다음 지문 출제 & 블록 스폰
+    // ----------------------------------------------------
+    // 문제 출제 & 5초 읽기 카운트다운
+    // ----------------------------------------------------
     function nextQuestion() {
       clearDrops();
       isTransitioning = false;
@@ -525,18 +618,73 @@
 
       currentQ = questionPool.pop();
       updateHUD();
-      qTextEl.textContent = currentQ.text;
 
-      // 보기 생성 (정답 포함하여 특급, 1급, 2급, 3급 4개 모두 낙하)
+      // 지문 표시 및 포커스 하이라이트
+      qTextEl.textContent = currentQ.text;
+      qPanelEl.classList.add("focus-read");
+      qHintEl.textContent = "👇 지문을 읽어두세요! 카운트다운 후 공중에서 블록이 떨어집니다.";
+      readingBadgeEl.textContent = "📖 지문 확인 중 (5초)";
+
+      // 5초 카운트다운 시작
+      startReadingCountdown(5);
+    }
+
+    function startReadingCountdown(seconds) {
+      isReadingPhase = true;
+      countdownSec = seconds;
+      countdownOverlay.style.display = "flex";
+      countdownNum.textContent = countdownSec;
+      readProgressBar.style.width = "100%";
+
+      if (countdownTimer) clearInterval(countdownTimer);
+
+      const totalMs = seconds * 1000;
+      const startMs = Date.now();
+
+      countdownTimer = setInterval(() => {
+        const elapsed = Date.now() - startMs;
+        const remain = Math.max(0, totalMs - elapsed);
+        const remainSec = Math.ceil(remain / 1000);
+
+        countdownNum.textContent = remainSec;
+        readProgressBar.style.width = `${(remain / totalMs) * 100}%`;
+        readingBadgeEl.textContent = `📖 지문 확인 중 (${remainSec}초)`;
+
+        if (remain <= 0) {
+          endCountdownAndStartDrop();
+        }
+      }, 100);
+    }
+
+    // 스킵(즉시 낙하 시작)
+    function skipCountdown() {
+      if (!isReadingPhase) return;
+      endCountdownAndStartDrop();
+    }
+
+    // 카운트다운 종료 ➔ 낙하 시작
+    function endCountdownAndStartDrop() {
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
+      isReadingPhase = false;
+      countdownOverlay.style.display = "none";
+      readProgressBar.style.width = "0%";
+      qPanelEl.classList.remove("focus-read");
+      readingBadgeEl.textContent = "🎯 낙하 중! 정답 블록 클릭!";
+      qHintEl.textContent = "👇 위에서 떨어지는 올바른 등급 블록을 직접 클릭(터치)하세요!";
+
+      // 블록 스폰 및 낙하 시작
       spawnBlocks(ALL_CATEGORIES, currentQ.answer);
     }
 
-    // 블록 스폰 (스케치처럼 각기 다른 위치와 약간의 시간차)
+    // ----------------------------------------------------
+    // 블록 스폰
+    // ----------------------------------------------------
     function spawnBlocks(categories, answer) {
       const stageWidth = stageEl.clientWidth;
       const colWidth = stageWidth / categories.length;
-
-      // 순서 셔플
       const shuffled = [...categories].sort(() => Math.random() - 0.5);
 
       shuffled.forEach((cat, index) => {
@@ -546,18 +694,14 @@
         el.dataset.category = cat;
         el.dataset.isAnswer = (cat === answer) ? "true" : "false";
 
-        // x 좌표 분산 (영역 내 랜덤)
         const minX = index * colWidth + 10;
         const maxX = (index + 1) * colWidth - 110;
         const x = Math.max(10, minX + Math.random() * (maxX - minX));
-        
-        // y 시작 위치 (0~100px 차이를 주어 자연스럽게 낙하)
         const startY = -(60 + Math.random() * 80);
 
         el.style.left = `${x}px`;
         el.style.top = `${startY}px`;
 
-        // 클릭 이벤트 등록
         el.addEventListener("pointerdown", (e) => {
           e.stopPropagation();
           onBlockClick(el);
@@ -577,7 +721,7 @@
     }
 
     // ----------------------------------------------------
-    // 메인 게임 루프 (낙하 및 충돌 검사)
+    // 메인 게임 루프
     // ----------------------------------------------------
     let lastTime = performance.now();
 
@@ -587,11 +731,10 @@
       const dt = (now - lastTime) / 1000;
       lastTime = now;
 
-      if (!isTransitioning) {
+      // 지문 읽기 단계 중에는 낙하하지 않음
+      if (!isTransitioning && !isReadingPhase) {
         const stageHeight = stageEl.clientHeight;
-        const floorY = stageHeight - 56; // 바닥 라인 충돌 기준 높이
-        
-        // 초당 떨어지는 속도 (px/sec) = 화면 높이 / dropDuration
+        const floorY = stageHeight - 56;
         const speed = (stageHeight / dropDuration);
 
         for (let i = 0; i < activeDrops.length; i++) {
@@ -601,17 +744,15 @@
           item.y += speed * dt;
           item.el.style.top = `${item.y}px`;
 
-          // 바닥 충돌 감지!
+          // 바닥 충돌 감지
           if (item.y >= floorY) {
             item.y = floorY;
             item.el.style.top = `${item.y}px`;
 
             if (item.isAnswer) {
-              // 정답 블록이 바닥에 닿음 ➔ 금 가고 부서짐 연출 발동!
               triggerCrackAndShatter(item);
               break;
             } else {
-              // 오답 블록은 조용히 바닥에서 사라짐
               item.el.style.opacity = "0.3";
             }
           }
@@ -622,16 +763,15 @@
     }
 
     // ----------------------------------------------------
-    // 클릭 인터랙션
+    // 클릭 이벤트
     // ----------------------------------------------------
     function onBlockClick(el) {
-      if (isTransitioning || isGameOver) return;
+      if (isTransitioning || isGameOver || isReadingPhase) return;
 
       const isAnswer = el.dataset.isAnswer === "true";
       const cat = el.dataset.category;
 
       if (isAnswer) {
-        // 정답 클릭!
         isTransitioning = true;
         currentScore += 100;
         showToast("정답! +100점", true);
@@ -641,7 +781,6 @@
           nextQuestion();
         }, 900);
       } else {
-        // 오답 클릭!
         el.classList.add("cracking");
         showToast(`오답! ${cat}이(가) 아닙니다`, false);
         lives--;
@@ -658,16 +797,14 @@
     }
 
     // ----------------------------------------------------
-    // 실패 연출: 금 가기(Crack) ➔ 부서지기(Shatter) ➔ 소멸
+    // 실패 연출: 금가기 ➔ 부서지기 ➔ 소멸
     // ----------------------------------------------------
     function triggerCrackAndShatter(item) {
       isTransitioning = true;
       item.isCracking = true;
 
-      // 1단계: 흔들림 효과
       item.el.classList.add("cracking");
 
-      // 2단계: 금 가는 SVG 크랙 오버레이 삽입
       const crackSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       crackSvg.setAttribute("class", "crack-svg");
       crackSvg.innerHTML = `
@@ -677,12 +814,10 @@
       `;
       item.el.appendChild(crackSvg);
 
-      // 3단계: 0.4초 후 산산조각 파편 분해 및 소멸
       setTimeout(() => {
         createShatterParticles(item.el);
         item.el.style.display = "none";
 
-        // 라이프 차감 및 해설 노출
         lives--;
         updateHUD();
         showToast(`시간 초과! 놓침!<br><small style="font-size:0.95rem;color:#ffebee;">정답: [${currentQ.answer}] - ${currentQ.desc}</small>`, false);
@@ -697,29 +832,23 @@
       }, 450);
     }
 
-    // 산산조각 파편 파티클 생성
     function createShatterParticles(el) {
       const rect = el.getBoundingClientRect();
       const stageRect = stageEl.getBoundingClientRect();
       const originX = rect.left - stageRect.left + rect.width / 2;
       const originY = rect.top - stageRect.top + rect.height / 2;
 
-      const pieceCount = 18;
-      for (let i = 0; i < pieceCount; i++) {
+      for (let i = 0; i < 18; i++) {
         const piece = document.createElement("div");
         piece.className = "shatter-piece";
-        
-        // 파편 조각 크기 및 색상
         const size = Math.random() * 10 + 6;
         piece.style.width = `${size}px`;
         piece.style.height = `${size}px`;
         piece.style.background = (i % 2 === 0) ? "#f85149" : "#e3b341";
         piece.style.left = `${originX}px`;
         piece.style.top = `${originY}px`;
-
         stageEl.appendChild(piece);
 
-        // 파편 확산 애니메이션
         const angle = Math.random() * Math.PI * 2;
         const dist = Math.random() * 80 + 30;
         const destX = Math.cos(angle) * dist;
@@ -738,7 +867,6 @@
       }
     }
 
-    // 정답 시 환호 폭죽 파티클
     function createCorrectExplosion(el) {
       const rect = el.getBoundingClientRect();
       const stageRect = stageEl.getBoundingClientRect();
@@ -776,7 +904,6 @@
       }
     }
 
-    // 피드백 토스트 표시
     function showToast(msg, isSuccess) {
       toastEl.innerHTML = msg;
       toastEl.className = isSuccess ? "show correct" : "show wrong";
@@ -785,16 +912,15 @@
       }, 1400);
     }
 
-    // 잔여 블록 정리
     function clearDrops() {
       activeDrops.forEach(d => d.el.remove());
       activeDrops = [];
     }
 
-    // 게임 종료 모달
     function showGameOver(isWin) {
       isGameOver = true;
       cancelAnimationFrame(animationFrameId);
+      if (countdownTimer) clearInterval(countdownTimer);
       clearDrops();
 
       const modalTitle = document.getElementById("modal-title");
