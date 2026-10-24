@@ -36,7 +36,26 @@
     .hud-left {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+    }
+    .btn-exit-game {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover {
+      background: #30363d;
+      color: #58a6ff;
+      border-color: #58a6ff;
     }
     .score-badge {
       font-size: 1.1rem;
@@ -403,6 +422,7 @@
   <!-- 1. 상단 HUD & 속도 조절 옵션 -->
   <header>
     <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game" title="게임 목록으로 돌아가기">← 목록</a>
       <div class="score-badge">SCORE: <span id="score-val">0</span></div>
       <div class="lives" id="lives-display">❤️❤️❤️</div>
       <div class="progress-text" id="progress-val">1 / 13</div>
@@ -454,7 +474,10 @@
         (바닥에 닿으면 금이 가고 부서집니다)<br><br>
         ⏱️ 우측 상단에서 낙하 시간을 조절할 수 있습니다.
       </p>
-      <button class="btn-action" id="modal-btn" onclick="startGame()">게임 시작</button>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+        <button class="btn-action" id="modal-btn" onclick="startGame()">게임 시작</button>
+      </div>
     </div>
   </div>
 

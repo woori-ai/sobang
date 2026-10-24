@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>소방 게임 센터 | 소방안전관리자 1급</title>
+  <meta name="description" content="소방안전관리자 1급 합격을 위한 실전 암기 아케이드 게임 모음">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚒</text></svg>">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. 글로벌 헤더 */
+    .app-header {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-icon {
+      font-size: 1.6rem;
+    }
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      line-height: 1.2;
+    }
+    .brand-sub {
+      font-size: 0.75rem;
+      color: #8b949e;
+    }
+
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-back-home:hover {
+      background: #30363d;
+      color: #58a6ff;
+      border-color: #58a6ff;
+    }
+
+    /* 2. 히어로 배너 */
+    .hero-section {
+      max-width: 1080px;
+      margin: 24px auto 16px;
+      padding: 0 20px;
+      width: 100%;
+    }
+    .hero-card {
+      background: linear-gradient(135deg, #1f242c 0%, #161b22 100%);
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 24px 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .hero-card::after {
+      content: "🚒";
+      position: absolute;
+      right: 20px;
+      bottom: -15px;
+      font-size: 6rem;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(247, 129, 102, 0.2);
+      color: #f78166;
+      border: 1px solid rgba(247, 129, 102, 0.4);
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 8px;
+    }
+    .hero-desc {
+      font-size: 0.95rem;
+      color: #8b949e;
+      line-height: 1.5;
+      max-width: 600px;
+      word-break: keep-all;
+    }
+
+    /* 3. 게임 리스트 그리드 */
+    .games-container {
+      max-width: 1080px;
+      margin: 16px auto 40px;
+      padding: 0 20px;
+      width: 100%;
+      flex: 1;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #c9d1d9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .game-count-badge {
+      font-size: 0.8rem;
+      background: #21262d;
+      color: #58a6ff;
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 20px;
+    }
+
+    /* 게임 카드 */
+    .game-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .game-card.active-card {
+      cursor: pointer;
+      border-color: rgba(88, 166, 255, 0.4);
+    }
+    .game-card.active-card:hover {
+      transform: translateY(-4px);
+      border-color: #58a6ff;
+      box-shadow: 0 12px 28px rgba(88, 166, 255, 0.15);
+    }
+    .game-card.disabled-card {
+      opacity: 0.65;
+      cursor: not-allowed;
+      border-style: dashed;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .game-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      background: #21262d;
+      border: 1px solid #30363d;
+    }
+    .badge-status {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .badge-status.play {
+      background: rgba(35, 134, 54, 0.2);
+      color: #3fb950;
+      border: 1px solid rgba(63, 185, 80, 0.4);
+    }
+    .badge-status.soon {
+      background: rgba(139, 148, 158, 0.15);
+      color: #8b949e;
+      border: 1px solid #30363d;
+    }
+
+    .game-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .game-desc {
+      font-size: 0.88rem;
+      color: #8b949e;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      word-break: keep-all;
+    }
+    .game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .tag {
+      font-size: 0.72rem;
+      background: #21262d;
+      color: #79c0ff;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+    }
+
+    .btn-play {
+      width: 100%;
+      padding: 10px;
+      background: #238636;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s ease;
+    }
+    .active-card:hover .btn-play {
+      background: #2ea043;
+    }
+    .btn-disabled {
+      width: 100%;
+      padding: 10px;
+      background: #21262d;
+      color: #6e7681;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* 4. 푸터 */
+    footer {
+      border-top: 1px solid #21262d;
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6e7681;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 상단 글로벌 헤더 -->
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="./index.html" class="brand">
+        <span class="brand-icon">🚒</span>
+        <div>
+          <div class="brand-title">소방안전관리자 1급</div>
+          <div class="brand-sub">소방 게임 아케이드</div>
+        </div>
+      </a>
+      <a href="./index.html" class="btn-back-home" title="메인 문제풀이 화면으로 이동">
+        <span>← 메인 학습으로</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- 2. 히어로 배너 -->
+  <section class="hero-section">
+    <div class="hero-card">
+      <span class="hero-tag">🔥 실전 암기 아케이드</span>
+      <h1 class="hero-title">소방 게임 센터</h1>
+      <p class="hero-desc">
+        지루한 암기는 끝! 하늘에서 떨어지는 소방 핵심 키워드를 직접 조준 격추하며<br>
+        헷갈리는 층수, 높이, 연면적, 경력 연수를 완벽하게 마스터하세요.
+      </p>
+    </div>
+  </section>
+
+  <!-- 3. 게임 목록 영역 -->
+  <main class="games-container">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span>🎮 플레이 가능한 게임 모음</span>
+      </h2>
+      <span class="game-count-badge">총 4개 시리즈</span>
+    </div>
+
+    <div class="game-grid">
+
+      <!-- 게임 1탄: 대상물 낙하 격추 퀴즈 (플레이 가능) -->
+      <a href="./1keup-game/index.html" class="game-card active-card">
+        <div>
+          <div class="card-top">
+            <div class="game-icon-box" style="border-color:#e3b341;">🎯</div>
+            <span class="badge-status play">PLAY 가능 ▶</span>
+          </div>
+          <h3 class="game-title">[제 1탄] 대상물 선임 기준 격추</h3>
+          <p class="game-desc">
+            50층, 30층, 120m, 10만㎡, 1.5만㎡! 쏟아지는 지문을 읽고 올바른 [특급/1급/2급/3급] 블록을 바닥에 부서지기 전에 격추하세요.
+          </p>
+          <div class="game-tags">
+            <span class="tag">#특급/1급/2급/3급</span>
+            <span class="tag">#선임대상물</span>
+            <span class="tag">#5초읽기타이머</span>
+            <span class="tag">#바닥파손연출</span>
+          </div>
+        </div>
+        <div class="btn-play">
+          <span>게임 시작하기 ▶</span>
+        </div>
+      </a>
+
+      <!-- 게임 2탄: 선임 자격 & 경력 연수 격추 (준비 중) -->
+      <div class="game-card disabled-card">
+        <div>
+          <div class="card-top">
+            <div class="game-icon-box">⏱️</div>
+            <span class="badge-status soon">준비 중 🔒</span>
+          </div>
+          <h3 class="game-title">[제 2탄] 선임 자격 & 경력 연수</h3>
+          <p class="game-desc">
+            소방공무원(20년/7년/3년/1년), 기사(5년/7년), 기술사/관리사 요건을 순발력 있게 매칭하는 경력 암기 특훈 게임.
+          </p>
+          <div class="game-tags">
+            <span class="tag">#소방공무원경력</span>
+            <span class="tag">#기사/산업기사</span>
+            <span class="tag">#자격요건</span>
+          </div>
+        </div>
+        <div class="btn-disabled">
+          <span>곧 출시 예정입니다</span>
+        </div>
+      </div>
+
+      <!-- 게임 3탄: 소방보조자 선임 기준 (준비 중) -->
+      <div class="game-card disabled-card">
+        <div>
+          <div class="card-top">
+            <div class="game-icon-box">🏢</div>
+            <span class="badge-status soon">준비 중 🔒</span>
+          </div>
+          <h3 class="game-title">[제 3탄] 소방보조자 추가 선임 기준</h3>
+          <p class="game-desc">
+            아파트 300세대 초과마다 1명, 연면적 1.5만㎡마다 1명(특정조건 3만㎡), 대상 시설(기숙사, 의료 등)을 정복하는 계산 연계 게임.
+          </p>
+          <div class="game-tags">
+            <span class="tag">#소방보조자</span>
+            <span class="tag">#300세대</span>
+            <span class="tag">#1.5만㎡</span>
+          </div>
+        </div>
+        <div class="btn-disabled">
+          <span>곧 출시 예정입니다</span>
+        </div>
+      </div>
+
+      <!-- 게임 4탄: 소화설비별 설치 대상물 (준비 중) -->
+      <div class="game-card disabled-card">
+        <div>
+          <div class="card-top">
+            <div class="game-icon-box">🧯</div>
+            <span class="badge-status soon">준비 중 🔒</span>
+          </div>
+          <h3 class="game-title">[제 4탄] 소방설비별 설치 대상물</h3>
+          <p class="game-desc">
+            옥내소화전, 스프링클러, 물분무등소화설비(호스릴 제외), 자동화재탐지설비 등 설비와 대상을 번개처럼 연결하는 스피드 매칭.
+          </p>
+          <div class="game-tags">
+            <span class="tag">#소화설비</span>
+            <span class="tag">#경보설비</span>
+            <span class="tag">#2급vs3급</span>
+          </div>
+        </div>
+        <div class="btn-disabled">
+          <span>곧 출시 예정입니다</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    소방안전관리자 1급 합격 트레이닝 센터 © 2026
+  </footer>
+
+</body>
+</html>
