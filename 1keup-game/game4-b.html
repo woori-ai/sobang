@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>소방시설 5대 분류 플로팅 헌팅 4탄 B</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. 상단 HUD & 속도 조절 */
+    header {
+      height: 60px;
+      padding: 10px 16px;
+      background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-exit-game {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover {
+      background: #30363d;
+      color: #58a6ff;
+      border-color: #58a6ff;
+    }
+    .score-badge {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #58a6ff;
+    }
+    .lives {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.35); filter: drop-shadow(0 0 10px #ff4d6d); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.6s ease-in-out;
+    }
+    .progress-text {
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #161b22;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+    }
+    .speed-control-label {
+      font-size: 0.8rem;
+      color: #c9d1d9;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .speed-slider {
+      width: 100px;
+      cursor: pointer;
+      accent-color: #a371f7;
+    }
+    .speed-val {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #a371f7;
+      min-width: 38px;
+      text-align: right;
+    }
+
+    /* 2. 상단 미션 목표 배너 */
+    .mission-banner {
+      background: #161b22;
+      border-bottom: 2px solid #30363d;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 40;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    .mission-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .mission-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #a371f7;
+      display: inline-block;
+    }
+    .mission-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mission-counter {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 6px 14px;
+      text-align: right;
+    }
+    .counter-label {
+      font-size: 0.72rem;
+      color: #8b949e;
+      display: block;
+    }
+    .counter-value {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #3fb950;
+    }
+
+    /* 3. 유영 플레이 필드 */
+    #floating-stage {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%);
+    }
+
+    /* 둥둥 떠다니는 단어 블록 */
+    .floating-bubble {
+      position: absolute;
+      cursor: pointer;
+      padding: 10px 16px;
+      border-radius: 20px;
+      background: #21262d;
+      border: 2px solid #30363d;
+      color: #e6edf3;
+      font-weight: 700;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      transition: transform 0.1s ease, border-color 0.2s ease, background 0.2s ease;
+      touch-action: manipulation;
+    }
+    .floating-bubble:hover {
+      filter: brightness(1.2);
+      transform: scale(1.06);
+    }
+    .floating-bubble:active {
+      transform: scale(0.94);
+    }
+
+    /* 정답 수집 시 폭죽 & 사라짐 */
+    @keyframes bubblePop {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); filter: drop-shadow(0 0 15px #3fb950); }
+      100% { transform: scale(0); opacity: 0; }
+    }
+    .popping {
+      animation: bubblePop 0.35s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+
+    /* 함정 클릭 시 진동 */
+    @keyframes bubbleShake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-5px, 2px) rotate(-3deg); }
+      40% { transform: translate(5px, -2px) rotate(3deg); }
+      60% { transform: translate(-4px, 1px) rotate(-2deg); }
+      80% { transform: translate(4px, -1px) rotate(2deg); }
+    }
+    .shake-wrong {
+      animation: bubbleShake 0.4s ease-in-out;
+      border-color: #f85149 !important;
+      background: rgba(248, 81, 73, 0.25) !important;
+      color: #ff7b72 !important;
+    }
+
+    /* 피드백 토스트 */
+    #feedback-toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      padding: 16px 28px;
+      border-radius: 14px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+      max-width: 85%;
+      word-break: keep-all;
+    }
+    #feedback-toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    #feedback-toast.correct {
+      background: rgba(35, 134, 54, 0.95);
+      border: 2px solid #3fb950;
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(63, 185, 80, 0.6);
+    }
+    #feedback-toast.wrong {
+      background: rgba(218, 54, 51, 0.95);
+      border: 2px solid #f85149;
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(248, 81, 73, 0.6);
+    }
+
+    /* 별가루 파티클 */
+    .shatter-piece {
+      position: absolute;
+      pointer-events: none;
+      z-index: 100;
+      border-radius: 50%;
+    }
+
+    /* 모달 */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 17, 23, 0.88);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      padding: 16px;
+    }
+    .modal-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 26px 20px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 85vh;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .modal-card h2 {
+      font-size: 1.55rem;
+      margin-bottom: 10px;
+      color: #f0f6fc;
+    }
+    .modal-card p {
+      font-size: 0.95rem;
+      color: #8b949e;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .btn-action {
+      background: #238636;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-action:hover {
+      background: #2ea043;
+    }
+
+    /* 오답 리포트 스타일 */
+    .wrong-report-container {
+      margin: 16px 0;
+      text-align: left;
+      border-top: 1px solid #30363d;
+      padding-top: 14px;
+    }
+    .wrong-report-header {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f85149;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .wrong-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .wrong-card {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-left: 4px solid #f85149;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .wrong-q-text {
+      font-size: 0.88rem;
+      color: #e6edf3;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+    .wrong-desc {
+      font-size: 0.8rem;
+      color: #8b949e;
+      line-height: 1.35;
+    }
+    .perfect-score-banner {
+      background: rgba(35, 134, 54, 0.15);
+      border: 1px solid rgba(63, 185, 80, 0.4);
+      color: #7ee787;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 14px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 상단 글로벌 HUD -->
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game" title="게임 목록으로 돌아가기">← 목록</a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-display">❤️❤️❤️🖤🖤</div>
+      <div class="progress-text" id="progress-val">라운드 1 / 3</div>
+    </div>
+    <div class="hud-right">
+      <label class="speed-control-label" for="speed-slider">
+        🛸 유영속도:
+      </label>
+      <input type="range" id="speed-slider" class="speed-slider" min="1" max="5" step="1" value="2">
+      <span class="speed-val" id="speed-text">2단계</span>
+    </div>
+  </header>
+
+  <!-- 2. 상단 미션 배너 -->
+  <section class="mission-banner">
+    <div class="mission-info">
+      <span class="mission-tag" id="mission-tag">🎯 플로팅 헌팅 미션</span>
+      <h2 class="mission-title" id="mission-title">소화설비를 모두 찾아 터치하세요!</h2>
+    </div>
+    <div class="mission-counter">
+      <span class="counter-label">찾은 개수</span>
+      <span class="counter-value" id="counter-value">0 / 5</span>
+    </div>
+  </section>
+
+  <!-- 3. 유영 플레이 필드 -->
+  <main id="floating-stage"></main>
+
+  <div id="feedback-toast"></div>
+
+  <!-- 시작 / 게임 오버 모달 -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-card">
+      <h2 id="modal-title">소방시설 5대 분류 4탄 B</h2>
+      <p id="modal-desc">
+        단어들이 화면 밖으로 흘러나가지 않고 <b>둥둥 떠다닙니다!</b><br><br>
+        상단 미션(예: <b>[소화설비]</b>)에 해당하는 진짜 설비들만<br>
+        함정 단어를 피해 모두 콕콕 터치하여 격추하세요!<br><br>
+        ⚠️ <b>함정 단어(오답)를 터치하면 하트가 깎입니다.</b><br>
+        ❤️ <b>미션 완료 시 하트 +1 회복!</b> (최대 5개)
+      </p>
+
+      <div id="wrong-report-area"></div>
+
+      <div id="modal-actions" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+        <button class="btn-action" id="modal-btn" onclick="startGame()">게임 시작</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ----------------------------------------------------
+    // 라운드별 미션 데이터 (교재 원문 100% 반영)
+    // ----------------------------------------------------
+    const MISSIONS = [
+      {
+        round: 1,
+        targetCategory: "소화설비",
+        title: "🔥 [소화설비] 5개를 모두 찾아 터치하세요!",
+        requiredCount: 5,
+        // 진짜 정답 5개
+        answers: [
+          { name: "소화기구", desc: "소화설비: 소화기, 간이소화용구, 자동확산소화기" },
+          { name: "자동소화장치", desc: "소화설비: 주거용, 상업용, 캐비닛형 자동소화장치" },
+          { name: "옥내·옥외소화전", desc: "소화설비: 물을 이용한 기본 소화설비" },
+          { name: "스프링클러설비", desc: "소화설비: 스프링클러 및 간이스프링클러" },
+          { name: "물분무등소화설비", desc: "소화설비: 가스계(이산화탄소/할론), 분말, 포 등" }
+        ],
+        // 시험 단골 함정 단어들
+        traps: [
+          { name: "소화수조", category: "소화용수설비", desc: "함정! 소화수조는 [소화용수설비]입니다." },
+          { name: "상수도소화용수", category: "소화용수설비", desc: "함정! 상수도소화용수는 [소화용수설비]입니다." },
+          { name: "완강기", category: "피난구조설비", desc: "함정! 완강기는 [피난구조설비]입니다." },
+          { name: "시각경보기", category: "경보설비", desc: "함정! 시각경보기는 [경보설비]입니다." },
+          { name: "제연설비", category: "소화활동설비", desc: "함정! 제연설비는 [소화활동설비]입니다." },
+          { name: "비상콘센트", category: "소화활동설비", desc: "함정! 비상콘센트는 [소화활동설비]입니다." }
+        ]
+      },
+      {
+        round: 2,
+        targetCategory: "소화활동설비",
+        title: "🚒 [소화활동설비 (소방관용 6가지)]를 모두 찾으세요!",
+        requiredCount: 6,
+        answers: [
+          { name: "제연설비", desc: "소화활동: 연기를 배출하고 제어하는 소방활동설비" },
+          { name: "연결송수관설비", desc: "소화활동: 소방차가 호스를 연결하여 송수" },
+          { name: "연결살수설비", desc: "소화활동: 지하가 등에 살수용 송수관 연결" },
+          { name: "비상콘센트설비", desc: "소화활동: 소방관의 동력 장비 전원 공급용" },
+          { name: "무선통신보조설비", desc: "소화활동: 지하 등 전파 음영지역 무선통신" },
+          { name: "연소저지설비", desc: "소화활동: 지하구의 화재 확산 방지" }
+        ],
+        traps: [
+          { name: "스프링클러", category: "소화설비", desc: "함정! 스프링클러는 [소화설비]입니다." },
+          { name: "자동화재탐지설비", category: "경보설비", desc: "함정! 자탐은 [경보설비]입니다." },
+          { name: "구조대", category: "피난구조설비", desc: "함정! 구조대는 [피난구조설비]입니다." },
+          { name: "소화수조", category: "소화용수설비", desc: "함정! 소화수조는 [소화용수설비]입니다." },
+          { name: "자동소화장치", category: "소화설비", desc: "함정! 자동소화장치는 [소화설비]입니다." }
+        ]
+      },
+      {
+        round: 3,
+        targetCategory: "피난구조설비",
+        title: "🏃 [피난구조설비] 4개를 모두 찾아 터치하세요!",
+        requiredCount: 4,
+        answers: [
+          { name: "피난기구(완강기·구조대)", desc: "피난구조: 피난사다리, 구조대, 완강기 등" },
+          { name: "인명구조기구", desc: "피난구조: 방열·방화복, 공기호흡기, 인공소생기" },
+          { name: "유도등 및 유도표지", desc: "피난구조: 피난 방향을 안내하는 유도등" },
+          { name: "비상조명등", desc: "피난구조: 정전 시 피난 경로를 밝히는 조명등" }
+        ],
+        traps: [
+          { name: "단독경보형감지기", category: "경보설비", desc: "함정! 감지기는 [경보설비]입니다." },
+          { name: "비상방송설비", category: "경보설비", desc: "함정! 비상방송은 [경보설비]입니다." },
+          { name: "연결송수관설비", category: "소화활동설비", desc: "함정! 연결송수관은 [소화활동설비]입니다." },
+          { name: "옥내소화전", category: "소화설비", desc: "함정! 소화전은 [소화설비]입니다." },
+          { name: "상수도소화용수", category: "소화용수설비", desc: "함정! [소화용수설비]입니다." }
+        ]
+      }
+    ];
+
+    const MAX_LIVES = 5;
+    const START_LIVES = 3;
+    let currentScore = 0;
+    let lives = START_LIVES;
+    let roundIndex = 0;
+    let currentMission = null;
+    let foundCount = 0;
+    let wrongTraps = []; // 틀린 함정 수집
+    let isGameOver = false;
+    let activeBubbles = [];
+    let animationFrameId = null;
+    let speedMultiplier = 1.0;
+
+    const stageEl = document.getElementById("floating-stage");
+    const missionTitleEl = document.getElementById("mission-title");
+    const counterValueEl = document.getElementById("counter-value");
+    const scoreValEl = document.getElementById("score-val");
+    const livesDisplayEl = document.getElementById("lives-display");
+    const progressValEl = document.getElementById("progress-val");
+    const toastEl = document.getElementById("feedback-toast");
+    const speedSlider = document.getElementById("speed-slider");
+    const speedText = document.getElementById("speed-text");
+    const modalEl = document.getElementById("modal");
+
+    // 속도 조절 이벤트
+    speedSlider.addEventListener("input", (e) => {
+      const level = parseInt(e.target.value, 10);
+      speedText.textContent = level + "단계";
+      speedMultiplier = 0.5 + level * 0.35;
+    });
+
+    function recordWrong(trap) {
+      if (!trap) return;
+      if (!wrongTraps.some(item => item.name === trap.name)) {
+        wrongTraps.push(trap);
+      }
+    }
+
+    function startGame() {
+      modalEl.style.display = "none";
+      currentScore = 0;
+      lives = START_LIVES;
+      roundIndex = 0;
+      isGameOver = false;
+      wrongTraps = [];
+      updateHUD();
+      loadRound(roundIndex);
+      lastTime = performance.now();
+      gameLoop();
+    }
+
+    function updateHUD() {
+      scoreValEl.textContent = currentScore;
+      livesDisplayEl.textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, MAX_LIVES - lives));
+      progressValEl.textContent = `라운드 ${roundIndex + 1} / ${MISSIONS.length}`;
+    }
+
+    function triggerHeartHealAnim() {
+      livesDisplayEl.classList.remove("heart-heal-bounce");
+      void livesDisplayEl.offsetWidth;
+      livesDisplayEl.classList.add("heart-heal-bounce");
+    }
+
+    // 라운드 로드
+    function loadRound(idx) {
+      clearBubbles();
+      if (idx >= MISSIONS.length) {
+        showGameOver(true);
+        return;
+      }
+
+      currentMission = MISSIONS[idx];
+      foundCount = 0;
+      updateHUD();
+
+      missionTitleEl.textContent = currentMission.title;
+      counterValueEl.textContent = `${foundCount} / ${currentMission.requiredCount}`;
+
+      // 정답 + 함정 합쳐서 스폰
+      const allItems = [
+        ...currentMission.answers.map(a => ({ ...a, isAnswer: true })),
+        ...currentMission.traps.map(t => ({ ...t, isAnswer: false }))
+      ];
+
+      spawnFloatingBubbles(allItems);
+    }
+
+    // 유영 단어 블록 스폰
+    function spawnFloatingBubbles(items) {
+      const stageW = stageEl.clientWidth;
+      const stageH = stageEl.clientHeight;
+
+      // 셔플
+      const shuffled = [...items].sort(() => Math.random() - 0.5);
+
+      shuffled.forEach((item, index) => {
+        const el = document.createElement("div");
+        el.className = "floating-bubble";
+        el.textContent = item.name;
+
+        stageEl.appendChild(el);
+
+        const bw = el.offsetWidth || 120;
+        const bh = el.offsetHeight || 44;
+
+        // 랜덤 위치 (화면 내부)
+        const x = Math.random() * (stageW - bw - 20) + 10;
+        const y = Math.random() * (stageH - bh - 20) + 10;
+
+        // 랜덤 방향 속도
+        const angle = Math.random() * Math.PI * 2;
+        const baseSpeed = (Math.random() * 35 + 25);
+        const vx = Math.cos(angle) * baseSpeed;
+        const vy = Math.sin(angle) * baseSpeed;
+
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+
+        el.addEventListener("pointerdown", (e) => {
+          e.stopPropagation();
+          onBubbleClick(item, el);
+        });
+
+        activeBubbles.push({
+          el: el,
+          data: item,
+          x: x,
+          y: y,
+          vx: vx,
+          vy: vy,
+          w: bw,
+          h: bh,
+          isCollected: false
+        });
+      });
+    }
+
+    // ----------------------------------------------------
+    // 메인 물리 유영 루프 (벽 충돌 튕김)
+    // ----------------------------------------------------
+    let lastTime = performance.now();
+
+    function gameLoop(now = performance.now()) {
+      if (isGameOver) return;
+
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      const stageW = stageEl.clientWidth;
+      const stageH = stageEl.clientHeight;
+
+      activeBubbles.forEach(b => {
+        if (b.isCollected) return;
+
+        b.x += b.vx * dt * speedMultiplier;
+        b.y += b.vy * dt * speedMultiplier;
+
+        // 좌우 벽 충돌
+        if (b.x <= 5) {
+          b.x = 5;
+          b.vx = Math.abs(b.vx);
+        } else if (b.x + b.w >= stageW - 5) {
+          b.x = stageW - b.w - 5;
+          b.vx = -Math.abs(b.vx);
+        }
+
+        // 상하 벽 충돌
+        if (b.y <= 5) {
+          b.y = 5;
+          b.vy = Math.abs(b.vy);
+        } else if (b.y + b.h >= stageH - 5) {
+          b.y = stageH - b.h - 5;
+          b.vy = -Math.abs(b.vy);
+        }
+
+        b.el.style.left = `${b.x}px`;
+        b.el.style.top = `${b.y}px`;
+      });
+
+      animationFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    // ----------------------------------------------------
+    // 단어 터치 판정
+    // ----------------------------------------------------
+    function onBubbleClick(item, el) {
+      if (isGameOver) return;
+
+      if (item.isAnswer) {
+        // 정답 터치!
+        const bObj = activeBubbles.find(b => b.el === el);
+        if (bObj) bObj.isCollected = true;
+
+        el.classList.add("popping");
+        createPopParticles(el);
+
+        foundCount++;
+        currentScore += 100;
+        counterValueEl.textContent = `${foundCount} / ${currentMission.requiredCount}`;
+
+        showToast(`🎯 정답! [${item.name}] +100점`, true);
+
+        // 정답을 모두 찾았는지 확인
+        if (foundCount >= currentMission.requiredCount) {
+          onRoundClear();
+        }
+
+      } else {
+        // 함정 터치!
+        recordWrong(item);
+        el.classList.add("shake-wrong");
+        lives--;
+        updateHUD();
+
+        showToast(`❌ 함정! [${item.name}]은(는) ${item.category}입니다!`, false);
+
+        setTimeout(() => {
+          el.classList.remove("shake-wrong");
+        }, 500);
+
+        if (lives <= 0) {
+          showGameOver(false);
+        }
+      }
+    }
+
+    // 라운드 클리어
+    function onRoundClear() {
+      let healMsg = "";
+      if (lives < MAX_LIVES) {
+        lives++;
+        healMsg = " ❤️ 하트 +1 회복!";
+        triggerHeartHealAnim();
+      }
+      updateHUD();
+
+      showToast(`🎉 라운드 클리어! 모든 설비를 찾았습니다!${healMsg}`, true);
+
+      setTimeout(() => {
+        roundIndex++;
+        loadRound(roundIndex);
+      }, 1500);
+    }
+
+    // 별가루 파티클
+    function createPopParticles(el) {
+      const rect = el.getBoundingClientRect();
+      const stageRect = stageEl.getBoundingClientRect();
+      const originX = rect.left - stageRect.left + rect.width / 2;
+      const originY = rect.top - stageRect.top + rect.height / 2;
+
+      for (let i = 0; i < 16; i++) {
+        const p = document.createElement("div");
+        p.className = "shatter-piece";
+        p.style.width = "7px";
+        p.style.height = "7px";
+        p.style.background = ["#3fb950", "#58a6ff", "#f1e05a", "#a371f7"][i % 4];
+        p.style.left = `${originX}px`;
+        p.style.top = `${originY}px`;
+        stageEl.appendChild(p);
+
+        const angle = (Math.PI * 2 / 16) * i;
+        const dist = 50 + Math.random() * 30;
+
+        p.animate([
+          { transform: "translate(0,0) scale(1)", opacity: 1 },
+          { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) scale(0)`, opacity: 0 }
+        ], {
+          duration: 450,
+          easing: "ease-out",
+          fill: "forwards"
+        });
+        setTimeout(() => p.remove(), 500);
+      }
+    }
+
+    function showToast(msg, isSuccess) {
+      toastEl.innerHTML = msg;
+      toastEl.className = isSuccess ? "show correct" : "show wrong";
+      setTimeout(() => {
+        toastEl.className = "";
+      }, 1400);
+    }
+
+    function clearBubbles() {
+      activeBubbles.forEach(b => b.el.remove());
+      activeBubbles = [];
+    }
+
+    function showGameOver(isWin) {
+      isGameOver = true;
+      cancelAnimationFrame(animationFrameId);
+      clearBubbles();
+
+      const modalTitle = document.getElementById("modal-title");
+      const modalDesc = document.getElementById("modal-desc");
+      const wrongReportArea = document.getElementById("wrong-report-area");
+      const modalActions = document.getElementById("modal-actions");
+
+      if (isWin && wrongTraps.length === 0) {
+        modalTitle.textContent = "🏆 퍼펙트 헌팅 올킬!";
+        modalDesc.innerHTML = `함정에 단 한 번도 걸리지 않고 모든 설비를 찾아냈습니다!<br>최종 점수: <b style="color:#58a6ff;">${currentScore}점</b>`;
+        wrongReportArea.innerHTML = `
+          <div class="perfect-score-banner">
+            ✨ 소방시설 5대 분류 완벽 정복! 함정 판별력 100%!
+          </div>
+        `;
+        modalActions.innerHTML = `
+          <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+          <button class="btn-action" onclick="startGame()">다시 도전하기</button>
+        `;
+      } else {
+        modalTitle.textContent = isWin ? "🎉 전 라운드 정복 완료!" : "💥 게임 오버!";
+        modalDesc.innerHTML = `
+          최종 점수: <b style="color:#58a6ff;">${currentScore}점</b> | 잘못 누른 함정: <b style="color:#f85149;">${wrongTraps.length}개</b>
+        `;
+
+        if (wrongTraps.length > 0) {
+          let listHtml = `
+            <div class="wrong-report-container">
+              <div class="wrong-report-header">
+                <span>📝 이번 판 함정 복습 리포트 (${wrongTraps.length}개)</span>
+              </div>
+              <div class="wrong-items-list">
+          `;
+
+          wrongTraps.forEach((trap, idx) => {
+            listHtml += `
+              <div class="wrong-card">
+                <div class="wrong-q-text">⚠️ ${idx + 1}. [${trap.name}] ➔ 실제: ${trap.category}</div>
+                <div class="wrong-desc">💡 ${trap.desc}</div>
+              </div>
+            `;
+          });
+
+          listHtml += `
+              </div>
+            </div>
+          `;
+          wrongReportArea.innerHTML = listHtml;
+
+          modalActions.innerHTML = `
+            <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+            <button class="btn-action" onclick="startGame()">🔁 전체 다시 도전</button>
+          `;
+        } else {
+          wrongReportArea.innerHTML = "";
+          modalActions.innerHTML = `
+            <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+            <button class="btn-action" onclick="startGame()">다시 도전하기</button>
+          `;
+        }
+      }
+
+      modalEl.style.display = "flex";
+    }
+  </script>
+</body>
+</html>
