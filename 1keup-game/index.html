@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>소방안전관리자 대상물 낙하 격추 퀴즈 1탄</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. 상단 HUD & 속도 조절 옵션 */
+    header {
+      height: 60px;
+      padding: 10px 16px;
+      background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .score-badge {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #58a6ff;
+    }
+    .lives {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+    }
+    .progress-text {
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    /* 우측 상단 옵션: 낙하 속도 조절 컨트롤 */
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #161b22;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+    }
+    .speed-control-label {
+      font-size: 0.8rem;
+      color: #c9d1d9;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .speed-slider {
+      width: 100px;
+      cursor: pointer;
+      accent-color: #f78166;
+    }
+    .speed-val {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #f78166;
+      min-width: 38px;
+      text-align: right;
+    }
+
+    /* 2. 낙하 플레이 필드 */
+    #game-stage {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 100%);
+    }
+
+    /* 낙하물 (등급 타겟 블록) */
+    .drop-item {
+      position: absolute;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      letter-spacing: 1px;
+      transition: transform 0.05s ease;
+      touch-action: manipulation;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+    .drop-item:hover {
+      filter: brightness(1.15);
+      transform: scale(1.05);
+    }
+    .drop-item:active {
+      transform: scale(0.95);
+    }
+
+    /* 스케치 반영: 등급별 시각적 형태 및 디자인 */
+    /* 특급: 묵직한 직사각형 (금빛/다크블루) */
+    .drop-item.type-특급 {
+      width: 105px;
+      height: 52px;
+      border-radius: 8px;
+      background: #1f293d;
+      border: 3px solid #e3b341;
+      color: #f0f6fc;
+      font-size: 1.15rem;
+    }
+    /* 1급: 스케치의 핵심인 강렬한 빨간 원형/타원 */
+    .drop-item.type-1급 {
+      width: 90px;
+      height: 60px;
+      border-radius: 50px;
+      background: #2a1215;
+      border: 3px solid #f85149;
+      color: #ff7b72;
+      font-size: 1.15rem;
+    }
+    /* 2급: 라운드 직사각형 (청록) */
+    .drop-item.type-2급 {
+      width: 95px;
+      height: 54px;
+      border-radius: 12px;
+      background: #0d282f;
+      border: 3px solid #388bfd;
+      color: #79c0ff;
+      font-size: 1.15rem;
+    }
+    /* 3급: 부드러운 타원형 (퍼플) */
+    .drop-item.type-3급 {
+      width: 105px;
+      height: 54px;
+      border-radius: 40px;
+      background: #231934;
+      border: 3px solid #d29922;
+      color: #e3b341;
+      font-size: 1.15rem;
+    }
+
+    /* 바닥 위험선 */
+    .danger-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: repeating-linear-gradient(
+        45deg,
+        #f85149,
+        #f85149 10px,
+        #30363d 10px,
+        #30363d 20px
+      );
+      box-shadow: 0 0 10px rgba(248, 81, 73, 0.5);
+    }
+
+    /* 3. 하단 문제 지문 영역 */
+    #question-panel {
+      min-height: 140px;
+      padding: 16px 20px;
+      background: #161b22;
+      border-top: 2px solid #30363d;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 20;
+      box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.5);
+    }
+    .question-tag {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #1f6feb;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.5;
+      color: #f0f6fc;
+      word-break: keep-all;
+    }
+    .question-hint {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    /* 4. 애니메이션 연출 (금가기, 흔들림, 파편 파티클) */
+    @keyframes boxShake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-4px, 2px) rotate(-2deg); }
+      40% { transform: translate(4px, -2px) rotate(2deg); }
+      60% { transform: translate(-3px, 1px) rotate(-1deg); }
+      80% { transform: translate(3px, -1px) rotate(1deg); }
+    }
+    .cracking {
+      animation: boxShake 0.4s ease-in-out infinite;
+      filter: contrast(1.5) drop-shadow(0 0 8px #f85149);
+    }
+    /* 금 가는 선 오버레이 */
+    .crack-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .crack-path {
+      stroke: #f85149;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: crackDraw 0.3s forwards ease-out;
+    }
+    @keyframes crackDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* 부서진 파편 파티클 */
+    .shatter-piece {
+      position: absolute;
+      pointer-events: none;
+      z-index: 100;
+      border-radius: 2px;
+    }
+
+    /* 피드백 토스트 */
+    #feedback-toast {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+      max-width: 80%;
+      word-break: keep-all;
+    }
+    #feedback-toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    #feedback-toast.correct {
+      background: rgba(35, 134, 54, 0.95);
+      border: 2px solid #3fb950;
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(63, 185, 80, 0.6);
+    }
+    #feedback-toast.wrong {
+      background: rgba(218, 54, 51, 0.95);
+      border: 2px solid #f85149;
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(248, 81, 73, 0.6);
+    }
+
+    /* 모달 (시작 및 게임오버 화면) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 17, 23, 0.88);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+    }
+    .modal-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 30px;
+      width: 90%;
+      max-width: 440px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .modal-card h2 {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      color: #f0f6fc;
+    }
+    .modal-card p {
+      font-size: 0.95rem;
+      color: #8b949e;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .btn-action {
+      background: #238636;
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-action:hover {
+      background: #2ea043;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 상단 HUD & 속도 조절 옵션 -->
+  <header>
+    <div class="hud-left">
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-display">❤️❤️❤️</div>
+      <div class="progress-text" id="progress-val">1 / 15</div>
+    </div>
+    <div class="hud-right">
+      <label class="speed-control-label" for="speed-slider">
+        ⚙️ 낙하시간:
+      </label>
+      <input type="range" id="speed-slider" class="speed-slider" min="4" max="14" step="1" value="8">
+      <span class="speed-val" id="speed-text">8초</span>
+    </div>
+  </header>
+
+  <!-- 2. 낙하 플레이 영역 -->
+  <main id="game-stage">
+    <div class="danger-line"></div>
+  </main>
+
+  <!-- 3. 하단 문제 지문 영역 -->
+  <section id="question-panel">
+    <span class="question-tag" id="q-tag">선임대상물 퀴즈</span>
+    <div class="question-text" id="q-text">문제를 불러오는 중...</div>
+    <div class="question-hint">👇 위에서 떨어지는 올바른 등급 블록을 클릭(터치)하세요!</div>
+  </section>
+
+  <!-- 피드백 토스트 (성공 / 실패) -->
+  <div id="feedback-toast"></div>
+
+  <!-- 시작 / 게임 오버 모달 -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-card">
+      <h2 id="modal-title">소방안전관리자 1탄</h2>
+      <p id="modal-desc">
+        하단에 제시되는 대상물 지문을 읽고,<br>
+        공중에서 떨어지는 <b>[특급 / 1급 / 2급 / 3급]</b> 블록 중<br>
+        정답을 바닥에 닿기 전에 클릭하여 격추하세요!<br><br>
+        ⏱️ 우측 상단에서 낙하 시간을 조절할 수 있습니다.
+      </p>
+      <button class="btn-action" id="modal-btn" onclick="startGame()">게임 시작</button>
+    </div>
+  </div>
+
+  <script>
+    // ----------------------------------------------------
+    // 문제 데이터: 선임대상물 기준 (교재 원문 100% 반영)
+    // ----------------------------------------------------
+    const QUESTIONS = [
+      {
+        text: "50층 이상(지하층은 제외)이거나 지상으로부터 높이가 200미터 이상인 아파트",
+        answer: "특급",
+        desc: "특급: 50층 이상(지하 제외) 또는 200m 이상 아파트"
+      },
+      {
+        text: "30층 이상(지하층을 포함)이거나 지상으로부터 높이가 120미터 이상인 특정소방대상물(아파트는 제외)",
+        answer: "특급",
+        desc: "특급: 30층 이상(지하 포함) 또는 120m 이상(아파트 제외)"
+      },
+      {
+        text: "연면적이 10만제곱미터 이상인 특정소방대상물(아파트는 제외)",
+        answer: "특급",
+        desc: "특급: 연면적 10만㎡ 이상(아파트 제외)"
+      },
+      {
+        text: "30층 이상(지하층 제외)이거나 지상으로부터 높이가 120미터 이상인 아파트",
+        answer: "1급",
+        desc: "1급: 30층 이상(지하 제외) 또는 120m 이상 아파트"
+      },
+      {
+        text: "연면적 1만5천제곱미터 이상인 특정소방대상물(아파트 및 연립주택은 제외)",
+        answer: "1급",
+        desc: "1급: 연면적 1.5만㎡ 이상(아파트·연립 제외)"
+      },
+      {
+        text: "지상층의 층수가 11층 이상인 특정소방대상물(아파트는 제외)",
+        answer: "1급",
+        desc: "1급: 11층 이상 특정소방대상물(아파트 제외)"
+      },
+      {
+        text: "가연성 가스를 1천톤 이상 저장·취급하는 시설",
+        answer: "1급",
+        desc: "1급: 가연성 가스 1,000톤 이상"
+      },
+      {
+        text: "옥내소화전설비 또는 스프링클러설비 또는 물분무등소화설비(호스릴 방식 제외)를 설치해야 하는 특정소방대상물",
+        answer: "2급",
+        desc: "2급: 옥내소화전, 스프링클러, 물분무등(호스릴 제외)"
+      },
+      {
+        text: "가스 제조설비를 갖추고 도시가스사업 허가를 받아야 하는 시설 또는 가연성 가스를 100톤 이상 1천톤 미만 저장·취급하는 시설",
+        answer: "2급",
+        desc: "2급: 가연성 가스 100톤 이상 ~ 1,000톤 미만"
+      },
+      {
+        text: "지하구",
+        answer: "2급",
+        desc: "2급: 지하구"
+      },
+      {
+        text: "공동주택(옥내소화전설비 또는 스프링클러설비가 설치된 공동주택으로 한정)",
+        answer: "2급",
+        desc: "2급: 옥내소화전/스프링클러 설치 공동주택"
+      },
+      {
+        text: "문화유산의 보존 및 활용에 관한 법률에 따라 보물 또는 국보로 지정된 목조건축물",
+        answer: "2급",
+        desc: "2급: 국보 또는 보물 지정 목조건축물"
+      },
+      {
+        text: "간이스프링클러설비(주택전용 제외) 또는 자동화재탐지설비를 설치해야 하는 특정소방대상물",
+        answer: "3급",
+        desc: "3급: 간이스프링클러 또는 자탐설비 대상물"
+      }
+    ];
+
+    // 전체 선택지 목록
+    const ALL_CATEGORIES = ["특급", "1급", "2급", "3급"];
+
+    // ----------------------------------------------------
+    // 게임 상태 관리
+    // ----------------------------------------------------
+    let currentScore = 0;
+    let lives = 3;
+    let questionPool = [];
+    let currentQ = null;
+    let dropDuration = 8; // 기본 8초 (우측 상단 슬라이더로 조절)
+    let isGameOver = false;
+    let activeDrops = []; // 현재 화면에 떨어진 블록들
+    let animationFrameId = null;
+    let isTransitioning = false; // 정답/오답 후 다음 문제 대기 여부
+
+    const stageEl = document.getElementById("game-stage");
+    const qTextEl = document.getElementById("q-text");
+    const scoreValEl = document.getElementById("score-val");
+    const livesDisplayEl = document.getElementById("lives-display");
+    const progressValEl = document.getElementById("progress-val");
+    const toastEl = document.getElementById("feedback-toast");
+    const speedSlider = document.getElementById("speed-slider");
+    const speedText = document.getElementById("speed-text");
+    const modalEl = document.getElementById("modal");
+
+    // ----------------------------------------------------
+    // 속도 조절 슬라이더 이벤트 & LocalStorage 유지
+    // ----------------------------------------------------
+    const savedSpeed = localStorage.getItem("sobang_drop_speed");
+    if (savedSpeed) {
+      dropDuration = parseInt(savedSpeed, 10);
+      speedSlider.value = dropDuration;
+      speedText.textContent = dropDuration + "초";
+    }
+
+    speedSlider.addEventListener("input", (e) => {
+      dropDuration = parseInt(e.target.value, 10);
+      speedText.textContent = dropDuration + "초";
+      localStorage.setItem("sobang_drop_speed", dropDuration);
+    });
+
+    // ----------------------------------------------------
+    // 게임 시작 및 라운드 세팅
+    // ----------------------------------------------------
+    function startGame() {
+      modalEl.style.display = "none";
+      currentScore = 0;
+      lives = 3;
+      isGameOver = false;
+      isTransitioning = false;
+      questionPool = [...QUESTIONS].sort(() => Math.random() - 0.5);
+      updateHUD();
+      nextQuestion();
+      gameLoop();
+    }
+
+    function updateHUD() {
+      scoreValEl.textContent = currentScore;
+      livesDisplayEl.textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, 3 - lives));
+      const qIndex = QUESTIONS.length - questionPool.length;
+      progressValEl.textContent = `${qIndex} / ${QUESTIONS.length}`;
+    }
+
+    // 다음 지문 출제 & 블록 스폰
+    function nextQuestion() {
+      clearDrops();
+      isTransitioning = false;
+
+      if (questionPool.length === 0) {
+        showGameOver(true);
+        return;
+      }
+
+      currentQ = questionPool.pop();
+      updateHUD();
+      qTextEl.textContent = currentQ.text;
+
+      // 보기 생성 (정답 포함하여 특급, 1급, 2급, 3급 4개 모두 낙하)
+      spawnBlocks(ALL_CATEGORIES, currentQ.answer);
+    }
+
+    // 블록 스폰 (스케치처럼 각기 다른 위치와 약간의 시간차)
+    function spawnBlocks(categories, answer) {
+      const stageWidth = stageEl.clientWidth;
+      const colWidth = stageWidth / categories.length;
+
+      // 순서 셔플
+      const shuffled = [...categories].sort(() => Math.random() - 0.5);
+
+      shuffled.forEach((cat, index) => {
+        const el = document.createElement("div");
+        el.className = `drop-item type-${cat}`;
+        el.textContent = cat;
+        el.dataset.category = cat;
+        el.dataset.isAnswer = (cat === answer) ? "true" : "false";
+
+        // x 좌표 분산 (영역 내 랜덤)
+        const minX = index * colWidth + 10;
+        const maxX = (index + 1) * colWidth - 110;
+        const x = Math.max(10, minX + Math.random() * (maxX - minX));
+        
+        // y 시작 위치 (0~100px 차이를 주어 자연스럽게 낙하)
+        const startY = -(60 + Math.random() * 80);
+
+        el.style.left = `${x}px`;
+        el.style.top = `${startY}px`;
+
+        // 클릭 이벤트 등록
+        el.addEventListener("pointerdown", (e) => {
+          e.stopPropagation();
+          onBlockClick(el);
+        });
+
+        stageEl.appendChild(el);
+
+        activeDrops.push({
+          el: el,
+          x: x,
+          y: startY,
+          category: cat,
+          isAnswer: (cat === answer),
+          isCracking: false
+        });
+      });
+    }
+
+    // ----------------------------------------------------
+    // 메인 게임 루프 (낙하 및 충돌 검사)
+    // ----------------------------------------------------
+    let lastTime = performance.now();
+
+    function gameLoop(now = performance.now()) {
+      if (isGameOver) return;
+
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      if (!isTransitioning) {
+        const stageHeight = stageEl.clientHeight;
+        const floorY = stageHeight - 56; // 바닥 라인 충돌 기준 높이
+        
+        // 초당 떨어지는 속도 (px/sec) = 화면 높이 / dropDuration
+        const speed = (stageHeight / dropDuration);
+
+        for (let i = 0; i < activeDrops.length; i++) {
+          const item = activeDrops[i];
+          if (item.isCracking) continue;
+
+          item.y += speed * dt;
+          item.el.style.top = `${item.y}px`;
+
+          // 바닥 충돌 감지!
+          if (item.y >= floorY) {
+            item.y = floorY;
+            item.el.style.top = `${item.y}px`;
+
+            if (item.isAnswer) {
+              // 정답 블록이 바닥에 닿음 ➔ 금 가고 부서짐 연출 발동!
+              triggerCrackAndShatter(item);
+              break;
+            } else {
+              // 오답 블록은 조용히 바닥에서 사라짐
+              item.el.style.opacity = "0.3";
+            }
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    // ----------------------------------------------------
+    // 클릭 인터랙션
+    // ----------------------------------------------------
+    function onBlockClick(el) {
+      if (isTransitioning || isGameOver) return;
+
+      const isAnswer = el.dataset.isAnswer === "true";
+      const cat = el.dataset.category;
+
+      if (isAnswer) {
+        // 정답 클릭!
+        isTransitioning = true;
+        currentScore += 100;
+        showToast("정답! +100점", true);
+        createCorrectExplosion(el);
+
+        setTimeout(() => {
+          nextQuestion();
+        }, 900);
+      } else {
+        // 오답 클릭!
+        el.classList.add("cracking");
+        showToast(`오답! ${cat}이(가) 아닙니다`, false);
+        lives--;
+        updateHUD();
+
+        setTimeout(() => {
+          el.classList.remove("cracking");
+        }, 400);
+
+        if (lives <= 0) {
+          showGameOver(false);
+        }
+      }
+    }
+
+    // ----------------------------------------------------
+    // 실패 연출: 금 가기(Crack) ➔ 부서지기(Shatter) ➔ 소멸
+    // ----------------------------------------------------
+    function triggerCrackAndShatter(item) {
+      isTransitioning = true;
+      item.isCracking = true;
+
+      // 1단계: 흔들림 효과
+      item.el.classList.add("cracking");
+
+      // 2단계: 금 가는 SVG 크랙 오버레이 삽입
+      const crackSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      crackSvg.setAttribute("class", "crack-svg");
+      crackSvg.innerHTML = `
+        <path class="crack-path" d="M 10 10 L 40 30 L 60 20 L 90 45" />
+        <path class="crack-path" d="M 40 30 L 30 50 L 50 48" />
+        <path class="crack-path" d="M 60 20 L 75 10 L 85 25" />
+      `;
+      item.el.appendChild(crackSvg);
+
+      // 3단계: 0.4초 후 산산조각 파편 분해 및 소멸
+      setTimeout(() => {
+        createShatterParticles(item.el);
+        item.el.style.display = "none";
+
+        // 라이프 차감 및 해설 노출
+        lives--;
+        updateHUD();
+        showToast(`시간 초과! 놓침!<br><small style="font-size:0.95rem;color:#ffebee;">정답: [${currentQ.answer}] - ${currentQ.desc}</small>`, false);
+
+        setTimeout(() => {
+          if (lives <= 0) {
+            showGameOver(false);
+          } else {
+            nextQuestion();
+          }
+        }, 1800);
+      }, 450);
+    }
+
+    // 산산조각 파편 파티클 생성
+    function createShatterParticles(el) {
+      const rect = el.getBoundingClientRect();
+      const stageRect = stageEl.getBoundingClientRect();
+      const originX = rect.left - stageRect.left + rect.width / 2;
+      const originY = rect.top - stageRect.top + rect.height / 2;
+
+      const pieceCount = 18;
+      for (let i = 0; i < pieceCount; i++) {
+        const piece = document.createElement("div");
+        piece.className = "shatter-piece";
+        
+        // 파편 조각 크기 및 색상
+        const size = Math.random() * 10 + 6;
+        piece.style.width = `${size}px`;
+        piece.style.height = `${size}px`;
+        piece.style.background = (i % 2 === 0) ? "#f85149" : "#e3b341";
+        piece.style.left = `${originX}px`;
+        piece.style.top = `${originY}px`;
+
+        stageEl.appendChild(piece);
+
+        // 파편 확산 애니메이션
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.random() * 80 + 30;
+        const destX = Math.cos(angle) * dist;
+        const destY = Math.sin(angle) * dist - 20;
+
+        piece.animate([
+          { transform: `translate(0, 0) rotate(0deg) scale(1)`, opacity: 1 },
+          { transform: `translate(${destX}px, ${destY}px) rotate(${Math.random() * 360}deg) scale(0)`, opacity: 0 }
+        ], {
+          duration: 600 + Math.random() * 200,
+          easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+          fill: "forwards"
+        });
+
+        setTimeout(() => piece.remove(), 800);
+      }
+    }
+
+    // 정답 시 환호 폭죽 파티클
+    function createCorrectExplosion(el) {
+      const rect = el.getBoundingClientRect();
+      const stageRect = stageEl.getBoundingClientRect();
+      const originX = rect.left - stageRect.left + rect.width / 2;
+      const originY = rect.top - stageRect.top + rect.height / 2;
+
+      el.animate([
+        { transform: 'scale(1)', opacity: 1 },
+        { transform: 'scale(1.4)', opacity: 0 }
+      ], { duration: 300, fill: 'forwards' });
+
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement("div");
+        p.className = "shatter-piece";
+        p.style.width = "8px";
+        p.style.height = "8px";
+        p.style.borderRadius = "50%";
+        p.style.background = ["#3fb950", "#58a6ff", "#f1e05a"][i % 3];
+        p.style.left = `${originX}px`;
+        p.style.top = `${originY}px`;
+        stageEl.appendChild(p);
+
+        const angle = (Math.PI * 2 / 20) * i;
+        const dist = 60 + Math.random() * 40;
+
+        p.animate([
+          { transform: "translate(0,0) scale(1)", opacity: 1 },
+          { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) scale(0)`, opacity: 0 }
+        ], {
+          duration: 500,
+          easing: "ease-out",
+          fill: "forwards"
+        });
+        setTimeout(() => p.remove(), 550);
+      }
+    }
+
+    // 피드백 토스트 표시
+    function showToast(msg, isSuccess) {
+      toastEl.innerHTML = msg;
+      toastEl.className = isSuccess ? "show correct" : "show wrong";
+      setTimeout(() => {
+        toastEl.className = "";
+      }, 1400);
+    }
+
+    // 잔여 블록 정리
+    function clearDrops() {
+      activeDrops.forEach(d => d.el.remove());
+      activeDrops = [];
+    }
+
+    // 게임 종료 모달
+    function showGameOver(isWin) {
+      isGameOver = true;
+      cancelAnimationFrame(animationFrameId);
+      clearDrops();
+
+      const modalTitle = document.getElementById("modal-title");
+      const modalDesc = document.getElementById("modal-desc");
+      const modalBtn = document.getElementById("modal-btn");
+
+      if (isWin) {
+        modalTitle.textContent = "🎉 전 문항 격추 성공!";
+        modalDesc.innerHTML = `소방안전관리대상물 선임 기준을 완벽하게 마스터하셨습니다!<br><br>최종 점수: <b>${currentScore}점</b>`;
+      } else {
+        modalTitle.textContent = "💥 게임 오버!";
+        modalDesc.innerHTML = `블록이 바닥에 부서지거나 오답이 누적되었습니다.<br>최종 점수: <b>${currentScore}점</b>`;
+      }
+      modalBtn.textContent = "다시 도전하기";
+      modalEl.style.display = "flex";
+    }
+  </script>
+</body>
+</html>
