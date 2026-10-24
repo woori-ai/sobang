@@ -402,22 +402,93 @@
       background: #161b22;
       border: 1px solid #30363d;
       border-radius: 16px;
-      padding: 30px;
+      padding: 26px 20px;
       width: 90%;
-      max-width: 440px;
+      max-width: 520px;
+      max-height: 88vh;
+      overflow-y: auto;
       text-align: center;
       box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     }
     .modal-card h2 {
-      font-size: 1.6rem;
-      margin-bottom: 12px;
+      font-size: 1.55rem;
+      margin-bottom: 10px;
       color: #f0f6fc;
     }
     .modal-card p {
       font-size: 0.95rem;
       color: #8b949e;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       line-height: 1.6;
+    }
+
+    /* 오답 리포트 박스 스타일 */
+    .wrong-report-container {
+      margin: 16px 0;
+      text-align: left;
+      border-top: 1px solid #30363d;
+      padding-top: 14px;
+    }
+    .wrong-report-header {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f85149;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .wrong-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .wrong-card {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-left: 4px solid #f85149;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .wrong-q-text {
+      font-size: 0.88rem;
+      color: #e6edf3;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .wrong-answer-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+    }
+    .badge-ans {
+      background: rgba(56, 139, 253, 0.2);
+      border: 1px solid #388bfd;
+      color: #79c0ff;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .wrong-desc {
+      font-size: 0.8rem;
+      color: #8b949e;
+      line-height: 1.35;
+    }
+    .perfect-score-banner {
+      background: rgba(35, 134, 54, 0.15);
+      border: 1px solid rgba(63, 185, 80, 0.4);
+      color: #7ee787;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 14px 0;
     }
     .btn-action {
       background: #238636;
@@ -490,7 +561,11 @@
         ❤️ <b>정답 맞출 때마다 하트 +1 회복!</b> (최대 5개)<br>
         ⏱️ 우측 상단에서 낙하 시간을 조절할 수 있습니다.
       </p>
-      <div style="display:flex;gap:10px;justify-content:center;">
+
+      <!-- 오답 복습 리포트 동적 영역 -->
+      <div id="wrong-report-area"></div>
+
+      <div id="modal-actions" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
         <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
         <button class="btn-action" id="modal-btn" onclick="startGame()">게임 시작</button>
       </div>
@@ -572,6 +647,7 @@
     let currentScore = 0;
     let lives = START_LIVES;
     let questionPool = [];
+    let wrongQuestions = []; // 틀린 문제 수집 배열
     let currentQ = null;
     let dropDuration = 8;
     let isGameOver = false;
@@ -581,6 +657,14 @@
     let isReadingPhase = false;
     let countdownTimer = null;
     let countdownSec = 5;
+
+    // 틀린 문제 수집 (중복 방지)
+    function recordWrong(q) {
+      if (!q) return;
+      if (!wrongQuestions.some(item => item.text === q.text)) {
+        wrongQuestions.push(q);
+      }
+    }
 
     const stageEl = document.getElementById("game-stage");
     const qTextEl = document.getElementById("q-text");
@@ -630,7 +714,24 @@
       lives = START_LIVES;
       isGameOver = false;
       isTransitioning = false;
+      wrongQuestions = []; // 새 게임 시 오답 초기화
       questionPool = shuffleArray(QUESTIONS);
+      updateHUD();
+      nextQuestion();
+      lastTime = performance.now();
+      gameLoop();
+    }
+
+    // 틀린 문제만 모아서 다시 풀기 (복습 모드)
+    function startReviewGame() {
+      if (wrongQuestions.length === 0) return;
+      modalEl.style.display = "none";
+      currentScore = 0;
+      lives = START_LIVES;
+      isGameOver = false;
+      isTransitioning = false;
+      questionPool = shuffleArray(wrongQuestions);
+      wrongQuestions = [];
       updateHUD();
       nextQuestion();
       lastTime = performance.now();
@@ -822,6 +923,7 @@
       } else {
         el.classList.add("cracking");
         showToast(`오답! ${cat}이(가) 아닙니다`, false);
+        recordWrong(currentQ);
         lives--;
         updateHUD();
 
@@ -855,6 +957,7 @@
         createShatterParticles(item.el);
         item.el.style.display = "none";
 
+        recordWrong(currentQ);
         lives--;
         updateHUD();
         showToast(`시간 초과! 놓침!<br><small style="font-size:0.95rem;color:#ffebee;">정답: [${currentQ.answer}] - ${currentQ.desc}</small>`, false);
@@ -962,16 +1065,68 @@
 
       const modalTitle = document.getElementById("modal-title");
       const modalDesc = document.getElementById("modal-desc");
-      const modalBtn = document.getElementById("modal-btn");
+      const wrongReportArea = document.getElementById("wrong-report-area");
+      const modalActions = document.getElementById("modal-actions");
 
-      if (isWin) {
-        modalTitle.textContent = "🎉 전 문항 격추 성공!";
-        modalDesc.innerHTML = `선임 자격 및 실무 경력 요건을 완벽하게 마스터하셨습니다!<br><br>최종 점수: <b>${currentScore}점</b>`;
+      if (isWin && wrongQuestions.length === 0) {
+        modalTitle.textContent = "🏆 퍼펙트 올킬! 전 문항 격추";
+        modalDesc.innerHTML = `오답 없이 모든 문제를 한 번에 격추하셨습니다!<br>최종 점수: <b style="color:#58a6ff;">${currentScore}점</b>`;
+        wrongReportArea.innerHTML = `
+          <div class="perfect-score-banner">
+            ✨ 틀린 문제가 하나도 없습니다! 선임 자격 및 경력 기준 완벽 마스터!
+          </div>
+        `;
+        modalActions.innerHTML = `
+          <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+          <button class="btn-action" onclick="startGame()">다시 도전하기</button>
+        `;
       } else {
-        modalTitle.textContent = "💥 게임 오버!";
-        modalDesc.innerHTML = `블록이 바닥에 부서지거나 오답이 누적되었습니다.<br>최종 점수: <b>${currentScore}점</b>`;
+        modalTitle.textContent = isWin ? "🎉 전 문항 완료!" : "💥 게임 오버!";
+        modalDesc.innerHTML = `
+          최종 점수: <b style="color:#58a6ff;">${currentScore}점</b> | 놓친 문제: <b style="color:#f85149;">${wrongQuestions.length}개</b>
+        `;
+
+        if (wrongQuestions.length > 0) {
+          let listHtml = `
+            <div class="wrong-report-container">
+              <div class="wrong-report-header">
+                <span>📝 이번 판 오답 복습 리포트 (${wrongQuestions.length}문항)</span>
+              </div>
+              <div class="wrong-items-list">
+          `;
+
+          wrongQuestions.forEach((q, idx) => {
+            listHtml += `
+              <div class="wrong-card">
+                <div class="wrong-q-text">❌ ${idx + 1}. ${q.text}</div>
+                <div class="wrong-answer-row">
+                  <span class="badge-ans">정답: [${q.answer}]</span>
+                </div>
+                <div class="wrong-desc">💡 ${q.desc}</div>
+              </div>
+            `;
+          });
+
+          listHtml += `
+              </div>
+            </div>
+          `;
+          wrongReportArea.innerHTML = listHtml;
+
+          modalActions.innerHTML = `
+            <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+            <button class="btn-action" style="background:#da3633;" onclick="startReviewGame()">🔄 오답만 다시 풀기</button>
+            <button class="btn-action" onclick="startGame()">🔁 전체 다시 풀기</button>
+          `;
+        } else {
+          wrongReportArea.innerHTML = "";
+          modalActions.innerHTML = `
+            <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+            <button class="btn-action" onclick="startGame()">다시 도전하기</button>
+          `;
+        }
       }
-      modalBtn.textContent = "다시 도전하기";
+
       modalEl.style.display = "flex";
     }
   </script>
