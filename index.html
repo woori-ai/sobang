@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>소방안전관리자 1급 마스터</title>
+  <meta name="description" content="1급 소방안전관리자 합격 필수 훈련: 4지선다 실전기출, 스피드 OX, 핵심 75선 암기카드, 계산 공식 37선">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚒</text></svg>">
+</head>
+<body>
+  <div id="app-container">
+    <!-- 1. 상단 글로벌 헤더 -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand">
+          <span class="brand-icon">🚒</span>
+          <div class="brand-text">
+            <h1>소방안전관리자 1급</h1>
+            <span class="sub-title">합격 핵심 트레이닝 마스터</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button id="theme-toggle-btn" class="icon-btn" title="테마 변경">🌙</button>
+          <button id="settings-btn" class="icon-btn" title="학습 초기화 / 설정">⚙️</button>
+        </div>
+      </div>
+
+      <!-- 종합 진도율 바 -->
+      <div class="progress-section">
+        <div class="progress-labels">
+          <span id="progress-summary">진도율 <strong id="progress-percent">0%</strong></span>
+          <span class="stats-badge">정답률 <strong id="accuracy-rate">-</strong> (<span id="answered-count">0</span>/<span id="total-pool-count">0</span>)</span>
+        </div>
+        <div class="progress-bar-track">
+          <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. 핵심 4대 탭 네비게이션 -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="mcq">
+        <span class="tab-icon">📝</span>
+        <span class="tab-name">4지선다</span>
+        <span class="tab-badge" id="badge-mcq">0</span>
+      </button>
+      <button class="nav-tab" data-tab="ox">
+        <span class="tab-icon">⭕❌</span>
+        <span class="tab-name">스피드 OX</span>
+        <span class="tab-badge" id="badge-ox">0</span>
+      </button>
+      <button class="nav-tab" data-tab="cards">
+        <span class="tab-icon">🎴</span>
+        <span class="tab-name">핵심 75선</span>
+        <span class="tab-badge" id="badge-cards">0</span>
+      </button>
+      <button class="nav-tab" data-tab="calc">
+        <span class="tab-icon">🔢</span>
+        <span class="tab-name">계산 37선</span>
+        <span class="tab-badge" id="badge-calc">0</span>
+      </button>
+    </nav>
+
+    <!-- 3. 필터 & 도구 바 -->
+    <section class="filter-toolbar">
+      <div class="filter-controls">
+        <select id="chapter-filter" class="filter-select" title="과목/단원 필터">
+          <option value="all">전체 과목 / 단원</option>
+        </select>
+        <select id="diff-filter" class="filter-select" title="난이도 필터">
+          <option value="all">전체 난이도</option>
+          <option value="기본빈출">기본빈출</option>
+          <option value="지엽킬러">지엽킬러</option>
+        </select>
+      </div>
+
+      <div class="filter-buttons">
+        <button id="filter-bookmark-btn" class="toggle-filter-btn" title="북마크한 문제만 보기">
+          ⭐ 북마크만
+        </button>
+        <button id="filter-incorrect-btn" class="toggle-filter-btn" title="틀린 오답 문제만 보기">
+          ❌ 오답노트만
+        </button>
+        <label class="switch-label" title="문제 풀이 없이 해설을 즉시 확인합니다">
+          <input type="checkbox" id="always-show-explanation">
+          <span class="switch-slider"></span>
+          <span class="switch-text">해설 항상 보기</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- 4. 메인 콘텐츠 영역 (동적 렌더링) -->
+    <main class="main-content" id="main-content">
+      <div id="loading-spinner" class="loading-state">
+        <div class="spinner"></div>
+        <p>학습 데이터를 불러오는 중입니다...</p>
+      </div>
+
+      <!-- 문제 카드 영역 -->
+      <article class="quiz-card" id="quiz-card" style="display: none;">
+        <!-- 상단 메타 바 (파트, 난이도, 교재참조, 북마크) -->
+        <div class="card-meta">
+          <div class="meta-tags">
+            <span class="tag tag-chapter" id="card-chapter">과목</span>
+            <span class="tag tag-diff" id="card-diff">기본빈출</span>
+            <span class="tag tag-page" id="card-page">p.0</span>
+          </div>
+          <button id="bookmark-toggle" class="bookmark-btn" title="북마크 토글">
+            <span id="bookmark-icon">☆</span>
+          </button>
+        </div>
+
+        <!-- 문제 지문 -->
+        <div class="question-header">
+          <span class="q-number" id="q-number">Q1.</span>
+          <h2 class="q-text" id="q-text">문제가 로딩 중입니다.</h2>
+        </div>
+
+        <!-- 보기/선택지 영역 -->
+        <div class="options-container" id="options-container">
+          <!-- JS로 동적 생성 -->
+        </div>
+
+        <!-- 3D 플립 카드 (핵심 75선 전용) -->
+        <div class="flashcard-wrapper" id="flashcard-wrapper" style="display: none;">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-front">
+              <span class="flashcard-hint">👆 카드를 터치하면 해설/암기팁이 뒤집힙니다</span>
+              <h3 id="flashcard-front-title">핵심 요약 제목</h3>
+              <p id="flashcard-front-q">문제 지문</p>
+            </div>
+            <div class="flashcard-back">
+              <div class="flashcard-back-badge">💡 핵심 암기 비법</div>
+              <p class="flashcard-memo" id="flashcard-back-memo">암기 팁</p>
+              <div class="flashcard-exp-divider"></div>
+              <p class="flashcard-exp" id="flashcard-back-exp">상세 설명</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 정답 확인 및 상세 설명란 -->
+        <section class="explanation-box" id="explanation-box" style="display: none;">
+          <div class="result-banner" id="result-banner">
+            <!-- JS로 상태별(정답/오답) 배너 출력 -->
+          </div>
+
+          <div class="explanation-content">
+            <div class="exp-section">
+              <h4 class="exp-heading">📖 정답 및 상세 해설</h4>
+              <p class="exp-body" id="exp-text">해설 내용</p>
+            </div>
+
+            <!-- 함정 TIP 상자 -->
+            <div class="trap-box" id="trap-box" style="display: none;">
+              <h4 class="trap-heading">⚠️ 출제 함정 피하기 TIP</h4>
+              <p class="trap-body" id="trap-text">함정 주의사항</p>
+            </div>
+
+            <!-- 핵심 암기 메모 상자 (75선/37선) -->
+            <div class="memo-box" id="memo-box" style="display: none;">
+              <h4 class="memo-heading">💡 핵심 암기 포인트</h4>
+              <p class="memo-body" id="memo-text">메모</p>
+            </div>
+
+            <!-- 출처 안내 -->
+            <div class="ref-footer" id="ref-footer">
+              <span id="ref-text">기본서 참조</span>
+            </div>
+          </div>
+        </section>
+      </article>
+
+      <!-- 빈 목록 상태 안내 (필터 시 해당 데이터가 없을 때) -->
+      <div id="empty-state" class="empty-state" style="display: none;">
+        <span class="empty-icon">📂</span>
+        <h3>해당 조건의 문제가 없습니다.</h3>
+        <p id="empty-desc">필터를 변경하거나 전체 문제를 선택해 보세요.</p>
+        <button id="reset-filter-btn" class="primary-btn">필터 초기화</button>
+      </div>
+    </main>
+
+    <!-- 5. 하단 네비게이션 이동바 -->
+    <footer class="app-footer">
+      <button id="prev-btn" class="nav-control-btn" title="이전 문제 (단축키: ←)">
+        ◀ 이전
+      </button>
+
+      <div class="pager-indicator">
+        <span id="current-index-display">1</span>
+        <span class="pager-slash">/</span>
+        <span id="total-filter-display">1</span>
+      </div>
+
+      <button id="next-btn" class="nav-control-btn" title="다음 문제 (단축키: →)">
+        다음 ▶
+      </button>
+    </footer>
+
+    <!-- 설정/초기화 모달 -->
+    <div id="settings-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>⚙️ 학습 설정 및 관리</h3>
+          <button id="close-settings-btn" class="close-btn">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="setting-item">
+            <label>글자 크기 조절</label>
+            <div class="font-size-btns">
+              <button class="font-btn" data-size="small">작게</button>
+              <button class="font-btn active" data-size="medium">보통</button>
+              <button class="font-btn" data-size="large">크게</button>
+            </div>
+          </div>
+          <div class="setting-item">
+            <label>학습 기록 초기화</label>
+            <p class="setting-desc">모든 정답/오답 기록, 북마크, 진도율을 초기화합니다.</p>
+            <button id="reset-all-data-btn" class="danger-btn">전체 학습 기록 초기화</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
