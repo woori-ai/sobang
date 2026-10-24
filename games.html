@@ -523,19 +523,22 @@
         </div>
       </div>
 
-      <!-- [제 4탄] 소방설비별 설치 대상물 (준비 중 슬림형) -->
-      <div class="game-card disabled-card">
+      <!-- [제 4탄] 소방시설 5대 분류 격추 (3단 구조) -->
+      <div class="game-card active-card">
         <div>
           <div class="card-top">
-            <div class="game-icon-box">🧯</div>
-            <span class="badge-status soon">준비 중 🔒</span>
+            <div class="game-icon-box" style="border-color:#a371f7;">🧯</div>
+            <span class="badge-status play">PLAY 가능 ▶</span>
           </div>
-          <h3 class="game-title">[제 4탄] 소방설비별 설치 대상물</h3>
+          <h3 class="game-title">[제 4탄] 소방시설 5대 분류 격추</h3>
         </div>
         <div class="card-actions">
-          <button class="btn-disabled" disabled>
-            <span>곧 출시 예정입니다</span>
+          <button class="btn-study" onclick="openStudyModal(4)">
+            <span>📖 핵심 요약 먼저 공부하기</span>
           </button>
+          <a href="./1keup-game/game4.html" class="btn-play-link">
+            <span>게임 시작하기 ▶</span>
+          </a>
         </div>
       </div>
 
@@ -663,6 +666,33 @@
             items: [
               "기숙사, 의료시설, 노유자시설, 수련시설: <span class='highlight-badge'>무조건 1명 선임</span>",
               "숙박시설 예외: <span class='highlight-red'>1,500㎡ 미만 + 24시간 상시근무</span> 시 <span class='highlight-badge'>선임 제외 (0명)</span>"
+            ]
+          }
+        ]
+      },
+      4: {
+        title: "🧯 [제 4탄] 소방시설 5대 분류 1분 족집게",
+        playUrl: "./1keup-game/game4.html",
+        cards: [
+          {
+            title: "1. 소화설비 vs 소화용수설비",
+            items: [
+              "<span class='highlight-badge'>소화설비</span>: 소화기구, 자동소화장치, 옥내·옥외소화전, 스프링클러, 물분무등(가스계/분말/포)",
+              "<span class='highlight-badge'>소화용수설비</span>: 상수도소화용수설비, 소화수조 및 저수조 (물을 공급·저장하는 설비)"
+            ]
+          },
+          {
+            title: "2. 경보설비 vs 피난구조설비",
+            items: [
+              "<span class='highlight-badge'>경보설비</span>: 단독경보형감지기, 자동화재탐지설비, 시각경보기, 비상방송, 자동화재속보, 가스·누전경보기",
+              "<span class='highlight-badge'>피난구조설비</span>: 피난기구(완강기, 구조대), <span class='highlight-red'>인명구조기구(방열/방화복, 공기호흡기, 인공소생기)</span>, 유도등, 비상조명등"
+            ]
+          },
+          {
+            title: "3. ★소화활동설비 (소방관이 사용하는 6대 설비)",
+            items: [
+              "<span class='highlight-red'>소화활동설비 6가지</span>: 제연설비, 연결송수관설비, 연결살수설비, 비상콘센트설비, 무선통신보조설비, 연소저지설비",
+              "암기 팁: '연결', '제연', '무선', '비상콘센트'는 무조건 소화활동설비!"
             ]
           }
         ]
