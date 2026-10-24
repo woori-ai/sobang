@@ -65,6 +65,17 @@
     .lives {
       font-size: 1.2rem;
       letter-spacing: 2px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.35); filter: drop-shadow(0 0 10px #ff4d6d); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.6s ease-in-out;
     }
     .progress-text {
       font-size: 0.85rem;
@@ -472,6 +483,7 @@
         카운트다운 후 공중에서 떨어지는<br>
         <b>[특급 / 1급 / 2급 / 3급]</b> 블록 중 정답을 클릭해 격추하세요!<br>
         (바닥에 닿으면 금이 가고 부서집니다)<br><br>
+        ❤️ <b>정답 맞출 때마다 하트 +1 회복!</b> (최대 5개)<br>
         ⏱️ 우측 상단에서 낙하 시간을 조절할 수 있습니다.
       </p>
       <div style="display:flex;gap:10px;justify-content:center;">
@@ -558,8 +570,10 @@
     // ----------------------------------------------------
     // 게임 상태 관리
     // ----------------------------------------------------
+    const MAX_LIVES = 5;
+    const START_LIVES = 3;
     let currentScore = 0;
-    let lives = 3;
+    let lives = START_LIVES;
     let questionPool = [];
     let currentQ = null;
     let dropDuration = 8;
@@ -604,16 +618,27 @@
       localStorage.setItem("sobang_drop_speed", dropDuration);
     });
 
+    // 문제 무작위 완전 셔플 (Fisher-Yates 알고리즘)
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
     // ----------------------------------------------------
     // 게임 시작
     // ----------------------------------------------------
     function startGame() {
       modalEl.style.display = "none";
       currentScore = 0;
-      lives = 3;
+      lives = START_LIVES;
       isGameOver = false;
       isTransitioning = false;
-      questionPool = [...QUESTIONS].sort(() => Math.random() - 0.5);
+      // 매 게임 시작 및 재도전 시마다 문제 순서 100% 무작위 셔플
+      questionPool = shuffleArray(QUESTIONS);
       updateHUD();
       nextQuestion();
       lastTime = performance.now();
@@ -622,9 +647,15 @@
 
     function updateHUD() {
       scoreValEl.textContent = currentScore;
-      livesDisplayEl.textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, 3 - lives));
+      livesDisplayEl.textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, MAX_LIVES - lives));
       const qIndex = QUESTIONS.length - questionPool.length;
       progressValEl.textContent = `${qIndex} / ${QUESTIONS.length}`;
+    }
+
+    function triggerHeartHealAnim() {
+      livesDisplayEl.classList.remove("heart-heal-bounce");
+      void livesDisplayEl.offsetWidth; // 리플로우 강제
+      livesDisplayEl.classList.add("heart-heal-bounce");
     }
 
     // ----------------------------------------------------
@@ -797,12 +828,22 @@
       if (isAnswer) {
         isTransitioning = true;
         currentScore += 100;
-        showToast("정답! +100점", true);
+
+        // 정답 시 하트 증가/회복 (최대 5개까지)
+        let healMsg = "";
+        if (lives < MAX_LIVES) {
+          lives++;
+          healMsg = "<br><span style='font-size:0.95rem;color:#7ee787;'>❤️ 하트 +1 회복!</span>";
+          triggerHeartHealAnim();
+        }
+
+        updateHUD();
+        showToast(`정답! +100점${healMsg}`, true);
         createCorrectExplosion(el);
 
         setTimeout(() => {
           nextQuestion();
-        }, 900);
+        }, 950);
       } else {
         el.classList.add("cracking");
         showToast(`오답! ${cat}이(가) 아닙니다`, false);
