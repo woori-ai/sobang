@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>소방보조자 선임 도장 쾅쾅! 3탄</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* 1. 상단 HUD & 속도 조절 옵션 */
+    header {
+      height: 60px;
+      padding: 10px 16px;
+      background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-exit-game {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover {
+      background: #30363d;
+      color: #58a6ff;
+      border-color: #58a6ff;
+    }
+    .score-badge {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #58a6ff;
+    }
+    .lives {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.35); filter: drop-shadow(0 0 10px #ff4d6d); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.6s ease-in-out;
+    }
+    .progress-text {
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #161b22;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+    }
+    .speed-control-label {
+      font-size: 0.8rem;
+      color: #c9d1d9;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .speed-slider {
+      width: 100px;
+      cursor: pointer;
+      accent-color: #f78166;
+    }
+    .speed-val {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #f78166;
+      min-width: 38px;
+      text-align: right;
+    }
+
+    /* 제한시간 타이머 바 */
+    .timer-bar-container {
+      width: 100%;
+      height: 6px;
+      background: #21262d;
+      position: relative;
+    }
+    #timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: #3fb950;
+      transition: width 0.1s linear, background-color 0.3s ease;
+    }
+
+    /* 2. 메인 게임 보드 */
+    main {
+      flex: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px 16px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* 중앙 건물 문제 카드 */
+    .building-card {
+      background: #161b22;
+      border: 2px solid #30363d;
+      border-radius: 20px;
+      padding: 24px 20px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease, border-color 0.3s ease;
+    }
+    .building-icon {
+      font-size: 3.5rem;
+      margin-bottom: 10px;
+      display: inline-block;
+      animation: floatBuilding 3s ease-in-out infinite;
+    }
+    @keyframes floatBuilding {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .building-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(56, 139, 253, 0.2);
+      border: 1px solid #388bfd;
+      color: #79c0ff;
+      margin-bottom: 12px;
+    }
+    .building-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+    .building-subtext {
+      margin-top: 8px;
+      font-size: 0.88rem;
+      color: #8b949e;
+    }
+
+    /* 금가는 효과 & 진동 애니메이션 */
+    @keyframes boxShake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-5px, 2px) rotate(-2deg); }
+      40% { transform: translate(5px, -2px) rotate(2deg); }
+      60% { transform: translate(-4px, 1px) rotate(-1deg); }
+      80% { transform: translate(4px, -1px) rotate(1deg); }
+    }
+    .cracking {
+      animation: boxShake 0.4s ease-in-out infinite;
+      border-color: #f85149 !important;
+    }
+    .crack-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .crack-path {
+      stroke: #f85149;
+      stroke-width: 3;
+      fill: none;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: crackDraw 0.3s forwards ease-out;
+    }
+    @keyframes crackDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* 3. 보조자 슬롯 디스플레이 (도장 찍히는 영역) */
+    .slot-display-section {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: 18px 0;
+      text-align: center;
+    }
+    .slot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      color: #8b949e;
+      font-weight: 600;
+    }
+    .slot-counter {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #58a6ff;
+    }
+    .slots-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      min-height: 70px;
+      flex-wrap: wrap;
+    }
+    .slot-stamp {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      background: #21262d;
+      border: 2px dashed #30363d;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: #6e7681;
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .slot-stamp.filled {
+      background: rgba(35, 134, 54, 0.2);
+      border: 2px solid #3fb950;
+      color: #3fb950;
+      transform: scale(1.08);
+      box-shadow: 0 4px 14px rgba(63, 185, 80, 0.3);
+      animation: stampDrop 0.25s ease-out;
+    }
+    @keyframes stampDrop {
+      0% { transform: scale(1.6); opacity: 0; }
+      100% { transform: scale(1.08); opacity: 1; }
+    }
+    .slot-stamp-num {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #7ee787;
+      margin-top: -2px;
+    }
+    .slot-empty-notice {
+      color: #6e7681;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* 4. 하단 컨트롤 조작 패드 */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .btn-control {
+      padding: 16px 14px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+    .btn-control:active {
+      transform: scale(0.96);
+    }
+    .btn-stamp-add {
+      background: #1f6feb;
+      color: #ffffff;
+      box-shadow: 0 6px 16px rgba(31, 111, 235, 0.35);
+    }
+    .btn-stamp-add:hover {
+      background: #388bfd;
+    }
+    .btn-stamp-cancel {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+    }
+    .btn-stamp-cancel:hover {
+      background: #30363d;
+    }
+    .btn-zero-submit {
+      background: #21262d;
+      border: 1px solid #f85149;
+      color: #ff7b72;
+    }
+    .btn-zero-submit:hover {
+      background: rgba(248, 81, 73, 0.15);
+    }
+    .btn-deploy-submit {
+      background: #238636;
+      color: #ffffff;
+      box-shadow: 0 6px 16px rgba(35, 134, 54, 0.35);
+    }
+    .btn-deploy-submit:hover {
+      background: #2ea043;
+    }
+
+    /* 피드백 토스트 */
+    #feedback-toast {
+      position: fixed;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      padding: 16px 30px;
+      border-radius: 16px;
+      font-size: 1.35rem;
+      font-weight: 800;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+      max-width: 85%;
+      word-break: keep-all;
+    }
+    #feedback-toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    #feedback-toast.correct {
+      background: rgba(35, 134, 54, 0.95);
+      border: 2px solid #3fb950;
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(63, 185, 80, 0.6);
+    }
+    #feedback-toast.wrong {
+      background: rgba(218, 54, 51, 0.95);
+      border: 2px solid #f85149;
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(248, 81, 73, 0.6);
+    }
+
+    /* 모달 */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 17, 23, 0.88);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+    }
+    .modal-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 26px 20px;
+      width: 90%;
+      max-width: 520px;
+      max-height: 88vh;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .modal-card h2 {
+      font-size: 1.55rem;
+      margin-bottom: 10px;
+      color: #f0f6fc;
+    }
+    .modal-card p {
+      font-size: 0.95rem;
+      color: #8b949e;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .btn-action {
+      background: #238636;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-action:hover {
+      background: #2ea043;
+    }
+
+    /* 오답 리포트 스타일 */
+    .wrong-report-container {
+      margin: 16px 0;
+      text-align: left;
+      border-top: 1px solid #30363d;
+      padding-top: 14px;
+    }
+    .wrong-report-header {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f85149;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .wrong-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .wrong-card {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-left: 4px solid #f85149;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .wrong-q-text {
+      font-size: 0.88rem;
+      color: #e6edf3;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .wrong-answer-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+    }
+    .badge-ans {
+      background: rgba(56, 139, 253, 0.2);
+      border: 1px solid #388bfd;
+      color: #79c0ff;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .wrong-desc {
+      font-size: 0.8rem;
+      color: #8b949e;
+      line-height: 1.35;
+    }
+    .perfect-score-banner {
+      background: rgba(35, 134, 54, 0.15);
+      border: 1px solid rgba(63, 185, 80, 0.4);
+      color: #7ee787;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 14px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 상단 글로벌 HUD -->
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game" title="게임 목록으로 돌아가기">← 목록</a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-display">❤️❤️❤️🖤🖤</div>
+      <div class="progress-text" id="progress-val">1 / 12</div>
+    </div>
+    <div class="hud-right">
+      <label class="speed-control-label" for="speed-slider">
+        ⏱️ 제한시간:
+      </label>
+      <input type="range" id="speed-slider" class="speed-slider" min="6" max="18" step="1" value="10">
+      <span class="speed-val" id="speed-text">10초</span>
+    </div>
+  </header>
+
+  <!-- 제한시간 카운트다운 타이머 바 -->
+  <div class="timer-bar-container">
+    <div id="timer-bar-fill"></div>
+  </div>
+
+  <!-- 2. 메인 게임 보드 -->
+  <main>
+    <!-- 중앙 건물 문제 카드 -->
+    <section class="building-card" id="building-card">
+      <div class="building-icon" id="building-icon">🏢</div>
+      <div>
+        <span class="building-badge" id="building-badge">아파트 세대수 기준</span>
+      </div>
+      <h2 class="building-title" id="building-title">문제를 불러오는 중...</h2>
+      <p class="building-subtext" id="building-subtext">이 건물에 선임해야 할 최소 소방보조자 수는?</p>
+    </section>
+
+    <!-- 보조자 슬롯 디스플레이 (도장 찍히는 영역) -->
+    <section class="slot-display-section">
+      <div class="slot-header">
+        <span>현재 배치된 보조자</span>
+        <span class="slot-counter" id="slot-counter">0 명</span>
+      </div>
+      <div class="slots-row" id="slots-row">
+        <span class="slot-empty-notice" id="slot-empty-notice">아래 [보조자 선임 👤] 버튼을 탭하여 인원을 채우세요</span>
+      </div>
+    </section>
+
+    <!-- 하단 컨트롤 조작 패드 -->
+    <section class="controls-grid">
+      <button class="btn-control btn-stamp-add" onclick="addWorkerStamp()">
+        <span>➕ 보조자 선임 👤</span>
+      </button>
+      <button class="btn-control btn-stamp-cancel" onclick="removeWorkerStamp()">
+        <span>➖ 1명 취소</span>
+      </button>
+      <button class="btn-control btn-zero-submit" onclick="submitZeroWorkers()">
+        <span>🚫 선임 제외 (0명)</span>
+      </button>
+      <button class="btn-control btn-deploy-submit" onclick="submitDeployment()">
+        <span>🚀 배치 완료!</span>
+      </button>
+    </section>
+  </main>
+
+  <div id="feedback-toast"></div>
+
+  <!-- 시작 / 게임 오버 모달 -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-card">
+      <h2 id="modal-title">소방안전관리자 3탄</h2>
+      <p id="modal-desc">
+        건물 조건(세대수, 연면적, 특정 용도)을 보고 암산하여<br>
+        <b>[보조자 선임 👤]</b> 버튼을 필요한 만큼 도장 찍듯 탭한 뒤<br>
+        <b>[🚀 배치 완료!]</b>를 누르세요!<br><br>
+        선임 의무가 없는 건물은 <b>[🚫 선임 제외 (0명)]</b>을 누르면 됩니다.<br><br>
+        ❤️ <b>정답 맞출 때마다 하트 +1 회복!</b> (최대 5개)<br>
+        ⏱️ 우측 상단에서 생각할 제한시간을 조절할 수 있습니다.
+      </p>
+
+      <div id="wrong-report-area"></div>
+
+      <div id="modal-actions" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+        <button class="btn-action" id="modal-btn" onclick="startGame()">게임 시작</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ----------------------------------------------------
+    // 문제 데이터: 소방안전관리보조자 선임 기준 (교재 원문 100% 반영 총 12문항)
+    // ----------------------------------------------------
+    const QUESTIONS = [
+      {
+        icon: "🏢",
+        category: "아파트 세대수",
+        text: "250세대인 아파트",
+        answer: 0,
+        desc: "300세대 미만 아파트는 보조자 선임 의무 없음 (0명 제외)"
+      },
+      {
+        icon: "🏢",
+        category: "아파트 세대수",
+        text: "300세대 이상 ~ 500세대인 아파트",
+        answer: 1,
+        desc: "300세대 이상 기본 1명 (초과 300세대 미달로 추가 없음)"
+      },
+      {
+        icon: "🏢",
+        category: "아파트 세대수",
+        text: "750세대인 아파트",
+        answer: 2,
+        desc: "기본 1명(300세대) + 초과 450세대(300단위 1구간) = 총 2명"
+      },
+      {
+        icon: "🏢",
+        category: "아파트 세대수",
+        text: "1,000세대인 아파트",
+        answer: 3,
+        desc: "기본 1명(300세대) + 초과 700세대(300단위 2구간) = 총 3명"
+      },
+      {
+        icon: "🏢",
+        category: "아파트 세대수",
+        text: "1,350세대인 아파트",
+        answer: 4,
+        desc: "기본 1명(300세대) + 초과 1,050세대(300단위 3구간) = 총 4명"
+      },
+      {
+        icon: "🏬",
+        category: "연면적 기준",
+        text: "연면적 2만㎡인 특정소방대상물 (아파트·연립 제외)",
+        answer: 1,
+        desc: "1.5만㎡ 이상 기본 1명 (초과 5천㎡로 1.5만㎡ 추가 미달)"
+      },
+      {
+        icon: "🏬",
+        category: "연면적 기준",
+        text: "연면적 3만5천㎡인 특정소방대상물 (아파트·연립 제외)",
+        answer: 2,
+        desc: "기본 1명(1.5만㎡) + 초과 2만㎡(1.5만㎡ 1구간 달성) = 총 2명"
+      },
+      {
+        icon: "🏬",
+        category: "연면적 기준",
+        text: "연면적 5만㎡인 특정소방대상물 (아파트·연립 제외)",
+        answer: 3,
+        desc: "기본 1명(1.5만㎡) + 초과 3.5만㎡(1.5만㎡ 2구간 달성) = 총 3명"
+      },
+      {
+        icon: "🚒",
+        category: "연면적 특례(소방차 운용)",
+        text: "자위소방대 24시간 상시근무 & 소방차 운용 시설로서 연면적 4만㎡인 대상물",
+        answer: 1,
+        desc: "[특례] 소방차 운용 시 초과 3만㎡마다 1명 추가이므로 기본 1명만 선임"
+      },
+      {
+        icon: "🚒",
+        category: "연면적 특례(소방차 운용)",
+        text: "자위소방대 24시간 상시근무 & 소방차 운용 시설로서 연면적 5만㎡인 대상물",
+        answer: 2,
+        desc: "[특례] 기본 1명(1.5만㎡) + 초과 3.5만㎡(3만㎡ 1구간 초과) = 총 2명"
+      },
+      {
+        icon: "🏥",
+        category: "특정 용도 시설",
+        text: "공동주택 중 기숙사, 의료시설, 노유자시설, 수련시설",
+        answer: 1,
+        desc: "연면적에 상관없이 보조자 최소 1명 선임 필수"
+      },
+      {
+        icon: "🏨",
+        category: "숙박시설 예외",
+        text: "바닥면적 합계 1,200㎡이고 관계인이 24시간 상시 근무하는 숙박시설",
+        answer: 0,
+        desc: "[예외] 1,500㎡ 미만 + 24시간 상시근무 숙박시설은 보조자 선임 제외 (0명)"
+      }
+    ];
+
+    const MAX_LIVES = 5;
+    const START_LIVES = 3;
+    let currentScore = 0;
+    let lives = START_LIVES;
+    let questionPool = [];
+    let wrongQuestions = [];
+    let currentQ = null;
+    let timeLimitSec = 10; // 기본 10초 암산 시간
+    let currentStampedCount = 0; // 현재 찍어둔 보조자 수
+    let isGameOver = false;
+    let isTransitioning = false;
+    let timerInterval = null;
+
+    const buildingCard = document.getElementById("building-card");
+    const buildingIcon = document.getElementById("building-icon");
+    const buildingBadge = document.getElementById("building-badge");
+    const buildingTitle = document.getElementById("building-title");
+    const buildingSubtext = document.getElementById("building-subtext");
+
+    const timerBarFill = document.getElementById("timer-bar-fill");
+    const slotCounter = document.getElementById("slot-counter");
+    const slotsRow = document.getElementById("slots-row");
+    const slotEmptyNotice = document.getElementById("slot-empty-notice");
+
+    const scoreValEl = document.getElementById("score-val");
+    const livesDisplayEl = document.getElementById("lives-display");
+    const progressValEl = document.getElementById("progress-val");
+    const toastEl = document.getElementById("feedback-toast");
+    const speedSlider = document.getElementById("speed-slider");
+    const speedText = document.getElementById("speed-text");
+    const modalEl = document.getElementById("modal");
+
+    // 속도(제한시간) 설정 유지
+    const savedTime = localStorage.getItem("sobang_game3_time");
+    if (savedTime) {
+      timeLimitSec = parseInt(savedTime, 10);
+      speedSlider.value = timeLimitSec;
+      speedText.textContent = timeLimitSec + "초";
+    }
+
+    speedSlider.addEventListener("input", (e) => {
+      timeLimitSec = parseInt(e.target.value, 10);
+      speedText.textContent = timeLimitSec + "초";
+      localStorage.setItem("sobang_game3_time", timeLimitSec);
+    });
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function recordWrong(q) {
+      if (!q) return;
+      if (!wrongQuestions.some(item => item.text === q.text)) {
+        wrongQuestions.push(q);
+      }
+    }
+
+    // 게임 시작
+    function startGame() {
+      modalEl.style.display = "none";
+      currentScore = 0;
+      lives = START_LIVES;
+      isGameOver = false;
+      isTransitioning = false;
+      wrongQuestions = [];
+      questionPool = shuffleArray(QUESTIONS);
+      updateHUD();
+      nextQuestion();
+    }
+
+    function startReviewGame() {
+      if (wrongQuestions.length === 0) return;
+      modalEl.style.display = "none";
+      currentScore = 0;
+      lives = START_LIVES;
+      isGameOver = false;
+      isTransitioning = false;
+      questionPool = shuffleArray(wrongQuestions);
+      wrongQuestions = [];
+      updateHUD();
+      nextQuestion();
+    }
+
+    function updateHUD() {
+      scoreValEl.textContent = currentScore;
+      livesDisplayEl.textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, MAX_LIVES - lives));
+      const qIndex = QUESTIONS.length - questionPool.length;
+      progressValEl.textContent = `${qIndex} / ${QUESTIONS.length}`;
+    }
+
+    function triggerHeartHealAnim() {
+      livesDisplayEl.classList.remove("heart-heal-bounce");
+      void livesDisplayEl.offsetWidth;
+      livesDisplayEl.classList.add("heart-heal-bounce");
+    }
+
+    // 다음 문제 세팅
+    function nextQuestion() {
+      if (timerInterval) clearInterval(timerInterval);
+      isTransitioning = false;
+      removeCrackEffect();
+
+      if (questionPool.length === 0) {
+        showGameOver(true);
+        return;
+      }
+
+      currentQ = questionPool.pop();
+      currentStampedCount = 0;
+      updateHUD();
+      renderSlots();
+
+      buildingIcon.textContent = currentQ.icon;
+      buildingBadge.textContent = currentQ.category;
+      buildingTitle.textContent = currentQ.text;
+      buildingSubtext.textContent = "이 건물에 선임해야 할 최소 소방보조자 수는?";
+
+      startQuestionTimer();
+    }
+
+    // 카운트다운 타이머
+    function startQuestionTimer() {
+      const totalMs = timeLimitSec * 1000;
+      const startMs = Date.now();
+      timerBarFill.style.width = "100%";
+      timerBarFill.style.backgroundColor = "#3fb950";
+
+      timerInterval = setInterval(() => {
+        if (isTransitioning || isGameOver) return;
+
+        const elapsed = Date.now() - startMs;
+        const remain = Math.max(0, totalMs - elapsed);
+        const percent = (remain / totalMs) * 100;
+
+        timerBarFill.style.width = `${percent}%`;
+
+        if (percent < 30) {
+          timerBarFill.style.backgroundColor = "#f85149";
+        } else if (percent < 60) {
+          timerBarFill.style.backgroundColor = "#d29922";
+        }
+
+        if (remain <= 0) {
+          clearInterval(timerInterval);
+          onTimeOut();
+        }
+      }, 50);
+    }
+
+    // 보조자 도장 추가 (➕)
+    function addWorkerStamp() {
+      if (isTransitioning || isGameOver) return;
+      if (currentStampedCount >= 6) {
+        showToast("최대 6명까지만 배치 가능합니다", false);
+        return;
+      }
+      currentStampedCount++;
+      renderSlots();
+    }
+
+    // 보조자 1명 취소 (➖)
+    function removeWorkerStamp() {
+      if (isTransitioning || isGameOver) return;
+      if (currentStampedCount > 0) {
+        currentStampedCount--;
+        renderSlots();
+      }
+    }
+
+    // 선임 제외(0명) 바로 제출
+    function submitZeroWorkers() {
+      if (isTransitioning || isGameOver) return;
+      currentStampedCount = 0;
+      renderSlots();
+      submitDeployment();
+    }
+
+    // 슬롯 UI 렌더링
+    function renderSlots() {
+      slotCounter.textContent = `${currentStampedCount} 명`;
+
+      if (currentStampedCount === 0) {
+        slotsRow.innerHTML = `<span class="slot-empty-notice" id="slot-empty-notice">아래 [보조자 선임 👤] 버튼을 탭하여 인원을 채우세요</span>`;
+      } else {
+        let html = "";
+        for (let i = 1; i <= currentStampedCount; i++) {
+          html += `
+            <div class="slot-stamp filled">
+              <span>👤</span>
+              <span class="slot-stamp-num">#${i}</span>
+            </div>
+          `;
+        }
+        slotsRow.innerHTML = html;
+      }
+    }
+
+    // 최종 배치 완료 제출 검사
+    function submitDeployment() {
+      if (isTransitioning || isGameOver) return;
+      isTransitioning = true;
+      if (timerInterval) clearInterval(timerInterval);
+
+      const isCorrect = (currentStampedCount === currentQ.answer);
+
+      if (isCorrect) {
+        currentScore += 100;
+        let healMsg = "";
+        if (lives < MAX_LIVES) {
+          lives++;
+          healMsg = "<br><span style='font-size:0.95rem;color:#7ee787;'>❤️ 하트 +1 회복!</span>";
+          triggerHeartHealAnim();
+        }
+
+        updateHUD();
+        const ansText = currentQ.answer === 0 ? "선임 제외(0명)" : `${currentQ.answer}명 선임`;
+        showToast(`🎉 정답! [${ansText}]${healMsg}`, true);
+
+        buildingCard.style.borderColor = "#3fb950";
+        buildingCard.style.boxShadow = "0 0 25px rgba(63, 185, 80, 0.5)";
+
+        setTimeout(() => {
+          buildingCard.style.borderColor = "#30363d";
+          buildingCard.style.boxShadow = "0 12px 30px rgba(0, 0, 0, 0.4)";
+          nextQuestion();
+        }, 1100);
+
+      } else {
+        recordWrong(currentQ);
+        triggerCrackAndShake();
+
+        const ansText = currentQ.answer === 0 ? "0명 (선임 제외)" : `${currentQ.answer}명`;
+        showToast(`❌ 오답! 정답은 [${ansText}]<br><small style="font-size:0.9rem;color:#ffebee;">${currentQ.desc}</small>`, false);
+
+        lives--;
+        updateHUD();
+
+        setTimeout(() => {
+          if (lives <= 0) {
+            showGameOver(false);
+          } else {
+            nextQuestion();
+          }
+        }, 1800);
+      }
+    }
+
+    // 시간 초과 처리
+    function onTimeOut() {
+      isTransitioning = true;
+      recordWrong(currentQ);
+      triggerCrackAndShake();
+
+      const ansText = currentQ.answer === 0 ? "0명 (선임 제외)" : `${currentQ.answer}명`;
+      showToast(`⏱️ 시간 초과! 정답: [${ansText}]<br><small style="font-size:0.9rem;color:#ffebee;">${currentQ.desc}</small>`, false);
+
+      lives--;
+      updateHUD();
+
+      setTimeout(() => {
+        if (lives <= 0) {
+          showGameOver(false);
+        } else {
+          nextQuestion();
+        }
+      }, 1800);
+    }
+
+    // 건물 카드 흔들림 및 금가는 연출
+    function triggerCrackAndShake() {
+      buildingCard.classList.add("cracking");
+
+      const crackSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      crackSvg.setAttribute("class", "crack-svg");
+      crackSvg.id = "active-crack-svg";
+      crackSvg.innerHTML = `
+        <path class="crack-path" d="M 20 20 L 80 60 L 120 40 L 180 90" />
+        <path class="crack-path" d="M 80 60 L 60 100 L 100 95" />
+        <path class="crack-path" d="M 280 20 L 220 70 L 240 110" />
+      `;
+      buildingCard.appendChild(crackSvg);
+    }
+
+    function removeCrackEffect() {
+      buildingCard.classList.remove("cracking");
+      const existingSvg = document.getElementById("active-crack-svg");
+      if (existingSvg) existingSvg.remove();
+      buildingCard.style.borderColor = "#30363d";
+      buildingCard.style.boxShadow = "0 12px 30px rgba(0, 0, 0, 0.4)";
+    }
+
+    function showToast(msg, isSuccess) {
+      toastEl.innerHTML = msg;
+      toastEl.className = isSuccess ? "show correct" : "show wrong";
+      setTimeout(() => {
+        toastEl.className = "";
+      }, 1500);
+    }
+
+    // 게임 종료 모달 & 오답 복습 리포트
+    function showGameOver(isWin) {
+      isGameOver = true;
+      if (timerInterval) clearInterval(timerInterval);
+
+      const modalTitle = document.getElementById("modal-title");
+      const modalDesc = document.getElementById("modal-desc");
+      const wrongReportArea = document.getElementById("wrong-report-area");
+      const modalActions = document.getElementById("modal-actions");
+
+      if (isWin && wrongQuestions.length === 0) {
+        modalTitle.textContent = "🏆 퍼펙트 올킬! 보조자 완벽 배치";
+        modalDesc.innerHTML = `오답 없이 모든 건물의 보조자를 완벽하게 계산하셨습니다!<br>최종 점수: <b style="color:#58a6ff;">${currentScore}점</b>`;
+        wrongReportArea.innerHTML = `
+          <div class="perfect-score-banner">
+            ✨ 보조자 선임 및 인원수 계산 기준을 100% 마스터하셨습니다!
+          </div>
+        `;
+        modalActions.innerHTML = `
+          <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+          <button class="btn-action" onclick="startGame()">다시 도전하기</button>
+        `;
+      } else {
+        modalTitle.textContent = isWin ? "🎉 전 문항 계산 완료!" : "💥 게임 오버!";
+        modalDesc.innerHTML = `
+          최종 점수: <b style="color:#58a6ff;">${currentScore}점</b> | 놓친 건물: <b style="color:#f85149;">${wrongQuestions.length}개</b>
+        `;
+
+        if (wrongQuestions.length > 0) {
+          let listHtml = `
+            <div class="wrong-report-container">
+              <div class="wrong-report-header">
+                <span>📝 이번 판 오답 복습 리포트 (${wrongQuestions.length}건물)</span>
+              </div>
+              <div class="wrong-items-list">
+          `;
+
+          wrongQuestions.forEach((q, idx) => {
+            const ansStr = q.answer === 0 ? "선임 제외 (0명)" : `${q.answer}명 선임`;
+            listHtml += `
+              <div class="wrong-card">
+                <div class="wrong-q-text">${q.icon} ${idx + 1}. ${q.text}</div>
+                <div class="wrong-answer-row">
+                  <span class="badge-ans">정답: [${ansStr}]</span>
+                </div>
+                <div class="wrong-desc">💡 ${q.desc}</div>
+              </div>
+            `;
+          });
+
+          listHtml += `
+              </div>
+            </div>
+          `;
+          wrongReportArea.innerHTML = listHtml;
+
+          modalActions.innerHTML = `
+            <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+            <button class="btn-action" style="background:#da3633;" onclick="startReviewGame()">🔄 오답만 다시 풀기</button>
+            <button class="btn-action" onclick="startGame()">🔁 전체 다시 풀기</button>
+          `;
+        } else {
+          wrongReportArea.innerHTML = "";
+          modalActions.innerHTML = `
+            <a href="../games.html" class="btn-action" style="background:#30363d;text-decoration:none;">목록으로</a>
+            <button class="btn-action" onclick="startGame()">다시 도전하기</button>
+          `;
+        }
+      }
+
+      modalEl.style.display = "flex";
+    }
+  </script>
+</body>
+</html>
