@@ -567,15 +567,17 @@
   function bindEvents() {
     // 탭 전환
     dom.tabs.forEach(tabBtn => {
-      tabBtn.addEventListener('click', () => {
-        dom.tabs.forEach(t => t.classList.remove('active'));
-        tabBtn.classList.add('active');
-        state.activeTab = tabBtn.dataset.tab;
+      if (tabBtn.dataset.tab) {
+        tabBtn.addEventListener('click', () => {
+          dom.tabs.forEach(t => t.classList.remove('active'));
+          tabBtn.classList.add('active');
+          state.activeTab = tabBtn.dataset.tab;
 
-        // 필터 초기화 후 재구성
-        populateChapterFilter();
-        applyFilters();
-      });
+          // 필터 초기화 후 재구성
+          populateChapterFilter();
+          applyFilters();
+        });
+      }
     });
 
     // 필터 체인지

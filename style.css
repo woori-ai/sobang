@@ -190,8 +190,8 @@ body {
    =================================================== */
 .nav-tabs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
   margin-bottom: 12px;
 }
 
@@ -199,7 +199,7 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 10px 4px;
+  padding: 10px 3px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -209,6 +209,22 @@ body {
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
+  text-decoration: none;
+}
+
+.nav-tab-link {
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.nav-tab-link:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: #a855f7;
+  color: #c084fc;
+}
+
+.nav-tab-link .link-badge {
+  background: #a855f7;
+  color: #ffffff;
 }
 
 .nav-tab:hover {
