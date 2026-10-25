@@ -7,11 +7,10 @@
 
   // 1. 상태(State) 관리
   const state = {
-    activeTab: 'mcq', // 'mcq' | 'box' | 'ox' | 'cards' | 'calc'
+    activeTab: 'mcq', // 'mcq' | 'box' | 'cards' | 'calc'
     data: {
       mcq: [],
       box: [],
-      ox: [],
       cards: [],
       calc: []
     },
@@ -51,7 +50,6 @@
     tabs: document.querySelectorAll('.nav-tab'),
     badgeMcq: document.getElementById('badge-mcq'),
     badgeBox: document.getElementById('badge-box'),
-    badgeOx: document.getElementById('badge-ox'),
     badgeCards: document.getElementById('badge-cards'),
     badgeCalc: document.getElementById('badge-calc'),
 
@@ -139,24 +137,21 @@
   // 4. 데이터 비동기 Fetch
   async function initData() {
     try {
-      const [mcqRes, boxRes, oxRes, cardsRes, calcRes] = await Promise.all([
+      const [mcqRes, boxRes, cardsRes, calcRes] = await Promise.all([
         fetch('questions_mcq.json').then(r => r.json()),
         fetch('questions_box.json').then(r => r.json()),
-        fetch('questions_ox.json').then(r => r.json()),
         fetch('cards_75.json').then(r => r.json()),
         fetch('calc_37.json').then(r => r.json())
       ]);
 
       state.data.mcq = Array.isArray(mcqRes) ? mcqRes : [];
       state.data.box = Array.isArray(boxRes) ? boxRes : [];
-      state.data.ox = Array.isArray(oxRes) ? oxRes : [];
       state.data.cards = Array.isArray(cardsRes) ? cardsRes : [];
       state.data.calc = Array.isArray(calcRes) ? calcRes : [];
 
       // 뱃지 숫자 갱신
       dom.badgeMcq.textContent = state.data.mcq.length;
       if (dom.badgeBox) dom.badgeBox.textContent = state.data.box.length;
-      dom.badgeOx.textContent = state.data.ox.length;
       dom.badgeCards.textContent = state.data.cards.length;
       dom.badgeCalc.textContent = state.data.calc.length;
 
@@ -309,8 +304,6 @@
     // 탭별 뷰 분기
     if (tab === 'cards') {
       renderCardsView(item, history);
-    } else if (tab === 'ox') {
-      renderOxView(item, history);
     } else {
       renderMcqView(item, history);
     }
@@ -319,7 +312,7 @@
     renderExplanation(item, history);
   }
 
-  // 4지선다 / 계산 37선 렌더링
+  // 4지선다 / 보기선택 / 계산 37선 렌더링
   function renderMcqView(item, history) {
     dom.flashcardWrapper.style.display = 'none';
     dom.optionsContainer.style.display = 'flex';
@@ -352,43 +345,6 @@
 
       btn.addEventListener('click', () => {
         handleAnswerSubmit(item, optIdx, correctAnswer);
-      });
-
-      dom.optionsContainer.appendChild(btn);
-    });
-  }
-
-  // 스피드 OX 렌더링
-  function renderOxView(item, history) {
-    dom.flashcardWrapper.style.display = 'none';
-    dom.optionsContainer.style.display = 'grid';
-    dom.optionsContainer.className = 'ox-buttons-grid';
-    dom.optionsContainer.innerHTML = '';
-
-    const isTrueAnswer = (item.answer === true || item.answer === 'O' || item.answer === 1);
-
-    const oxData = [
-      { text: '⭕ 그렇다', val: true, class: 'ox-btn-o' },
-      { text: '❌ 아니다', val: false, class: 'ox-btn-x' }
-    ];
-
-    oxData.forEach(btnInfo => {
-      const btn = document.createElement('button');
-      btn.className = `ox-btn ${btnInfo.class}`;
-      btn.innerHTML = `
-        <span>${btnInfo.val ? 'O' : 'X'}</span>
-        <span class="ox-btn-sub">${btnInfo.text}</span>
-      `;
-
-      if (history) {
-        btn.disabled = true;
-        if (history.selected === btnInfo.val) {
-          btn.classList.add(history.isCorrect ? 'selected-correct' : 'selected-wrong');
-        }
-      }
-
-      btn.addEventListener('click', () => {
-        handleAnswerSubmit(item, btnInfo.val, isTrueAnswer);
       });
 
       dom.optionsContainer.appendChild(btn);
@@ -455,9 +411,7 @@
         dom.resultBanner.innerHTML = '✅ 정답입니다! 아주 훌륭합니다.';
       } else {
         dom.resultBanner.className = 'result-banner wrong';
-        const ansLabel = (state.activeTab === 'ox')
-          ? (item.answer ? 'O (그렇다)' : 'X (아니다)')
-          : `${item.answer}번`;
+        const ansLabel = `${item.answer}번`;
         dom.resultBanner.innerHTML = `❌ 오답입니다. (정답: <strong>${ansLabel}</strong>)`;
       }
     } else {
@@ -528,7 +482,7 @@
     let answeredItems = 0;
     let correctItems = 0;
 
-    ['mcq', 'box', 'ox', 'cards', 'calc'].forEach(tab => {
+    ['mcq', 'box', 'cards', 'calc'].forEach(tab => {
       const list = state.data[tab] || [];
       totalItems += list.length;
 

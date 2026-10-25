@@ -190,7 +190,7 @@ body {
    =================================================== */
 .nav-tabs {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 6px;
   margin-bottom: 12px;
 }
@@ -1068,23 +1068,21 @@ body {
     font-size: 1.1rem;
   }
   .nav-tabs {
-    grid-template-columns: repeat(6, 1fr);
-    gap: 3px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
   }
   .nav-tab {
-    padding: 6px 1px;
-    border-radius: 6px;
+    padding: 8px 2px;
   }
   .tab-icon {
-    font-size: 14px;
+    font-size: 16px;
   }
   .tab-name {
-    font-size: 0.65rem;
-    letter-spacing: -0.5px;
+    font-size: 0.72rem;
   }
   .tab-badge {
-    font-size: 0.62rem;
-    padding: 1px 4px;
+    font-size: 0.65rem;
+    padding: 1px 5px;
   }
   .quiz-box-card {
     padding: 10px 12px;
