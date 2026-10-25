@@ -486,7 +486,7 @@
       <h2 class="section-title">
         <span>🎮 플레이 가능한 게임 모음</span>
       </h2>
-      <span class="game-count-badge">총 4개 시리즈</span>
+      <span class="game-count-badge">총 5개 시리즈</span>
     </div>
 
     <div class="game-grid">
@@ -573,6 +573,30 @@
               <span>🎯 A 낙하형</span>
             </a>
             <a href="./1keup-game/game4-b.html" class="btn-play-dual btn-b" title="B타입: 화면에 둥둥 떠다니는 단어 다중 선택 사냥">
+              <span>🛸 B 플로팅형</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- [제 5탄] 소방 벌칙·과징금·과태료 (A/B 모드 선택형) -->
+      <div class="game-card active-card">
+        <div>
+          <div class="card-top">
+            <div class="game-icon-box" style="border-color:#f0883e;">⚖️</div>
+            <span class="badge-status play">PLAY 가능 ▶</span>
+          </div>
+          <h3 class="game-title">[제 5탄] 소방 벌칙·과징금·과태료</h3>
+        </div>
+        <div class="card-actions">
+          <button class="btn-study" onclick="openStudyModal(5)">
+            <span>📖 핵심 요약 먼저 공부하기</span>
+          </button>
+          <div class="card-dual-actions">
+            <a href="./1keup-game/game5.html" class="btn-play-dual" title="A타입: 위반 행위 낙하 ➔ 법정형 금액 블록 요격 격추">
+              <span>🎯 A 낙하형</span>
+            </a>
+            <a href="./1keup-game/game5-b.html" class="btn-play-dual btn-b" title="B타입: 화면에 떠다니는 위반 항목 중 타겟 미션 사냥">
               <span>🛸 B 플로팅형</span>
             </a>
           </div>
@@ -730,6 +754,46 @@
             items: [
               "<span class='highlight-red'>소화활동설비 6가지</span>: 제연설비, 연결송수관설비, 연결살수설비, 비상콘센트설비, 무선통신보조설비, 연소저지설비",
               "암기 팁: '연결', '제연', '무선', '비상콘센트'는 무조건 소화활동설비!"
+            ]
+          }
+        ]
+      },
+      5: {
+        title: "⚖️ [제 5탄] 벌칙·과징금·과태료 금액순 1분 족집게",
+        playUrl: "./1keup-game/game5.html",
+        cards: [
+          {
+            title: "1. 최고형벌 & 과징금 (5,000만 ~ 3,000만원)",
+            items: [
+              "<span class='highlight-red'>[5년 이하 징역 / 5,000만원 벌금]</span>: <b>'5천 방해 용수소'</b> - 소방대 출동·진압·구조 방해/폭행, 소방용수시설·비상소화장치 효용침해·방해, 소방시설 차단으로 <b>사망</b>",
+              "<span class='highlight-badge'>[3,000만원 이하 과징금]</span>: <b>교재 유일의 과징금</b> - 소방시설관리업자 영업정지 처분 갈음",
+              "<span class='highlight-badge'>[3년 이하 징역 / 3,000만원 벌금]</span>: <b>'3천 강제처분·조치명령'</b> - 소방관서장 조치명령(보완/철거) 위반, 강제처분 방해, 소방시설 차단으로 <b>상해(부상)</b>"
+            ]
+          },
+          {
+            title: "2. 중간형벌 & 고액 과태료 (1,000만 ~ 300만원)",
+            items: [
+              "<span class='highlight-badge'>[1년 이하 징역 / 1,000만원 벌금]</span>: <b>'1천 자체점검 미실시'</b> - 소방시설 자체점검 전혀 미실시, 소방안전관리자 업무 태만 과실 화재",
+              "<span class='highlight-badge'>[500만원 이하 과태료]</span>: <b>'500 거짓신고·위험물'</b> - 119 화재·구조구급 거짓(허위) 신고, 위험물안전관리법상 모든 과태료",
+              "<span class='highlight-red'>[300만원 이하 벌금 (형벌)]</span>: ★ <b>'3벌 조조방·미선임'</b> - <b>소방안전관리자 아예 미선임(사람 안 뽑음)</b>, 화재안전조사 거부·방해·기피",
+              "<span class='highlight-badge'>[300만원 이하 과태료]</span>: <b>'300 방화문 폐쇄'</b> - 피난시설·방화구획·방화문 폐쇄·훼손·물건적치(3차 위반), 화재배상책임보험 미가입"
+            ]
+          },
+          {
+            title: "3. 일반 행정 과태료 (200만 ~ 20만원)",
+            items: [
+              "<span class='highlight-red'>[200만원 이하 과태료]</span>: ★ <b>'200 선임미신고·보고태만'</b> - <b>선임 후 14일 이내 선임 미신고</b>, 자체점검 지연보고/거짓보고, 소방계획서 미작성, 소방훈련 미실시",
+              "<span class='highlight-badge'>[100만원 이하 벌금]</span>: 소방대 생활안전활동(벌집/고드름) 방해, 화재조사 거짓진술",
+              "<span class='highlight-red'>[100만원 이하 과태료]</span>: ★ <b>'백과(100만 과태료) 실무교육'</b> - <b>소방안전관리자 실무교육 미이수</b>, 소방차 전용구역 방해",
+              "<span class='highlight-badge'>[20만원 이하 과태료]</span>: <b>'20 연막소독'</b> - 연막소독·불피움 사전 미신고로 소방차 오인 출동 유발"
+            ]
+          },
+          {
+            title: "4. ★ 헷갈리는 3대 핵심 함정",
+            items: [
+              "① 미선임(사람 안 뽑음) = <span class='highlight-red'>300만원 벌금</span> vs 14일 미신고 = <span class='highlight-badge'>200만원 과태료</span>",
+              "② 자체점검 아예 안 함 = <span class='highlight-red'>1,000만원 벌금</span> vs 지연/거짓 보고 = <span class='highlight-badge'>200만원 과태료</span>",
+              "③ 교재에 등장하는 과징금은 오직 <span class='highlight-badge'>소방시설관리업자 3,000만원</span> 1개뿐!"
             ]
           }
         ]

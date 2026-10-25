@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>소방 벌칙·과태료 금액 격추 퀴즈 5탄 A</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. 상단 HUD & 속도 조절 옵션 */
+    header {
+      height: 60px;
+      padding: 10px 16px;
+      background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-exit-game {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover {
+      background: #30363d;
+      color: #58a6ff;
+      border-color: #58a6ff;
+    }
+    .score-badge {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #58a6ff;
+    }
+    .lives {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+    .hud-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #161b22;
+      padding: 4px 8px;
+      border-radius: 20px;
+      border: 1px solid #30363d;
+    }
+    .speed-label {
+      font-size: 0.75rem;
+      color: #8b949e;
+      font-weight: 600;
+      margin-right: 2px;
+    }
+    .speed-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #8b949e;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .speed-btn.active {
+      background: #238636;
+      color: #fff;
+      border-color: #2ea043;
+    }
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .progress-pill {
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: #21262d;
+      border: 1px solid #30363d;
+      padding: 4px 10px;
+      border-radius: 14px;
+      color: #c9d1d9;
+    }
+
+    /* 2. 게임 메인 필드 */
+    #game-container {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 20%, #161b22 0%, #0d1117 80%);
+    }
+    #fx-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* 낙하 문제 블록 */
+    .falling-block {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 440px;
+      background: linear-gradient(145deg, #1f2937, #111827);
+      border: 2px solid #58a6ff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(88, 166, 255, 0.25);
+      z-index: 5;
+      cursor: default;
+      will-change: top, transform;
+    }
+    .block-category-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #f0883e;
+      background: rgba(240, 136, 62, 0.15);
+      border: 1px solid rgba(240, 136, 62, 0.4);
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+    }
+    .block-text {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+    .block-sub {
+      font-size: 0.75rem;
+      color: #8b949e;
+      margin-top: 4px;
+    }
+    .countdown-bar {
+      width: 100%;
+      height: 4px;
+      background: #21262d;
+      border-radius: 2px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .countdown-fill {
+      height: 100%;
+      width: 100%;
+      background: #58a6ff;
+      transition: width 0.1s linear, background-color 0.3s;
+    }
+
+    /* 3. 바닥 충돌 라인 & 파손 효과 */
+    .danger-line {
+      position: absolute;
+      bottom: 128px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #ff4d4f, transparent);
+      box-shadow: 0 0 10px rgba(255, 77, 79, 0.5);
+      pointer-events: none;
+      z-index: 4;
+    }
+    .floor-crack-layer {
+      position: absolute;
+      bottom: 128px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      pointer-events: none;
+      z-index: 6;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      background-repeat: no-repeat;
+      background-position: center bottom;
+      background-size: cover;
+    }
+    .floor-crack-1 {
+      opacity: 0.65;
+      background-image: radial-gradient(ellipse at 50% 100%, rgba(255, 77, 79, 0.3) 0%, transparent 60%);
+    }
+    .floor-crack-2 {
+      opacity: 0.9;
+      background-image: radial-gradient(ellipse at 50% 100%, rgba(255, 77, 79, 0.5) 0%, transparent 75%);
+    }
+
+    /* 4. 하단 6대 법정형 금액 컨트롤러 그리드 */
+    .control-deck {
+      height: 128px;
+      background: #161b22;
+      border-top: 1px solid #30363d;
+      padding: 8px 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 6px;
+      z-index: 15;
+    }
+    @media (min-width: 600px) {
+      .control-deck {
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: 1fr;
+        height: 105px;
+        gap: 8px;
+        padding: 10px 16px;
+      }
+      .danger-line {
+        bottom: 105px;
+      }
+      .floor-crack-layer {
+        bottom: 105px;
+      }
+    }
+    .fire-btn {
+      position: relative;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #e6edf3;
+      font-family: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 6px;
+      cursor: pointer;
+      transition: transform 0.08s ease, background 0.15s, border-color 0.15s;
+      overflow: hidden;
+    }
+    .fire-btn:active {
+      transform: scale(0.95);
+    }
+    .fire-btn .btn-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-bottom: 2px;
+    }
+    .fire-btn .btn-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      line-height: 1.15;
+      text-align: center;
+      word-break: keep-all;
+    }
+    .fire-btn .btn-sub {
+      font-size: 0.68rem;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+
+    /* 6개 버튼 고유 컬러 테마 */
+    /* 1: 5천만 (5년) */
+    .btn-cat-1 { border-color: rgba(248, 81, 73, 0.4); }
+    .btn-cat-1 .btn-badge { background: rgba(248, 81, 73, 0.2); color: #ff7b72; }
+    .btn-cat-1:hover { background: #2c1a1d; border-color: #ff7b72; }
+
+    /* 2: 3천만 (3년/과징금) */
+    .btn-cat-2 { border-color: rgba(240, 136, 62, 0.4); }
+    .btn-cat-2 .btn-badge { background: rgba(240, 136, 62, 0.2); color: #f0883e; }
+    .btn-cat-2:hover { background: #2a1f18; border-color: #f0883e; }
+
+    /* 3: 1천만 (1년) */
+    .btn-cat-3 { border-color: rgba(227, 179, 65, 0.4); }
+    .btn-cat-3 .btn-badge { background: rgba(227, 179, 65, 0.2); color: #e3b341; }
+    .btn-cat-3:hover { background: #282417; border-color: #e3b341; }
+
+    /* 4: 500만원 과태료 */
+    .btn-cat-4 { border-color: rgba(163, 113, 247, 0.4); }
+    .btn-cat-4 .btn-badge { background: rgba(163, 113, 247, 0.2); color: #d2a8ff; }
+    .btn-cat-4:hover { background: #231b2e; border-color: #bc8cff; }
+
+    /* 5: 300만원 이하 (미선임/방화문) */
+    .btn-cat-5 { border-color: rgba(88, 166, 255, 0.4); }
+    .btn-cat-5 .btn-badge { background: rgba(88, 166, 255, 0.2); color: #79c0ff; }
+    .btn-cat-5:hover { background: #162233; border-color: #58a6ff; }
+
+    /* 6: 200만~20만원 (선임미신고/실무교육/연막) */
+    .btn-cat-6 { border-color: rgba(63, 185, 80, 0.4); }
+    .btn-cat-6 .btn-badge { background: rgba(63, 185, 80, 0.2); color: #7ee787; }
+    .btn-cat-6:hover { background: #15271d; border-color: #56d364; }
+
+    /* 모달 & 오버레이 */
+    .overlay-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(13, 17, 23, 0.94);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 420px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 8px;
+    }
+    .modal-desc {
+      font-size: 0.88rem;
+      color: #8b949e;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      background: #238636;
+      border: 1px solid #2ea043;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+    .action-btn:hover {
+      background: #2ea043;
+    }
+    .sub-action-btn {
+      width: 100%;
+      padding: 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #c9d1d9;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .sub-action-btn:hover {
+      background: #30363d;
+      color: #58a6ff;
+    }
+
+    /* 오답 복습 리스트 */
+    .review-list {
+      text-align: left;
+      margin: 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .review-item {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.82rem;
+    }
+    .review-q {
+      font-weight: 700;
+      color: #f0f6fc;
+      margin-bottom: 4px;
+    }
+    .review-a {
+      color: #3fb950;
+      font-weight: 600;
+    }
+    .review-tip {
+      color: #e3b341;
+      font-size: 0.75rem;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 HUD -->
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">← 허브로</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-display">❤️❤️❤️</div>
+    </div>
+
+    <!-- 속도 조절 버튼 (0.7x, 1.0x, 1.3x) -->
+    <div class="hud-center">
+      <span class="speed-label">속도</span>
+      <button class="speed-btn" onclick="setGameSpeed(0.7, this)">0.7x</button>
+      <button class="speed-btn active" onclick="setGameSpeed(1.0, this)">1.0x</button>
+      <button class="speed-btn" onclick="setGameSpeed(1.3, this)">1.3x</button>
+    </div>
+
+    <div class="hud-right">
+      <div class="progress-pill">
+        <span id="current-q-num">1</span> / <span id="total-q-num">18</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 게임 메인 필드 -->
+  <main id="game-container">
+    <canvas id="fx-canvas"></canvas>
+
+    <!-- 위험 경계선 및 바닥 파손 레이어 -->
+    <div class="danger-line"></div>
+    <div class="floor-crack-layer" id="floor-crack"></div>
+  </main>
+
+  <!-- 하단 6대 법정형 금액 컨트롤러 -->
+  <footer class="control-deck">
+    <!-- 1: 5천만원 / 5년 -->
+    <button class="fire-btn btn-cat-1" onclick="handleFire(1)">
+      <span class="btn-badge">최고형벌</span>
+      <span class="btn-title">5천만 / 5년</span>
+      <span class="btn-sub">출동방해·용수소</span>
+    </button>
+
+    <!-- 2: 3천만원 / 3년 (과징금) -->
+    <button class="fire-btn btn-cat-2" onclick="handleFire(2)">
+      <span class="btn-badge">중형·과징금</span>
+      <span class="btn-title">3천만 / 3년</span>
+      <span class="btn-sub">조치명령·과징금</span>
+    </button>
+
+    <!-- 3: 1천만원 / 1년 -->
+    <button class="fire-btn btn-cat-3" onclick="handleFire(3)">
+      <span class="btn-badge">자체점검</span>
+      <span class="btn-title">1천만 / 1년</span>
+      <span class="btn-sub">점검 전혀 미실시</span>
+    </button>
+
+    <!-- 4: 500만원 과태료 -->
+    <button class="fire-btn btn-cat-4" onclick="handleFire(4)">
+      <span class="btn-badge">거짓신고</span>
+      <span class="btn-title">500만 과태료</span>
+      <span class="btn-sub">119거짓·위험물</span>
+    </button>
+
+    <!-- 5: 300만원 이하 (미선임/방화문) -->
+    <button class="fire-btn btn-cat-5" onclick="handleFire(5)">
+      <span class="btn-badge">★미선임·방화문</span>
+      <span class="btn-title">300만 이하</span>
+      <span class="btn-sub">미선임벌금/방화문</span>
+    </button>
+
+    <!-- 6: 200만 ~ 20만원 (선임미신고/실무교육/연막) -->
+    <button class="fire-btn btn-cat-6" onclick="handleFire(6)">
+      <span class="btn-badge">★선임미신고</span>
+      <span class="btn-title">200만~20만</span>
+      <span class="btn-sub">14일미신고·실무교육</span>
+    </button>
+  </footer>
+
+  <!-- 시작 전 인트로 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:10px;">⚖️</div>
+      <h2 class="modal-title">[제 5탄 A] 벌칙·과태료 격추</h2>
+      <p class="modal-desc">
+        상단에서 낙하하는 <b>위반 행위 블록</b>을 읽고,<br>
+        하단의 올바른 <b>법정형/금액 블록</b>을 눌러 격추하세요!<br><br>
+        • 상단 5초간 안전하게 문제를 읽을 수 있습니다.<br>
+        • 정답 시 하트가 1개씩 회복됩니다 (최대 5개).
+      </p>
+      <button class="action-btn" onclick="startGame()">🚀 게임 시작하기</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 게임 오버 / 클리어 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">미션 완료!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+
+      <!-- 오답 복습 리포트 영역 -->
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 틀린 문제 족집게 복습</h4>
+        <div class="review-list" id="review-list"></div>
+        <button class="action-btn" id="btn-retry-wrongs" style="background:#da3633; border-color:#f85149; display:none;" onclick="retryWrongQuestions()">
+          🔁 틀린 문제만 다시 풀기
+        </button>
+      </div>
+
+      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    // ----------------------------------------------------
+    // 문제 데이터베이스 (1급 교재 100% 반영 18문항)
+    // ----------------------------------------------------
+    const QUESTION_BANK = [
+      {
+        id: 1,
+        category: "소방기본법 / 최고형벌",
+        text: "소방대의 화재진압, 인명구조 또는 구급활동을 방해한 자",
+        answerCat: 1,
+        answerLabel: "5년 이하 징역 또는 5천만원 이하 벌금",
+        tip: "소방대 출동·진압·구조 방해는 무조건 최고형(5년/5천만)"
+      },
+      {
+        id: 2,
+        category: "소방기본법 / 최고형벌",
+        text: "소방용수시설 또는 비상소화장치의 효용을 해치거나 정당한 사유 없이 사용한 자",
+        answerCat: 1,
+        answerLabel: "5년 이하 징역 또는 5천만원 이하 벌금",
+        tip: "'5천 방해 용수소' - 소방용수시설 효용 침해는 5년/5천만"
+      },
+      {
+        id: 3,
+        category: "소방시설법 / 중대범죄",
+        text: "소방시설을 폐쇄·차단하여 사람을 '사망'에 이르게 한 때",
+        answerCat: 1,
+        answerLabel: "5년 이하 징역 또는 5천만원 이하 벌금 (사망 시 10년 이하/1억원도 가능)",
+        tip: "소방시설 차단으로 사망 사고 발생 시 최고 중형 부과"
+      },
+      {
+        id: 4,
+        category: "화재예방법 / 조치명령",
+        text: "소방관서장의 조치명령(보완, 개수, 철거 등)을 정당한 사유 없이 위반한 자",
+        answerCat: 2,
+        answerLabel: "3년 이하 징역 또는 3천만원 이하 벌금",
+        tip: "'3천 강제처분·조치명령' - 관서장 조치명령 위반은 3년/3천만"
+      },
+      {
+        id: 5,
+        category: "소방기본법 / 강제처분",
+        text: "소방활동을 위한 강제처분(주차차량 이동·파손 등)을 방해한 자",
+        answerCat: 2,
+        answerLabel: "3년 이하 징역 또는 3천만원 이하 벌금",
+        tip: "소방대원의 소방활동 강제처분 방해는 3년/3천만"
+      },
+      {
+        id: 6,
+        category: "소방시설법 / 교재 유일 과징금",
+        text: "소방시설관리업자의 영업정지 처분에 갈음하여 부과하는 과징금 상한선",
+        answerCat: 2,
+        answerLabel: "3,000만원 이하 과징금",
+        tip: "교재에 나오는 과징금은 오직 '소방시설관리업자 3천만원' 1개뿐!"
+      },
+      {
+        id: 7,
+        category: "소방시설법 / 자체점검",
+        text: "소방시설등의 자체점검(작동/종합점검)을 전혀 실시하지 아니한 관계인",
+        answerCat: 3,
+        answerLabel: "1년 이하 징역 또는 1천만원 이하 벌금",
+        tip: "'1천 자체점검 미실시' - 점검을 아예 안 하면 1년/1천만 형벌"
+      },
+      {
+        id: 8,
+        category: "화재예방법 / 관리자 과실",
+        text: "소방안전관리자 업무 태만 과실로 화재를 발생시켜 공공의 위험을 발생하게 한 자",
+        answerCat: 3,
+        answerLabel: "1년 이하 징역 또는 1천만원 이하 벌금",
+        tip: "관리자 업무 태만으로 화재 발생 시 1년/1천만원"
+      },
+      {
+        id: 9,
+        category: "소방기본법 / 허위신고",
+        text: "화재 또는 구조·구급이 필요한 상황을 119에 거짓(허위)으로 알린 자",
+        answerCat: 4,
+        answerLabel: "500만원 이하 과태료",
+        tip: "119 장난·거짓 신고는 500만원 이하 과태료"
+      },
+      {
+        id: 10,
+        category: "위험물안전관리법 / 과태료",
+        text: "위험물 제조소등의 임시저장 승인을 받지 아니하고 저장한 자의 과태료",
+        answerCat: 4,
+        answerLabel: "500만원 이하 과태료",
+        tip: "위험물안전관리법상 모든 과태료는 500만원 이하로 통일"
+      },
+      {
+        id: 11,
+        category: "화재예방법 / ★핵심 단골",
+        text: "소방안전관리자 또는 소방안전관리보조자를 아예 선임하지 아니한 관계인 (미선임)",
+        answerCat: 5,
+        answerLabel: "300만원 이하 벌금 (형벌)",
+        tip: "★사람을 안 뽑음(미선임) = 300만원 벌금(빨간줄)!"
+      },
+      {
+        id: 12,
+        category: "화재예방법 / 화재안전조사",
+        text: "정당한 사유 없이 소방관서의 화재안전조사를 거부·방해 또는 기피한 자",
+        answerCat: 5,
+        answerLabel: "300만원 이하 벌금",
+        tip: "화재안전조사 거부·방해·기피는 300만원 이하 벌금"
+      },
+      {
+        id: 13,
+        category: "소방시설법 / 피난방화시설",
+        text: "피난시설, 방화구획 또는 방화문을 폐쇄·훼손하거나 물건을 적치한 자 (3차 위반)",
+        answerCat: 5,
+        answerLabel: "300만원 이하 과태료 (1차 100만, 2차 200만, 3차 300만)",
+        tip: "방화문 폐쇄·물건적치는 과태료 최대 300만원"
+      },
+      {
+        id: 14,
+        category: "화재예방법 / ★핵심 단골",
+        text: "소방안전관리자를 선임한 날부터 14일 이내에 선임신고를 하지 아니한 자",
+        answerCat: 6,
+        answerLabel: "200만원 이하 과태료",
+        tip: "★사람은 뽑고 신고만 늦음 = 200만원 과태료(행정벌)!"
+      },
+      {
+        id: 15,
+        category: "소방시설법 / 점검결과 보고",
+        text: "소방시설 자체점검 결과를 지연 보고하거나 거짓으로 보고한 자",
+        answerCat: 6,
+        answerLabel: "200만원 이하 과태료",
+        tip: "점검은 했는데 보고를 늦게 하거나 거짓 보고 = 200만원 과태료"
+      },
+      {
+        id: 16,
+        category: "화재예방법 / 소방계획서",
+        text: "소방안전관리대상물의 소방계획서를 작성하지 아니한 관계인",
+        answerCat: 6,
+        answerLabel: "200만원 이하 과태료",
+        tip: "소방계획서 미작성, 훈련·교육 미실시는 200만원 과태료"
+      },
+      {
+        id: 17,
+        category: "화재예방법 / ★실무교육",
+        text: "정당한 사유 없이 소방안전관리자 실무교육을 받지 아니한 자",
+        answerCat: 6,
+        answerLabel: "100만원 이하 과태료",
+        tip: "'백과 실무' - 실무교육 미이수는 100만원 이하 과태료"
+      },
+      {
+        id: 18,
+        category: "소방기본법 / 오인출동",
+        text: "연막소독 또는 불피움을 사전 신고하지 않아 소방자동차를 오인 출동하게 한 자",
+        answerCat: 6,
+        answerLabel: "20만원 이하 과태료",
+        tip: "'20 연막소독' - 연막소독 오인출동은 20만원 과태료"
+      }
+    ];
+
+    // ----------------------------------------------------
+    // 게임 엔진 상태
+    // ----------------------------------------------------
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let lives = 3;
+    const MAX_LIVES = 5;
+    let gameSpeedMultiplier = 1.0;
+    let wrongAnswers = [];
+
+    let currentBlock = null;
+    let animFrameId = null;
+    let isPaused = false;
+    let isGameOver = false;
+
+    // Web Audio 신시사이저 사운드
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'laser') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(150, now + 0.15);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.15);
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } else if (type === 'hit') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } else if (type === 'explosion') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else if (type === 'heal') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      }
+    }
+
+    // Canvas 파티클 시스템
+    const canvas = document.getElementById("fx-canvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let lasers = [];
+
+    function resizeCanvas() {
+      const container = document.getElementById("game-container");
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+
+    function createExplosion(x, y, color = "#58a6ff") {
+      for (let i = 0; i < 24; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 5 + 2;
+        particles.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          radius: Math.random() * 3 + 2,
+          color: color,
+          alpha: 1,
+          decay: Math.random() * 0.03 + 0.02
+        });
+      }
+    }
+
+    function createLaser(startX, startY, targetX, targetY, color = "#58a6ff") {
+      lasers.push({
+        sx: startX,
+        sy: startY,
+        tx: targetX,
+        ty: targetY,
+        progress: 0,
+        color: color
+      });
+      playSound('laser');
+    }
+
+    function updateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 레이저 빔 렌더링
+      for (let i = lasers.length - 1; i >= 0; i--) {
+        const l = lasers[i];
+        l.progress += 0.2;
+        ctx.beginPath();
+        ctx.moveTo(l.sx, l.sy);
+        const currX = l.sx + (l.tx - l.sx) * Math.min(l.progress, 1);
+        const currY = l.sy + (l.ty - l.sy) * Math.min(l.progress, 1);
+        ctx.lineTo(currX, currY);
+        ctx.strokeStyle = l.color;
+        ctx.lineWidth = 4;
+        ctx.shadowColor = l.color;
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        if (l.progress >= 1) {
+          lasers.splice(i, 1);
+        }
+      }
+
+      // 파티클 렌더링
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= p.decay;
+
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+        } else {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.fill();
+          ctx.globalAlpha = 1.0;
+        }
+      }
+
+      requestAnimationFrame(updateParticles);
+    }
+    requestAnimationFrame(updateParticles);
+
+    // 속도 조절
+    function setGameSpeed(speed, btn) {
+      gameSpeedMultiplier = speed;
+      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    // 하트 표시 업데이트
+    function updateHeartsUI() {
+      let heartStr = "";
+      for (let i = 0; i < lives; i++) {
+        heartStr += "❤️";
+      }
+      document.getElementById("lives-display").textContent = heartStr || "💀";
+
+      // 바닥 파손 시각 효과 연동
+      const crack = document.getElementById("floor-crack");
+      if (lives === 2) {
+        crack.className = "floor-crack-layer floor-crack-1";
+      } else if (lives === 1) {
+        crack.className = "floor-crack-layer floor-crack-2";
+      } else if (lives >= 3) {
+        crack.className = "floor-crack-layer";
+      }
+    }
+
+    // ----------------------------------------------------
+    // 게임 루프 및 블록 제어
+    // ----------------------------------------------------
+    function startGame() {
+      document.getElementById("start-modal").style.display = "none";
+      resizeCanvas();
+      currentQuestions = [...QUESTION_BANK].sort(() => Math.random() - 0.5);
+      currentIndex = 0;
+      score = 0;
+      lives = 3;
+      wrongAnswers = [];
+      isGameOver = false;
+
+      document.getElementById("score-val").textContent = score;
+      document.getElementById("total-q-num").textContent = currentQuestions.length;
+      updateHeartsUI();
+
+      spawnNextBlock();
+    }
+
+    function spawnNextBlock() {
+      if (currentIndex >= currentQuestions.length) {
+        showGameClear();
+        return;
+      }
+
+      document.getElementById("current-q-num").textContent = currentIndex + 1;
+      const q = currentQuestions[currentIndex];
+      const container = document.getElementById("game-container");
+
+      const blockEl = document.createElement("div");
+      blockEl.className = "falling-block";
+      blockEl.innerHTML = `
+        <span class="block-category-tag">${q.category}</span>
+        <div class="block-text">${q.text}</div>
+        <div class="countdown-bar">
+          <div class="countdown-fill" id="block-countdown"></div>
+        </div>
+      `;
+      container.appendChild(blockEl);
+
+      const bottomLimit = container.clientHeight - (window.innerWidth >= 600 ? 105 : 128) - blockEl.offsetHeight;
+
+      currentBlock = {
+        element: blockEl,
+        question: q,
+        posY: 10,
+        readGraceTime: 5.0, // 상단 5초 유예
+        totalGraceTime: 5.0,
+        bottomLimit: bottomLimit,
+        isDestroyed: false
+      };
+
+      lastTime = performance.now();
+      animFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    let lastTime = 0;
+    function gameLoop(time) {
+      if (!currentBlock || isGameOver) return;
+
+      const dt = (time - lastTime) / 1000;
+      lastTime = time;
+
+      if (currentBlock.readGraceTime > 0) {
+        currentBlock.readGraceTime -= dt;
+        const ratio = Math.max(0, currentBlock.readGraceTime / currentBlock.totalGraceTime);
+        const bar = currentBlock.element.querySelector("#block-countdown");
+        if (bar) {
+          bar.style.width = (ratio * 100) + "%";
+          if (ratio < 0.3) {
+            bar.style.backgroundColor = "#ff4d4f";
+          }
+        }
+      } else {
+        // 낙하 시작 (기본 속도 px/sec * 멀티플라이어)
+        const fallSpeed = 38 * gameSpeedMultiplier;
+        currentBlock.posY += fallSpeed * dt;
+        currentBlock.element.style.top = currentBlock.posY + "px";
+
+        // 바닥 충돌 판정
+        if (currentBlock.posY >= currentBlock.bottomLimit) {
+          handleBlockHitFloor();
+          return;
+        }
+      }
+
+      animFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    // 바닥 추락 (시간 초과)
+    function handleBlockHitFloor() {
+      if (!currentBlock || currentBlock.isDestroyed) return;
+      currentBlock.isDestroyed = true;
+
+      playSound('explosion');
+      const rect = currentBlock.element.getBoundingClientRect();
+      const cRect = document.getElementById("game-container").getBoundingClientRect();
+      createExplosion(rect.left + rect.width / 2 - cRect.left, rect.top + rect.height / 2 - cRect.top, "#ff4d4f");
+
+      wrongAnswers.push({
+        question: currentBlock.question.text,
+        answer: currentBlock.question.answerLabel,
+        tip: currentBlock.question.tip
+      });
+
+      currentBlock.element.remove();
+      currentBlock = null;
+
+      lives--;
+      updateHeartsUI();
+
+      if (lives <= 0) {
+        showGameOver();
+      } else {
+        currentIndex++;
+        setTimeout(spawnNextBlock, 600);
+      }
+    }
+
+    // 버튼 클릭 격추 핸들러
+    function handleFire(catId) {
+      if (!currentBlock || currentBlock.isDestroyed || isGameOver) return;
+
+      const q = currentBlock.question;
+      const blockRect = currentBlock.element.getBoundingClientRect();
+      const containerRect = document.getElementById("game-container").getBoundingClientRect();
+      const targetX = blockRect.left + blockRect.width / 2 - containerRect.left;
+      const targetY = blockRect.top + blockRect.height / 2 - containerRect.top;
+
+      const startX = targetX;
+      const startY = containerRect.height - 20;
+
+      // 레이저 발사
+      const laserColor = getCategoryColor(catId);
+      createLaser(startX, startY, targetX, targetY, laserColor);
+
+      if (q.answerCat === catId) {
+        // 정답 격추!
+        currentBlock.isDestroyed = true;
+        cancelAnimationFrame(animFrameId);
+
+        playSound('hit');
+        createExplosion(targetX, targetY, laserColor);
+
+        score += 100;
+        document.getElementById("score-val").textContent = score;
+
+        // 정답 시 하트 회복 (최대 MAX_LIVES까지)
+        if (lives < MAX_LIVES) {
+          lives++;
+          updateHeartsUI();
+          playSound('heal');
+        }
+
+        currentBlock.element.remove();
+        currentBlock = null;
+
+        currentIndex++;
+        setTimeout(spawnNextBlock, 400);
+
+      } else {
+        // 오답 클릭
+        playSound('explosion');
+        currentBlock.element.style.borderColor = "#ff4d4f";
+        setTimeout(() => {
+          if (currentBlock && currentBlock.element) {
+            currentBlock.element.style.borderColor = "#58a6ff";
+          }
+        }, 300);
+
+        wrongAnswers.push({
+          question: q.text,
+          answer: q.answerLabel,
+          tip: q.tip
+        });
+
+        lives--;
+        updateHeartsUI();
+
+        if (lives <= 0) {
+          currentBlock.isDestroyed = true;
+          cancelAnimationFrame(animFrameId);
+          currentBlock.element.remove();
+          currentBlock = null;
+          showGameOver();
+        }
+      }
+    }
+
+    function getCategoryColor(catId) {
+      switch (catId) {
+        case 1: return "#ff7b72";
+        case 2: return "#f0883e";
+        case 3: return "#e3b341";
+        case 4: return "#bc8cff";
+        case 5: return "#58a6ff";
+        case 6: return "#56d364";
+        default: return "#58a6ff";
+      }
+    }
+
+    // 결과 모달 표시
+    function showGameClear() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "🏆";
+      document.getElementById("result-title").textContent = "축하합니다! 전원 격추 성공!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#58a6ff; font-size:1.2rem;">${score}점</b><br>벌칙·과태료 주요 법정형을 완벽히 마스터하셨습니다!`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function showGameOver() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "💥";
+      document.getElementById("result-title").textContent = "작전 실패!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#ff7b72; font-size:1.2rem;">${score}점</b><br>바닥이 파손되었습니다. 오답 노트를 복습하고 다시 도전하세요!`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function setupReviewUI() {
+      const revContainer = document.getElementById("review-container");
+      const revList = document.getElementById("review-list");
+      const retryBtn = document.getElementById("btn-retry-wrongs");
+
+      if (wrongAnswers.length > 0) {
+        revContainer.style.display = "block";
+        retryBtn.style.display = "block";
+        let html = "";
+        wrongAnswers.forEach(w => {
+          html += `
+            <div class="review-item">
+              <div class="review-q">${w.question}</div>
+              <div class="review-a">정답: ${w.answer}</div>
+              <div class="review-tip">💡 족집게: ${w.tip}</div>
+            </div>
+          `;
+        });
+        revList.innerHTML = html;
+      } else {
+        revContainer.style.display = "none";
+        retryBtn.style.display = "none";
+      }
+    }
+
+    function retryWrongQuestions() {
+      const wrongsToRetry = wrongAnswers.map(w => {
+        return QUESTION_BANK.find(q => q.text === w.question);
+      }).filter(Boolean);
+
+      if (wrongsToRetry.length === 0) return;
+
+      document.getElementById("result-modal").style.display = "none";
+      currentQuestions = wrongsToRetry.sort(() => Math.random() - 0.5);
+      currentIndex = 0;
+      lives = 3;
+      wrongAnswers = [];
+      isGameOver = false;
+
+      document.getElementById("total-q-num").textContent = currentQuestions.length;
+      updateHeartsUI();
+      spawnNextBlock();
+    }
+
+    function restartAll() {
+      document.getElementById("result-modal").style.display = "none";
+      startGame();
+    }
+  </script>
+</body>
+</html>
