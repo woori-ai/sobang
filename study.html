@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>1분 족집게 핵심 요약노트 | 소방안전관리자 1급</title>
+  <meta name="description" content="소방안전관리자 1급 시험 대비 1~7탄 실전 족집게 핵심 요약집">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. 상단 글로벌 헤더 */
+    .app-header {
+      background: rgba(22, 27, 34, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #30363d;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-icon {
+      font-size: 1.5rem;
+    }
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      line-height: 1.2;
+    }
+    .brand-sub {
+      font-size: 0.72rem;
+      color: #8b949e;
+    }
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-back-home:hover {
+      background: #30363d;
+      color: #58a6ff;
+      border-color: #58a6ff;
+    }
+
+    /* 2. 탭 네비게이션 (가로 스크롤) */
+    .tab-bar-container {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      position: sticky;
+      top: 59px;
+      z-index: 90;
+    }
+    .tab-bar {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 8px 16px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .tab-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .tab-btn {
+      white-space: nowrap;
+      padding: 8px 14px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      border-radius: 20px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .tab-btn:hover {
+      color: #c9d1d9;
+      border-color: #8b949e;
+    }
+    .tab-btn.active {
+      background: #1f6feb;
+      border-color: #388bfd;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(56, 139, 253, 0.4);
+    }
+
+    /* 3. 본문 컨테이너 */
+    .content-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 16px 120px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* 히어로 헤더 */
+    .study-hero {
+      background: linear-gradient(135deg, #1f242c 0%, #161b22 100%);
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .round-tag {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 3px 10px;
+      background: rgba(56, 139, 253, 0.15);
+      border: 1px solid rgba(56, 139, 253, 0.4);
+      color: #58a6ff;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .study-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      line-height: 1.3;
+    }
+    .study-desc {
+      font-size: 0.88rem;
+      color: #8b949e;
+      line-height: 1.5;
+    }
+
+    /* 요약 카드 목록 */
+    .study-card-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .study-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 16px 18px;
+      transition: border-color 0.2s ease;
+    }
+    .study-card:hover {
+      border-color: #58a6ff;
+    }
+    .study-card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #58a6ff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #21262d;
+      padding-bottom: 8px;
+    }
+    .study-card-list {
+      list-style: none;
+      font-size: 0.92rem;
+      color: #c9d1d9;
+      line-height: 1.75;
+    }
+    .study-card-list li {
+      position: relative;
+      padding-left: 16px;
+      margin-bottom: 6px;
+    }
+    .study-card-list li:last-child {
+      margin-bottom: 0;
+    }
+    .study-card-list li::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      color: #f78166;
+      font-weight: bold;
+    }
+    .highlight-badge {
+      font-weight: 700;
+      color: #e3b341;
+      background: rgba(227, 179, 65, 0.12);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .highlight-red {
+      font-weight: 700;
+      color: #f85149;
+      background: rgba(248, 81, 73, 0.12);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* 4. 하단 고정 게임 시작 액션 바 */
+    .bottom-action-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(22, 27, 34, 0.95);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid #30363d;
+      padding: 12px 16px;
+      z-index: 100;
+    }
+    .bottom-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .bottom-label {
+      font-size: 0.85rem;
+      color: #8b949e;
+      display: flex;
+      flex-direction: column;
+    }
+    .bottom-label strong {
+      color: #f0f6fc;
+      font-size: 0.95rem;
+    }
+    .bottom-buttons {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      justify-content: flex-end;
+      max-width: 440px;
+    }
+    .btn-play-action {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      background: #238636;
+      color: #ffffff;
+      flex: 1;
+      text-align: center;
+    }
+    .btn-play-action:hover {
+      background: #2ea043;
+      transform: translateY(-2px);
+    }
+    .btn-play-action.btn-b {
+      background: #8957e5;
+    }
+    .btn-play-action.btn-b:hover {
+      background: #a371f7;
+    }
+
+    @media (max-width: 600px) {
+      .bottom-label {
+        display: none;
+      }
+      .bottom-buttons {
+        max-width: 100%;
+        width: 100%;
+      }
+      .btn-play-action {
+        padding: 10px 10px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 헤더 -->
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="./games.html" class="brand">
+        <span class="brand-icon">🚒</span>
+        <div>
+          <div class="brand-title">소방안전관리자 1급</div>
+          <div class="brand-sub">1분 족집게 합격 요약노트</div>
+        </div>
+      </a>
+      <a href="./games.html" class="btn-back-home">
+        <span>← 게임 센터로</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- 2. 라운드 탭 바 -->
+  <nav class="tab-bar-container">
+    <div class="tab-bar" id="round-tabs">
+      <button class="tab-btn" onclick="selectRound(1)" id="tab-1">🎯 1탄 대상물</button>
+      <button class="tab-btn" onclick="selectRound(2)" id="tab-2">⏱️ 2탄 자격경력</button>
+      <button class="tab-btn" onclick="selectRound(3)" id="tab-3">📅 3탄 실무일정</button>
+      <button class="tab-btn" onclick="selectRound(4)" id="tab-4">🧯 4탄 5대분류</button>
+      <button class="tab-btn" onclick="selectRound(5)" id="tab-5">⚖️ 5탄 벌칙과태료</button>
+      <button class="tab-btn" onclick="selectRound(6)" id="tab-6">🏛️ 6탄 건축법령</button>
+      <button class="tab-btn" onclick="selectRound(7)" id="tab-7">🔥 7탄 소방학개론</button>
+    </div>
+  </nav>
+
+  <!-- 3. 본문 영역 -->
+  <main class="content-container">
+    <div class="study-hero">
+      <span class="round-tag" id="hero-tag">ROUND 01</span>
+      <h1 class="study-title" id="hero-title">로딩 중...</h1>
+      <p class="study-desc" id="hero-desc">핵심 암기 요점을 숙지한 뒤, 하단의 실전 게임으로 완벽하게 체화하세요!</p>
+    </div>
+
+    <div class="study-card-grid" id="study-card-grid">
+      <!-- 동적 주입 -->
+    </div>
+  </main>
+
+  <!-- 4. 하단 고정 게임 시작 액션 바 -->
+  <footer class="bottom-action-bar">
+    <div class="bottom-inner">
+      <div class="bottom-label">
+        <span>요약 암기 완료!</span>
+        <strong>실전 게임으로 실력 검증</strong>
+      </div>
+      <div class="bottom-buttons" id="bottom-play-buttons">
+        <!-- 동적 주입 -->
+      </div>
+    </div>
+  </footer>
+
+  <script>
+const STUDY_DATA = {
+      1: {
+        title: "🎯 [제 1탄] 대상물 선임 기준 1분 족집게",
+        playUrl: "./1keup-game/index.html",
+        cards: [
+          {
+            title: "1. 특급 대상물 기준",
+            items: [
+              "아파트: <span class='highlight-badge'>50층 이상</span>(지하 제외) or <span class='highlight-badge'>200m 이상</span>",
+              "특정소방대상물: <span class='highlight-badge'>30층 이상</span>(<span class='highlight-red'>지하 포함!</span>) or <span class='highlight-badge'>120m 이상</span> (아파트 제외)",
+              "연면적: <span class='highlight-badge'>10만㎡ 이상</span> (아파트 제외)"
+            ]
+          },
+          {
+            title: "2. 1급 대상물 기준",
+            items: [
+              "아파트: <span class='highlight-badge'>30층 이상</span>(지하 제외) or <span class='highlight-badge'>120m 이상</span>",
+              "특정소방대상물: 지상층 층수 <span class='highlight-badge'>11층 이상</span> (아파트 제외)",
+              "연면적: <span class='highlight-badge'>1.5만㎡ 이상</span> (아파트·연립 제외)",
+              "가연성 가스: <span class='highlight-badge'>1천톤 이상</span> 저장·취급 시설"
+            ]
+          },
+          {
+            title: "3. 2급 & 3급 설비 기준",
+            items: [
+              "2급: <span class='highlight-badge'>옥내소화전, 스프링클러, 물분무등소화설비</span>(호스릴 제외), 지하구, 가스 100~1,000톤, 국보/보물 목조",
+              "3급: <span class='highlight-badge'>간이스프링클러</span>(주택전용 제외) or <span class='highlight-badge'>자동화재탐지설비</span>"
+            ]
+          }
+        ]
+      },
+      2: {
+        title: "⏱️ [제 2탄] 자격 & 경력 연수 1분 족집게",
+        playUrl: "./1keup-game/game2.html",
+        cards: [
+          {
+            title: "1. 소방공무원 경력 (20 ➔ 7 ➔ 3 ➔ 1)",
+            items: [
+              "특급: 소방공무원 <span class='highlight-badge'>20년 이상</span>",
+              "1급: 소방공무원 <span class='highlight-badge'>7년 이상</span>",
+              "2급: 소방공무원 <span class='highlight-badge'>3년 이상</span>",
+              "3급: 소방공무원 <span class='highlight-badge'>1년 이상</span>"
+            ]
+          },
+          {
+            title: "2. 국가기술자격자 선임 기준",
+            items: [
+              "특급: <span class='highlight-badge'>소방기술사/관리사</span>(즉시), 기사+1급 실무 <span class='highlight-red'>5년</span>, 산업기사+1급 실무 <span class='highlight-red'>7년</span>",
+              "1급: <span class='highlight-badge'>소방설비기사 or 산업기사</span> 자격 취득자 (경력 없이 즉시 선임 가능)",
+              "2급: <span class='highlight-badge'>위험물기능장, 위험물산업기사, 위험물기능사</span> 자격증 취득자 즉시 선임"
+            ]
+          },
+          {
+            title: "3. 소방안전관리보조자 자격",
+            items: [
+              "기술 분야(건축, 전기, 기계 등) 국가기술자격 보유자",
+              "소방안전 관련 업무 <span class='highlight-badge'>2년 이상</span> 근무 실무경력자",
+              "공공기관 및 특·1·2·3급 강습교육 수료자"
+            ]
+          }
+        ]
+      },
+      3: {
+        title: "🏢 [제 3탄] 소방보조자 선임 기준 1분 족집게",
+        playUrl: "./1keup-game/game3.html",
+        cards: [
+          {
+            title: "1. 아파트 세대수 기준 (기본 1명 + 초과 300세대당 +1)",
+            items: [
+              "300세대 미만: <span class='highlight-red'>선임 제외 (0명)</span>",
+              "300 ~ 599세대: <span class='highlight-badge'>1명</span>",
+              "600 ~ 899세대: <span class='highlight-badge'>2명</span> (초과 300구간 +1)",
+              "900 ~ 1,199세대: <span class='highlight-badge'>3명</span>",
+              "1,200 ~ 1,499세대: <span class='highlight-badge'>4명</span>"
+            ]
+          },
+          {
+            title: "2. 연면적 기준 (기본 1명 + 초과 1.5만㎡당 +1)",
+            items: [
+              "1.5만㎡ 미만: <span class='highlight-red'>선임 제외 (0명)</span>",
+              "1.5만 ~ 2.99만㎡: <span class='highlight-badge'>1명</span>",
+              "3만 ~ 4.49만㎡: <span class='highlight-badge'>2명</span> (초과 1.5만구간 +1)",
+              "4.5만 ~ 5.99만㎡: <span class='highlight-badge'>3명</span>",
+              "🚒 <span class='highlight-red'>[소방차 운용 특례]</span>: 초과 1.5만이 아닌 <span class='highlight-badge'>초과 3만㎡마다 +1명!</span>"
+            ]
+          },
+          {
+            title: "3. 특정 용도 시설 및 예외",
+            items: [
+              "기숙사, 의료시설, 노유자시설, 수련시설: <span class='highlight-badge'>무조건 1명 선임</span>",
+              "숙박시설 예외: <span class='highlight-red'>1,500㎡ 미만 + 24시간 상시근무</span> 시 <span class='highlight-badge'>선임 제외 (0명)</span>"
+            ]
+          }
+        ]
+      },
+      4: {
+        title: "🧯 [제 4탄] 소방시설 5대 분류 1분 족집게",
+        playUrl: "./1keup-game/game4.html",
+        playUrlB: "./1keup-game/game4-b.html",
+        cards: [
+          {
+            title: "1. 소화설비 vs 소화용수설비",
+            items: [
+              "<span class='highlight-badge'>소화설비</span>: 소화기구, 자동소화장치, 옥내·옥외소화전, 스프링클러, 물분무등(가스계/분말/포)",
+              "<span class='highlight-badge'>소화용수설비</span>: 상수도소화용수설비, 소화수조 및 저수조 (물을 공급·저장하는 설비)"
+            ]
+          },
+          {
+            title: "2. 경보설비 vs 피난구조설비",
+            items: [
+              "<span class='highlight-badge'>경보설비</span>: 단독경보형감지기, 자동화재탐지설비, 시각경보기, 비상방송, 자동화재속보, 가스·누전경보기",
+              "<span class='highlight-badge'>피난구조설비</span>: 피난기구(완강기, 구조대), <span class='highlight-red'>인명구조기구(방열/방화복, 공기호흡기, 인공소생기)</span>, 유도등, 비상조명등"
+            ]
+          },
+          {
+            title: "3. ★소화활동설비 (소방관이 사용하는 6대 설비)",
+            items: [
+              "<span class='highlight-red'>소화활동설비 6가지</span>: 제연설비, 연결송수관설비, 연결살수설비, 비상콘센트설비, 무선통신보조설비, 연소저지설비",
+              "암기 팁: '연결', '제연', '무선', '비상콘센트'는 무조건 소화활동설비!"
+            ]
+          }
+        ]
+      },
+      5: {
+        title: "⚖️ [제 5탄] 벌칙·과징금·과태료 금액순 1분 족집게",
+        playUrl: "./1keup-game/game5.html",
+        cards: [
+          {
+            title: "1. 최고형벌 & 중형 (5,000만 ~ 3,000만원)",
+            items: [
+              "<span class='highlight-red'>[5년 이하 징역 / 5,000만원 벌금]</span>: <b>'5천 방해 용수소'</b> - 소방대 출동·진압·구조 방해/폭행, 소방용수시설·비상소화장치 효용침해·방해, 소방시설 차단으로 <b>사람 사망</b>",
+              "<span class='highlight-badge'>[3년 이하 징역 / 3,000만원 벌금]</span>: <b>'3천 강제처분·조치명령'</b> - 소방관서장 조치명령(보완/철거) 위반, 소방대 강제처분 방해, 소방시설 차단으로 <b>상해(부상)</b>"
+            ]
+          },
+          {
+            title: "2. 중간형벌 & 고액 과태료 (1,000만 ~ 300만원)",
+            items: [
+              "<span class='highlight-badge'>[1년 이하 징역 / 1,000만원 벌금]</span>: <b>'1천 자체점검 미실시'</b> - 소방시설 자체점검 전혀 미실시, 소방안전관리자 업무 태만 과실 화재",
+              "<span class='highlight-badge'>[500만원 이하 과태료]</span>: <b>'500 거짓신고·위험물'</b> - 119 화재·구조구급 거짓(허위) 신고, 위험물안전관리법상 모든 과태료",
+              "<span class='highlight-red'>[300만원 이하 벌금 (형벌)]</span>: ★ <b>'3벌 조조방·미선임'</b> - <b>소방안전관리자 아예 미선임(사람 안 뽑음)</b>, 화재안전조사 거부·방해·기피",
+              "<span class='highlight-badge'>[300만원 이하 과태료]</span>: <b>'300 방화문 폐쇄'</b> - 피난시설·방화구획·방화문 폐쇄·훼손·물건적치(3차 위반), 화재배상책임보험 미가입"
+            ]
+          },
+          {
+            title: "3. 일반 행정 과태료 (200만 ~ 20만원)",
+            items: [
+              "<span class='highlight-red'>[200만원 이하 과태료]</span>: ★ <b>'200 선임미신고·보고태만'</b> - <b>선임 후 14일 이내 선임 미신고</b>, 자체점검 지연보고/거짓보고, 소방계획서 미작성, 소방훈련 미실시",
+              "<span class='highlight-badge'>[100만원 이하 벌금]</span>: 소방대 생활안전활동(벌집/고드름) 방해, 화재조사 거짓진술",
+              "<span class='highlight-red'>[100만원 이하 과태료]</span>: ★ <b>'백과(100만 과태료) 실무교육'</b> - <b>소방안전관리자 실무교육 미이수</b>, 소방차 전용구역 방해",
+              "<span class='highlight-badge'>[20만원 이하 과태료]</span>: <b>'20 연막소독'</b> - 연막소독·불피움 사전 미신고로 소방차 오인 출동 유발"
+            ]
+          },
+          {
+            title: "4. ★ 헷갈리는 3대 핵심 함정",
+            items: [
+              "① 미선임(사람 안 뽑음) = <span class='highlight-red'>300만원 벌금</span> vs 14일 미신고 = <span class='highlight-badge'>200만원 과태료</span>",
+              "② 자체점검 아예 안 함 = <span class='highlight-red'>1,000만원 벌금</span> vs 지연/거짓 보고 = <span class='highlight-badge'>200만원 과태료</span>",
+              "③ <b>[수험 핵심]</b> 1급 교재에는 과징금이 전혀 없으며, 오직 <span class='highlight-badge'>벌금(형벌)과 과태료</span>만 출제!"
+            ]
+          }
+        ]
+      },
+        6: {
+          title: "🏛️ [제 6탄] 건축관계법령 1분 족집게",
+          playUrl: "./1keup-game/game6.html",
+          playUrlB: "./1keup-game/game6-b.html",
+          cards: [
+            {
+              title: "1. 주요구조부 vs 비주요구조부",
+              items: [
+                "<span class='highlight-badge'>[주요구조부 6가지]</span>: <b>'바·지·보·내·기·주'</b> - 바닥, 지붕틀, 보, 내력벽, 기둥, 주계단",
+                "<span class='highlight-red'>[주요구조부가 아닌 것]</span>: <b>'사·최·작·차·옥'</b> - 사이기둥(샛기둥), 최하층 바닥, 작은보, 차양, 옥외계단"
+              ]
+            },
+            {
+              title: "2. 용적률 산정 시 연면적 '제외' 4총사",
+              items: [
+                "<span class='highlight-red'>[용적률 산정 제외 4가지]</span>: 1) <b>지하층</b> 바닥면적, 2) 지상층 <b>부설주차장</b> 면적, 3) 초고층/준초고층 <b>피난안전구역</b> 면적, 4) 아파트 옥상 <b>대피공간</b> 면적",
+                "<span class='highlight-badge'>[주의]</span>: 일반 연면적(총면적)에는 지하층 면적이 <b>포함</b>되지만, 용적률 계산할 때만 <b>제외</b>됩니다!"
+              ]
+            },
+            {
+              title: "3. 건축 5대 행위 & 대수선",
+              items: [
+                "<b>신축</b>: 빈 땅에 새로 짓거나 종전 규모를 초과하여 다시 축조",
+                "<b>증축</b>: 건축면적, 연면적, 층수, 높이를 늘리는 것",
+                "<b>개축</b>: 자발적 철거 후 종전 규모 이내 축조",
+                "<b>재축</b>: 재해로 멸실 후 종전 규모 이내 축조",
+                "<b>이전</b>: 주요구조부 해체 없이 같은 대지 내 다른 위치로 이동",
+                "<b>대수선</b>: 내력벽 30㎡ 이상 수선, 기둥·보·지붕틀 3개 이상 수선"
+              ]
+            },
+            {
+              title: "4. 높이 & 층수 산정 황금 수치",
+              items: [
+                "<b>층 구분 불명확</b>: 높이 <b>4m마다 1개 층</b>으로 산정",
+                "<b>지하층 층수</b>: 지하층은 건축물 <b>층수에서 제외</b> (평균높이 층고 1/2 이상)",
+                "<b>옥탑 층수 제외</b>: 옥탑 면적 합계가 건축면적의 <b>1/8 이하</b>인 경우",
+                "<b>옥탑 높이 산입</b>: 옥탑 면적이 1/8 이하인 경우 <b>12m를 넘는 부분만</b> 건물 높이에 산입"
+              ]
+            }
+          ]
+        },
+        7: {
+          title: "🔥 [제 7탄] 소방학개론 1분 족집게 요약노트",
+          playUrl: "./1keup-game/game7.html",
+          playUrlB: "./1keup-game/game7-b.html",
+          cards: [
+            {
+              title: "1. 연소의 3요소 & 4요소",
+              items: [
+                "<b>연소의 3요소</b>: <span class='highlight-badge'>가연물 + 산소공급원 + 점화원</span>",
+                "<b>연소의 4요소</b>: 3요소 + <span class='highlight-badge'>연쇄반응</span> (불꽃을 수반하는 유염연소 시 필수)",
+                "<b>산소공급원</b>: 공기(산소 약 21%), 산화제(제1류·제6류 위험물), 자기반응성물질(제5류 위험물)"
+              ]
+            },
+            {
+              title: "2. 가연물 구비조건 vs 비가연물 3총사",
+              items: [
+                "<span class='highlight-badge'>[가연물이 되기 쉬운 조건]</span>: <b>열전도율 작을 것</b>, <b>비표면적 클 것</b>, <b>활성화에너지 작을 것</b>, <b>발열량 클 것</b>, <b>산소 친화력 클 것</b>, 건조도 높을 것",
+                "<span class='highlight-red'>[비가연물 3총사]</span>: 1) <b>주기율표 0족 비활성기체</b>(He, Ne, Ar, Kr, Xe), 2) <b>완전산화물</b>(CO2, H2O, SO3, SiO2), 3) <b>질소 및 질소산화물</b>(산소와 흡열반응)"
+              ]
+            },
+            {
+              title: "3. 고체연소의 4가지 형태 비교 (핵심 빈출!)",
+              items: [
+                "<b>표면연소</b> (불꽃 없이 표면에서 반응): <span class='highlight-badge'>숯, 목탄, 코크스, 금속분</span>",
+                "<b>분해연소</b> (열분해로 발생한 가스가 연소): <span class='highlight-badge'>목재, 종이, 석탄, 플라스틱</span>",
+                "<b>증발연소</b> (고체가 증발 기화하여 증기가 연소): <span class='highlight-badge'>황, 나프탈렌, 파라핀(양초), 왁스</span>",
+                "<b>자기연소(내부연소)</b> (물질 자체 산소 함유): <span class='highlight-badge'>제5류 위험물 (니트로글리세린, TNT, 질산에스테르류)</span>"
+              ]
+            },
+            {
+              title: "4. 화재의 분류 (A~K급) & 소화기 표시색상",
+              items: [
+                "<b>A급 일반화재</b>: <span class='highlight-badge'>백색</span> (목재, 종이, 섬유 등 섬유질 - <b>재를 남김</b>, 냉각소화)",
+                "<b>B급 유류·가스화재</b>: <span class='highlight-badge'>황색</span> (인화성 액체, 가스 - <b>재를 남기지 않음</b>, 질식소화)",
+                "<b>C급 전기화재</b>: <span class='highlight-badge'>청색</span> (통전 중인 전기설비 - 비전도성 소화약제 사용)",
+                "<b>D급 금속화재</b>: <span class='highlight-badge'>무색</span> (가연성 금속 - <b>마른모래·팽창질석</b>, <span class='highlight-red'>물 주수 절대금지!</span>)",
+                "<b>K급 주방화재</b>: <span class='highlight-badge'>황색/갈색</span> (식용유·동식물유 - <b>비누화 현상으로 피막 형성 및 냉각</b>)"
+              ]
+            },
+            {
+              title: "5. 소화의 4대 기본 원리",
+              items: [
+                "<b>냉각소화</b>: 열을 흡수하여 온도를 발화점 이하로 강하 (물, 강화액 - 물 기화잠열 539kcal/kg)",
+                "<b>질식소화</b>: 공기(산소)를 차단하여 산소농도를 <b>15% 이하</b>로 희석 (CO2, 포 피복, 마른모래, 젖은 담요)",
+                "<b>제거소화</b>: 가연물을 제거하여 연소 차단 (가스 메인밸브 차단, 산불 맞불놓기, 촛불 불기, 가연물 이격)",
+                "<b>억제소화(부촉매)</b>: 활성 라디칼을 포획하여 연쇄반응 차단 (할론, 할로겐화합물 및 불활성기체, ABC 분말)"
+              ]
+            }
+          ]
+        }
+    };
+
+    const ROUND_DESCS = {
+      1: "특급·1급·2급·3급 특정소방대상물의 층수, 높이, 연면적 및 수량 기준 완벽 대비",
+      2: "소방공무원 경력연수(20/7/3/1) 및 기사·산업기사 실무경력 연수 완전 정복",
+      3: "종합점검·작동점검 실시 시기, 보고서 제출 기한(10일/15일), 점검자 자격 완벽 정리",
+      4: "소화설비, 경보설비, 피난구조설비, 소화용수설비, 소화활동설비 5대 소방시설 분류",
+      5: "5년·5천부터 100만원 과태료까지! 1급 시험에만 출제되는 소방 벌칙·과태료 족집게",
+      6: "주요구조부(바지보내기주), 비주요구조부, 용적률 산정 제외 4총사, 건축 5대 행위 완벽 마스터",
+      7: "연소의 3/4요소, 가연물 조건, 비가연물, 고체연소 4형태, 화재분류(A/B/C/D/K), 4대 소화원리"
+    };
+
+    let currentRound = 1;
+
+    function getRoundFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const r = parseInt(params.get('round'), 10);
+      if (r >= 1 && r <= 7) return r;
+      return 1;
+    }
+
+    function selectRound(roundNum) {
+      currentRound = roundNum;
+      
+      // URL 파라미터 업데이트 (새로고침 없이)
+      const url = new URL(window.location);
+      url.searchParams.set('round', roundNum);
+      window.history.replaceState({}, '', url);
+
+      // 탭 스타일 갱신
+      document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+        if (idx + 1 === roundNum) {
+          btn.classList.add('active');
+          btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const data = STUDY_DATA[roundNum];
+      if (!data) return;
+
+      // 헤더 영역 갱신
+      document.getElementById('hero-tag').textContent = `ROUND 0${roundNum}`;
+      document.getElementById('hero-title').textContent = data.title;
+      document.getElementById('hero-desc').textContent = ROUND_DESCS[roundNum] || "핵심 암기 요점을 숙지한 뒤, 하단의 실전 게임으로 완벽하게 체화하세요!";
+
+      // 카드 목록 갱신
+      const grid = document.getElementById('study-card-grid');
+      let html = '';
+      data.cards.forEach(card => {
+        html += `
+          <div class="study-card">
+            <div class="study-card-title">${card.title}</div>
+            <ul class="study-card-list">
+              ${card.items.map(it => `<li>${it}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+
+      // 하단 액션 버튼 갱신
+      const btnContainer = document.getElementById('bottom-play-buttons');
+      if (data.playUrlB) {
+        btnContainer.innerHTML = `
+          <a href="${data.playUrl}" class="btn-play-action">
+            <span>🎯 A 실전 요격형 ▶</span>
+          </a>
+          <a href="${data.playUrlB}" class="btn-play-action btn-b">
+            <span>🛸 B 플로팅 헌터 ▶</span>
+          </a>
+        `;
+      } else {
+        btnContainer.innerHTML = `
+          <a href="${data.playUrl}" class="btn-play-action" style="max-width:100%;">
+            <span>🎮 [제 ${roundNum}탄] 실전 게임 도전하기 ▶</span>
+          </a>
+        `;
+      }
+
+      // 스크롤 맨 위로 부드럽게 이동
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 초기화
+    document.addEventListener('DOMContentLoaded', () => {
+      const initialRound = getRoundFromUrl();
+      selectRound(initialRound);
+    });
+  </script>
+</body>
+</html>
