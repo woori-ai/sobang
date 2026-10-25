@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>소방안전관리자 1급 마스터</title>
-  <meta name="description" content="1급 소방안전관리자 합격 필수 훈련: 4지선다 실전기출, 스피드 OX, 핵심 75선 암기카드, 계산 공식 37선">
+  <meta name="description" content="1급 소방안전관리자 합격 필수 훈련: 4지선다 실전기출, 보기선택 30선, 스피드 OX, 핵심 75선 암기카드, 계산 공식 37선">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚒</text></svg>">
 </head>
@@ -38,12 +38,17 @@
       </div>
     </header>
 
-    <!-- 2. 핵심 4대 탭 네비게이션 + 우측 게임 링크 -->
+    <!-- 2. 핵심 5대 탭 네비게이션 + 우측 게임 링크 -->
     <nav class="nav-tabs">
       <button class="nav-tab active" data-tab="mcq">
         <span class="tab-icon">📝</span>
         <span class="tab-name">4지선다</span>
         <span class="tab-badge" id="badge-mcq">0</span>
+      </button>
+      <button class="nav-tab" data-tab="box">
+        <span class="tab-icon">📋</span>
+        <span class="tab-name">보기선택</span>
+        <span class="tab-badge" id="badge-box">0</span>
       </button>
       <button class="nav-tab" data-tab="ox">
         <span class="tab-icon">⭕❌</span>
@@ -120,6 +125,11 @@
         <div class="question-header">
           <span class="q-number" id="q-number">Q1.</span>
           <h2 class="q-text" id="q-text">문제가 로딩 중입니다.</h2>
+        </div>
+
+        <!-- 보기(가, 나, 다) 박스 영역 -->
+        <div class="quiz-box-card" id="quiz-box-card" style="display: none;">
+          <!-- JS 동적 생성 -->
         </div>
 
         <!-- 보기/선택지 영역 -->

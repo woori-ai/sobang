@@ -7,9 +7,10 @@
 
   // 1. 상태(State) 관리
   const state = {
-    activeTab: 'mcq', // 'mcq' | 'ox' | 'cards' | 'calc'
+    activeTab: 'mcq', // 'mcq' | 'box' | 'ox' | 'cards' | 'calc'
     data: {
       mcq: [],
+      box: [],
       ox: [],
       cards: [],
       calc: []
@@ -49,6 +50,7 @@
     // 탭 & 배지
     tabs: document.querySelectorAll('.nav-tab'),
     badgeMcq: document.getElementById('badge-mcq'),
+    badgeBox: document.getElementById('badge-box'),
     badgeOx: document.getElementById('badge-ox'),
     badgeCards: document.getElementById('badge-cards'),
     badgeCalc: document.getElementById('badge-calc'),
@@ -74,6 +76,7 @@
 
     qNumber: document.getElementById('q-number'),
     qText: document.getElementById('q-text'),
+    quizBoxCard: document.getElementById('quiz-box-card'),
     optionsContainer: document.getElementById('options-container'),
 
     // 플래시카드 (75선)
@@ -136,20 +139,23 @@
   // 4. 데이터 비동기 Fetch
   async function initData() {
     try {
-      const [mcqRes, oxRes, cardsRes, calcRes] = await Promise.all([
+      const [mcqRes, boxRes, oxRes, cardsRes, calcRes] = await Promise.all([
         fetch('questions_mcq.json').then(r => r.json()),
+        fetch('questions_box.json').then(r => r.json()),
         fetch('questions_ox.json').then(r => r.json()),
         fetch('cards_75.json').then(r => r.json()),
         fetch('calc_37.json').then(r => r.json())
       ]);
 
       state.data.mcq = Array.isArray(mcqRes) ? mcqRes : [];
+      state.data.box = Array.isArray(boxRes) ? boxRes : [];
       state.data.ox = Array.isArray(oxRes) ? oxRes : [];
       state.data.cards = Array.isArray(cardsRes) ? cardsRes : [];
       state.data.calc = Array.isArray(calcRes) ? calcRes : [];
 
       // 뱃지 숫자 갱신
       dom.badgeMcq.textContent = state.data.mcq.length;
+      if (dom.badgeBox) dom.badgeBox.textContent = state.data.box.length;
       dom.badgeOx.textContent = state.data.ox.length;
       dom.badgeCards.textContent = state.data.cards.length;
       dom.badgeCalc.textContent = state.data.calc.length;
@@ -269,6 +275,33 @@
     // 문제 텍스트
     dom.qNumber.textContent = `Q${state.currentIndex + 1}.`;
     dom.qText.textContent = item.question || item.statement || item.title || '';
+
+    // 보기(가, 나, 다) 박스 렌더링
+    if (dom.quizBoxCard) {
+      if (item.box && Array.isArray(item.box) && item.box.length > 0) {
+        dom.quizBoxCard.style.display = 'block';
+        let boxHtml = '<div class="box-header"><span>📋</span> [보 기]</div>';
+        item.box.forEach(boxLine => {
+          const colonIdx = boxLine.indexOf(':');
+          if (colonIdx > 0 && colonIdx <= 3) {
+            const label = boxLine.substring(0, colonIdx).trim();
+            const text = boxLine.substring(colonIdx + 1).trim();
+            boxHtml += `
+              <div class="box-item">
+                <span class="box-badge">${label}</span>
+                <span class="box-text">${text}</span>
+              </div>
+            `;
+          } else {
+            boxHtml += `<div class="box-item"><span class="box-text">${boxLine}</span></div>`;
+          }
+        });
+        dom.quizBoxCard.innerHTML = boxHtml;
+      } else {
+        dom.quizBoxCard.style.display = 'none';
+        dom.quizBoxCard.innerHTML = '';
+      }
+    }
 
     // 기존 풀이 기록 확인
     const history = state.userStore.answers[tab] && state.userStore.answers[tab][itemId];
@@ -495,7 +528,7 @@
     let answeredItems = 0;
     let correctItems = 0;
 
-    ['mcq', 'ox', 'cards', 'calc'].forEach(tab => {
+    ['mcq', 'box', 'ox', 'cards', 'calc'].forEach(tab => {
       const list = state.data[tab] || [];
       totalItems += list.length;
 

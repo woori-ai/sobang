@@ -290,8 +290,8 @@
       margin: 14px 0;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      max-height: 240px;
+      gap: 12px;
+      max-height: 280px;
       overflow-y: auto;
       padding-right: 4px;
     }
@@ -299,22 +299,47 @@
       background: #21262d;
       border: 1px solid #30363d;
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 12px;
       font-size: 0.82rem;
     }
     .review-q {
       font-weight: 700;
       color: #f0f6fc;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      line-height: 1.4;
     }
     .review-a {
       color: #f85149;
       font-weight: 600;
+      margin-bottom: 3px;
     }
     .review-tip {
       color: #e3b341;
-      font-size: 0.75rem;
-      margin-top: 2px;
+      font-size: 0.78rem;
+      margin-bottom: 8px;
+    }
+    .review-targets {
+      margin-top: 6px;
+      padding: 8px 10px;
+      background: rgba(35, 134, 54, 0.15);
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      border-radius: 6px;
+    }
+    .review-targets-title {
+      color: #3fb950;
+      font-weight: 700;
+      font-size: 0.78rem;
+      margin-bottom: 4px;
+    }
+    .review-targets-list {
+      margin: 0;
+      padding-left: 14px;
+      color: #c9d1d9;
+      font-size: 0.76rem;
+      line-height: 1.5;
+    }
+    .review-targets-list li {
+      margin-bottom: 2px;
     }
   </style>
 </head>
@@ -399,7 +424,7 @@
         title: "★ [300만원 이하 벌금(형벌)]에 해당하는 것을 모두 사냥하시오!",
         desc: "소방안전관리자 관련 중대범죄 및 안전조사 방해",
         targets: [
-          { text: "소방안전관리자 미선임 (사람 안 뽑음)", tip: "★미선임(사람 안 뽑음)은 300만원 이하 벌금(형벌)!" },
+          { text: "소방안전관리자 미선임 (사람 아예 안 뽑음)", tip: "★미선임(사람 아예 안 뽑음)은 300만원 이하 벌금(형벌)!" },
           { text: "화재안전조사 거부·방해 또는 기피", tip: "소방관서 화재안전조사 기피는 300만원 이하 벌금!" },
           { text: "직무상 알게 된 비밀 누설", tip: "비밀 누설은 300만원 이하 벌금!" }
         ],
@@ -764,6 +789,7 @@
 
         wrongHistory.push({
           roundTitle: ROUND_DATA[currentRoundIndex].title,
+          targets: ROUND_DATA[currentRoundIndex].targets,
           clicked: item.data.text,
           tip: item.data.tip
         });
@@ -803,11 +829,24 @@
         container.style.display = "block";
         let html = "";
         wrongHistory.forEach(w => {
+          // 타이틀에서 [대괄호] 핵심 키워드 추출 (예: [300만원 이하 벌금(형벌)] -> 300만원 이하 벌금)
+          let match = w.roundTitle.match(/\[(.*?)\]/);
+          let targetCategory = match ? match[1].replace("(형벌)", "").replace("(행정벌)", "") : "정답";
+          let count = w.targets.length;
+          
+          let targetsHtml = w.targets.map(t => `<li>${t.text}</li>`).join("");
+
           html += `
             <div class="review-item">
               <div class="review-q">${w.roundTitle}</div>
-              <div class="review-a">잘못 누른 함정: ${w.clicked}</div>
-              <div class="review-tip">💡 족집게: ${w.tip}</div>
+              <div class="review-a">❌ <b>잘못 누른 함정:</b> ${w.clicked}</div>
+              <div class="review-tip">💡 <b>족집게 해설:</b> ${w.tip}</div>
+              <div class="review-targets">
+                <div class="review-targets-title">🎯 <b>반드시 외워야 할 [${targetCategory}] 핵심 ${count}총사:</b></div>
+                <ul class="review-targets-list">
+                  ${targetsHtml}
+                </ul>
+              </div>
             </div>
           `;
         });

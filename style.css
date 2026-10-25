@@ -190,7 +190,7 @@ body {
    =================================================== */
 .nav-tabs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 6px;
   margin-bottom: 12px;
 }
@@ -510,6 +510,62 @@ body {
   word-break: keep-all;
 }
 
+/* 보기(가, 나, 다) 박스 스타일 */
+.quiz-box-card {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--fire-orange);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin: 10px 0 16px 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.quiz-box-card .box-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  color: var(--fire-orange);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.quiz-box-card .box-item {
+  margin-bottom: 8px;
+  color: var(--text-main);
+  word-break: keep-all;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.quiz-box-card .box-item:last-child {
+  margin-bottom: 0;
+}
+
+.quiz-box-card .box-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 24px;
+  padding: 0 4px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--accent-blue, #38bdf8);
+  flex-shrink: 0;
+}
+
+.quiz-box-card .box-text {
+  flex: 1;
+}
+
 /* 4지선다 옵션 리스트 */
 .options-container {
   display: flex;
@@ -794,6 +850,7 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   word-break: keep-all;
+  white-space: pre-line;
 }
 
 .trap-box {
@@ -1010,14 +1067,29 @@ body {
   .brand-text h1 {
     font-size: 1.1rem;
   }
+  .nav-tabs {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
+  }
   .nav-tab {
-    padding: 8px 2px;
+    padding: 6px 1px;
+    border-radius: 6px;
   }
   .tab-icon {
-    font-size: 16px;
+    font-size: 14px;
   }
   .tab-name {
-    font-size: 0.72rem;
+    font-size: 0.65rem;
+    letter-spacing: -0.5px;
+  }
+  .tab-badge {
+    font-size: 0.62rem;
+    padding: 1px 4px;
+  }
+  .quiz-box-card {
+    padding: 10px 12px;
+    font-size: 0.88rem;
+    margin: 8px 0 12px 0;
   }
   .filter-controls {
     grid-template-columns: 1fr;
