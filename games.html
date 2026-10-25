@@ -760,6 +760,7 @@
       4: {
         title: "🧯 [제 4탄] 소방시설 5대 분류 1분 족집게",
         playUrl: "./1keup-game/game4.html",
+        playUrlB: "./1keup-game/game4-b.html",
         cards: [
           {
             title: "1. 소화설비 vs 소화용수설비",
@@ -826,6 +827,7 @@
         6: {
           title: "🏛️ [제 6탄] 건축관계법령 1분 족집게",
           playUrl: "./1keup-game/game6.html",
+          playUrlB: "./1keup-game/game6-b.html",
           cards: [
             {
               title: "1. 주요구조부 vs 비주요구조부",
@@ -876,7 +878,30 @@
       if (!data) return;
 
       modalTitle.textContent = data.title;
-      playNowBtn.href = data.playUrl;
+
+      const footerActions = document.querySelector('.modal-footer-actions');
+      if (footerActions) {
+        if (data.playUrlB) {
+          footerActions.innerHTML = `
+            <button class="btn-study" style="width:auto;padding:8px 14px;" onclick="closeStudyModal()">닫기</button>
+            <div style="display:flex; gap:8px; flex:1; justify-content:flex-end;">
+              <a href="${data.playUrl}" class="btn-play-dual" style="padding:8px 14px; font-size:0.85rem;">
+                <span>🎯 A 낙하형 ▶</span>
+              </a>
+              <a href="${data.playUrlB}" class="btn-play-dual btn-b" style="padding:8px 14px; font-size:0.85rem;">
+                <span>🛸 B 플로팅형 ▶</span>
+              </a>
+            </div>
+          `;
+        } else {
+          footerActions.innerHTML = `
+            <button class="btn-study" style="width:auto;padding:8px 16px;" onclick="closeStudyModal()">닫기</button>
+            <a href="${data.playUrl}" class="btn-play-link" style="width:auto;padding:8px 20px;">
+              <span>🎮 바로 게임 시작하기 ▶</span>
+            </a>
+          `;
+        }
+      }
 
       let html = "";
       data.cards.forEach(card => {

@@ -305,6 +305,61 @@
     .review-targets-list li {
       margin-bottom: 2px;
     }
+      /* 모드 전환 스위처 */
+    .type-switcher {
+      display: flex;
+      gap: 4px;
+      background: #161b22;
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+    }
+    .type-btn {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: #8b949e;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .type-btn:hover {
+      color: #f0f6fc;
+      background: #21262d;
+    }
+    .type-btn.active-b {
+      background: #8957e5;
+      color: #ffffff;
+    }
+    .type-btn.active-a {
+      background: #238636;
+      color: #ffffff;
+    }
+    .modal-dual-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .modal-dual-actions .action-btn {
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+    .btn-alt {
+      background: #21262d;
+      border: 1px solid #58a6ff;
+      color: #58a6ff;
+    }
+    .btn-alt:hover {
+      background: rgba(88, 166, 255, 0.15);
+      border-color: #58a6ff;
+    }
   </style>
 </head>
 <body>
@@ -319,7 +374,12 @@
       <div class="lives" id="lives-val">❤️❤️❤️</div>
     </div>
     <div class="hud-center">
-      <span class="speed-tag">속도:</span>
+      <!-- A/B 모드 즉시 전환 탭 -->
+      <div class="type-switcher">
+        <a href="./game6.html" class="type-btn">🎯 A 낙하형</a>
+        <a href="./game6-b.html" class="type-btn active-b">🛸 B 플로팅형</a>
+      </div>
+      <span class="speed-tag" style="margin-left:6px;">속도:</span>
       <button class="speed-btn" data-speed="0.8" onclick="setSpeed(0.8, this)">0.8x</button>
       <button class="speed-btn active" data-speed="1.2" onclick="setSpeed(1.2, this)">1.2x</button>
       <button class="speed-btn" data-speed="1.6" onclick="setSpeed(1.6, this)">1.6x</button>
@@ -352,7 +412,10 @@
         • 용적률 제외 4총사 / 건축 5대 행위 / 핵심 법정 수치<br>
         • 총 4개의 라운드를 돌파하여 만점을 달성하세요!
       </p>
-      <button class="action-btn" onclick="startGame()">🚀 미션 시작하기</button>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()" style="background:#8957e5; border-color:#a371f7;">🛸 B타입 시작</button>
+        <a href="./game6.html" class="action-btn btn-alt">🎯 A타입 전환</a>
+      </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
     </div>
   </div>
@@ -369,8 +432,10 @@
         <div class="review-list" id="review-list"></div>
       </div>
 
-      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
-      <a href="./game6.html" class="sub-action-btn" style="margin-bottom:8px; color:#58a6ff; border-color:#58a6ff;">🎯 A타입 낙하형 도전하기</a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="restartAll()" style="background:#8957e5; border-color:#a371f7;">🔄 B타입 재도전</button>
+        <a href="./game6.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+      </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
     </div>
   </div>
