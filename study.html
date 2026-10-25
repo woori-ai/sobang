@@ -79,52 +79,150 @@
       border-color: #58a6ff;
     }
 
-    /* 2. 탭 네비게이션 (가로 스크롤) */
+    /* 2. 반응형 탑다운 네비게이션 (PC: 2단 계층 탭 / 모바일: 드롭다운) */
     .tab-bar-container {
       background: #161b22;
       border-bottom: 1px solid #30363d;
       position: sticky;
       top: 59px;
       z-index: 90;
+      backdrop-filter: blur(8px);
     }
-    .tab-bar {
+    .nav-inner {
       max-width: 900px;
       margin: 0 auto;
-      padding: 8px 16px;
+      padding: 0 16px;
+    }
+
+    /* --- PC: 1단 대분류 과목 탭 --- */
+    .pc-hybrid-nav {
+      display: block;
+    }
+    .cat-tab-bar {
       display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+      gap: 6px;
+      padding: 8px 0 6px;
+      border-bottom: 1px solid rgba(48, 54, 61, 0.7);
     }
-    .tab-bar::-webkit-scrollbar {
-      display: none;
-    }
-    .tab-btn {
-      white-space: nowrap;
-      padding: 8px 14px;
+    .cat-tab-btn {
+      flex: 1;
+      padding: 9px 12px;
       background: #21262d;
       border: 1px solid #30363d;
       color: #8b949e;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .cat-tab-btn:hover {
+      color: #c9d1d9;
+      background: #282e36;
+      border-color: #58a6ff;
+    }
+    .cat-tab-btn.active {
+      background: #1f6feb;
+      border-color: #388bfd;
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(31, 111, 235, 0.35);
+    }
+
+    /* --- PC: 2단 소분류 라운드 서브탭 --- */
+    .sub-round-bar {
+      display: flex;
+      gap: 8px;
+      padding: 8px 0;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .sub-round-btn {
+      padding: 6px 14px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      color: #8b949e;
       border-radius: 20px;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       transition: all 0.2s ease;
-      text-decoration: none;
     }
-    .tab-btn:hover {
-      color: #c9d1d9;
+    .sub-round-btn:hover {
+      color: #f0f6fc;
       border-color: #8b949e;
+      background: #161b22;
     }
-    .tab-btn.active {
-      background: #1f6feb;
-      border-color: #388bfd;
+    .sub-round-btn.active {
+      background: #238636;
+      border-color: #2ea043;
       color: #ffffff;
-      box-shadow: 0 0 12px rgba(56, 139, 253, 0.4);
+      box-shadow: 0 0 10px rgba(35, 134, 54, 0.45);
+    }
+
+    /* --- 모바일: 탑다운 드롭다운 네비게이션 --- */
+    .mobile-dropdown-nav {
+      display: none;
+      padding: 10px 0;
+    }
+    .mobile-select-box {
+      position: relative;
+      width: 100%;
+    }
+    .mobile-select {
+      width: 100%;
+      padding: 12px 40px 12px 16px;
+      background: #21262d;
+      border: 1.5px solid #388bfd;
+      color: #f0f6fc;
+      border-radius: 10px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      font-family: inherit;
+      appearance: none;
+      -webkit-appearance: none;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .mobile-select optgroup {
+      background: #161b22;
+      color: #58a6ff;
+      font-weight: 800;
+      padding: 8px;
+    }
+    .mobile-select option {
+      background: #21262d;
+      color: #e6edf3;
+      font-weight: 600;
+      padding: 10px;
+    }
+    .mobile-select-arrow {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #58a6ff;
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    /* 반응형 분기 */
+    @media (max-width: 768px) {
+      .pc-hybrid-nav {
+        display: none;
+      }
+      .mobile-dropdown-nav {
+        display: block;
+      }
     }
 
     /* 3. 본문 컨테이너 */
@@ -331,18 +429,30 @@
     </div>
   </header>
 
-  <!-- 2. 라운드 탭 바 -->
+  <!-- 2. 반응형 탑다운 네비게이션 (PC: 2단 탭 / 모바일: 계층형 드롭다운) -->
   <nav class="tab-bar-container">
-    <div class="tab-bar" id="round-tabs">
-      <button class="tab-btn" onclick="selectRound(1)" id="tab-1">🎯 1탄 대상물</button>
-      <button class="tab-btn" onclick="selectRound(2)" id="tab-2">⏱️ 2탄 자격경력</button>
-      <button class="tab-btn" onclick="selectRound(3)" id="tab-3">📅 3탄 실무일정</button>
-      <button class="tab-btn" onclick="selectRound(4)" id="tab-4">🧯 4탄 5대분류</button>
-      <button class="tab-btn" onclick="selectRound(5)" id="tab-5">⚖️ 5탄 벌칙과태료</button>
-      <button class="tab-btn" onclick="selectRound(6)" id="tab-6">🏛️ 6탄 건축법령</button>
-      <button class="tab-btn" onclick="selectRound('7-1')" id="tab-7-1">🔥 7-1탄 연소·위험물</button>
-      <button class="tab-btn" onclick="selectRound('7-2')" id="tab-7-2">💥 7-2탄 화재·특수현상</button>
-      <button class="tab-btn" onclick="selectRound('7-3')" id="tab-7-3">🧯 7-3탄 소화·약제</button>
+    <div class="nav-inner">
+      <!-- (1) PC 2단 계층형 탭 -->
+      <div class="pc-hybrid-nav">
+        <!-- 1단 대분류 과목 탭 -->
+        <div class="cat-tab-bar" id="cat-tabs">
+          <!-- 동적 렌더링 -->
+        </div>
+        <!-- 2단 소분류 라운드 칩 -->
+        <div class="sub-round-bar" id="sub-round-tabs">
+          <!-- 동적 렌더링 -->
+        </div>
+      </div>
+
+      <!-- (2) 모바일 전용 계층 드롭다운 -->
+      <div class="mobile-dropdown-nav">
+        <div class="mobile-select-box">
+          <select id="mobile-round-select" class="mobile-select" onchange="selectRound(this.value)">
+            <!-- 동적 렌더링 -->
+          </select>
+          <span class="mobile-select-arrow">▼</span>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -774,6 +884,49 @@ const STUDY_DATA = {
           ]
         }    };
 
+    // ----------------------------------------------------
+    // 과목(대분류) 및 라운드(소분류) 계층 데이터
+    // ----------------------------------------------------
+    const CATEGORIES = [
+      {
+        id: "part1",
+        name: "제1편 소방안전관리",
+        icon: "📘",
+        rounds: [
+          { id: 1, num: "1탄", label: "🎯 1탄 대상물 구분" },
+          { id: 2, num: "2탄", label: "⏱️ 2탄 자격·경력" },
+          { id: 3, num: "3탄", label: "📅 3탄 실무일정" }
+        ]
+      },
+      {
+        id: "part2",
+        name: "제2편 법령·소방시설",
+        icon: "⚖️",
+        rounds: [
+          { id: 4, num: "4탄", label: "🧯 4탄 5대분류" },
+          { id: 5, num: "5탄", label: "⚖️ 5탄 벌칙과태료" }
+        ]
+      },
+      {
+        id: "part3",
+        name: "제3편 건축관계법령",
+        icon: "🏛️",
+        rounds: [
+          { id: 6, num: "6탄", label: "🏛️ 6탄 건축법령" }
+        ]
+      },
+      {
+        id: "part4",
+        name: "제4편 소방학개론",
+        icon: "🔥",
+        rounds: [
+          { id: "7-1", num: "7-1탄", label: "🔥 7-1탄 연소·위험물" },
+          { id: "7-2", num: "7-2탄", label: "💥 7-2탄 화재·특수현상" },
+          { id: "7-3", num: "7-3탄", label: "🧯 7-3탄 소화·약제" }
+        ]
+      }
+    ];
+
     const ROUND_DESCS = {
       1: "특급·1급·2급·3급 특정소방대상물의 층수, 높이, 연면적 및 수량 기준 완벽 대비",
       2: "소방공무원 경력연수(20/7/3/1) 및 기사·산업기사 실무경력 연수 완전 정복",
@@ -788,6 +941,7 @@ const STUDY_DATA = {
     };
 
     let currentRound = 1;
+    let currentCatId = "part1";
 
     function getRoundFromUrl() {
       const params = new URLSearchParams(window.location.search);
@@ -798,28 +952,91 @@ const STUDY_DATA = {
       return 1;
     }
 
+    // 주어진 roundId가 속한 카테고리 찾기
+    function findCategoryByRound(roundId) {
+      for (const cat of CATEGORIES) {
+        if (cat.rounds.some(r => String(r.id) === String(roundId))) {
+          return cat;
+        }
+      }
+      return CATEGORIES[0];
+    }
+
+    // 1단 과목 탭 렌더링
+    function renderCategoryTabs() {
+      const catContainer = document.getElementById('cat-tabs');
+      catContainer.innerHTML = CATEGORIES.map(cat => `
+        <button class="cat-tab-btn ${cat.id === currentCatId ? 'active' : ''}" 
+                onclick="selectCategory('${cat.id}')">
+          <span>${cat.icon}</span> <span>${cat.name}</span>
+        </button>
+      `).join('');
+    }
+
+    // 2단 소분류 라운드 칩 렌더링
+    function renderSubRoundTabs() {
+      const subContainer = document.getElementById('sub-round-tabs');
+      const cat = CATEGORIES.find(c => c.id === currentCatId) || CATEGORIES[0];
+      subContainer.innerHTML = cat.rounds.map(r => `
+        <button class="sub-round-btn ${String(r.id) === String(currentRound) ? 'active' : ''}" 
+                onclick="selectRound('${r.id}')">
+          ${r.label}
+        </button>
+      `).join('');
+    }
+
+    // 모바일 드롭다운 렌더링
+    function renderMobileSelect() {
+      const select = document.getElementById('mobile-round-select');
+      select.innerHTML = CATEGORIES.map(cat => `
+        <optgroup label="${cat.icon} ${cat.name}">
+          ${cat.rounds.map(r => `
+            <option value="${r.id}" ${String(r.id) === String(currentRound) ? 'selected' : ''}>
+              ${r.label}
+            </option>
+          `).join('')}
+        </optgroup>
+      `).join('');
+    }
+
+    // 1단 과목 탭 클릭 시
+    function selectCategory(catId) {
+      currentCatId = catId;
+      const cat = CATEGORIES.find(c => c.id === catId);
+      if (cat && cat.rounds.length > 0) {
+        // 해당 과목의 첫 번째 라운드로 이동
+        selectRound(cat.rounds[0].id);
+      }
+    }
+
+    // 라운드 선택 시 통합 처리
     function selectRound(roundNum) {
       currentRound = roundNum;
-      
+
+      // 해당 라운드의 과목 찾기
+      const cat = findCategoryByRound(roundNum);
+      currentCatId = cat.id;
+
       // URL 파라미터 업데이트 (새로고침 없이)
       const url = new URL(window.location);
       url.searchParams.set('round', roundNum);
       window.history.replaceState({}, '', url);
 
-      // 탭 스타일 갱신
-      document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
-        if (idx + 1 === roundNum) {
-          btn.classList.add('active');
-          btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        } else {
-          btn.classList.remove('active');
-        }
-      });
+      // PC 1단 & 2단 탭 갱신
+      renderCategoryTabs();
+      renderSubRoundTabs();
 
+      // 모바일 드롭다운 갱신
+      const mobileSelect = document.getElementById('mobile-round-select');
+      if (mobileSelect) {
+        mobileSelect.value = String(roundNum);
+      }
+
+      // 본문 데이터 갱신
       const data = STUDY_DATA[roundNum];
       if (!data) return;
 
-      // 헤더 영역 갱신
+      // 히어로 영역 갱신
       document.getElementById('hero-tag').textContent = typeof roundNum === 'string' && roundNum.startsWith('7-') ? `ROUND ${roundNum}` : `ROUND 0${roundNum}`;
       document.getElementById('hero-title').textContent = data.title;
       document.getElementById('hero-desc').textContent = ROUND_DESCS[roundNum] || "핵심 암기 요점을 숙지한 뒤, 하단의 실전 게임으로 완벽하게 체화하세요!";
@@ -865,6 +1082,13 @@ const STUDY_DATA = {
     // 초기화
     document.addEventListener('DOMContentLoaded', () => {
       const initialRound = getRoundFromUrl();
+      const cat = findCategoryByRound(initialRound);
+      currentCatId = cat.id;
+
+      renderCategoryTabs();
+      renderSubRoundTabs();
+      renderMobileSelect();
+
       selectRound(initialRound);
     });
   </script>
