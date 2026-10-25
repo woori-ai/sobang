@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[제 7-1탄 A] 연소이론 & 위험물 마스터 요격전</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      height: 60px;
+      padding: 10px 16px;
+      background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-exit-game {
+      background: #21262d;
+      color: #8b949e;
+      border: 1px solid #30363d;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-exit-game:hover {
+      background: #30363d;
+      color: #f0f6fc;
+    }
+    .score-badge {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #58a6ff;
+      background: rgba(56, 139, 253, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(56, 139, 253, 0.3);
+    }
+    .lives {
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+    }
+
+    .hud-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .speed-label {
+      font-size: 0.78rem;
+      color: #8b949e;
+      font-weight: 600;
+    }
+    .speed-btn {
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.15s;
+    }
+    .speed-btn.active {
+      background: #f78166;
+      border-color: #f78166;
+      color: #fff;
+    }
+
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .progress-pill {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #8b949e;
+      background: #161b22;
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+    }
+
+    main.battlefield {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 100%);
+      overflow: hidden;
+    }
+
+    .danger-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: repeating-linear-gradient(90deg, #ff7b72, #ff7b72 10px, transparent 10px, transparent 20px);
+      box-shadow: 0 0 10px rgba(255, 123, 114, 0.5);
+      z-index: 5;
+    }
+
+    .falling-block {
+      position: absolute;
+      width: 280px;
+      left: calc(50% - 140px);
+      background: linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95));
+      border: 2px solid #58a6ff;
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 12px rgba(88, 166, 255, 0.2);
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .block-category-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #ffa657;
+      background: rgba(255, 166, 87, 0.15);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+      border: 1px solid rgba(255, 166, 87, 0.3);
+    }
+    .block-text {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .countdown-bar {
+      height: 4px;
+      background: #30363d;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .countdown-fill {
+      height: 100%;
+      background: #58a6ff;
+      width: 100%;
+      transform-origin: left;
+    }
+
+    footer.control-deck {
+      height: 170px;
+      background: #161b22;
+      border-top: 1px solid #30363d;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      z-index: 20;
+    }
+    .fire-btn {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #c9d1d9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      cursor: pointer;
+      transition: all 0.1s;
+      position: relative;
+    }
+    .fire-btn:active {
+      transform: scale(0.97);
+    }
+    .btn-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-bottom: 3px;
+    }
+    .btn-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 2px;
+    }
+    .btn-sub {
+      font-size: 0.72rem;
+      color: #8b949e;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .btn-cat-1 { border-color: #388bfd; }
+    .btn-cat-1 .btn-badge { background: rgba(56, 139, 253, 0.2); color: #58a6ff; }
+    .btn-cat-2 { border-color: #f0883e; }
+    .btn-cat-2 .btn-badge { background: rgba(240, 136, 62, 0.2); color: #f0883e; }
+    .btn-cat-3 { border-color: #d29922; }
+    .btn-cat-3 .btn-badge { background: rgba(210, 153, 34, 0.2); color: #d29922; }
+    .btn-cat-4 { border-color: #a371f7; }
+    .btn-cat-4 .btn-badge { background: rgba(163, 113, 247, 0.2); color: #a371f7; }
+    .btn-cat-5 { border-color: #f85149; }
+    .btn-cat-5 .btn-badge { background: rgba(248, 81, 73, 0.2); color: #f85149; }
+    .btn-cat-6 { border-color: #3fb950; }
+    .btn-cat-6 .btn-badge { background: rgba(63, 185, 80, 0.2); color: #3fb950; }
+
+    .overlay-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 440px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 8px;
+    }
+    .modal-desc {
+      font-size: 0.88rem;
+      color: #8b949e;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      background: #238636;
+      border: 1px solid #2ea043;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .action-btn:hover { background: #2ea043; }
+    .sub-action-btn {
+      width: 100%;
+      padding: 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #c9d1d9;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .review-list {
+      text-align: left;
+      margin: 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .review-item {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.82rem;
+    }
+    .review-q { font-weight: 700; color: #f0f6fc; margin-bottom: 4px; }
+    .review-a { color: #f85149; font-weight: 600; margin-bottom: 2px; }
+    .review-tip { color: #e3b341; font-size: 0.78rem; margin-bottom: 6px; }
+    .review-targets {
+      background: rgba(35, 134, 54, 0.15);
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+    .review-targets-title {
+      color: #3fb950;
+      font-weight: 700;
+      font-size: 0.78rem;
+      margin-bottom: 3px;
+    }
+    .review-targets-list {
+      margin: 0;
+      padding-left: 14px;
+      color: #c9d1d9;
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">← 허브로</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-display">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div style="display:flex;gap:4px;background:#161b22;padding:3px;border-radius:8px;border:1px solid #30363d;">
+        <span style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;background:#238636;color:#fff;">🎯 A 요격형</span>
+        <a href="./game7-1-b.html" style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;text-decoration:none;color:#8b949e;">🛸 B 플로팅형</a>
+      </div>
+      <span class="speed-label">속도</span>
+      <button class="speed-btn" onclick="setGameSpeed(0.7, this)">0.7x</button>
+      <button class="speed-btn active" onclick="setGameSpeed(1.0, this)">1.0x</button>
+      <button class="speed-btn" onclick="setGameSpeed(1.3, this)">1.3x</button>
+    </div>
+    <div class="hud-right">
+      <div class="progress-pill"><span id="current-q-num">1</span> / <span id="total-q-num">20</span></div>
+    </div>
+  </header>
+
+  <main class="battlefield" id="battlefield">
+    <div class="danger-line"></div>
+  </main>
+
+  <footer class="control-deck">
+    <!-- 1: 제1류/제6류 산화제 -->
+    <button class="fire-btn btn-cat-1" onclick="handleFire(1)">
+      <span class="btn-badge">산화제</span>
+      <span class="btn-title">제1류 · 제6류</span>
+      <span class="btn-sub">산화성 고체·액체</span>
+    </button>
+    <!-- 2: 제2류/제3류 가연물/금수성 -->
+    <button class="fire-btn btn-cat-2" onclick="handleFire(2)">
+      <span class="btn-badge">가연·금수성</span>
+      <span class="btn-title">제2류 · 제3류</span>
+      <span class="btn-sub">황·적린 / 칼륨·나트륨</span>
+    </button>
+    <!-- 3: 제4류 인화성액체 -->
+    <button class="fire-btn btn-cat-3" onclick="handleFire(3)">
+      <span class="btn-badge">인화성액체</span>
+      <span class="btn-title">제4류 위험물</span>
+      <span class="btn-sub">휘발유·등유·경유·아세톤</span>
+    </button>
+    <!-- 4: 제5류 자기반응성 -->
+    <button class="fire-btn btn-cat-4" onclick="handleFire(4)">
+      <span class="btn-badge">자체산소</span>
+      <span class="btn-title">제5류 위험물</span>
+      <span class="btn-sub">유기과산화물·질산에스테르</span>
+    </button>
+    <!-- 5: 인화점/연소점/발화점 -->
+    <button class="fire-btn btn-cat-5" onclick="handleFire(5)">
+      <span class="btn-badge">온도서열</span>
+      <span class="btn-title">인화점·연소·발화</span>
+      <span class="btn-sub">불꽃접촉 / 5초지속 / 스스로</span>
+    </button>
+    <!-- 6: 연소범위(vol%) -->
+    <button class="fire-btn btn-cat-6" onclick="handleFire(6)">
+      <span class="btn-badge">연소범위</span>
+      <span class="btn-title">가스·증기 범위</span>
+      <span class="btn-sub">수소4.1-75/아세틸렌2.5-81</span>
+    </button>
+  </footer>
+
+  <!-- 인트로 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:10px;">🧪</div>
+      <h2 class="modal-title">[제 7-1탄 A] 연소이론 & 위험물 요격전</h2>
+      <p class="modal-desc">
+        상단에서 낙하하는 <b>위험물·연소 물리화학 항목</b>을 확인하고,<br>
+        바닥에 닿기 전 <b>하단 6대 분류 버튼</b>을 정확히 발사해 요격하세요!<br><br>
+        • 산화제(1·6류), 가연성고체·금수성(2·3류), 인화성액체(4류), 자기반응성(5류)<br>
+        • 인화점·연소점·발화점 특성 및 가연성 가스 연소범위 수치
+      </p>
+      <button class="action-btn" onclick="startGame()">🚀 요격전 시작하기</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">미션 완료!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 틀린 문제 족집게 복습</h4>
+        <div class="review-list" id="review-list"></div>
+      </div>
+      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const QUESTIONS = [
+      { category: "제4류 위험물", text: "휘발유(가솔린) - 인화점 21℃ 미만", ans: 3, desc: "제4류 제1석유류 비수용성 (지정수량 200L)" },
+      { category: "산화제", text: "과산화수소, 질산, 과염소산 (300kg)", ans: 1, desc: "제6류 위험물은 불연성이지만 강한 산화성 액체!" },
+      { category: "산화제", text: "염소산염류, 무기과산화물 (50kg)", ans: 1, desc: "제1류 위험물은 불연성 산화성 고체!" },
+      { category: "자체산소", text: "질산에스테르류, 니트로화합물 (자기반응성)", ans: 4, desc: "제5류 위험물은 자체 분자 내 산소 함유로 질식소화 불가!" },
+      { category: "가연·금수성", text: "황화린, 적린, 유황 (지정수량 100kg)", ans: 2, desc: "제2류 가연성 고체!" },
+      { category: "가연·금수성", text: "칼륨, 나트륨, 알킬알루미늄 (물 접촉 금지)", ans: 2, desc: "제3류 금수성 물질로 물과 반응 시 수소 발생 폭발!" },
+      { category: "제4류 위험물", text: "아세톤, 피리딘 (수용성 400L)", ans: 3, desc: "제4류 제1석유류 수용성 (지정수량 400L)" },
+      { category: "제4류 위험물", text: "등유, 경유 (인화점 21℃ 이상 70℃ 미만)", ans: 3, desc: "제4류 제2석유류 비수용성 (지정수량 1,000L)" },
+      { category: "제4류 위험물", text: "중유, 크레오소트유 (인화점 70~200℃)", ans: 3, desc: "제4류 제3석유류 비수용성 (지정수량 2,000L)" },
+      { category: "온도서열", text: "외부 점화원(불꽃)을 댈 때 불이 붙는 최저온도", ans: 5, desc: "인화점 (세 온도 중 가장 낮음!)" },
+      { category: "온도서열", text: "점화원을 제거해도 연소가 5초 이상 지속되는 최저온도", ans: 5, desc: "연소점 (보통 인화점보다 5~10℃ 높음)" },
+      { category: "온도서열", text: "점화원(불꽃) 없이 스스로 열축적으로 발화하는 최저온도", ans: 5, desc: "발화점(착화점, 세 온도 중 가장 높음)" },
+      { category: "연소범위", text: "연소범위 2.5 ~ 81 vol% (폭발범위 최상)", ans: 6, desc: "아세틸렌의 연소범위 (2.5~81%)" },
+      { category: "연소범위", text: "연소범위 4.1 ~ 75 vol%", ans: 6, desc: "수소 가스의 연소범위 (4.1~75%)" },
+      { category: "연소범위", text: "연소범위 1.2 ~ 7.6 vol% (하한계 극히 낮음)", ans: 6, desc: "휘발유(가솔린)의 연소범위 (1.2~7.6%)" },
+      { category: "연소범위", text: "연소범위 0.7 ~ 5 vol% (하한계 0.7)", ans: 6, desc: "등유의 연소범위 (0.7~5%)" },
+      { category: "연소범위", text: "연소범위 6 ~ 36 vol% ('콜록콜록 36대')", ans: 6, desc: "메틸알코올의 연소범위 (6~36%)" },
+      { category: "자체산소", text: "유기과산화물 (대량의 물로 냉각소화)", ans: 4, desc: "제5류 위험물 (지정수량 10kg, 질식소화 불가)" },
+      { category: "가연·금수성", text: "황린 (공기 중 자연발화, 물속 보관)", ans: 2, desc: "제3류 자연발화성 물질 (지정수량 20kg)" },
+      { category: "제4류 위험물", text: "디에틸에테르, 이황화탄소 (지정수량 50L)", ans: 3, desc: "제4류 특수인화물 (지정수량 50L)" }
+    ];
+
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let lives = 3;
+    let speedMult = 1.0;
+    let wrongHistory = [];
+    let isGameOver = false;
+
+    let activeBlock = null;
+    let animStartTime = 0;
+    let baseDuration = 5500;
+    let animFrame = null;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq, type, duration) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function setGameSpeed(spd, btn) {
+      speedMult = spd;
+      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    function updateHUD() {
+      document.getElementById("score-val").textContent = score;
+      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives));
+      document.getElementById("current-q-num").textContent = Math.min(currentIndex + 1, currentQuestions.length);
+      document.getElementById("total-q-num").textContent = currentQuestions.length;
+    }
+
+    function startGame() {
+      document.getElementById("start-modal").style.display = "none";
+      score = 0;
+      lives = 3;
+      currentIndex = 0;
+      wrongHistory = [];
+      isGameOver = false;
+      currentQuestions = [...QUESTIONS].sort(() => Math.random() - 0.5);
+      updateHUD();
+      spawnNext();
+    }
+
+    function spawnNext() {
+      if (currentIndex >= currentQuestions.length) {
+        showWin();
+        return;
+      }
+      if (lives <= 0) return;
+
+      updateHUD();
+      const q = currentQuestions[currentIndex];
+      const bf = document.getElementById("battlefield");
+      
+      const el = document.createElement("div");
+      el.className = "falling-block";
+      el.innerHTML = `
+        <span class="block-category-tag">${q.category}</span>
+        <div class="block-text">${q.text}</div>
+        <div class="countdown-bar"><div class="countdown-fill" id="c-fill"></div></div>
+      `;
+      bf.appendChild(el);
+
+      activeBlock = {
+        element: el,
+        data: q,
+        duration: baseDuration / speedMult
+      };
+
+      animStartTime = performance.now();
+      requestAnimationFrame(gameLoop);
+    }
+
+    function gameLoop(now) {
+      if (!activeBlock || isGameOver) return;
+      const elapsed = now - animStartTime;
+      const progress = Math.min(elapsed / activeBlock.duration, 1);
+
+      const bf = document.getElementById("battlefield");
+      const maxTop = bf.clientHeight - activeBlock.element.offsetHeight - 4;
+      activeBlock.element.style.top = (progress * maxTop) + "px";
+
+      const fill = document.getElementById("c-fill");
+      if (fill) fill.style.transform = `scaleX(${1 - progress})`;
+
+      if (progress >= 1) {
+        // 바닥 충돌
+        handleMiss();
+      } else {
+        animFrame = requestAnimationFrame(gameLoop);
+      }
+    }
+
+    function handleFire(catNumber) {
+      if (!activeBlock || isGameOver) return;
+      cancelAnimationFrame(animFrame);
+
+      const q = activeBlock.data;
+      if (q.ans === catNumber) {
+        // 정답 요격
+        playBeep(587, 'sine', 0.1);
+        setTimeout(() => playBeep(880, 'sine', 0.15), 80);
+        score += 100;
+        activeBlock.element.style.borderColor = "#3fb950";
+        activeBlock.element.style.boxShadow = "0 0 20px #3fb950";
+      } else {
+        // 오답
+        playBeep(180, 'sawtooth', 0.25);
+        lives--;
+        wrongHistory.push({
+          q: q.text,
+          userAns: getCategoryName(catNumber),
+          correctAns: getCategoryName(q.ans),
+          desc: q.desc
+        });
+        activeBlock.element.style.borderColor = "#f85149";
+        activeBlock.element.style.boxShadow = "0 0 20px #f85149";
+      }
+
+      setTimeout(() => {
+        if (activeBlock && activeBlock.element) {
+          activeBlock.element.remove();
+        }
+        activeBlock = null;
+        currentIndex++;
+        updateHUD();
+
+        if (lives <= 0) {
+          showGameOver();
+        } else {
+          spawnNext();
+        }
+      }, 350);
+    }
+
+    function handleMiss() {
+      playBeep(140, 'sawtooth', 0.3);
+      lives--;
+      const q = activeBlock.data;
+      wrongHistory.push({
+        q: q.text,
+        userAns: "시간 초과 (바닥 충돌)",
+        correctAns: getCategoryName(q.ans),
+        desc: q.desc
+      });
+
+      if (activeBlock && activeBlock.element) activeBlock.element.remove();
+      activeBlock = null;
+      currentIndex++;
+      updateHUD();
+
+      if (lives <= 0) {
+        showGameOver();
+      } else {
+        spawnNext();
+      }
+    }
+
+    function getCategoryName(num) {
+      const names = {
+        1: "제1류/제6류 산화제",
+        2: "제2류/제3류 가연성고체·금수성",
+        3: "제4류 인화성 액체",
+        4: "제5류 자기반응성(자체산소)",
+        5: "인화점·연소점·발화점 특성",
+        6: "가연성 가스 연소범위"
+      };
+      return names[num] || "미확인";
+    }
+
+    function showWin() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "🏆";
+      document.getElementById("result-title").textContent = "연소이론 완전 정복!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#58a6ff;font-size:1.2rem;">${score}점</b><br>위험물 1~6류와 연소 물리화학 핵심을 모두 요격하셨습니다!`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function showGameOver() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "💥";
+      document.getElementById("result-title").textContent = "작전 실패!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#ff7b72;font-size:1.2rem;">${score}점</b><br>하트가 모두 소진되었습니다.`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function setupReviewUI() {
+      const container = document.getElementById("review-container");
+      const list = document.getElementById("review-list");
+      if (wrongHistory.length > 0) {
+        container.style.display = "block";
+        let html = "";
+        wrongHistory.forEach(w => {
+          html += `
+            <div class="review-item">
+              <div class="review-q">❓ ${w.q}</div>
+              <div class="review-a">❌ 내가 누른 답: ${w.userAns}</div>
+              <div class="review-tip">🎯 올바른 정답: <b>[${w.correctAns}]</b></div>
+              <div class="review-targets">
+                <div class="review-targets-title">💡 핵심 해설 족보:</div>
+                <div style="color:#c9d1d9;font-size:0.75rem;">${w.desc}</div>
+              </div>
+            </div>
+          `;
+        });
+        list.innerHTML = html;
+      } else {
+        container.style.display = "none";
+      }
+    }
+
+    function restartAll() {
+      document.getElementById("result-modal").style.display = "none";
+      startGame();
+    }
+  </script>
+</body>
+</html>

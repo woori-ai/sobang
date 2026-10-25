@@ -340,7 +340,9 @@
       <button class="tab-btn" onclick="selectRound(4)" id="tab-4">🧯 4탄 5대분류</button>
       <button class="tab-btn" onclick="selectRound(5)" id="tab-5">⚖️ 5탄 벌칙과태료</button>
       <button class="tab-btn" onclick="selectRound(6)" id="tab-6">🏛️ 6탄 건축법령</button>
-      <button class="tab-btn" onclick="selectRound(7)" id="tab-7">🔥 7탄 소방학개론</button>
+      <button class="tab-btn" onclick="selectRound('7-1')" id="tab-7-1">🔥 7-1탄 연소·위험물</button>
+      <button class="tab-btn" onclick="selectRound('7-2')" id="tab-7-2">💥 7-2탄 화재·특수현상</button>
+      <button class="tab-btn" onclick="selectRound('7-3')" id="tab-7-3">🧯 7-3탄 소화·약제</button>
     </div>
   </nav>
 
@@ -575,9 +577,9 @@ const STUDY_DATA = {
           ]
         },
         7: {
-          title: "🔥 [제 7탄] 소방학개론 1분 족집게 요약노트",
-          playUrl: "./1keup-game/game7.html",
-          playUrlB: "./1keup-game/game7-b.html",
+          title: "🔥 [제 7-1탄] 연소이론 & 위험물 족집게 핵심노트",
+          playUrl: "./1keup-game/game7-1.html",
+          playUrlB: "./1keup-game/game7-1-b.html",
           cards: [
             {
               title: "1. 연소의 3요소 & 4요소",
@@ -588,43 +590,189 @@ const STUDY_DATA = {
               ]
             },
             {
-              title: "2. 가연물 구비조건 vs 비가연물 3총사",
+              title: "2. 인화점 vs 연소점 vs 발화점 특성 & 온도 서열",
               items: [
-                "<span class='highlight-badge'>[가연물이 되기 쉬운 조건]</span>: <b>열전도율 작을 것</b>, <b>비표면적 클 것</b>, <b>활성화에너지 작을 것</b>, <b>발열량 클 것</b>, <b>산소 친화력 클 것</b>, 건조도 높을 것",
-                "<span class='highlight-red'>[비가연물 3총사]</span>: 1) <b>주기율표 0족 비활성기체</b>(He, Ne, Ar, Kr, Xe), 2) <b>완전산화물</b>(CO2, H2O, SO3, SiO2), 3) <b>질소 및 질소산화물</b>(산소와 흡열반응)"
+                "<b>인화점(Flash Point)</b>: 점화원에 의해 불이 붙는 <b>최저 온도</b> (가장 낮음)",
+                "<b>연소점(Fire Point)</b>: 점화원 제거 후에도 <b>5초 이상 연소 지속</b>되는 최저 온도 (인화점보다 약 5~10℃ 높음)",
+                "<b>발화점(착화점, Ignition Point)</b>: <b>점화원 없이 스스로 불이 붙는</b> 최저 온도 (가장 높음)",
+                "<span class='highlight-badge'>★ 온도 서열 절대 암기</span>: <b>인화점 &lt; 연소점 &lt; 발화점</b>"
               ]
             },
             {
-              title: "3. 고체연소의 4가지 형태 비교 (핵심 빈출!)",
+              title: "3. 가연성 기체/증기 연소범위(vol%) 핵심 수치 족보",
               items: [
-                "<b>표면연소</b> (불꽃 없이 표면에서 반응): <span class='highlight-badge'>숯, 목탄, 코크스, 금속분</span>",
-                "<b>분해연소</b> (열분해로 발생한 가스가 연소): <span class='highlight-badge'>목재, 종이, 석탄, 플라스틱</span>",
-                "<b>증발연소</b> (고체가 증발 기화하여 증기가 연소): <span class='highlight-badge'>황, 나프탈렌, 파라핀(양초), 왁스</span>",
-                "<b>자기연소(내부연소)</b> (물질 자체 산소 함유): <span class='highlight-badge'>제5류 위험물 (니트로글리세린, TNT, 질산에스테르류)</span>"
+                "<b>수소 (H2)</b>: <span class='highlight-badge'>4 ~ 75 %</span> (광범위 폭발)",
+                "<b>아세틸렌 (C2H2)</b>: <span class='highlight-badge'>2.5 ~ 81 %</span> (가장 넓은 폭발범위)",
+                "<b>휘발유(가솔린)</b>: <span class='highlight-badge'>1.4 ~ 7.6 %</span>",
+                "<b>등유(케로신)</b>: <span class='highlight-badge'>1.1 ~ 6.0 %</span> / <b>중유</b>: <span class='highlight-badge'>1.0 ~ 5.0 %</span>",
+                "<b>메틸알코올</b>: <span class='highlight-badge'>6.0 ~ 36 %</span> / <b>아세톤</b>: <span class='highlight-badge'>2.6 ~ 12.8 %</span>",
+                "<b>암모니아 (NH3)</b>: <span class='highlight-badge'>15 ~ 28 %</span>"
               ]
             },
             {
-              title: "4. 화재의 분류 (A~K급) & 소화기 표시색상",
+              title: "4. 위험물 제1류 ~ 제6류 유별 성질 & 산소 공급원",
               items: [
-                "<b>A급 일반화재</b>: <span class='highlight-badge'>백색</span> (목재, 종이, 섬유 등 섬유질 - <b>재를 남김</b>, 냉각소화)",
-                "<b>B급 유류·가스화재</b>: <span class='highlight-badge'>황색</span> (인화성 액체, 가스 - <b>재를 남기지 않음</b>, 질식소화)",
-                "<b>C급 전기화재</b>: <span class='highlight-badge'>청색</span> (통전 중인 전기설비 - 비전도성 소화약제 사용)",
-                "<b>D급 금속화재</b>: <span class='highlight-badge'>무색</span> (가연성 금속 - <b>마른모래·팽창질석</b>, <span class='highlight-red'>물 주수 절대금지!</span>)",
-                "<b>K급 주방화재</b>: <span class='highlight-badge'>황색/갈색</span> (식용유·동식물유 - <b>비누화 현상으로 피막 형성 및 냉각</b>)"
+                "<b>제1류 [산화성 고체]</b>: 불연성이며 <b>산소 방출</b> (염소산염류, 과염소산염류, 무기과산화물)",
+                "<b>제2류 [가연성 고체]</b>: 환원성 물질, 저온 착화 (황화린, 적린, 유황, 철분, 마그네슘)",
+                "<b>제3류 [자연발화성 및 금수성]</b>: 물 접촉 시 발열·가연성가스 (칼륨, 나트륨, 알킬알루미늄, 황린)",
+                "<b>제4류 [인화성 액체]</b>: 인화하기 쉬운 액체 (특수인화물, 휘발유, 등유, 경유 등)",
+                "<b>제5류 [자기반응성 물질]</b>: <b>가연물+산소 자체 함유</b> (유기과산화물, 질산에스테르류, 니트로화합물)",
+                "<b>제6류 [산화성 액체]</b>: 불연성이며 <b>산소 방출</b> (과염소산, 과산화수소, 질산)"
               ]
             },
             {
-              title: "5. 소화의 4대 기본 원리",
+              title: "5. 제4류 인화성 액체 품명 & 인화점/지정수량",
               items: [
-                "<b>냉각소화</b>: 열을 흡수하여 온도를 발화점 이하로 강하 (물, 강화액 - 물 기화잠열 539kcal/kg)",
-                "<b>질식소화</b>: 공기(산소)를 차단하여 산소농도를 <b>15% 이하</b>로 희석 (CO2, 포 피복, 마른모래, 젖은 담요)",
-                "<b>제거소화</b>: 가연물을 제거하여 연소 차단 (가스 메인밸브 차단, 산불 맞불놓기, 촛불 불기, 가연물 이격)",
-                "<b>억제소화(부촉매)</b>: 활성 라디칼을 포획하여 연쇄반응 차단 (할론, 할로겐화합물 및 불활성기체, ABC 분말)"
+                "<b>특수인화물</b>: 디에틸에테르, 이황화탄소 (발화점 100℃ 이하 또는 인화점 -20℃ 이하 & 비점 40℃ 이하) - <b>50L</b>",
+                "<b>제1석유류</b>: 아세톤, 가솔린 (인화점 21℃ 미만) - <b>비수용성 200L / 수용성 400L</b>",
+                "<b>알코올류</b>: C1~C3 1가 알코올 (메탄올, 에탄올) - <b>400L</b>",
+                "<b>제2석유류</b>: 등유, 경유 (인화점 21℃ 이상 70℃ 미만) - <b>비수용성 1,000L / 수용성 2,000L</b>",
+                "<b>제3석유류</b>: 중유, 클레오소트유 (인화점 70℃ 이상 200℃ 미만) - <b>비수용성 2,000L / 수용성 4,000L</b>",
+                "<b>제4석유류</b>: 기계유, 실린더유 (인화점 200℃ 이상 250℃ 미만) - <b>6,000L</b>",
+                "<b>동식물유류</b>: 요오드가에 따른 분류 (인화점 250℃ 미만) - <b>10,000L</b>"
               ]
             }
           ]
-        }
-    };
+        },
+        '7-1': {
+          title: "🔥 [제 7-1탄] 연소이론 & 위험물 족집게 핵심노트",
+          playUrl: "./1keup-game/game7-1.html",
+          playUrlB: "./1keup-game/game7-1-b.html",
+          cards: [
+            {
+              title: "1. 연소의 3요소 & 4요소",
+              items: [
+                "<b>연소의 3요소</b>: <span class='highlight-badge'>가연물 + 산소공급원 + 점화원</span>",
+                "<b>연소의 4요소</b>: 3요소 + <span class='highlight-badge'>연쇄반응</span> (불꽃을 수반하는 유염연소 시 필수)",
+                "<b>산소공급원</b>: 공기(산소 약 21%), 산화제(제1류·제6류 위험물), 자기반응성물질(제5류 위험물)"
+              ]
+            },
+            {
+              title: "2. 인화점 vs 연소점 vs 발화점 특성 & 온도 서열",
+              items: [
+                "<b>인화점(Flash Point)</b>: 점화원에 의해 불이 붙는 <b>최저 온도</b> (가장 낮음)",
+                "<b>연소점(Fire Point)</b>: 점화원 제거 후에도 <b>5초 이상 연소 지속</b>되는 최저 온도 (인화점보다 약 5~10℃ 높음)",
+                "<b>발화점(착화점, Ignition Point)</b>: <b>점화원 없이 스스로 불이 붙는</b> 최저 온도 (가장 높음)",
+                "<span class='highlight-badge'>★ 온도 서열 절대 암기</span>: <b>인화점 &lt; 연소점 &lt; 발화점</b>"
+              ]
+            },
+            {
+              title: "3. 가연성 기체/증기 연소범위(vol%) 핵심 수치 족보",
+              items: [
+                "<b>수소 (H2)</b>: <span class='highlight-badge'>4 ~ 75 %</span> (광범위 폭발)",
+                "<b>아세틸렌 (C2H2)</b>: <span class='highlight-badge'>2.5 ~ 81 %</span> (가장 넓은 폭발범위)",
+                "<b>휘발유(가솔린)</b>: <span class='highlight-badge'>1.4 ~ 7.6 %</span>",
+                "<b>등유(케로신)</b>: <span class='highlight-badge'>1.1 ~ 6.0 %</span> / <b>중유</b>: <span class='highlight-badge'>1.0 ~ 5.0 %</span>",
+                "<b>메틸알코올</b>: <span class='highlight-badge'>6.0 ~ 36 %</span> / <b>아세톤</b>: <span class='highlight-badge'>2.6 ~ 12.8 %</span>",
+                "<b>암모니아 (NH3)</b>: <span class='highlight-badge'>15 ~ 28 %</span>"
+              ]
+            },
+            {
+              title: "4. 위험물 제1류 ~ 제6류 유별 성질 & 산소 공급원",
+              items: [
+                "<b>제1류 [산화성 고체]</b>: 불연성이며 <b>산소 방출</b> (염소산염류, 과염소산염류, 무기과산화물)",
+                "<b>제2류 [가연성 고체]</b>: 환원성 물질, 저온 착화 (황화린, 적린, 유황, 철분, 마그네슘)",
+                "<b>제3류 [자연발화성 및 금수성]</b>: 물 접촉 시 발열·가연성가스 (칼륨, 나트륨, 알킬알루미늄, 황린)",
+                "<b>제4류 [인화성 액체]</b>: 인화하기 쉬운 액체 (특수인화물, 휘발유, 등유, 경유 등)",
+                "<b>제5류 [자기반응성 물질]</b>: <b>가연물+산소 자체 함유</b> (유기과산화물, 질산에스테르류, 니트로화합물)",
+                "<b>제6류 [산화성 액체]</b>: 불연성이며 <b>산소 방출</b> (과염소산, 과산화수소, 질산)"
+              ]
+            },
+            {
+              title: "5. 제4류 인화성 액체 품명 & 인화점/지정수량",
+              items: [
+                "<b>특수인화물</b>: 디에틸에테르, 이황화탄소 (발화점 100℃ 이하 또는 인화점 -20℃ 이하 & 비점 40℃ 이하) - <b>50L</b>",
+                "<b>제1석유류</b>: 아세톤, 가솔린 (인화점 21℃ 미만) - <b>비수용성 200L / 수용성 400L</b>",
+                "<b>알코올류</b>: C1~C3 1가 알코올 (메탄올, 에탄올) - <b>400L</b>",
+                "<b>제2석유류</b>: 등유, 경유 (인화점 21℃ 이상 70℃ 미만) - <b>비수용성 1,000L / 수용성 2,000L</b>",
+                "<b>제3석유류</b>: 중유, 클레오소트유 (인화점 70℃ 이상 200℃ 미만) - <b>비수용성 2,000L / 수용성 4,000L</b>",
+                "<b>제4석유류</b>: 기계유, 실린더유 (인화점 200℃ 이상 250℃ 미만) - <b>6,000L</b>",
+                "<b>동식물유류</b>: 요오드가에 따른 분류 (인화점 250℃ 미만) - <b>10,000L</b>"
+              ]
+            }
+          ]
+        },
+        '7-2': {
+          title: "💥 [제 7-2탄] 화재이론 & 특수현상 족집게 핵심노트",
+          playUrl: "./1keup-game/game7-2.html",
+          playUrlB: "./1keup-game/game7-2-b.html",
+          cards: [
+            {
+              title: "1. 화재의 분류 (A~K급) & 표시색상",
+              items: [
+                "<b>A급 일반화재 (백색)</b>: 목재, 종이, 섬유 - <b>재를 남김</b> (냉각소화)",
+                "<b>B급 유류·가스화재 (황색)</b>: 인화성 액체, 가스 - <b>재를 남기지 않음</b> (질식소화)",
+                "<b>C급 전기화재 (청색)</b>: 통전 중인 전기설비 - 비전도성 소화약제",
+                "<b>D급 금속화재 (무색)</b>: 가연성 금속 - <b>마른모래·팽창질석</b> (<span class='highlight-red'>물 주수 절대금지!</span>)",
+                "<b>K급 주방화재 (황색/갈색)</b>: 식용유·동식물유 - <b>비누화 현상으로 피막 형성 및 냉각</b>"
+              ]
+            },
+            {
+              title: "2. 구획실 특수 화재 현상 4가지 (빈출 100%)",
+              items: [
+                "<b>롤오버 (Rollover / Flameover)</b>: 플래시오버 이전, 천장 부근 미연소가스 층이 불꽃으로 빠르게 번지는 현상",
+                "<b>플래시오버 (Flashover)</b>: 성장기에서 최성기로 넘어가는 전환점, 복사열 축적으로 실내 전체가 순간 동시 착화 (원인: 복사열, 환기지배형 화재)",
+                "<b>백드래프트 (Backdraft)</b>: 감쇄기(산소 결핍 훈소) 상태에서 문·창문을 개방해 산소가 급격히 유입될 때 발생하는 폭풍 동반 폭발적 연소 (대응: 지붕 환기구 개방)",
+                "<b>보일오버 (Boilover)</b>: 유류탱크 화재 시 고온의 열유층(Heat Wave)이 탱크 바닥의 물과 만나 급격히 비등 증발하여 기름을 외부로 분출시키는 현상"
+              ]
+            },
+            {
+              title: "3. 열전달 3방식 & 화염전달 2요소",
+              items: [
+                "<b>전도 (Conduction)</b>: 고체 물질 내부를 통해 열이 이동 (Fourier 법칙)",
+                "<b>대류 (Convection)</b>: 기체나 액체의 순환 이동으로 열이 전달 (화재 시 연기·상승기류)",
+                "<b>복사 (Radiation)</b>: 전자파 형태로 중간 매개체 없이 직접 열 전달 (화재 확산의 최대 주범, Stefan-Boltzmann 법칙)",
+                "<b>화염전달 2요소</b>: 1) <b>접염</b>(화염이 직접 가연물에 접촉), 2) <b>비화</b>(불티가 바람에 날려 원거리 가연물에 착화)"
+              ]
+            },
+            {
+              title: "4. 연기의 유동 속도 & 주요 유독가스",
+              items: [
+                "<b>연기 수평 유동 속도</b>: <span class='highlight-badge'>0.5 ~ 1 m/s</span> (보행 속도와 유사)",
+                "<b>연기 수직 유동 속도</b>: <span class='highlight-badge'>2 ~ 3 m/s</span>",
+                "<b>계단실(농연) 유동 속도</b>: <span class='highlight-badge'>3 ~ 5 m/s</span> (가장 빠름)",
+                "<b>일산화탄소 (CO)</b>: 헤모글로빈 결합력 산소의 <b>200~300배</b>, 저산소증 질식사 유발",
+                "<b>시안화수소 (HCN)</b>: 질소 함유 물질(우레탄, 양모, 나일론) 불완전 연소 시 발생, 세포 호흡 마비",
+                "<b>염화수소 (HCl)</b>: PVC 등 염소 함유 플라스틱 연소 시 발생, 호흡기 점막 부식"
+              ]
+            }
+          ]
+        },
+        '7-3': {
+          title: "🧯 [제 7-3탄] 소화이론 & 소화약제 족집게 핵심노트",
+          playUrl: "./1keup-game/game7-3.html",
+          playUrlB: "./1keup-game/game7-3-b.html",
+          cards: [
+            {
+              title: "1. 소화의 4대 기본 원리",
+              items: [
+                "<b>냉각소화</b>: 열을 흡수하여 온도를 발화점 이하로 강하 (물, 강화액 - 물 기화잠열 539 kcal/kg)",
+                "<b>질식소화</b>: 산소 농도를 <b>15% 이하</b>로 희석 차단 (CO2, 포 피복, 마른모래, 젖은 담요)",
+                "<b>제거소화</b>: 가연물을 제거하여 연소 차단 (가스 밸브 차단, 산불 맞불, 촛불 불기)",
+                "<b>억제소화 (부촉매)</b>: 활성 라디칼 포획하여 연쇄반응 차단 (할론, 할로겐화합물, ABC 분말)"
+              ]
+            },
+            {
+              title: "2. 분말 소화약제 1종 ~ 4종 완벽 비교 (필수 100%)",
+              items: [
+                "<b>제1종 분말</b>: <span class='highlight-badge'>탄산수소나트륨 (NaHCO3)</span> / 백색 / B·C급 적응 (비누화 현상으로 주방·식용유 화재에 효과)",
+                "<b>제2종 분말</b>: <span class='highlight-badge'>탄산수소칼륨 (KHCO3)</span> / 담회색(보라색) / B·C급 적응 (1종보다 소화력 2배 우수)",
+                "<b>제3종 분말 (가장 대중적)</b>: <span class='highlight-badge'>제1인산암모늄 (NH4H2PO4)</span> / <b>담홍색(황색)</b> / <b>A·B·C급 적응</b> (열분해 시 <b>메타인산(HPO3) 피막</b> 형성으로 A급 진화)",
+                "<b>제4종 분말</b>: <span class='highlight-badge'>탄산수소칼륨 + 요소 [KHCO3 + (NH2)2CO]</span> / 회색 / B·C급 적응"
+              ]
+            },
+            {
+              title: "3. 주수소화 절대 금지 물질 (폭발·가연성가스 생성)",
+              items: [
+                "<span class='highlight-red'>[물 주수 시 수소(H2) 발생]</span>: <b>칼륨(K), 나트륨(Na), 마그네슘(Mg), 알킬알루미늄</b>",
+                "<span class='highlight-red'>[물 주수 시 아세틸렌(C2H2) 발생]</span>: <b>탄화칼슘 (카바이트, CaC2)</b>",
+                "<span class='highlight-red'>[물 주수 시 포스핀(PH3) 가스 발생]</span>: <b>탄화인 (황화린 등)</b>",
+                "<span class='highlight-red'>[물 주수 시 산소(O2) 발생]</span>: <b>무기과산화물 (과산화나트륨 등 제1류 위험물)</b>",
+                "<b>적응 소화약제</b>: <span class='highlight-badge'>마른모래, 팽창질석, 팽창진주암</span>"
+              ]
+            }
+          ]
+        }    };
 
     const ROUND_DESCS = {
       1: "특급·1급·2급·3급 특정소방대상물의 층수, 높이, 연면적 및 수량 기준 완벽 대비",
@@ -633,14 +781,19 @@ const STUDY_DATA = {
       4: "소화설비, 경보설비, 피난구조설비, 소화용수설비, 소화활동설비 5대 소방시설 분류",
       5: "5년·5천부터 100만원 과태료까지! 1급 시험에만 출제되는 소방 벌칙·과태료 족집게",
       6: "주요구조부(바지보내기주), 비주요구조부, 용적률 산정 제외 4총사, 건축 5대 행위 완벽 마스터",
-      7: "연소의 3/4요소, 가연물 조건, 비가연물, 고체연소 4형태, 화재분류(A/B/C/D/K), 4대 소화원리"
+      7: "연소의 3/4요소, 인화점 서열, 가연성증기 연소범위, 제1~6류 위험물, 제4류 품명 완벽 정리",
+      '7-1': "연소의 3/4요소, 인화점 서열, 가연성증기 연소범위, 제1~6류 위험물, 제4류 품명 완벽 정리",
+      '7-2': "화재분류(A~K급), 롤오버·플래시오버·백드래프트·보일오버, 열전달 3방식, 연기 유동속도",
+      '7-3': "4대 소화원리(냉각/질식/제거/억제), 분말소화약제 1~4종 성분·착색, 주수금지 물질 총정리"
     };
 
     let currentRound = 1;
 
     function getRoundFromUrl() {
       const params = new URLSearchParams(window.location.search);
-      const r = parseInt(params.get('round'), 10);
+      const val = params.get('round');
+      if (['7-1', '7-2', '7-3'].includes(val)) return val;
+      const r = parseInt(val, 10);
       if (r >= 1 && r <= 7) return r;
       return 1;
     }
@@ -667,7 +820,7 @@ const STUDY_DATA = {
       if (!data) return;
 
       // 헤더 영역 갱신
-      document.getElementById('hero-tag').textContent = `ROUND 0${roundNum}`;
+      document.getElementById('hero-tag').textContent = typeof roundNum === 'string' && roundNum.startsWith('7-') ? `ROUND ${roundNum}` : `ROUND 0${roundNum}`;
       document.getElementById('hero-title').textContent = data.title;
       document.getElementById('hero-desc').textContent = ROUND_DESCS[roundNum] || "핵심 암기 요점을 숙지한 뒤, 하단의 실전 게임으로 완벽하게 체화하세요!";
 

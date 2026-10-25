@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[제 7-2탄 B] 화재이론 & 특수현상 플로팅 헌팅</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      height: 60px;
+      padding: 10px 16px;
+      background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-exit-game {
+      background: #21262d;
+      color: #8b949e;
+      border: 1px solid #30363d;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #f0f6fc; }
+    .score-badge {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #58a6ff;
+      background: rgba(56, 139, 253, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(56, 139, 253, 0.3);
+    }
+    .lives { font-size: 1.1rem; letter-spacing: 2px; }
+
+    .hud-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .speed-label { font-size: 0.78rem; color: #8b949e; font-weight: 600; }
+    .speed-btn {
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.15s;
+    }
+    .speed-btn.active {
+      background: #1f6feb;
+      border-color: #388bfd;
+      color: #fff;
+    }
+
+    .hud-right { display: flex; align-items: center; gap: 12px; }
+    .round-pill {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #f0883e;
+      background: rgba(240, 136, 62, 0.12);
+      padding: 4px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(240, 136, 62, 0.3);
+    }
+
+    section.mission-banner {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 10px 16px;
+      text-align: center;
+      z-index: 15;
+    }
+    .mission-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 2px;
+    }
+    .mission-desc { font-size: 0.8rem; color: #8b949e; }
+    .mission-progress-bar {
+      width: 100%;
+      max-width: 320px;
+      height: 6px;
+      background: #21262d;
+      border-radius: 3px;
+      margin: 6px auto 0;
+      overflow: hidden;
+    }
+    .mission-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #238636, #2ea043);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    main.space-zone {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%);
+      overflow: hidden;
+    }
+
+    .floating-bubble {
+      position: absolute;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95));
+      border: 1.5px solid #30363d;
+      border-radius: 20px;
+      color: #f0f6fc;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      white-space: nowrap;
+      transition: transform 0.1s, border-color 0.2s, background 0.2s;
+      z-index: 5;
+    }
+    .floating-bubble:active { transform: scale(0.95); }
+
+    .overlay-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 440px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-title { font-size: 1.4rem; font-weight: 800; color: #f0f6fc; margin-bottom: 8px; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 18px; }
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      background: #238636;
+      border: 1px solid #2ea043;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .action-btn:hover { background: #2ea043; }
+    .sub-action-btn {
+      width: 100%;
+      padding: 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #c9d1d9;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .review-list {
+      text-align: left;
+      margin: 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .review-item {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.82rem;
+    }
+    .review-q { font-weight: 700; color: #f0f6fc; margin-bottom: 4px; line-height: 1.4; }
+    .review-a { color: #f85149; font-weight: 600; margin-bottom: 2px; }
+    .review-tip { color: #e3b341; font-size: 0.78rem; margin-bottom: 8px; }
+    .review-targets {
+      background: rgba(35, 134, 54, 0.15);
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+    .review-targets-title {
+      color: #3fb950;
+      font-weight: 700;
+      font-size: 0.78rem;
+      margin-bottom: 4px;
+    }
+    .review-targets-list {
+      margin: 0;
+      padding-left: 14px;
+      color: #c9d1d9;
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+    .review-targets-list li { margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">← 허브로</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-display">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div style="display:flex;gap:4px;background:#161b22;padding:3px;border-radius:8px;border:1px solid #30363d;">
+        <a href="./game7-2.html" style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;text-decoration:none;color:#8b949e;">🎯 A 요격형</a>
+        <span style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;background:#1f6feb;color:#fff;">🛸 B 플로팅형</span>
+      </div>
+      <span class="speed-label">속도</span>
+      <button class="speed-btn" onclick="setSpeed(0.7, this)">0.7x</button>
+      <button class="speed-btn active" onclick="setSpeed(1.0, this)">1.0x</button>
+      <button class="speed-btn" onclick="setSpeed(1.3, this)">1.3x</button>
+    </div>
+    <div class="hud-right">
+      <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
+    </div>
+  </header>
+
+  <section class="mission-banner">
+    <div class="mission-title" id="mission-title">로딩 중...</div>
+    <div class="mission-desc" id="mission-desc">미션 설명</div>
+    <div class="mission-progress-bar">
+      <div class="mission-progress-fill" id="progress-fill"></div>
+    </div>
+  </section>
+
+  <main class="space-zone" id="space-zone"></main>
+
+  <!-- 인트로 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:10px;">🌪️</div>
+      <h2 class="modal-title">[제 7-2탄 B] 화재이론 & 특수현상 플로팅 헌팅</h2>
+      <p class="modal-desc">
+        화면에 둥둥 떠다니는 화재 지문 중<br>
+        상단 <b>미션 목표</b>에 해당하는 것을 모두 클릭해 사냥하세요!<br><br>
+        • A·B·C·D·K급 화재 분류 및 색상 매칭<br>
+        • 전도·대류·복사 및 비화·접염<br>
+        • 플래시오버 vs 백드래프트 vs 롤오버 특성<br>
+        • 연기 유동 속도 및 일산화탄소·시안화수소 등 유독가스
+      </p>
+      <button class="action-btn" onclick="startGame()">🚀 미션 시작하기</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">작전 성공!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
+        <div class="review-list" id="review-list"></div>
+      </div>
+      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const ROUND_DATA = [
+      {
+        round: 1,
+        title: "🚒 [화재 분류(A/B/C/D/K급) 및 표시색상] 올바른 연결을 모두 사냥하시오!",
+        desc: "일반(백색), 유류(황색), 전기(청색), 금속(무색), 주방(비누화)",
+        targets: [
+          { text: "A급 화재 (일반화재) - 백색 표시", tip: "A급 일반화재 = 백색 (재를 남김)" },
+          { text: "B급 화재 (유류화재) - 황색 표시", tip: "B급 유류화재 = 황색 (재를 남기지 않음)" },
+          { text: "C급 화재 (전기화재) - 청색 표시", tip: "C급 전기화재 = 청색 (감전 위험으로 주수 금지)" },
+          { text: "D급 화재 (금속화재) - 별도 표시색상 없음(무색)", tip: "D급 금속화재 = 무색 (마른 모래로 소화)" },
+          { text: "K급 화재 (주방화재) - 식용유 비누화 반응", tip: "K급 주방화재 = 식용유 발화 (비누화 피막 형성)" }
+        ],
+        traps: [
+          { text: "A급 화재 (일반화재) - 황색 표시", tip: "황색은 B급 유류화재입니다!" },
+          { text: "C급 화재 (전기화재) - 적색 표시", tip: "전기화재는 청색입니다! (적색 표시는 없음)" },
+          { text: "B급 화재 - 주수 냉각소화가 주원리", tip: "유류화재는 물 주수 시 연소확대되므로 질식소화가 원칙!" },
+          { text: "D급 금속화재 - 물 분무로 냉각소화", tip: "금속화재에 주수 시 수소 발생 폭발합니다!" }
+        ]
+      },
+      {
+        round: 2,
+        title: "🌡️ [열전달 3방식(전도·대류·복사) 및 비화/접염]만 모두 사냥하시오!",
+        desc: "고체 열이동, 유체 순환, 전자파 복사열, 날아가는 불티",
+        targets: [
+          { text: "전도: 고체 분자의 진동을 통해 열이 직접 이동", tip: "철골, 콘크리트 벽체를 통한 열이동 = 전도" },
+          { text: "대류: 액체나 기체의 순환에 의해 열이 이동", tip: "뜨거운 화재 연기의 상승 및 확산 = 대류" },
+          { text: "복사: 전자파 형태로 전달 (플래시오버의 주원인)", tip: "실내 화재 확산 및 플래시오버를 일으키는 가장 큰 원인 = 복사" },
+          { text: "비화: 불티가 바람에 날려 원거리 가연물에 착화", tip: "비화(Flying Brand) = 불티가 바람에 날려 번짐" },
+          { text: "접염: 화염의 불꽃이 가연물에 직접 닿아 연소확대", tip: "접염 = 화염의 직접 접촉" }
+        ],
+        traps: [
+          { text: "복사: 고체 금속을 통해 열이 천천히 이동", tip: "고체를 통한 열 이동은 '전도'입니다!" },
+          { text: "전도: 전자파 형태로 공기를 건너뛰어 이동", tip: "전자파 형태 열전달은 '복사'입니다!" },
+          { text: "대류: 플래시오버를 유발하는 가장 지배적인 열전달", tip: "플래시오버의 지배적 원인은 '복사'입니다!" }
+        ]
+      },
+      {
+        round: 3,
+        title: "🌪️ [특수 화재 현상 (플래시오버 · 백드래프트 · 롤오버)] 올바른 설명을 사냥하시오!",
+        desc: "발생 시기, 징후, 산소 결핍 및 복사열 폭발",
+        targets: [
+          { text: "롤오버: 성장기 천장 가연성 가스 층이 파도처럼 연소", tip: "롤오버(Flameover) = 천장 화염 파도 (플래시오버 직전 전조)" },
+          { text: "플래시오버: 성장기 말기 복사열로 실내 전체가 순식간 전소", tip: "플래시오버 = 최성기 도달 직전 실내 전체 동시 발화" },
+          { text: "백드래프트: 감퇴기 산소 결핍 훈소 중 산소 급유입 폭발", tip: "백드래프트 = 개구부 개방으로 신선 산소 유입 시 순간 폭발" },
+          { text: "보일오버: 유류탱크 바닥 물이 비등하여 기름 분출", tip: "보일오버 = 유류탱크 바닥 수분의 비등 분출" }
+        ],
+        traps: [
+          { text: "백드래프트: 성장기 말기에 복사열 축적으로 발생", tip: "성장기 말기 복사열 축적은 '플래시오버'입니다!" },
+          { text: "플래시오버: 감퇴기에 문을 열었을 때 산소 유입 폭발", tip: "감퇴기 문 개방 산소 폭발은 '백드래프트'입니다!" },
+          { text: "롤오버: 최성기를 지나 화재가 꺼져가는 단계에서 발생", tip: "롤오버는 '성장기'에 발생합니다!" }
+        ]
+      },
+      {
+        round: 4,
+        title: "💨 [연기 유동 속도 & 주요 유독가스 족보] 올바른 수치를 모두 사냥하시오!",
+        desc: "수평/수직/계단실 속도 및 CO, HCN, HCl",
+        targets: [
+          { text: "연기 수평 방향 이동 속도: 0.5 ~ 1.0 m/s", tip: "수평 이동 속도 = 0.5~1.0 m/s (보행속도와 유사)" },
+          { text: "연기 수직 방향 이동 속도: 2.0 ~ 3.0 m/s", tip: "수직 이동 속도 = 2.0~3.0 m/s" },
+          { text: "계단실·수직샤프트 연기 상승 속도: 3.0 ~ 5.0 m/s", tip: "계단실 수직샤프트 속도 = 3.0~5.0 m/s (가장 빠름)" },
+          { text: "CO(일산화탄소): 헤모글로빈 결합력 산소의 200배", tip: "일산화탄소는 체내 산소 공급을 차단하여 질식 유발 (사망 1위)" },
+          { text: "HCN(시안화수소): 우레탄·나일론 연소 시 청산가스", tip: "질소 함유 고분자 연소 시 발생하는 맹독성 가스" },
+          { text: "HCl(염화수소): PVC 전선 피복 연소 시 부식성 유독가스", tip: "PVC 연소 시 호흡기 손상 및 금속 부식 가스" }
+        ],
+        traps: [
+          { text: "연기 수평 방향 이동 속도: 3.0 ~ 5.0 m/s", tip: "3.0~5.0 m/s는 계단실/수직샤프트 속도입니다! (수평은 0.5~1m/s)" },
+          { text: "연기 수직 방향 이동 속도: 0.5 ~ 1.0 m/s", tip: "0.5~1.0 m/s는 수평 속도입니다! (수직은 2~3m/s)" },
+          { text: "CO(일산화탄소): 헤모글로빈 결합력 산소의 2배", tip: "2배가 아니라 '200배'나 강합니다!" }
+        ]
+      }
+    ];
+
+    let currentRoundIndex = 0;
+    let score = 0;
+    let lives = 3;
+    let speedMultiplier = 1.0;
+    let wrongHistory = [];
+    let isGameOver = false;
+
+    let floatingItems = [];
+    let remainingTargetCount = 0;
+    let totalTargetsInRound = 0;
+    let animFrameId = null;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      if (type === 'hit') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.12);
+      } else {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      }
+    }
+
+    function setSpeed(spd, btn) {
+      speedMultiplier = spd;
+      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    function updateHeartsUI() {
+      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives));
+    }
+
+    function updateProgressBar() {
+      const fill = document.getElementById("progress-fill");
+      const done = totalTargetsInRound - remainingTargetCount;
+      const pct = (done / totalTargetsInRound) * 100;
+      fill.style.width = pct + "%";
+    }
+
+    function startGame() {
+      document.getElementById("start-modal").style.display = "none";
+      score = 0;
+      lives = 3;
+      currentRoundIndex = 0;
+      wrongHistory = [];
+      isGameOver = false;
+      document.getElementById("score-val").textContent = score;
+      updateHeartsUI();
+      loadRound(0);
+    }
+
+    function loadRound(roundIdx) {
+      currentRoundIndex = roundIdx;
+      const data = ROUND_DATA[roundIdx];
+      document.getElementById("round-indicator").textContent = `ROUND ${data.round} / ${ROUND_DATA.length}`;
+      document.getElementById("mission-title").textContent = data.title;
+      document.getElementById("mission-desc").textContent = data.desc;
+
+      const space = document.getElementById("space-zone");
+      space.innerHTML = "";
+      floatingItems = [];
+
+      remainingTargetCount = data.targets.length;
+      totalTargetsInRound = data.targets.length;
+      updateProgressBar();
+
+      const combined = [
+        ...data.targets.map(t => ({ ...t, isTarget: true })),
+        ...data.traps.map(t => ({ ...t, isTarget: false }))
+      ].sort(() => Math.random() - 0.5);
+
+      const zoneW = space.clientWidth || 360;
+      const zoneH = space.clientHeight || 480;
+
+      combined.forEach(itemData => {
+        const bubble = document.createElement("div");
+        bubble.className = "floating-bubble";
+        bubble.textContent = itemData.text;
+        space.appendChild(bubble);
+
+        const bW = bubble.offsetWidth || 140;
+        const bH = bubble.offsetHeight || 36;
+        const x = Math.random() * (zoneW - bW - 20) + 10;
+        const y = Math.random() * (zoneH - bH - 20) + 10;
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (0.7 + Math.random() * 0.6);
+        const vx = Math.cos(angle) * speed;
+        const vy = Math.sin(angle) * speed;
+
+        const obj = {
+          element: bubble,
+          data: itemData,
+          x, y, vx, vy,
+          w: bW, h: bH,
+          isAlive: true
+        };
+
+        bubble.addEventListener("click", () => handleBubbleClick(obj));
+        floatingItems.push(obj);
+      });
+
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      animFrameId = requestAnimationFrame(updatePhysics);
+    }
+
+    function updatePhysics() {
+      if (isGameOver) return;
+      const space = document.getElementById("space-zone");
+      const zoneW = space.clientWidth;
+      const zoneH = space.clientHeight;
+
+      floatingItems.forEach(item => {
+        if (!item.isAlive) return;
+        item.x += item.vx * speedMultiplier;
+        item.y += item.vy * speedMultiplier;
+
+        if (item.x <= 4) { item.x = 4; item.vx *= -1; }
+        else if (item.x + item.w >= zoneW - 4) { item.x = zoneW - item.w - 4; item.vx *= -1; }
+
+        if (item.y <= 4) { item.y = 4; item.vy *= -1; }
+        else if (item.y + item.h >= zoneH - 4) { item.y = zoneH - item.h - 4; item.vy *= -1; }
+
+        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+      });
+
+      animFrameId = requestAnimationFrame(updatePhysics);
+    }
+
+    function handleBubbleClick(item) {
+      if (!item.isAlive || isGameOver) return;
+
+      if (item.data.isTarget) {
+        playSound('hit');
+        score += 100;
+        document.getElementById("score-val").textContent = score;
+
+        item.isAlive = false;
+        item.element.style.transform += " scale(1.3)";
+        item.element.style.opacity = "0";
+        setTimeout(() => item.element.remove(), 200);
+
+        remainingTargetCount--;
+        updateProgressBar();
+
+        if (remainingTargetCount <= 0) {
+          if (currentRoundIndex + 1 < ROUND_DATA.length) {
+            setTimeout(() => loadRound(currentRoundIndex + 1), 600);
+          } else {
+            setTimeout(showGameClear, 600);
+          }
+        }
+      } else {
+        playSound('wrong');
+        item.element.style.borderColor = "#ff4d4f";
+        item.element.style.background = "#3d1d1f";
+        setTimeout(() => {
+          if (item.element && item.isAlive) {
+            item.element.style.borderColor = "#30363d";
+            item.element.style.background = "linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95))";
+          }
+        }, 400);
+
+        wrongHistory.push({
+          roundTitle: ROUND_DATA[currentRoundIndex].title,
+          targets: ROUND_DATA[currentRoundIndex].targets,
+          clicked: item.data.text,
+          tip: item.data.tip
+        });
+
+        lives--;
+        updateHeartsUI();
+        if (lives <= 0) showGameOver();
+      }
+    }
+
+    function showGameClear() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "🏆";
+      document.getElementById("result-title").textContent = "화재이론 올클리어!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#58a6ff; font-size:1.2rem;">${score}점</b><br>화재 분류와 특수 현상 족보를 모두 정복하셨습니다!`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function showGameOver() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "💥";
+      document.getElementById("result-title").textContent = "작전 실패!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#ff7b72; font-size:1.2rem;">${score}점</b><br>함정에 걸려 하트가 모두 소진되었습니다.`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function setupReviewUI() {
+      const container = document.getElementById("review-container");
+      const list = document.getElementById("review-list");
+      if (wrongHistory.length > 0) {
+        container.style.display = "block";
+        let html = "";
+        wrongHistory.forEach(w => {
+          let match = w.roundTitle.match(/\[(.*?)\]/);
+          let targetCategory = match ? match[1] : "정답";
+          let count = w.targets.length;
+          let targetsHtml = w.targets.map(t => `<li>${t.text}</li>`).join("");
+
+          html += `
+            <div class="review-item">
+              <div class="review-q">${w.roundTitle}</div>
+              <div class="review-a">❌ <b>잘못 누른 함정:</b> ${w.clicked}</div>
+              <div class="review-tip">💡 <b>족집게 해설:</b> ${w.tip}</div>
+              <div class="review-targets">
+                <div class="review-targets-title">🎯 <b>반드시 외워야 할 [${targetCategory}] 핵심 ${count}총사:</b></div>
+                <ul class="review-targets-list">
+                  ${targetsHtml}
+                </ul>
+              </div>
+            </div>
+          `;
+        });
+        list.innerHTML = html;
+      } else {
+        container.style.display = "none";
+      }
+    }
+
+    function restartAll() {
+      document.getElementById("result-modal").style.display = "none";
+      startGame();
+    }
+  </script>
+</body>
+</html>

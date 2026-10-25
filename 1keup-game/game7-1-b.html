@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[제 7-1탄 B] 연소이론 & 위험물 플로팅 헌팅</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      height: 60px;
+      padding: 10px 16px;
+      background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-exit-game {
+      background: #21262d;
+      color: #8b949e;
+      border: 1px solid #30363d;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-exit-game:hover {
+      background: #30363d;
+      color: #f0f6fc;
+    }
+    .score-badge {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #58a6ff;
+      background: rgba(56, 139, 253, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(56, 139, 253, 0.3);
+    }
+    .lives {
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+    }
+
+    .hud-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .speed-label {
+      font-size: 0.78rem;
+      color: #8b949e;
+      font-weight: 600;
+    }
+    .speed-btn {
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.15s;
+    }
+    .speed-btn.active {
+      background: #1f6feb;
+      border-color: #388bfd;
+      color: #fff;
+    }
+
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .round-pill {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #f0883e;
+      background: rgba(240, 136, 62, 0.12);
+      padding: 4px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(240, 136, 62, 0.3);
+    }
+
+    section.mission-banner {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 10px 16px;
+      text-align: center;
+      z-index: 15;
+    }
+    .mission-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 2px;
+    }
+    .mission-desc {
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+    .mission-progress-bar {
+      width: 100%;
+      max-width: 320px;
+      height: 6px;
+      background: #21262d;
+      border-radius: 3px;
+      margin: 6px auto 0;
+      overflow: hidden;
+    }
+    .mission-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #238636, #2ea043);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    main.space-zone {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%);
+      overflow: hidden;
+    }
+
+    .floating-bubble {
+      position: absolute;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95));
+      border: 1.5px solid #30363d;
+      border-radius: 20px;
+      color: #f0f6fc;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      white-space: nowrap;
+      transition: transform 0.1s, border-color 0.2s, background 0.2s;
+      z-index: 5;
+    }
+    .floating-bubble:active {
+      transform: scale(0.95);
+    }
+
+    .explosion-particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .overlay-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 440px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 8px;
+    }
+    .modal-desc {
+      font-size: 0.88rem;
+      color: #8b949e;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      background: #238636;
+      border: 1px solid #2ea043;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .action-btn:hover { background: #2ea043; }
+    .sub-action-btn {
+      width: 100%;
+      padding: 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #c9d1d9;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .review-list {
+      text-align: left;
+      margin: 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .review-item {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.82rem;
+    }
+    .review-q { font-weight: 700; color: #f0f6fc; margin-bottom: 4px; line-height: 1.4; }
+    .review-a { color: #f85149; font-weight: 600; margin-bottom: 2px; }
+    .review-tip { color: #e3b341; font-size: 0.78rem; margin-bottom: 8px; }
+    .review-targets {
+      background: rgba(35, 134, 54, 0.15);
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+    .review-targets-title {
+      color: #3fb950;
+      font-weight: 700;
+      font-size: 0.78rem;
+      margin-bottom: 4px;
+    }
+    .review-targets-list {
+      margin: 0;
+      padding-left: 14px;
+      color: #c9d1d9;
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+    .review-targets-list li { margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">← 허브로</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-display">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div style="display:flex;gap:4px;background:#161b22;padding:3px;border-radius:8px;border:1px solid #30363d;">
+        <a href="./game7-1.html" style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;text-decoration:none;color:#8b949e;">🎯 A 요격형</a>
+        <span style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;background:#1f6feb;color:#fff;">🛸 B 플로팅형</span>
+      </div>
+      <span class="speed-label">속도</span>
+      <button class="speed-btn" onclick="setSpeed(0.7, this)">0.7x</button>
+      <button class="speed-btn active" onclick="setSpeed(1.0, this)">1.0x</button>
+      <button class="speed-btn" onclick="setSpeed(1.3, this)">1.3x</button>
+    </div>
+    <div class="hud-right">
+      <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
+    </div>
+  </header>
+
+  <section class="mission-banner">
+    <div class="mission-title" id="mission-title">로딩 중...</div>
+    <div class="mission-desc" id="mission-desc">미션 설명</div>
+    <div class="mission-progress-bar">
+      <div class="mission-progress-fill" id="progress-fill"></div>
+    </div>
+  </section>
+
+  <main class="space-zone" id="space-zone"></main>
+
+  <!-- 인트로 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:10px;">🛸</div>
+      <h2 class="modal-title">[제 7-1탄 B] 연소이론 & 위험물 플로팅 헌팅</h2>
+      <p class="modal-desc">
+        화면에 둥둥 떠다니는 물질 중<br>
+        상단 <b>미션 목표</b>에 해당하는 것을 모두 클릭해 사냥하세요!<br><br>
+        • 산화제·자체산소, 제4류 품명별 인화점, 인화점·연소점·발화점, 연소범위<br>
+        • 잘못된 함정 단어를 클릭하면 하트가 깎입니다.<br>
+        • 총 4개의 라운드를 돌파하여 만점을 달성하세요!
+      </p>
+      <button class="action-btn" onclick="startGame()">🚀 미션 시작하기</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">작전 성공!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
+        <div class="review-list" id="review-list"></div>
+      </div>
+      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const ROUND_DATA = [
+      {
+        round: 1,
+        title: "🎯 [산소공급원 위험물(제1·6류 산화제 및 제5류)]만 모두 사냥하시오!",
+        desc: "불연성 산화제(고체/액체) 또는 자체 산소 함유 물질",
+        targets: [
+          { text: "제1류 무기과산화물·염소산염류 (산화성 고체)", tip: "제1류는 강력한 산화성 고체로 산소공급원!" },
+          { text: "제6류 과산화수소·질산 (산화성 액체)", tip: "제6류는 강산성 산화성 액체로 산소공급원!" },
+          { text: "제5류 질산에스테르류·유기과산화물 (자기반응성)", tip: "제5류는 자체 분자 내 산소를 함유하여 질식소화 불가!" },
+          { text: "제1류 과염소산염류 (50kg)", tip: "제1류 산화성 고체!" }
+        ],
+        traps: [
+          { text: "제2류 황화린·적린·유황 (가연성 고체)", tip: "제2류는 환원성 가연물(탈 물질)입니다!" },
+          { text: "제3류 칼륨·나트륨 (금수성)", tip: "제3류는 가연성 금수성 물질입니다!" },
+          { text: "제4류 휘발유·등유 (인화성 액체)", tip: "제4류는 액체 가연물입니다!" },
+          { text: "제2류 철분·금속분·마그네슘", tip: "제2류 가연물로 물과 접촉 시 수소 폭발!" }
+        ]
+      },
+      {
+        round: 2,
+        title: "🧪 [제4류 인화성 액체 & 품명별 인화점 기준]만 모두 사냥하시오!",
+        desc: "인화점 21℃ 미만 제1석유류 및 21~70℃ 제2석유류 등",
+        targets: [
+          { text: "휘발유·벤젠·톨루엔 (제1석유류 비수용 200L)", tip: "인화점 21℃ 미만 제1석유류 비수용성!" },
+          { text: "아세톤·피리딘 (제1석유류 수용성 400L)", tip: "인화점 21℃ 미만 제1석유류 수용성!" },
+          { text: "등유·경유 (제2석유류 비수용 1,000L)", tip: "인화점 21℃ 이상 70℃ 미만 제2석유류 비수용성!" },
+          { text: "초산·아크릴산 (제2석유류 수용 2,000L)", tip: "제2석유류 수용성 (2,000L)!" },
+          { text: "디에틸에테르·이황화탄소 (특수인화물 50L)", tip: "인화점 20℃ 이하, 비점 40℃ 이하 특수인화물!" }
+        ],
+        traps: [
+          { text: "중유 (제1석유류 200L)", tip: "중유는 인화점 70~200℃인 제3석유류(2,000L)입니다!" },
+          { text: "경유 (제1석유류 200L)", tip: "경유는 제2석유류(1,000L)입니다!" },
+          { text: "메틸알코올 (특수인화물 50L)", tip: "메틸알코올은 알코올류(400L)입니다!" },
+          { text: "기계유 (제2석유류 1,000L)", tip: "기계유는 인화점 200℃ 이상인 제4석유류(6,000L)입니다!" }
+        ]
+      },
+      {
+        round: 3,
+        title: "🔥 [인화점 vs 연소점 vs 발화점 특성] 올바른 설명을 모두 사냥하시오!",
+        desc: "외부 점화원 유무, 연소 지속 시간, 온도 크기 서열",
+        targets: [
+          { text: "인화점: 불꽃을 접촉시켰을 때 불붙는 최저온도", tip: "인화점 = 점화원 접촉 시 최저온도 (가장 낮음)" },
+          { text: "연소점: 점화원 제거 후 연소가 5초 이상 지속", tip: "연소점 = 5초 이상 연소 지속 최저온도" },
+          { text: "발화점: 점화원(불꽃) 없이 스스로 착화하는 최저온도", tip: "발화점 = 착화점, 세 온도 중 가장 높음" },
+          { text: "온도 서열: 인화점 < 연소점 < 발화점", tip: "인화점이 가장 낮고 발화점이 가장 높습니다!" }
+        ],
+        traps: [
+          { text: "인화점: 점화원 없이 스스로 발화하는 온도", tip: "점화원 없이 스스로 불붙는 것은 '발화점'입니다!" },
+          { text: "연소점: 인화점보다 온도가 5~10℃ 더 낮다", tip: "연소점은 인화점보다 5~10℃ 더 높습니다!" },
+          { text: "온도 서열: 발화점 < 연소점 < 인화점", tip: "서열이 정반대입니다! (인화점 < 연소점 < 발화점)" },
+          { text: "발화점: 불꽃을 대었을 때만 불이 붙는 온도", tip: "발화점은 불꽃 접촉 없이 열 축적만으로 탑니다!" }
+        ]
+      },
+      {
+        round: 4,
+        title: "📊 [가연성 증기 연소범위(vol%) 올바른 수치]만 모두 사냥하시오!",
+        desc: "교재 수록 가연성 가스 및 유류 증기 연소범위",
+        targets: [
+          { text: "아세틸렌: 2.5 ~ 81 vol%", tip: "아세틸렌은 연소범위가 2.5~81%로 가장 넓어 폭발 위험 최상!" },
+          { text: "수소: 4.1 ~ 75 vol%", tip: "수소는 4.1 ~ 75%!" },
+          { text: "휘발유(가솔린): 1.2 ~ 7.6 vol%", tip: "휘발유는 하한계가 1.2%로 극도로 낮아 위험!" },
+          { text: "메틸알코올: 6 ~ 36 vol%", tip: "메틸알코올은 6 ~ 36% ('콜록콜록 36대')!" },
+          { text: "암모니아: 15 ~ 28 vol%", tip: "암모니아는 15 ~ 28% ('보름달 이팔청춘')!" }
+        ],
+        traps: [
+          { text: "휘발유(가솔린): 2.5 ~ 8.1 vol%", tip: "2.5 ~ 8.1%는 에테르의 연소범위입니다! (휘발유는 1.2~7.6%)" },
+          { text: "등유: 1.0 ~ 5.0 vol%", tip: "1.0 ~ 5.0%는 중유입니다! (등유는 0.7~5%)" },
+          { text: "중유: 0.7 ~ 5.0 vol%", tip: "0.7 ~ 5.0%는 등유입니다! (중유는 1~5%)" },
+          { text: "아세틸렌: 15 ~ 28 vol%", tip: "15 ~ 28%는 암모니아입니다!" }
+        ]
+      }
+    ];
+
+    let currentRoundIndex = 0;
+    let score = 0;
+    let lives = 3;
+    let speedMultiplier = 1.0;
+    let wrongHistory = [];
+    let isGameOver = false;
+
+    let floatingItems = [];
+    let remainingTargetCount = 0;
+    let totalTargetsInRound = 0;
+    let animFrameId = null;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      if (type === 'hit') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.12);
+      } else {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      }
+    }
+
+    function setSpeed(spd, btn) {
+      speedMultiplier = spd;
+      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    function updateHeartsUI() {
+      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives));
+    }
+
+    function updateProgressBar() {
+      const fill = document.getElementById("progress-fill");
+      const done = totalTargetsInRound - remainingTargetCount;
+      const pct = (done / totalTargetsInRound) * 100;
+      fill.style.width = pct + "%";
+    }
+
+    function startGame() {
+      document.getElementById("start-modal").style.display = "none";
+      score = 0;
+      lives = 3;
+      currentRoundIndex = 0;
+      wrongHistory = [];
+      isGameOver = false;
+      document.getElementById("score-val").textContent = score;
+      updateHeartsUI();
+      loadRound(0);
+    }
+
+    function loadRound(roundIdx) {
+      currentRoundIndex = roundIdx;
+      const data = ROUND_DATA[roundIdx];
+      document.getElementById("round-indicator").textContent = `ROUND ${data.round} / ${ROUND_DATA.length}`;
+      document.getElementById("mission-title").textContent = data.title;
+      document.getElementById("mission-desc").textContent = data.desc;
+
+      const space = document.getElementById("space-zone");
+      space.innerHTML = "";
+      floatingItems = [];
+
+      remainingTargetCount = data.targets.length;
+      totalTargetsInRound = data.targets.length;
+      updateProgressBar();
+
+      const combined = [
+        ...data.targets.map(t => ({ ...t, isTarget: true })),
+        ...data.traps.map(t => ({ ...t, isTarget: false }))
+      ].sort(() => Math.random() - 0.5);
+
+      const zoneW = space.clientWidth || 360;
+      const zoneH = space.clientHeight || 480;
+
+      combined.forEach(itemData => {
+        const bubble = document.createElement("div");
+        bubble.className = "floating-bubble";
+        bubble.textContent = itemData.text;
+        space.appendChild(bubble);
+
+        const bW = bubble.offsetWidth || 140;
+        const bH = bubble.offsetHeight || 36;
+        const x = Math.random() * (zoneW - bW - 20) + 10;
+        const y = Math.random() * (zoneH - bH - 20) + 10;
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (0.7 + Math.random() * 0.6);
+        const vx = Math.cos(angle) * speed;
+        const vy = Math.sin(angle) * speed;
+
+        const obj = {
+          element: bubble,
+          data: itemData,
+          x, y, vx, vy,
+          w: bW, h: bH,
+          isAlive: true
+        };
+
+        bubble.addEventListener("click", () => handleBubbleClick(obj));
+        floatingItems.push(obj);
+      });
+
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      animFrameId = requestAnimationFrame(updatePhysics);
+    }
+
+    function updatePhysics() {
+      if (isGameOver) return;
+      const space = document.getElementById("space-zone");
+      const zoneW = space.clientWidth;
+      const zoneH = space.clientHeight;
+
+      floatingItems.forEach(item => {
+        if (!item.isAlive) return;
+        item.x += item.vx * speedMultiplier;
+        item.y += item.vy * speedMultiplier;
+
+        if (item.x <= 4) { item.x = 4; item.vx *= -1; }
+        else if (item.x + item.w >= zoneW - 4) { item.x = zoneW - item.w - 4; item.vx *= -1; }
+
+        if (item.y <= 4) { item.y = 4; item.vy *= -1; }
+        else if (item.y + item.h >= zoneH - 4) { item.y = zoneH - item.h - 4; item.vy *= -1; }
+
+        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+      });
+
+      animFrameId = requestAnimationFrame(updatePhysics);
+    }
+
+    function handleBubbleClick(item) {
+      if (!item.isAlive || isGameOver) return;
+
+      if (item.data.isTarget) {
+        playSound('hit');
+        score += 100;
+        document.getElementById("score-val").textContent = score;
+
+        item.isAlive = false;
+        item.element.style.transform += " scale(1.3)";
+        item.element.style.opacity = "0";
+        setTimeout(() => item.element.remove(), 200);
+
+        remainingTargetCount--;
+        updateProgressBar();
+
+        if (remainingTargetCount <= 0) {
+          if (currentRoundIndex + 1 < ROUND_DATA.length) {
+            setTimeout(() => loadRound(currentRoundIndex + 1), 600);
+          } else {
+            setTimeout(showGameClear, 600);
+          }
+        }
+      } else {
+        playSound('wrong');
+        item.element.style.borderColor = "#ff4d4f";
+        item.element.style.background = "#3d1d1f";
+        setTimeout(() => {
+          if (item.element && item.isAlive) {
+            item.element.style.borderColor = "#30363d";
+            item.element.style.background = "linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95))";
+          }
+        }, 400);
+
+        wrongHistory.push({
+          roundTitle: ROUND_DATA[currentRoundIndex].title,
+          targets: ROUND_DATA[currentRoundIndex].targets,
+          clicked: item.data.text,
+          tip: item.data.tip
+        });
+
+        lives--;
+        updateHeartsUI();
+        if (lives <= 0) showGameOver();
+      }
+    }
+
+    function showGameClear() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "🏆";
+      document.getElementById("result-title").textContent = "플로팅 헌팅 올클리어!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#58a6ff; font-size:1.2rem;">${score}점</b><br>연소이론 및 위험물 전 문항을 완벽하게 마스터하셨습니다!`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function showGameOver() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "💥";
+      document.getElementById("result-title").textContent = "작전 실패!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#ff7b72; font-size:1.2rem;">${score}점</b><br>함정에 걸려 하트가 모두 소진되었습니다.`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function setupReviewUI() {
+      const container = document.getElementById("review-container");
+      const list = document.getElementById("review-list");
+      if (wrongHistory.length > 0) {
+        container.style.display = "block";
+        let html = "";
+        wrongHistory.forEach(w => {
+          let match = w.roundTitle.match(/\[(.*?)\]/);
+          let targetCategory = match ? match[1] : "정답";
+          let count = w.targets.length;
+          let targetsHtml = w.targets.map(t => `<li>${t.text}</li>`).join("");
+
+          html += `
+            <div class="review-item">
+              <div class="review-q">${w.roundTitle}</div>
+              <div class="review-a">❌ <b>잘못 누른 함정:</b> ${w.clicked}</div>
+              <div class="review-tip">💡 <b>족집게 해설:</b> ${w.tip}</div>
+              <div class="review-targets">
+                <div class="review-targets-title">🎯 <b>반드시 외워야 할 [${targetCategory}] 핵심 ${count}총사:</b></div>
+                <ul class="review-targets-list">
+                  ${targetsHtml}
+                </ul>
+              </div>
+            </div>
+          `;
+        });
+        list.innerHTML = html;
+      } else {
+        container.style.display = "none";
+      }
+    }
+
+    function restartAll() {
+      document.getElementById("result-modal").style.display = "none";
+      startGame();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[제 7-3탄 B] 소화이론 & 소화약제 플로팅 헌팅</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      height: 60px;
+      padding: 10px 16px;
+      background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-exit-game {
+      background: #21262d;
+      color: #8b949e;
+      border: 1px solid #30363d;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #f0f6fc; }
+    .score-badge {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #58a6ff;
+      background: rgba(56, 139, 253, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(56, 139, 253, 0.3);
+    }
+    .lives { font-size: 1.1rem; letter-spacing: 2px; }
+
+    .hud-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .speed-label { font-size: 0.78rem; color: #8b949e; font-weight: 600; }
+    .speed-btn {
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.15s;
+    }
+    .speed-btn.active {
+      background: #1f6feb;
+      border-color: #388bfd;
+      color: #fff;
+    }
+
+    .hud-right { display: flex; align-items: center; gap: 12px; }
+    .round-pill {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #f0883e;
+      background: rgba(240, 136, 62, 0.12);
+      padding: 4px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(240, 136, 62, 0.3);
+    }
+
+    section.mission-banner {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 10px 16px;
+      text-align: center;
+      z-index: 15;
+    }
+    .mission-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 2px;
+    }
+    .mission-desc { font-size: 0.8rem; color: #8b949e; }
+    .mission-progress-bar {
+      width: 100%;
+      max-width: 320px;
+      height: 6px;
+      background: #21262d;
+      border-radius: 3px;
+      margin: 6px auto 0;
+      overflow: hidden;
+    }
+    .mission-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #238636, #2ea043);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    main.space-zone {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%);
+      overflow: hidden;
+    }
+
+    .floating-bubble {
+      position: absolute;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95));
+      border: 1.5px solid #30363d;
+      border-radius: 20px;
+      color: #f0f6fc;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      white-space: nowrap;
+      transition: transform 0.1s, border-color 0.2s, background 0.2s;
+      z-index: 5;
+    }
+    .floating-bubble:active { transform: scale(0.95); }
+
+    .overlay-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 440px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-title { font-size: 1.4rem; font-weight: 800; color: #f0f6fc; margin-bottom: 8px; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 18px; }
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      background: #238636;
+      border: 1px solid #2ea043;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .action-btn:hover { background: #2ea043; }
+    .sub-action-btn {
+      width: 100%;
+      padding: 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #c9d1d9;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .review-list {
+      text-align: left;
+      margin: 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .review-item {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.82rem;
+    }
+    .review-q { font-weight: 700; color: #f0f6fc; margin-bottom: 4px; line-height: 1.4; }
+    .review-a { color: #f85149; font-weight: 600; margin-bottom: 2px; }
+    .review-tip { color: #e3b341; font-size: 0.78rem; margin-bottom: 8px; }
+    .review-targets {
+      background: rgba(35, 134, 54, 0.15);
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+    .review-targets-title {
+      color: #3fb950;
+      font-weight: 700;
+      font-size: 0.78rem;
+      margin-bottom: 4px;
+    }
+    .review-targets-list {
+      margin: 0;
+      padding-left: 14px;
+      color: #c9d1d9;
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+    .review-targets-list li { margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">← 허브로</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-display">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div style="display:flex;gap:4px;background:#161b22;padding:3px;border-radius:8px;border:1px solid #30363d;">
+        <a href="./game7-3.html" style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;text-decoration:none;color:#8b949e;">🎯 A 요격형</a>
+        <span style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;background:#1f6feb;color:#fff;">🛸 B 플로팅형</span>
+      </div>
+      <span class="speed-label">속도</span>
+      <button class="speed-btn" onclick="setSpeed(0.7, this)">0.7x</button>
+      <button class="speed-btn active" onclick="setSpeed(1.0, this)">1.0x</button>
+      <button class="speed-btn" onclick="setSpeed(1.3, this)">1.3x</button>
+    </div>
+    <div class="hud-right">
+      <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
+    </div>
+  </header>
+
+  <section class="mission-banner">
+    <div class="mission-title" id="mission-title">로딩 중...</div>
+    <div class="mission-desc" id="mission-desc">미션 설명</div>
+    <div class="mission-progress-bar">
+      <div class="mission-progress-fill" id="progress-fill"></div>
+    </div>
+  </section>
+
+  <main class="space-zone" id="space-zone"></main>
+
+  <!-- 인트로 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:10px;">🧯</div>
+      <h2 class="modal-title">[제 7-3탄 B] 소화이론 & 소화약제 플로팅 헌팅</h2>
+      <p class="modal-desc">
+        화면에 둥둥 떠다니는 소화 약제·원리 지문 중<br>
+        상단 <b>미션 목표</b>에 해당하는 것을 모두 클릭해 사냥하세요!<br><br>
+        • 4대 소화원리: 냉각 / 질식 / 제거 / 억제(부촉매)<br>
+        • 분말 소화약제 1~4종 성분 및 착색·적응성<br>
+        • 물 분무 주수 형태 및 물 주수 절대 금지 물질
+      </p>
+      <button class="action-btn" onclick="startGame()">🚀 미션 시작하기</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">작전 성공!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
+        <div class="review-list" id="review-list"></div>
+      </div>
+      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const ROUND_DATA = [
+      {
+        round: 1,
+        title: "❄️ [냉각소화 & 질식소화 원리 및 사례]만 모두 사냥하시오!",
+        desc: "증발잠열 흡수(발화점이하) 또는 산소 농도 15% 이하 희석",
+        targets: [
+          { text: "물 주수로 증발잠열(539 kcal/kg) 흡수 (냉각)", tip: "물의 가장 지배적인 소화원리는 기화잠열에 의한 냉각!" },
+          { text: "CO2 방출로 공기 중 산소 농도를 15% 이하로 희석 (질식)", tip: "이산화탄소 소화설비의 핵심 원리는 질식소화!" },
+          { text: "유류 화재에 포(거품)를 덮어 산소 차단 (질식)", tip: "포 소화약제는 액면 피막 형성으로 산소 차단(질식)!" },
+          { text: "강화액 소화설비 주수로 연소 온도 저하 (냉각)", tip: "강화액의 주원리는 냉각소화!" }
+        ],
+        traps: [
+          { text: "가스 밸브를 신속히 차단하여 불을 끔", tip: "가연물 공급 차단은 '제거소화'입니다!" },
+          { text: "할론 소화약제로 라디칼 연쇄반응 차단", tip: "연쇄반응 차단은 '억제(부촉매)소화'입니다!" },
+          { text: "산불 발생 시 나무를 미리 벌목하여 방화선 구축", tip: "가연물 격리는 '제거소화'입니다!" },
+          { text: "할로겐화합물 약제 방출로 불꽃 억제", tip: "할로겐 약제는 '부촉매(억제)소화'입니다!" }
+        ]
+      },
+      {
+        round: 2,
+        title: "🚫 [제거소화 & 억제(부촉매)소화 원리 및 사례]만 모두 사냥하시오!",
+        desc: "가연물 격리/공급차단 또는 연쇄반응 화학적 억제",
+        targets: [
+          { text: "가스 화재 시 중간 밸브를 차단 (제거)", tip: "가연성 가스 공급 차단 = 제거소화" },
+          { text: "산불 발생 시 수목 벌채로 방화선 설치 (제거)", tip: "가연물 격리 = 제거소화" },
+          { text: "촛불을 입김으로 세게 불어 끄기 (제거)", tip: "증기를 불어서 날려버리는 물리적 제거소화" },
+          { text: "할론·할로겐화합물로 연쇄반응 라디칼 차단 (억제)", tip: "부촉매 작용으로 연쇄반응 억제" }
+        ],
+        traps: [
+          { text: "스프링클러 헤드에서 물을 방사하여 냉각", tip: "물 방사는 '냉각소화'입니다!" },
+          { text: "밀폐실에 이산화탄소를 가득 채워 산소 차단", tip: "산소 차단은 '질식소화'입니다!" },
+          { text: "식용유 화재에 젖은 수건을 덮어 불을 끔", tip: "수건으로 덮는 것은 '질식소화'입니다!" },
+          { text: "모래를 뿌려 화염을 덮어버림", tip: "모래로 덮는 것은 '질식소화'입니다!" }
+        ]
+      },
+      {
+        round: 3,
+        title: "🧪 [분말 소화약제 1~4종 성분 및 착색] 올바른 연결을 모두 사냥하시오!",
+        desc: "탄산수소나트륨(백색), 탄산수소칼륨(자색), 제1인산암모늄(담홍색 ABC급)",
+        targets: [
+          { text: "제1종: 탄산수소나트륨(NaHCO3) - 백색 (BC급)", tip: "제1종 = 탄산수소나트륨, 백색 착색, BC급 전용!" },
+          { text: "제2종: 탄산수소칼륨(KHCO3) - 자색(보라) (BC급)", tip: "제2종 = 탄산수소칼륨, 자색 착색, BC급 전용!" },
+          { text: "제3종: 제1인산암모늄(NH4H2PO4) - 담홍색 (ABC급 만능)", tip: "제3종 = 제1인산암모늄, 담홍색(분홍), 일반(A급) 화재에도 적응!" },
+          { text: "제4종: 탄산수소칼륨 + 요소 - 회색 (BC급)", tip: "제4종 = 탄산수소칼륨+요소, 회색 착색, BC급!" }
+        ],
+        traps: [
+          { text: "제1종: 탄산수소나트륨 - 담홍색 (ABC급)", tip: "담홍색 ABC급은 '제3종(제1인산암모늄)'입니다!" },
+          { text: "제3종: 제1인산암모늄 - 백색 (BC급 전용)", tip: "제3종은 '담홍색'이며 A급 화재에도 적응성이 있습니다!" },
+          { text: "제2종: 탄산수소칼륨 - 회색 착색", tip: "제2종은 '자색(보라)'입니다! (회색은 4종)" },
+          { text: "제4종: 제1인산암모늄 + 물", tip: "제4종은 탄산수소칼륨에 요소를 합성한 것입니다!" }
+        ]
+      },
+      {
+        round: 4,
+        title: "⚠️ [화재 시 물 주수 절대 금지 물질 (폭발·연소확대)]만 모두 사냥하시오!",
+        desc: "물과 반응하여 수소 폭발하거나 기름이 물 위에 떠서 연소확대되는 물질",
+        targets: [
+          { text: "제3류 칼륨, 나트륨, 알킬알루미늄 (금수성)", tip: "물과 접촉 시 수소 가스 발생하여 맹렬히 폭발!" },
+          { text: "제2류 철분, 금속분, 마그네슘 분말", tip: "고온 금속분에 주수 시 물 열분해로 수소 폭발!" },
+          { text: "제1류 무기과산화물 (과산화칼륨, 과산화나트륨)", tip: "물과 반응 시 다량의 산소를 방출하여 폭발!" },
+          { text: "제4류 휘발유, 벤젠 등 인화성 액체 (봉상주수)", tip: "기름이 물 위에 떠서 화재 면적이 급격히 확대!" }
+        ],
+        traps: [
+          { text: "A급 목재, 종이, 섬유 화재", tip: "일반화재(A급)는 물 주수가 가장 효과적인 최우선 소화방법입니다!" },
+          { text: "제5류 유기과산화물, 질산에스테르 화재", tip: "제5류는 자체 산소를 함유하므로 '대량의 물 주수 냉각'이 유일한 소화법입니다!" },
+          { text: "무상(안개모양) 주수로 방사하는 C급 전기화재", tip: "무상 주수는 물 입자가 미세하여 전기 전도성이 없으므로 C급에도 사용 가능합니다!" },
+          { text: "석탄 더미 화재", tip: "석탄 화재는 물 주수를 통해 냉각 소화합니다!" }
+        ]
+      }
+    ];
+
+    let currentRoundIndex = 0;
+    let score = 0;
+    let lives = 3;
+    let speedMultiplier = 1.0;
+    let wrongHistory = [];
+    let isGameOver = false;
+
+    let floatingItems = [];
+    let remainingTargetCount = 0;
+    let totalTargetsInRound = 0;
+    let animFrameId = null;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      if (type === 'hit') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.12);
+      } else {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      }
+    }
+
+    function setSpeed(spd, btn) {
+      speedMultiplier = spd;
+      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    function updateHeartsUI() {
+      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives));
+    }
+
+    function updateProgressBar() {
+      const fill = document.getElementById("progress-fill");
+      const done = totalTargetsInRound - remainingTargetCount;
+      const pct = (done / totalTargetsInRound) * 100;
+      fill.style.width = pct + "%";
+    }
+
+    function startGame() {
+      document.getElementById("start-modal").style.display = "none";
+      score = 0;
+      lives = 3;
+      currentRoundIndex = 0;
+      wrongHistory = [];
+      isGameOver = false;
+      document.getElementById("score-val").textContent = score;
+      updateHeartsUI();
+      loadRound(0);
+    }
+
+    function loadRound(roundIdx) {
+      currentRoundIndex = roundIdx;
+      const data = ROUND_DATA[roundIdx];
+      document.getElementById("round-indicator").textContent = `ROUND ${data.round} / ${ROUND_DATA.length}`;
+      document.getElementById("mission-title").textContent = data.title;
+      document.getElementById("mission-desc").textContent = data.desc;
+
+      const space = document.getElementById("space-zone");
+      space.innerHTML = "";
+      floatingItems = [];
+
+      remainingTargetCount = data.targets.length;
+      totalTargetsInRound = data.targets.length;
+      updateProgressBar();
+
+      const combined = [
+        ...data.targets.map(t => ({ ...t, isTarget: true })),
+        ...data.traps.map(t => ({ ...t, isTarget: false }))
+      ].sort(() => Math.random() - 0.5);
+
+      const zoneW = space.clientWidth || 360;
+      const zoneH = space.clientHeight || 480;
+
+      combined.forEach(itemData => {
+        const bubble = document.createElement("div");
+        bubble.className = "floating-bubble";
+        bubble.textContent = itemData.text;
+        space.appendChild(bubble);
+
+        const bW = bubble.offsetWidth || 140;
+        const bH = bubble.offsetHeight || 36;
+        const x = Math.random() * (zoneW - bW - 20) + 10;
+        const y = Math.random() * (zoneH - bH - 20) + 10;
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (0.7 + Math.random() * 0.6);
+        const vx = Math.cos(angle) * speed;
+        const vy = Math.sin(angle) * speed;
+
+        const obj = {
+          element: bubble,
+          data: itemData,
+          x, y, vx, vy,
+          w: bW, h: bH,
+          isAlive: true
+        };
+
+        bubble.addEventListener("click", () => handleBubbleClick(obj));
+        floatingItems.push(obj);
+      });
+
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      animFrameId = requestAnimationFrame(updatePhysics);
+    }
+
+    function updatePhysics() {
+      if (isGameOver) return;
+      const space = document.getElementById("space-zone");
+      const zoneW = space.clientWidth;
+      const zoneH = space.clientHeight;
+
+      floatingItems.forEach(item => {
+        if (!item.isAlive) return;
+        item.x += item.vx * speedMultiplier;
+        item.y += item.vy * speedMultiplier;
+
+        if (item.x <= 4) { item.x = 4; item.vx *= -1; }
+        else if (item.x + item.w >= zoneW - 4) { item.x = zoneW - item.w - 4; item.vx *= -1; }
+
+        if (item.y <= 4) { item.y = 4; item.vy *= -1; }
+        else if (item.y + item.h >= zoneH - 4) { item.y = zoneH - item.h - 4; item.vy *= -1; }
+
+        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+      });
+
+      animFrameId = requestAnimationFrame(updatePhysics);
+    }
+
+    function handleBubbleClick(item) {
+      if (!item.isAlive || isGameOver) return;
+
+      if (item.data.isTarget) {
+        playSound('hit');
+        score += 100;
+        document.getElementById("score-val").textContent = score;
+
+        item.isAlive = false;
+        item.element.style.transform += " scale(1.3)";
+        item.element.style.opacity = "0";
+        setTimeout(() => item.element.remove(), 200);
+
+        remainingTargetCount--;
+        updateProgressBar();
+
+        if (remainingTargetCount <= 0) {
+          if (currentRoundIndex + 1 < ROUND_DATA.length) {
+            setTimeout(() => loadRound(currentRoundIndex + 1), 600);
+          } else {
+            setTimeout(showGameClear, 600);
+          }
+        }
+      } else {
+        playSound('wrong');
+        item.element.style.borderColor = "#ff4d4f";
+        item.element.style.background = "#3d1d1f";
+        setTimeout(() => {
+          if (item.element && item.isAlive) {
+            item.element.style.borderColor = "#30363d";
+            item.element.style.background = "linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95))";
+          }
+        }, 400);
+
+        wrongHistory.push({
+          roundTitle: ROUND_DATA[currentRoundIndex].title,
+          targets: ROUND_DATA[currentRoundIndex].targets,
+          clicked: item.data.text,
+          tip: item.data.tip
+        });
+
+        lives--;
+        updateHeartsUI();
+        if (lives <= 0) showGameOver();
+      }
+    }
+
+    function showGameClear() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "🏆";
+      document.getElementById("result-title").textContent = "소화이론 올클리어!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#58a6ff; font-size:1.2rem;">${score}점</b><br>4대 소화원리와 분말약제 족보를 완벽하게 정복하셨습니다!`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function showGameOver() {
+      isGameOver = true;
+      document.getElementById("result-icon").textContent = "💥";
+      document.getElementById("result-title").textContent = "작전 실패!";
+      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#ff7b72; font-size:1.2rem;">${score}점</b><br>함정에 걸려 하트가 모두 소진되었습니다.`;
+      setupReviewUI();
+      document.getElementById("result-modal").style.display = "flex";
+    }
+
+    function setupReviewUI() {
+      const container = document.getElementById("review-container");
+      const list = document.getElementById("review-list");
+      if (wrongHistory.length > 0) {
+        container.style.display = "block";
+        let html = "";
+        wrongHistory.forEach(w => {
+          let match = w.roundTitle.match(/\[(.*?)\]/);
+          let targetCategory = match ? match[1] : "정답";
+          let count = w.targets.length;
+          let targetsHtml = w.targets.map(t => `<li>${t.text}</li>`).join("");
+
+          html += `
+            <div class="review-item">
+              <div class="review-q">${w.roundTitle}</div>
+              <div class="review-a">❌ <b>잘못 누른 함정:</b> ${w.clicked}</div>
+              <div class="review-tip">💡 <b>족집게 해설:</b> ${w.tip}</div>
+              <div class="review-targets">
+                <div class="review-targets-title">🎯 <b>반드시 외워야 할 [${targetCategory}] 핵심 ${count}총사:</b></div>
+                <ul class="review-targets-list">
+                  ${targetsHtml}
+                </ul>
+              </div>
+            </div>
+          `;
+        });
+        list.innerHTML = html;
+      } else {
+        container.style.display = "none";
+      }
+    }
+
+    function restartAll() {
+      document.getElementById("result-modal").style.display = "none";
+      startGame();
+    }
+  </script>
+</body>
+</html>
