@@ -486,7 +486,7 @@
       <h2 class="section-title">
         <span>🎮 플레이 가능한 게임 모음</span>
       </h2>
-      <span class="game-count-badge">총 5개 시리즈</span>
+      <span class="game-count-badge">총 6개 시리즈</span>
     </div>
 
     <div class="game-grid">
@@ -602,6 +602,32 @@
           </div>
         </div>
       </div>
+
+      <!-- [제 6탄] 건축관계법령 족집게 헌터 (A/B 모드 선택형) -->
+      <div class="game-card active-card">
+        <div>
+          <div class="card-top">
+            <div class="game-icon-box" style="border-color:#38bdf8;">🏛️</div>
+            <span class="badge-status play">PLAY 가능 ▶</span>
+          </div>
+          <h3 class="game-title">[제 6탄] 건축관계법령 족집게 헌터</h3>
+        </div>
+        <div class="card-actions">
+          <button class="btn-study" onclick="openStudyModal(6)">
+            <span>📖 핵심 요약 먼저 공부하기</span>
+          </button>
+          <div class="card-dual-actions">
+            <a href="./1keup-game/game6.html" class="btn-play-dual" title="A타입: 건축법 단어 낙하 ➔ 5대 카테고리 요격 격추">
+              <span>🎯 A 낙하형</span>
+            </a>
+            <a href="./1keup-game/game6-b.html" class="btn-play-dual btn-b" title="B타입: 화면에 떠다니는 건축법 항목 중 타겟 미션 사냥">
+              <span>🛸 B 플로팅형</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      
 
     </div>
   </main>
@@ -797,6 +823,47 @@
           }
         ]
       }
+        6: {
+          title: "🏛️ [제 6탄] 건축관계법령 1분 족집게",
+          playUrl: "./1keup-game/game6.html",
+          cards: [
+            {
+              title: "1. 주요구조부 vs 비주요구조부",
+              items: [
+                "<span class='highlight-badge'>[주요구조부 6가지]</span>: <b>'바·지·보·내·기·주'</b> - 바닥, 지붕틀, 보, 내력벽, 기둥, 주계단",
+                "<span class='highlight-red'>[주요구조부가 아닌 것]</span>: <b>'사·최·작·차·옥'</b> - 사이기둥(샛기둥), 최하층 바닥, 작은보, 차양, 옥외계단"
+              ]
+            },
+            {
+              title: "2. 용적률 산정 시 연면적 '제외' 4총사",
+              items: [
+                "<span class='highlight-red'>[용적률 산정 제외 4가지]</span>: 1) <b>지하층</b> 바닥면적, 2) 지상층 <b>부설주차장</b> 면적, 3) 초고층/준초고층 <b>피난안전구역</b> 면적, 4) 아파트 옥상 <b>대피공간</b> 면적",
+                "<span class='highlight-badge'>[주의]</span>: 일반 연면적(총면적)에는 지하층 면적이 <b>포함</b>되지만, 용적률 계산할 때만 <b>제외</b>됩니다!"
+              ]
+            },
+            {
+              title: "3. 건축 5대 행위 & 대수선",
+              items: [
+                "<b>신축</b>: 빈 땅에 새로 짓거나 종전 규모를 초과하여 다시 축조",
+                "<b>증축</b>: 건축면적, 연면적, 층수, 높이를 늘리는 것",
+                "<b>개축</b>: 자발적 철거 후 종전 규모 이내 축조",
+                "<b>재축</b>: 재해로 멸실 후 종전 규모 이내 축조",
+                "<b>이전</b>: 주요구조부 해체 없이 같은 대지 내 다른 위치로 이동",
+                "<b>대수선</b>: 내력벽 30㎡ 이상 수선, 기둥·보·지붕틀 3개 이상 수선"
+              ]
+            },
+            {
+              title: "4. 높이 & 층수 산정 황금 수치",
+              items: [
+                "<b>층 구분 불명확</b>: 높이 <b>4m마다 1개 층</b>으로 산정",
+                "<b>지하층 층수</b>: 지하층은 건축물 <b>층수에서 제외</b> (평균높이 층고 1/2 이상)",
+                "<b>옥탑 층수 제외</b>: 옥탑 면적 합계가 건축면적의 <b>1/8 이하</b>일 때",
+                "<b>옥탑 높이 산입</b>: 옥탑 면적이 1/8 이하인 경우 <b>12m를 넘는 부분만</b> 건물 높이에 산입"
+              ]
+            }
+          ]
+        },
+
     };
 
     const studyModal = document.getElementById("study-modal");

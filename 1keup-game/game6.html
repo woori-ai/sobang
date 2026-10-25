@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>건축관계법령 족집게 격추 6탄 A</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. 상단 HUD */
+    header {
+      height: 60px;
+      padding: 10px 16px;
+      background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-exit-game {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover {
+      background: #30363d;
+      color: #58a6ff;
+      border-color: #58a6ff;
+    }
+    .score-badge {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #58a6ff;
+    }
+    .lives {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+    .hud-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #161b22;
+      padding: 4px 8px;
+      border-radius: 20px;
+      border: 1px solid #30363d;
+    }
+    .speed-tag {
+      font-size: 0.75rem;
+      color: #8b949e;
+      font-weight: 600;
+    }
+    .speed-btn {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .speed-btn.active {
+      background: #238636;
+      color: #ffffff;
+      border-color: #2ea043;
+    }
+    .streak-badge {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #e3b341;
+      min-width: 75px;
+      text-align: right;
+    }
+
+    /* 2. 게임 캔버스 플레이존 */
+    #game-zone {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 75%);
+      overflow: hidden;
+    }
+
+    /* 떨어지는 건축법 단어 블록 */
+    .word-block {
+      position: absolute;
+      padding: 10px 14px;
+      background: #1f242c;
+      border: 2px solid #58a6ff;
+      border-radius: 8px;
+      color: #f0f6fc;
+      font-size: 0.95rem;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+      cursor: default;
+      will-change: transform, top;
+      white-space: nowrap;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      z-index: 5;
+    }
+    .word-block .hint-sub {
+      font-size: 0.72rem;
+      color: #8b949e;
+      font-weight: 500;
+    }
+
+    /* 3. 위험 한계선 */
+    .danger-line {
+      position: absolute;
+      bottom: 128px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #f85149 30%, #f85149 70%, transparent);
+      box-shadow: 0 0 10px #f85149;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    /* 4. 하단 5대 건축법 컨트롤러 그리드 */
+    .control-deck {
+      height: 128px;
+      background: #161b22;
+      border-top: 1px solid #30363d;
+      padding: 8px 10px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      z-index: 15;
+    }
+    @media (max-width: 600px) {
+      .control-deck {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        height: 130px;
+        gap: 5px;
+        padding: 6px 8px;
+      }
+    }
+    .fire-btn {
+      position: relative;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #e6edf3;
+      font-family: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 6px;
+      cursor: pointer;
+      transition: transform 0.08s ease, background 0.15s, border-color 0.15s;
+      overflow: hidden;
+    }
+    .fire-btn:active {
+      transform: scale(0.95);
+    }
+    .fire-btn .btn-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-bottom: 2px;
+    }
+    .fire-btn .btn-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      line-height: 1.2;
+      text-align: center;
+      word-break: keep-all;
+    }
+    .fire-btn .btn-sub {
+      font-size: 0.65rem;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+
+    /* 5대 카테고리 고유 컬러 */
+    /* 1: 주요구조부 (바지보내기주) */
+    .btn-cat-1 { border-color: rgba(63, 185, 80, 0.4); }
+    .btn-cat-1 .btn-badge { background: rgba(63, 185, 80, 0.2); color: #7ee787; }
+    .btn-cat-1:hover { background: #15271d; border-color: #56d364; }
+
+    /* 2: 비주요구조부 (사최작차옥) */
+    .btn-cat-2 { border-color: rgba(248, 81, 73, 0.4); }
+    .btn-cat-2 .btn-badge { background: rgba(248, 81, 73, 0.2); color: #ff7b72; }
+    .btn-cat-2:hover { background: #2c1a1d; border-color: #ff7b72; }
+
+    /* 3: 건축행위 (신축/증축/개축/재축/이전) */
+    .btn-cat-3 { border-color: rgba(88, 166, 255, 0.4); }
+    .btn-cat-3 .btn-badge { background: rgba(88, 166, 255, 0.2); color: #79c0ff; }
+    .btn-cat-3:hover { background: #162233; border-color: #58a6ff; }
+
+    /* 4: 용적률 제외 (지하/주차/피난/대피) */
+    .btn-cat-4 { border-color: rgba(227, 179, 65, 0.4); }
+    .btn-cat-4 .btn-badge { background: rgba(227, 179, 65, 0.2); color: #e3b341; }
+    .btn-cat-4:hover { background: #282417; border-color: #e3b341; }
+
+    /* 5: 높이·수치 (4m/1층, 1/8, 12m, 30㎡) */
+    .btn-cat-5 { border-color: rgba(163, 113, 247, 0.4); }
+    .btn-cat-5 .btn-badge { background: rgba(163, 113, 247, 0.2); color: #d2a8ff; }
+    .btn-cat-5:hover { background: #231b2e; border-color: #bc8cff; }
+
+    /* 모달 레이아웃 */
+    .overlay-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(13, 17, 23, 0.88);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #58a6ff;
+    }
+    .modal-desc {
+      font-size: 0.88rem;
+      color: #8b949e;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      background: #238636;
+      border: 1px solid #2ea043;
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+    .action-btn:hover { background: #2ea043; }
+    .sub-action-btn {
+      display: block;
+      width: 100%;
+      padding: 9px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .sub-action-btn:hover { background: #30363d; color: #58a6ff; }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 HUD -->
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game" title="소방 게임 센터로">
+        <span>◀ 게임 목록</span>
+      </a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn" data-speed="1.0" onclick="setSpeed(1.0, this)">1.0x</button>
+      <button class="speed-btn active" data-speed="1.3" onclick="setSpeed(1.3, this)">1.3x</button>
+      <button class="speed-btn" data-speed="1.7" onclick="setSpeed(1.7, this)">1.7x</button>
+    </div>
+    <div class="streak-badge" id="streak-val">🔥 0 COMBO</div>
+  </header>
+
+  <!-- 게임존 -->
+  <main id="game-zone">
+    <div class="danger-line"></div>
+  </main>
+
+  <!-- 하단 5대 컨트롤러 덱 -->
+  <footer class="control-deck">
+    <button class="fire-btn btn-cat-1" onclick="fireShot('주요구조부')">
+      <span class="btn-badge">바지보내기주</span>
+      <span class="btn-title">주요구조부</span>
+      <span class="btn-sub">내력벽/기둥/바닥/보</span>
+    </button>
+    <button class="fire-btn btn-cat-2" onclick="fireShot('비주요구조부')">
+      <span class="btn-badge">사최작차옥</span>
+      <span class="btn-title">비주요구조부</span>
+      <span class="btn-sub">최하층/사이기둥/작은보</span>
+    </button>
+    <button class="fire-btn btn-cat-3" onclick="fireShot('건축행위')">
+      <span class="btn-badge">5대 행위</span>
+      <span class="btn-title">건축 행위</span>
+      <span class="btn-sub">신축/증축/개축/재축/이전</span>
+    </button>
+    <button class="fire-btn btn-cat-4" onclick="fireShot('용적률제외')">
+      <span class="btn-badge">연면적 제외</span>
+      <span class="btn-title">용적률 제외</span>
+      <span class="btn-sub">지하/주차/피난안전/대피</span>
+    </button>
+    <button class="fire-btn btn-cat-5" onclick="fireShot('높이수치')">
+      <span class="btn-badge">기준 수치</span>
+      <span class="btn-title">높이·수치</span>
+      <span class="btn-sub">4m/1층, 1/8, 12m, 30㎡</span>
+    </button>
+  </footer>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">🏛️</div>
+      <h2 class="modal-title">[제 6탄 A] 건축관계법령 족집게 격추</h2>
+      <p class="modal-desc">
+        위에서 떨어지는 건축법 용어·부재·상황을 확인하고,<br>
+        하단의 <b>5대 카테고리 버튼</b>을 눌러 격추하세요!<br><br>
+        • 주요구조부(바지보내기주) vs 비주요구조부(사최작차옥)<br>
+        • 건축 5대 행위 / 용적률 제외 4총사 / 핵심 법정 수치
+      </p>
+      <button class="action-btn" onclick="startGame()">🚀 미션 시작하기</button>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 게임 오버 모달 -->
+  <div class="overlay-modal" id="gameover-modal" style="display:none;">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">💥</div>
+      <h2 class="modal-title" style="color:#f85149;">작전 실패!</h2>
+      <p class="modal-desc" id="gameover-desc">최종 점수: 0점</p>
+      <button class="action-btn" onclick="restartGame()">🔄 다시 도전하기</button>
+      <a href="./game6-b.html" class="sub-action-btn" style="margin-bottom:8px; color:#58a6ff; border-color:#58a6ff;">🛸 B타입 플로팅형 도전하기</a>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    // 건축관계법령 문제 데이터셋 (총 25문항 풀)
+    const QUESTIONS = [
+      // 1. 주요구조부
+      { word: "내력벽", sub: "하중을 받는 벽체", cat: "주요구조부" },
+      { word: "기둥 (주기둥)", sub: "수직 하중 지지부재", cat: "주요구조부" },
+      { word: "바닥", sub: "중간층 바닥 슬래브", cat: "주요구조부" },
+      { word: "보 (대들보)", sub: "수평 하중 지지부재", cat: "주요구조부" },
+      { word: "지붕틀", sub: "지붕을 받치는 트러스 구조", cat: "주요구조부" },
+      { word: "주계단", sub: "건물의 중심 주 이동통로", cat: "주요구조부" },
+
+      // 2. 비주요구조부
+      { word: "최하층 바닥", sub: "지반이 받치고 있는 바닥", cat: "비주요구조부" },
+      { word: "사이기둥 (샛기둥)", sub: "벽체 마감용 보조 기둥", cat: "비주요구조부" },
+      { word: "작은보 (단일보)", sub: "주요 하중을 받지 않는 보", cat: "비주요구조부" },
+      { word: "차양 (햇빛가리개)", sub: "외벽 돌출 차양", cat: "비주요구조부" },
+      { word: "옥외계단", sub: "외부 피난용 보조 계단", cat: "비주요구조부" },
+
+      // 3. 건축행위
+      { word: "빈 땅에 새로 건축", sub: "기존건물 철거 후 포함", cat: "건축행위" },
+      { word: "면적·층수·높이 늘림", sub: "기존 건축물 있는 대지", cat: "건축행위" },
+      { word: "철거 후 종전규모 축조", sub: "인위적 자발적 철거", cat: "건축행위" },
+      { word: "재해 멸실 후 동일규모", sub: "태풍·화재 등 비자발적", cat: "건축행위" },
+      { word: "해체없이 같은대지 이동", sub: "주요구조부 보존", cat: "건축행위" },
+
+      // 4. 용적률 제외
+      { word: "지하층의 바닥면적", sub: "용적률 분자 연면적 산정 시", cat: "용적률제외" },
+      { word: "지상층 부설주차장 면적", sub: "주차전용 공간", cat: "용적률제외" },
+      { word: "초고층 피난안전구역", sub: "30개 층마다 설치 구역", cat: "용적률제외" },
+      { word: "아파트 경사지붕 대피공간", sub: "11층 이상 옥상 대피", cat: "용적률제외" },
+
+      // 5. 높이·수치
+      { word: "층 구분 불명확 건축물", sub: "몇 m마다 1개 층?", cat: "높이수치" },
+      { word: "옥탑 층수 제외 비율", sub: "건축면적의 몇 이하?", cat: "높이수치" },
+      { word: "옥탑 높이 산입 기준", sub: "몇 m 넘는 부분만?", cat: "높이수치" },
+      { word: "내력벽 대수선 면적", sub: "몇 ㎡ 이상 수선·변경?", cat: "높이수치" },
+      { word: "기둥·보 대수선 개수", sub: "몇 개 이상 수선·변경?", cat: "높이수치" }
+    ];
+
+    let score = 0;
+    let lives = 3;
+    let streak = 0;
+    let speedMult = 1.3;
+    let activeWords = [];
+    let isGameRunning = false;
+    let spawnTimer = null;
+    let animFrame = null;
+
+    const gameZone = document.getElementById('game-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const streakVal = document.getElementById('streak-val');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('gameover-modal').style.display = 'none';
+      score = 0;
+      lives = 3;
+      streak = 0;
+      activeWords = [];
+      gameZone.querySelectorAll('.word-block').forEach(el => el.remove());
+      updateHUD();
+      isGameRunning = true;
+
+      spawnLoop();
+      mainLoop();
+    }
+
+    function restartGame() {
+      startGame();
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) || '💀';
+      streakVal.textContent = streak > 0 ? `🔥 ${streak} COMBO` : '🔥 0 COMBO';
+    }
+
+    function spawnLoop() {
+      if (!isGameRunning) return;
+      spawnWord();
+      const nextDelay = Math.max(1600, 3200 / speedMult);
+      spawnTimer = setTimeout(spawnLoop, nextDelay);
+    }
+
+    function spawnWord() {
+      const q = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
+      const el = document.createElement('div');
+      el.className = 'word-block';
+      el.innerHTML = `<span>${q.word}</span><span class="hint-sub">${q.sub}</span>`;
+
+      const zoneWidth = gameZone.clientWidth;
+      const left = Math.max(15, Math.floor(Math.random() * (zoneWidth - 180)));
+      el.style.left = `${left}px`;
+      el.style.top = `-60px`;
+
+      gameZone.appendChild(el);
+
+      activeWords.push({
+        el: el,
+        q: q,
+        y: -60,
+        speed: (1.2 + Math.random() * 0.4) * speedMult
+      });
+    }
+
+    function mainLoop() {
+      if (!isGameRunning) return;
+
+      const dangerY = gameZone.clientHeight - 130;
+
+      for (let i = activeWords.length - 1; i >= 0; i--) {
+        const item = activeWords[i];
+        item.y += item.speed;
+        item.el.style.top = `${item.y}px`;
+
+        // 위험선 돌파 판정
+        if (item.y >= dangerY) {
+          item.el.remove();
+          activeWords.splice(i, 1);
+          takeDamage();
+        }
+      }
+
+      animFrame = requestAnimationFrame(mainLoop);
+    }
+
+    function fireShot(targetCat) {
+      if (!isGameRunning) return;
+
+      // 가장 화면 아래쪽에 있는 단어를 우선 타겟팅
+      let lowestIdx = -1;
+      let maxBottomY = -999;
+
+      for (let i = 0; i < activeWords.length; i++) {
+        if (activeWords[i].y > maxBottomY) {
+          maxBottomY = activeWords[i].y;
+          lowestIdx = i;
+        }
+      }
+
+      if (lowestIdx === -1) return;
+
+      const targetItem = activeWords[lowestIdx];
+
+      if (targetItem.q.cat === targetCat) {
+        // 정답 격추!
+        streak++;
+        score += 100 + (streak * 10);
+        createExplosion(targetItem.el);
+        targetItem.el.remove();
+        activeWords.splice(lowestIdx, 1);
+        updateHUD();
+      } else {
+        // 오답 발사!
+        streak = 0;
+        targetItem.el.style.borderColor = '#f85149';
+        targetItem.el.style.background = 'rgba(248, 81, 73, 0.3)';
+        takeDamage();
+      }
+    }
+
+    function createExplosion(el) {
+      const rect = el.getBoundingClientRect();
+      const gameRect = gameZone.getBoundingClientRect();
+      const pop = document.createElement('div');
+      pop.style.position = 'absolute';
+      pop.style.left = `${rect.left - gameRect.left + rect.width / 2}px`;
+      pop.style.top = `${rect.top - gameRect.top}px`;
+      pop.style.color = '#58a6ff';
+      pop.style.fontWeight = '900';
+      pop.style.fontSize = '1.3rem';
+      pop.style.transform = 'translate(-50%, -50%)';
+      pop.style.transition = 'all 0.4s ease-out';
+      pop.style.pointerEvents = 'none';
+      pop.textContent = '💥 HIT!';
+      gameZone.appendChild(pop);
+
+      requestAnimationFrame(() => {
+        pop.style.top = `${parseFloat(pop.style.top) - 30}px`;
+        pop.style.opacity = '0';
+      });
+
+      setTimeout(() => pop.remove(), 400);
+    }
+
+    function takeDamage() {
+      lives--;
+      streak = 0;
+      updateHUD();
+
+      // 화면 깜빡임
+      gameZone.style.boxShadow = 'inset 0 0 40px rgba(248, 81, 73, 0.6)';
+      setTimeout(() => {
+        gameZone.style.boxShadow = 'none';
+      }, 250);
+
+      if (lives <= 0) {
+        gameOver();
+      }
+    }
+
+    function gameOver() {
+      isGameRunning = false;
+      clearTimeout(spawnTimer);
+      cancelAnimationFrame(animFrame);
+
+      document.getElementById('gameover-desc').innerHTML = `최종 점수: <strong>${score}점</strong><br>건축법령 핵심 요점을 복습하세요!`;
+      document.getElementById('gameover-modal').style.display = 'flex';
+    }
+
+    // 키보드 1, 2, 3, 4, 5 지원
+    window.addEventListener('keydown', (e) => {
+      const cats = ['주요구조부', '비주요구조부', '건축행위', '용적률제외', '높이수치'];
+      const num = parseInt(e.key, 10);
+      if (num >= 1 && num <= 5) {
+        fireShot(cats[num - 1]);
+      }
+    });
+  </script>
+</body>
+</html>
