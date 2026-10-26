@@ -371,7 +371,7 @@
         <span>◀ 게임 목록</span>
       </a>
       <div class="score-badge">SCORE: <span id="score-val">0</span></div>
-      <div class="lives" id="lives-val">❤️❤️❤️</div>
+      <div class="lives" id="lives-val">❤️❤️❤️🖤🖤</div>
     </div>
     <div class="hud-center">
       <!-- A/B 모드 즉시 전환 탭 -->
@@ -520,6 +520,7 @@
 
     let currentRoundIndex = 0;
     let score = 0;
+    const MAX_LIVES = 5;
     let lives = 3;
     let streak = 0;
     let speedMult = 1.2;
@@ -560,9 +561,17 @@
       startGame();
     }
 
+        function triggerHeartHealAnim() {
+      const el = document.getElementById("lives-val");
+      if (!el) return;
+      el.classList.remove("heart-heal-bounce");
+      void el.offsetWidth;
+      el.classList.add("heart-heal-bounce");
+    }
+
     function updateHUD() {
       scoreVal.textContent = score;
-      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) || '💀';
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
       streakVal.textContent = streak > 0 ? `🔥 ${streak} COMBO` : '🔥 0 COMBO';
       roundVal.textContent = `ROUND ${currentRoundIndex + 1}/${ROUND_DATA.length}`;
     }
@@ -660,29 +669,58 @@
 
     function onItemClick(item) {
       if (!isRoundRunning) return;
+      if (item.isSolved) return; // 이미 맞힌 카드는 재클릭 무시
 
       if (item.data.isTarget) {
-        // 정답 타겟 사냥!
+        item.isSolved = true;
         streak++;
         score += 150 + (streak * 15);
         remainTargetCount--;
         remainCount.textContent = remainTargetCount;
 
-        showFloatingHit(item.x + item.w / 2, item.y, "🎯 TARGET DOWN!");
+        let healed = false;
+        if (lives < MAX_LIVES) {
+          lives++;
+          healed = true;
+          triggerHeartHealAnim();
+        }
 
-        item.el.remove();
-        items = items.filter(it => it !== item);
+        // 맞으면 초록색으로 표시되고 사라지지 않고 화면에 남아 계속 읽을 수 있음!
+        item.el.style.borderColor = '#3fb950';
+        item.el.style.background = 'rgba(63, 185, 80, 0.45)';
+        item.el.style.boxShadow = '0 0 12px rgba(63, 185, 80, 0.6)';
+        item.el.style.cursor = 'default';
+        item.el.innerHTML = '<span style="color:#7ee787; font-weight:800; margin-right:4px;">✅</span>' + item.data.text;
+
+        if (healed) {
+          const healText = document.createElement('div');
+          healText.textContent = '❤️ +1';
+          healText.style.position = 'absolute';
+          healText.style.top = '-20px';
+          healText.style.right = '5px';
+          healText.style.color = '#7ee787';
+          healText.style.fontWeight = 'bold';
+          healText.style.fontSize = '1.1rem';
+          healText.style.textShadow = '0 0 5px rgba(0,0,0,0.8)';
+          healText.style.pointerEvents = 'none';
+          item.el.appendChild(healText);
+        }
+
         updateHUD();
 
         if (remainTargetCount <= 0) {
           isRoundRunning = false;
-          setTimeout(() => {
-            currentRoundIndex++;
-            loadRound(currentRoundIndex);
-          }, 800);
+          const roundClearBar = document.getElementById("round-clear-bar");
+          const btnNextRound = document.getElementById("btn-next-round");
+          if (roundClearBar && btnNextRound) {
+            btnNextRound.textContent = (currentRoundIndex + 1 >= ROUND_DATA.length) ? '최종 결과 보기 🏆' : '다음 라운드 ▶';
+            roundClearBar.style.display = 'flex';
+          }
         }
       } else {
-        // 함정 클릭!
+        if (item.isFailed) return; // 이미 틀린 카드는 재클릭 감점 방지
+        item.isFailed = true;
+
         lives--;
         streak = 0;
         updateHUD();
@@ -694,18 +732,25 @@
           tip: item.data.tip
         });
 
+        // 틀리면 빨강으로 표시되고 화면에 남아있음 (해설 팁 포함)
         item.el.style.borderColor = '#f85149';
-        item.el.style.background = 'rgba(248, 81, 73, 0.4)';
-        showFloatingHit(item.x + item.w / 2, item.y, "❌ 함정!");
-
-        zone.style.boxShadow = 'inset 0 0 50px rgba(248, 81, 73, 0.6)';
-        setTimeout(() => zone.style.boxShadow = 'none', 300);
+        item.el.style.background = 'rgba(248, 81, 73, 0.45)';
+        item.el.style.boxShadow = '0 0 10px rgba(248, 81, 73, 0.6)';
+        item.el.innerHTML = '<span style="color:#f85149; font-weight:800; margin-right:4px;">❌</span>' + item.data.text +
+          (item.data.tip ? '<div style="font-size:0.75rem; color:#ffa657; margin-top:4px; font-weight:normal;">💡 ' + item.data.tip + '</div>' : '');
 
         if (lives <= 0) {
           isRoundRunning = false;
           showFinalResult(false);
         }
       }
+    }
+
+    function proceedNextRound() {
+      const roundClearBar = document.getElementById("round-clear-bar");
+      if (roundClearBar) roundClearBar.style.display = "none";
+      currentRoundIndex++;
+      loadRound(currentRoundIndex);
     }
 
     function showFloatingHit(x, y, text) {

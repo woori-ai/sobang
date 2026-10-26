@@ -62,6 +62,15 @@
       font-weight: 700;
       color: #58a6ff;
     }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.5s ease-in-out;
+    }
     .lives {
       font-size: 1.2rem;
       letter-spacing: 2px;
@@ -368,7 +377,7 @@
         <span>◀ 게임 목록</span>
       </a>
       <div class="score-badge">SCORE: <span id="score-val">0</span></div>
-      <div class="lives" id="lives-val">❤️❤️❤️</div>
+      <div class="lives" id="lives-val">❤️❤️❤️🖤🖤</div>
     </div>
     <div class="hud-center">
       <!-- A/B 모드 즉시 전환 탭 -->
@@ -491,6 +500,7 @@
     ];
 
     let score = 0;
+    const MAX_LIVES = 5;
     let lives = 3;
     let streak = 0;
     let speedMult = 1.3;
@@ -529,9 +539,17 @@
       startGame();
     }
 
+        function triggerHeartHealAnim() {
+      const el = document.getElementById("lives-val");
+      if (!el) return;
+      el.classList.remove("heart-heal-bounce");
+      void el.offsetWidth;
+      el.classList.add("heart-heal-bounce");
+    }
+
     function updateHUD() {
       scoreVal.textContent = score;
-      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) || '💀';
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
       streakVal.textContent = streak > 0 ? `🔥 ${streak} COMBO` : '🔥 0 COMBO';
     }
 
@@ -606,6 +624,10 @@
         // 정답 격추!
         streak++;
         score += 100 + (streak * 10);
+        if (lives < MAX_LIVES) {
+          lives++;
+          triggerHeartHealAnim();
+        }
         createExplosion(targetItem.el);
         targetItem.el.remove();
         activeWords.splice(lowestIdx, 1);
