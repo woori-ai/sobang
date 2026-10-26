@@ -379,8 +379,8 @@
       <label class="speed-control-label" for="speed-slider">
         🛸 유영속도:
       </label>
-      <input type="range" id="speed-slider" class="speed-slider" min="1" max="5" step="1" value="2">
-      <span class="speed-val" id="speed-text">2단계</span>
+      <input type="range" id="speed-slider" class="speed-slider" min="1" max="5" step="1" value="1">
+      <span class="speed-val" id="speed-text">0.5x</span>
     </div>
   </header>
 
@@ -509,7 +509,7 @@
     let isGameOver = false;
     let activeBubbles = [];
     let animationFrameId = null;
-    let speedMultiplier = 1.0;
+    let speedMultiplier = 0.5;
 
     const stageEl = document.getElementById("floating-stage");
     const missionTitleEl = document.getElementById("mission-title");
@@ -525,8 +525,8 @@
     // 속도 조절 이벤트
     speedSlider.addEventListener("input", (e) => {
       const level = parseInt(e.target.value, 10);
-      speedText.textContent = level + "단계";
-      speedMultiplier = 0.5 + level * 0.35;
+      speedText.textContent = (0.2 + level * 0.3).toFixed(1) + "x";
+      speedMultiplier = 0.2 + level * 0.3;
     });
 
     function recordWrong(trap) {

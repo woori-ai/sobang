@@ -380,9 +380,11 @@
         <a href="./game7-b.html" class="type-btn active-b">🛸 B 플로팅형</a>
       </div>
       <span class="speed-tag" style="margin-left:6px;">속도:</span>
-      <button class="speed-btn" data-speed="0.8" onclick="setSpeed(0.8, this)">0.8x</button>
-      <button class="speed-btn active" data-speed="1.2" onclick="setSpeed(1.2, this)">1.2x</button>
-      <button class="speed-btn" data-speed="1.6" onclick="setSpeed(1.6, this)">1.6x</button>
+      <button class="speed-btn" onclick="setSpeed(0.3, this)">0.3x</button>
+      <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
+      <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
+      <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
     </div>
     <div class="hud-right">
       <span class="round-tag" id="round-val">ROUND 1/4</span>
@@ -530,7 +532,7 @@
     const MAX_LIVES = 5;
     let lives = 3;
     let streak = 0;
-    let speedMult = 1.2;
+    let speedMult = 0.5;
     let remainTargetCount = 0;
     let items = [];
     let isRoundRunning = false;
