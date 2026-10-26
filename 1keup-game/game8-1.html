@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>[제 8-1탄 A] 위험물 안전관리 요격전</title>
+  <title>[제 8-1탄 A] 위험물 & 연료가스 요격전</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     body {
@@ -75,9 +75,9 @@
     .deck-btn .btn-title { display: block; font-size: 0.82rem; font-weight: 800; color: #ffffff; }
     .deck-btn .btn-sub { display: block; font-size: 0.68rem; color: #8b949e; margin-top: 2px; }
 
-    .btn-cat-1 { border-color: #f87171; } .btn-cat-1 .btn-badge { color: #f87171; }
-    .btn-cat-2 { border-color: #fb923c; } .btn-cat-2 .btn-badge { color: #fb923c; }
-    .btn-cat-3 { border-color: #e3b341; } .btn-cat-3 .btn-badge { color: #e3b341; }
+    .btn-cat-1 { border-color: #e3b341; } .btn-cat-1 .btn-badge { color: #e3b341; }
+    .btn-cat-2 { border-color: #f87171; } .btn-cat-2 .btn-badge { color: #f87171; }
+    .btn-cat-3 { border-color: #fb923c; } .btn-cat-3 .btn-badge { color: #fb923c; }
     .btn-cat-4 { border-color: #a371f7; } .btn-cat-4 .btn-badge { color: #a371f7; }
     .btn-cat-5 { border-color: #38bdf8; } .btn-cat-5 .btn-badge { color: #38bdf8; }
 
@@ -132,30 +132,30 @@
   </main>
 
   <footer class="control-deck">
-    <button class="deck-btn btn-cat-1" onclick="fireShot('산화성')">
+    <button class="deck-btn btn-cat-1" onclick="fireShot('4류지정')">
+      <span class="btn-badge">제4류 품명</span>
+      <span class="btn-title">4류 지정수량</span>
+      <span class="btn-sub">특수50/1석200·400</span>
+    </button>
+    <button class="deck-btn btn-cat-2" onclick="fireShot('산화성')">
       <span class="btn-badge">1류·6류</span>
       <span class="btn-title">산화성 물질</span>
       <span class="btn-sub">산소방출/자체불연</span>
     </button>
-    <button class="deck-btn btn-cat-2" onclick="fireShot('가연금수')">
+    <button class="deck-btn btn-cat-3" onclick="fireShot('가연금수')">
       <span class="btn-badge">2류·3류</span>
       <span class="btn-title">가연·금수성</span>
       <span class="btn-sub">저온착화/물접촉금지</span>
     </button>
-    <button class="deck-btn btn-cat-3" onclick="fireShot('인화액체')">
-      <span class="btn-badge">제4류</span>
-      <span class="btn-title">인화성 액체</span>
-      <span class="btn-sub">물보다 가볍/증기무겁</span>
-    </button>
     <button class="deck-btn btn-cat-4" onclick="fireShot('자기반응')">
       <span class="btn-badge">제5류</span>
       <span class="btn-title">자기반응성</span>
-      <span class="btn-sub">자체산소함유/폭발</span>
+      <span class="btn-sub">자체산소/대량주수</span>
     </button>
-    <button class="deck-btn btn-cat-5" onclick="fireShot('법정기준')">
-      <span class="btn-badge">법령·점검</span>
-      <span class="btn-title">법령·정기점검</span>
-      <span class="btn-sub">1500벌금/제조소10배</span>
+    <button class="deck-btn btn-cat-5" onclick="fireShot('연료가스')">
+      <span class="btn-badge">LPG·LNG</span>
+      <span class="btn-title">연료가스·경보기</span>
+      <span class="btn-sub">프로판·부탄/메탄/비중</span>
     </button>
   </footer>
 
@@ -163,13 +163,13 @@
   <div class="overlay-modal" id="start-modal">
     <div class="modal-box">
       <div style="font-size:2.8rem; margin-bottom:8px;">🛢️</div>
-      <h2 class="modal-title">[제 8-1탄 A] 위험물 안전관리 요격전</h2>
+      <h2 class="modal-title">[제 8-1탄 A] 위험물 & 연료가스 요격전</h2>
       <p class="modal-desc">
-        하늘에서 떨어지는 위험물 품명, 성질, 법정 기준을 보고<br>
-        하단의 <b>5대 분류 버튼</b>을 정확히 눌러 요격하세요!<br><br>
-        • 산화성(1·6류) vs 가연·금수성(2·3류)<br>
-        • 인화성액체(4류) vs 자기반응성(5류)<br>
-        • 위험물 중요기준 벌칙 및 정기점검 대상 배수
+        하늘에서 떨어지는 위험물 지정수량·성질, 연료가스 특성을 보고<br>
+        하단의 <b>5대 카테고리 버튼</b>을 눌러 정확히 요격하세요!<br><br>
+        • 제4류 지정수량 (특수50L, 1석200/400L, 알400L 등)<br>
+        • 산화성(1·6류), 가연·금수성(2·3류), 자기반응성(5류)<br>
+        • 연료가스(LPG 프로판·부탄 vs LNG 메탄) & 경보기 위치
       </p>
       <div class="modal-dual-actions">
         <button class="action-btn" onclick="startGame()">🎯 A타입 시작</button>
@@ -195,37 +195,41 @@
 
   <script>
     const TARGETS_DATA = [
-      // 1. 산화성 (1류·6류)
+      // 1. 제4류 지정수량
+      { title: "디에틸에테르 / 이황화탄소", desc: "특수인화물 지정수량 50L", cat: "4류지정" },
+      { title: "휘발유(가솔린) / 톨루엔", desc: "제1석유류 비수용성 200L", cat: "4류지정" },
+      { title: "아세톤 (제1석유류)", desc: "제1석유류 수용성 400L", cat: "4류지정" },
+      { title: "메탄올 / 에탄올", desc: "알코올류 지정수량 400L", cat: "4류지정" },
+      { title: "등유 / 경유 (제2석유류)", desc: "제2석유류 비수용성 1,000L", cat: "4류지정" },
+      { title: "중유 (제3석유류)", desc: "제3석유류 비수용성 2,000L", cat: "4류지정" },
+      { title: "기계유 / 실린더유", desc: "제4석유류 지정수량 6,000L", cat: "4류지정" },
+      { title: "동식물유류", desc: "인화점 250℃ 미만 (10,000L)", cat: "4류지정" },
+
+      // 2. 산화성 (1류·6류)
       { title: "염소산염류 / 과염소산염류", desc: "제1류 산화성 고체 (산소 방출)", cat: "산화성" },
-      { title: "무기과산화물", desc: "제1류 위험물 (물 접촉 시 산소 방출)", cat: "산화성" },
+      { title: "무기과산화물", desc: "제1류 위험물 (물 접촉 시 산소 방출, 마른모래)", cat: "산화성" },
       { title: "과산화수소 / 질산", desc: "제6류 산화성 액체 (강산 조연성)", cat: "산화성" },
       { title: "과염소산", desc: "제6류 위험물 (불연성이며 산소 방출)", cat: "산화성" },
 
-      // 2. 가연·금수성 (2류·3류)
+      // 3. 가연·금수성 (2류·3류)
       { title: "황화린 / 적린 / 유황", desc: "제2류 가연성 고체 (저온 착화)", cat: "가연금수" },
-      { title: "철분 / 금속분 / 마그네슘", desc: "제2류 위험물 (물 접촉 시 수소 발생)", cat: "가연금수" },
-      { title: "칼륨(K) / 나트륨(Na)", desc: "제3류 금수성 물질 (물 접촉 절대금지)", cat: "가연금수" },
-      { title: "알킬알루미늄 / 황린", desc: "제3류 자연발화성 및 금수성", cat: "가연금수" },
-
-      // 3. 인화성 액체 (제4류)
-      { title: "디에틸에테르 / 이황화탄소", desc: "제4류 특수인화물 (지정수량 50L)", cat: "인화액체" },
-      { title: "휘발유(가솔린) / 아세톤", desc: "제4류 제1석유류 (인화점 21℃ 미만)", cat: "인화액체" },
-      { title: "등유 / 경유", desc: "제4류 제2석유류 (인화점 21~70℃)", cat: "인화액체" },
-      { title: "중유 / 클레오소트유", desc: "제4류 제3석유류 (인화점 70~200℃)", cat: "인화액체" },
-      { title: "기계유 / 실린더유", desc: "제4류 제4석유류 (인화점 200~250℃)", cat: "인화액체" },
+      { title: "철분 / 금속분 / 마그네슘", desc: "제2류 위험물 (물 주수 절대금지, 마른모래)", cat: "가연금수" },
+      { title: "칼륨(K) / 나트륨(Na)", desc: "제3류 금수성 물질 (물 접촉 시 수소 발생)", cat: "가연금수" },
+      { title: "알킬알루미늄 / 황린", desc: "제3류 자연발화성 및 금수성 (마른모래)", cat: "가연금수" },
 
       // 4. 자기반응성 물질 (제5류)
       { title: "유기과산화물 / 질산에스테르류", desc: "제5류 위험물 (가연물+산소 자체 함유)", cat: "자기반응" },
-      { title: "니트로글리세린 / TNT", desc: "제5류 폭발성 물질 (가열·마찰 위험)", cat: "자기반응" },
-      { title: "셀룰로이드 / 니트로화합물", desc: "제5류 자기반응성 (연소속도 극히 빠름)", cat: "자기반응" },
+      { title: "니트로글리세린 / TNT", desc: "제5류 폭발성 물질 (대량의 물 주수 냉각)", cat: "자기반응" },
+      { title: "셀룰로이드 / 니트로화합물", desc: "제5류 자기반응성 (질식소화 효과 없음)", cat: "자기반응" },
 
-      // 5. 법령·정기점검 기준
-      { title: "중요기준 위반 벌칙", desc: "화재 직결 위험물 저장·취급 (1,500만원 벌금)", cat: "법정기준" },
-      { title: "제조소 정기점검 대상", desc: "지정수량 10배 이상 제조소", cat: "법정기준" },
-      { title: "옥내저장소 정기점검", desc: "지정수량 150배 이상 옥내저장소", cat: "법정기준" },
-      { title: "옥외저장소 정기점검", desc: "지정수량 100배 이상 옥외저장소", cat: "법정기준" },
-      { title: "옥외탱크저장소 정기점검", desc: "지정수량 200배 이상 옥외탱크", cat: "법정기준" },
-      { title: "운반용기 혼재 가능 기준", desc: "지정수량 1/10 초과 (4-2,3,5 / 5-2,4 / 6-1)", cat: "법정기준" }
+      // 5. 연료가스 (LPG vs LNG) & 경보기
+      { title: "LPG 주성분", desc: "프로판(C3H8), 부탄(C4H10)", cat: "연료가스" },
+      { title: "LPG 비중 1.5 ~ 2", desc: "공기보다 무거워 누출 시 바닥 체류", cat: "연료가스" },
+      { title: "LPG 폭발범위", desc: "프로판(2.1~9.5%), 부탄(1.8~8.4%)", cat: "연료가스" },
+      { title: "LNG 주성분 (도시가스)", desc: "메탄(CH4, 폭발범위 5~15%)", cat: "연료가스" },
+      { title: "LNG 비중 약 0.6", desc: "공기보다 가벼워 누출 시 천장 체류", cat: "연료가스" },
+      { title: "LPG 경보기 설치 위치", desc: "바닥면 상방 30cm 이내, 수평 4m 이내", cat: "연료가스" },
+      { title: "LNG 경보기 설치 위치", desc: "천장면 하방 30cm 이내, 수평 8m 이내", cat: "연료가스" }
     ];
 
     let score = 0;
@@ -313,7 +317,6 @@
         t.el.style.top = `${t.y}px`;
 
         if (t.y >= dangerY) {
-          // 경계선 돌파 실패
           lives--;
           streak = 0;
           updateHUD();
@@ -334,7 +337,6 @@
     function fireShot(selectedCat) {
       if (!isGameRunning || activeTargets.length === 0) return;
 
-      // 가장 아래에 있는 타겟 찾기
       let lowestIdx = 0;
       let maxY = -999;
       for (let i = 0; i < activeTargets.length; i++) {
@@ -347,7 +349,6 @@
       const target = activeTargets[lowestIdx];
 
       if (target.data.cat === selectedCat) {
-        // 정답 요격!
         streak++;
         score += 100 + (streak * 10);
         updateHUD();
@@ -357,7 +358,6 @@
         setTimeout(() => target.el.remove(), 120);
         activeTargets.splice(lowestIdx, 1);
       } else {
-        // 오답 발사!
         lives--;
         streak = 0;
         updateHUD();
@@ -375,7 +375,7 @@
       isGameRunning = false;
       clearInterval(spawnTimer);
       cancelAnimationFrame(animFrame);
-      document.getElementById('gameover-desc').innerHTML = `최종 점수: <strong>${score}점</strong><br>위험물 성질과 지정수량·법정기준을 다시 점검하세요!`;
+      document.getElementById('gameover-desc').innerHTML = `최종 점수: <strong>${score}점</strong><br>제4류 지정수량과 연료가스 특성을 다시 점검하세요!`;
       document.getElementById('gameover-modal').style.display = 'flex';
     }
   </script>
