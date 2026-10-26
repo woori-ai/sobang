@@ -640,36 +640,66 @@
     // ----------------------------------------------------
     let lastTime = performance.now();
 
+        function clampAllItemsInsideZone() {
+      if (!stageEl) return;
+      const rect = stageEl.getBoundingClientRect();
+      const stageW = rect.width;
+      const stageH = rect.height;
+      const MARGIN = 15;
+      if (!stageW || !stageH) return;
+
+      activeBubbles.forEach(b => {
+        const w = b.el.offsetWidth || b.w || 150;
+        const h = b.el.offsetHeight || b.h || 44;
+        b.w = w;
+        b.h = h;
+
+        if (b.x + w > stageW - MARGIN) b.x = Math.max(MARGIN, stageW - w - MARGIN);
+        if (b.x < MARGIN) b.x = MARGIN;
+
+        if (b.y + h > stageH - MARGIN) b.y = Math.max(MARGIN, stageH - h - MARGIN);
+        if (b.y < MARGIN) b.y = MARGIN;
+
+        b.el.style.left = `${b.x}px`;
+        b.el.style.top = `${b.y}px`;
+      });
+    }
+
+    window.addEventListener('resize', clampAllItemsInsideZone);
+
     function gameLoop(now = performance.now()) {
       if (isGameOver) return;
 
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
-      const stageW = stageEl.clientWidth;
-      const stageH = stageEl.clientHeight;
+      const rect = stageEl.getBoundingClientRect();
+      const stageW = rect.width;
+      const stageH = rect.height;
+      const MARGIN = 15;
 
       activeBubbles.forEach(b => {
-        if (b.isCollected) return;
-
         b.x += b.vx * dt * speedMultiplier;
         b.y += b.vy * dt * speedMultiplier;
 
-        // 좌우 벽 충돌
-        if (b.x <= 5) {
-          b.x = 5;
+        const w = b.el.offsetWidth || b.w || 150;
+        const h = b.el.offsetHeight || b.h || 44;
+        b.w = w;
+        b.h = h;
+
+        if (b.x <= MARGIN) {
+          b.x = MARGIN;
           b.vx = Math.abs(b.vx);
-        } else if (b.x + b.w >= stageW - 5) {
-          b.x = stageW - b.w - 5;
+        } else if (b.x + w >= stageW - MARGIN) {
+          b.x = Math.max(MARGIN, stageW - w - MARGIN);
           b.vx = -Math.abs(b.vx);
         }
 
-        // 상하 벽 충돌
-        if (b.y <= 5) {
-          b.y = 5;
+        if (b.y <= MARGIN) {
+          b.y = MARGIN;
           b.vy = Math.abs(b.vy);
-        } else if (b.y + b.h >= stageH - 5) {
-          b.y = stageH - b.h - 5;
+        } else if (b.y + h >= stageH - MARGIN) {
+          b.y = Math.max(MARGIN, stageH - h - MARGIN);
           b.vy = -Math.abs(b.vy);
         }
 
@@ -755,6 +785,8 @@
     // 라운드 클리어 (유영 정지 & 수동 진행 지원)
     function onRoundClear() {
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      clampAllItemsInsideZone();
+      setTimeout(clampAllItemsInsideZone, 60);
 
       const roundClearBar = document.getElementById("round-clear-bar");
       const btnNextRound = document.getElementById("btn-next-round");

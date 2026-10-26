@@ -720,37 +720,70 @@
     // 물리 엔진 루프 (벽 충돌 튕기기)
     // ----------------------------------------------------
     let lastTime = 0;
+        function clampAllItemsInsideZone() {
+      const field = document.getElementById("game-field");
+      if (!field) return;
+      const rect = field.getBoundingClientRect();
+      const fWidth = rect.width;
+      const fHeight = rect.height;
+      const MARGIN = 15;
+      if (!fWidth || !fHeight) return;
+
+      floatingItems.forEach(item => {
+        const w = item.element.offsetWidth || item.width || 150;
+        const h = item.element.offsetHeight || item.height || 44;
+        item.width = w;
+        item.height = h;
+
+        if (item.x + w > fWidth - MARGIN) item.x = Math.max(MARGIN, fWidth - w - MARGIN);
+        if (item.x < MARGIN) item.x = MARGIN;
+
+        if (item.y + h > fHeight - MARGIN) item.y = Math.max(MARGIN, fHeight - h - MARGIN);
+        if (item.y < MARGIN) item.y = MARGIN;
+
+        item.element.style.left = item.x + "px";
+        item.element.style.top = item.y + "px";
+      });
+    }
+
+    window.addEventListener('resize', clampAllItemsInsideZone);
+
     function physicsLoop(time) {
       if (isGameOver) return;
       const dt = Math.min((time - lastTime) / 1000, 0.1);
       lastTime = time;
 
       const field = document.getElementById("game-field");
-      const fWidth = field.clientWidth;
-      const fHeight = field.clientHeight;
+      if (!field) return;
+      const rect = field.getBoundingClientRect();
+      const fWidth = rect.width;
+      const fHeight = rect.height;
+      const MARGIN = 15;
 
       floatingItems.forEach(item => {
         if (!item.isAlive) return;
 
-        // 위치 갱신 (속도 * 계수)
         item.x += item.vx * speedMultiplier * dt;
         item.y += item.vy * speedMultiplier * dt;
 
-        // 좌우 벽 충돌
-        if (item.x <= 0) {
-          item.x = 0;
+        const w = item.element.offsetWidth || item.width || 150;
+        const h = item.element.offsetHeight || item.height || 44;
+        item.width = w;
+        item.height = h;
+
+        if (item.x <= MARGIN) {
+          item.x = MARGIN;
           item.vx = Math.abs(item.vx);
-        } else if (item.x + item.width >= fWidth) {
-          item.x = fWidth - item.width;
+        } else if (item.x + w >= fWidth - MARGIN) {
+          item.x = Math.max(MARGIN, fWidth - w - MARGIN);
           item.vx = -Math.abs(item.vx);
         }
 
-        // 상하 벽 충돌
-        if (item.y <= 0) {
-          item.y = 0;
+        if (item.y <= MARGIN) {
+          item.y = MARGIN;
           item.vy = Math.abs(item.vy);
-        } else if (item.y + item.height >= fHeight) {
-          item.y = fHeight - item.height;
+        } else if (item.y + h >= fHeight - MARGIN) {
+          item.y = Math.max(MARGIN, fHeight - h - MARGIN);
           item.vy = -Math.abs(item.vy);
         }
 
@@ -797,6 +830,8 @@
         if (remainingTargetCount <= 0) {
           playSound('clear');
           if (animFrameId) cancelAnimationFrame(animFrameId);
+          clampAllItemsInsideZone();
+          setTimeout(clampAllItemsInsideZone, 60);
           const roundClearBar = document.getElementById("round-clear-bar");
           const btnNextRound = document.getElementById("btn-next-round");
           if (roundClearBar && btnNextRound) {

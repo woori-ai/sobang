@@ -566,22 +566,67 @@
       animFrameId = requestAnimationFrame(updatePhysics);
     }
 
+        function clampAllItemsInsideZone() {
+      const space = document.getElementById("space-zone");
+      if (!space) return;
+      const rect = space.getBoundingClientRect();
+      const zoneW = rect.width;
+      const zoneH = rect.height;
+      const MARGIN = 15;
+      if (!zoneW || !zoneH) return;
+
+      floatingItems.forEach(item => {
+        const w = item.element.offsetWidth || item.w || 150;
+        const h = item.element.offsetHeight || item.h || 44;
+        item.w = w;
+        item.h = h;
+
+        if (item.x + w > zoneW - MARGIN) item.x = Math.max(MARGIN, zoneW - w - MARGIN);
+        if (item.x < MARGIN) item.x = MARGIN;
+
+        if (item.y + h > zoneH - MARGIN) item.y = Math.max(MARGIN, zoneH - h - MARGIN);
+        if (item.y < MARGIN) item.y = MARGIN;
+
+        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+      });
+    }
+
+    window.addEventListener('resize', clampAllItemsInsideZone);
+
     function updatePhysics() {
       if (isGameOver) return;
       const space = document.getElementById("space-zone");
-      const zoneW = space.clientWidth;
-      const zoneH = space.clientHeight;
+      if (!space) return;
+      const rect = space.getBoundingClientRect();
+      const zoneW = rect.width;
+      const zoneH = rect.height;
+      const MARGIN = 15;
 
       floatingItems.forEach(item => {
         if (!item.isAlive) return;
         item.x += item.vx * speedMultiplier;
         item.y += item.vy * speedMultiplier;
 
-        if (item.x <= 4) { item.x = 4; item.vx *= -1; }
-        else if (item.x + item.w >= zoneW - 4) { item.x = zoneW - item.w - 4; item.vx *= -1; }
+        const w = item.element.offsetWidth || item.w || 150;
+        const h = item.element.offsetHeight || item.h || 44;
+        item.w = w;
+        item.h = h;
 
-        if (item.y <= 4) { item.y = 4; item.vy *= -1; }
-        else if (item.y + item.h >= zoneH - 4) { item.y = zoneH - item.h - 4; item.vy *= -1; }
+        if (item.x <= MARGIN) {
+          item.x = MARGIN;
+          item.vx = Math.abs(item.vx);
+        } else if (item.x + w >= zoneW - MARGIN) {
+          item.x = Math.max(MARGIN, zoneW - w - MARGIN);
+          item.vx = -Math.abs(item.vx);
+        }
+
+        if (item.y <= MARGIN) {
+          item.y = MARGIN;
+          item.vy = Math.abs(item.vy);
+        } else if (item.y + h >= zoneH - MARGIN) {
+          item.y = Math.max(MARGIN, zoneH - h - MARGIN);
+          item.vy = -Math.abs(item.vy);
+        }
 
         item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
       });
@@ -615,6 +660,8 @@
 
         if (remainingTargetCount <= 0) {
           if (animFrameId) cancelAnimationFrame(animFrameId);
+          clampAllItemsInsideZone();
+          setTimeout(clampAllItemsInsideZone, 60);
           const roundClearBar = document.getElementById("round-clear-bar");
           const btnNextRound = document.getElementById("btn-next-round");
           if (roundClearBar && btnNextRound) {

@@ -644,21 +644,68 @@
       runPhysics();
     }
 
+        function clampAllItemsInsideZone() {
+      const zoneRect = zone.getBoundingClientRect();
+      const zoneW = zoneRect.width || zone.clientWidth || window.innerWidth;
+      const zoneH = zoneRect.height || zone.clientHeight || (window.innerHeight - 150);
+      const MARGIN = 15;
+      if (!zoneW || !zoneH) return;
+
+      items.forEach(item => {
+        const w = item.el.offsetWidth || item.w || 150;
+        const h = item.el.offsetHeight || item.h || 44;
+        item.w = w;
+        item.h = h;
+
+        if (item.x + w > zoneW - MARGIN) {
+          item.x = Math.max(MARGIN, zoneW - w - MARGIN);
+        }
+        if (item.x < MARGIN) item.x = MARGIN;
+
+        if (item.y + h > zoneH - MARGIN) {
+          item.y = Math.max(MARGIN, zoneH - h - MARGIN);
+        }
+        if (item.y < MARGIN) item.y = MARGIN;
+
+        item.el.style.left = `${item.x}px`;
+        item.el.style.top = `${item.y}px`;
+      });
+    }
+
+    window.addEventListener('resize', clampAllItemsInsideZone);
+
     function runPhysics() {
       if (!isRoundRunning) return;
 
-      const zoneW = zone.clientWidth;
-      const zoneH = zone.clientHeight;
+      const zoneRect = zone.getBoundingClientRect();
+      const zoneW = zoneRect.width || zone.clientWidth || window.innerWidth;
+      const zoneH = zoneRect.height || zone.clientHeight || (window.innerHeight - 150);
+      const MARGIN = 15;
 
       items.forEach(item => {
         item.x += item.vx * speedMult;
         item.y += item.vy * speedMult;
 
-        // 벽 튕기기
-        if (item.x <= 5) { item.x = 5; item.vx *= -1; }
-        if (item.x + item.w >= zoneW - 5) { item.x = zoneW - item.w - 5; item.vx *= -1; }
-        if (item.y <= 5) { item.y = 5; item.vy *= -1; }
-        if (item.y + item.h >= zoneH - 5) { item.y = zoneH - item.h - 5; item.vy *= -1; }
+        const w = item.el.offsetWidth || item.w || 150;
+        const h = item.el.offsetHeight || item.h || 44;
+        item.w = w;
+        item.h = h;
+
+        if (item.x <= MARGIN) {
+          item.x = MARGIN;
+          item.vx = Math.abs(item.vx);
+        } else if (item.x + w >= zoneW - MARGIN) {
+          item.x = Math.max(MARGIN, zoneW - w - MARGIN);
+          item.vx = -Math.abs(item.vx);
+        }
+
+        if (item.y <= MARGIN) {
+          item.y = MARGIN;
+          item.vy = Math.abs(item.vy);
+        } else if (item.y + h >= zoneH - MARGIN) {
+          item.y = Math.max(MARGIN, zoneH - h - MARGIN);
+          item.vy = -Math.abs(item.vy);
+        }
 
         item.el.style.left = `${item.x}px`;
         item.el.style.top = `${item.y}px`;
@@ -710,6 +757,8 @@
 
         if (remainTargetCount <= 0) {
           isRoundRunning = false;
+          clampAllItemsInsideZone();
+          setTimeout(clampAllItemsInsideZone, 60);
           const roundClearBar = document.getElementById("round-clear-bar");
           const btnNextRound = document.getElementById("btn-next-round");
           if (roundClearBar && btnNextRound) {
