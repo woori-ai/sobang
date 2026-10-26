@@ -283,6 +283,12 @@
     </div>
   </section>
 
+  <!-- 라운드 클리어 안내 및 다음 라운드 진행 바 (계속 읽기 지원) -->
+  <div id="round-clear-bar" style="display:none; margin: 8px 16px; padding: 10px 16px; background: rgba(35, 134, 54, 0.25); border: 1px solid #3fb950; border-radius: 8px; text-align: center; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+    <span style="color:#7ee787; font-weight:700; font-size:0.95rem;">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
+    <button id="btn-next-round" onclick="proceedNextRound()" style="padding: 6px 18px; background: #238636; border: 1px solid #3fb950; color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">다음 라운드 ▶</button>
+  </div>
+
   <main class="space-zone" id="space-zone"></main>
 
   <!-- 인트로 모달 -->
@@ -543,18 +549,21 @@
       animFrameId = requestAnimationFrame(updatePhysics);
     }
 
-    function handleBubbleClick(item) {
-      if (!item.isAlive || isGameOver) return;
+        function handleBubbleClick(item) {
+      if (item.isSolved || isGameOver) return;
 
       if (item.data.isTarget) {
         playSound('hit');
         score += 100;
         document.getElementById("score-val").textContent = score;
 
-        item.isAlive = false;
-        item.element.style.transform += " scale(1.3)";
-        item.element.style.opacity = "0";
-        setTimeout(() => item.element.remove(), 200);
+        item.isSolved = true;
+        // 맞으면 초록색으로 표시되고 사라지지 않고 유지됨
+        item.element.style.borderColor = "#3fb950";
+        item.element.style.background = "rgba(63, 185, 80, 0.45)";
+        item.element.style.boxShadow = "0 0 12px rgba(63, 185, 80, 0.6)";
+        item.element.style.cursor = "default";
+        item.element.innerHTML = '<span style="color:#7ee787; font-weight:800; margin-right:4px;">✅</span>' + item.data.text;
 
         if (lives < MAX_LIVES) {
           lives++;
@@ -565,22 +574,24 @@
         updateProgressBar();
 
         if (remainingTargetCount <= 0) {
-          if (currentRoundIndex + 1 < ROUND_DATA.length) {
-            setTimeout(() => loadRound(currentRoundIndex + 1), 600);
-          } else {
-            setTimeout(showGameClear, 600);
+          if (animFrameId) cancelAnimationFrame(animFrameId);
+          const roundClearBar = document.getElementById("round-clear-bar");
+          const btnNextRound = document.getElementById("btn-next-round");
+          if (roundClearBar && btnNextRound) {
+            btnNextRound.textContent = (currentRoundIndex + 1 >= ROUND_DATA.length) ? '최종 결과 보기 🏆' : '다음 라운드 ▶';
+            roundClearBar.style.display = 'flex';
           }
         }
       } else {
+        if (item.isFailed) return;
+        item.isFailed = true;
+
         playSound('wrong');
         item.element.style.borderColor = "#ff4d4f";
-        item.element.style.background = "#3d1d1f";
-        setTimeout(() => {
-          if (item.element && item.isAlive) {
-            item.element.style.borderColor = "#30363d";
-            item.element.style.background = "linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95))";
-          }
-        }, 400);
+        item.element.style.background = "rgba(248, 81, 73, 0.45)";
+        item.element.style.boxShadow = "0 0 10px rgba(248, 81, 73, 0.6)";
+        item.element.innerHTML = '<span style="color:#f85149; font-weight:800; margin-right:4px;">❌</span>' + item.data.text +
+          (item.data.tip ? '<div style="font-size:0.75rem; color:#ffa657; margin-top:4px; font-weight:normal;">💡 ' + item.data.tip + '</div>' : '');
 
         wrongHistory.push({
           roundTitle: ROUND_DATA[currentRoundIndex].title,
@@ -592,6 +603,16 @@
         lives--;
         updateHeartsUI();
         if (lives <= 0) showGameOver();
+      }
+    }
+
+    function proceedNextRound() {
+      const roundClearBar = document.getElementById("round-clear-bar");
+      if (roundClearBar) roundClearBar.style.display = "none";
+      if (currentRoundIndex + 1 < ROUND_DATA.length) {
+        loadRound(currentRoundIndex + 1);
+      } else {
+        showGameClear();
       }
     }
 
