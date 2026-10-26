@@ -23,7 +23,16 @@
     }
     .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
     .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
-    .lives { font-size: 1.2rem; letter-spacing: 2px; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; display: inline-block; transition: transform 0.2s ease; }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.5s ease-in-out;
+    }
     .hud-center {
       display: flex; align-items: center; gap: 6px; background: #161b22;
       padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
@@ -112,7 +121,7 @@
     <div class="hud-left">
       <a href="../games.html" class="btn-exit-game"><span>◀ 게임 목록</span></a>
       <div class="score-badge">SCORE: <span id="score-val">0</span></div>
-      <div class="lives" id="lives-val">❤️❤️❤️</div>
+      <div class="lives" id="lives-val">❤️❤️❤️🖤🖤</div>
     </div>
     <div class="hud-center">
       <div class="type-switcher">
@@ -232,6 +241,7 @@
       { title: "LNG 경보기 설치 위치", desc: "천장면 하방 30cm 이내, 수평 8m 이내", cat: "연료가스" }
     ];
 
+    const MAX_LIVES = 5;
     let score = 0;
     let lives = 3;
     let streak = 0;
@@ -252,9 +262,15 @@
       btn.classList.add('active');
     }
 
+    function triggerHeartHealAnim() {
+      livesVal.classList.remove("heart-heal-bounce");
+      void livesVal.offsetWidth;
+      livesVal.classList.add("heart-heal-bounce");
+    }
+
     function updateHUD() {
       scoreVal.textContent = score;
-      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) || '💀';
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
       streakVal.textContent = streak > 0 ? `🔥 ${streak} COMBO` : '🔥 0 COMBO';
     }
 
@@ -351,11 +367,32 @@
       if (target.data.cat === selectedCat) {
         streak++;
         score += 100 + (streak * 10);
+
+        let healed = false;
+        if (lives < MAX_LIVES) {
+          lives++;
+          healed = true;
+          triggerHeartHealAnim();
+        }
+
         updateHUD();
 
         target.el.style.borderColor = '#3fb950';
         target.el.style.background = 'rgba(63, 185, 80, 0.4)';
-        setTimeout(() => target.el.remove(), 120);
+        if (healed) {
+          const healText = document.createElement('div');
+          healText.textContent = '❤️ +1';
+          healText.style.position = 'absolute';
+          healText.style.top = '-25px';
+          healText.style.right = '10px';
+          healText.style.color = '#7ee787';
+          healText.style.fontWeight = 'bold';
+          healText.style.fontSize = '1.1rem';
+          healText.style.textShadow = '0 0 5px rgba(0,0,0,0.8)';
+          healText.style.pointerEvents = 'none';
+          target.el.appendChild(healText);
+        }
+        setTimeout(() => target.el.remove(), 140);
         activeTargets.splice(lowestIdx, 1);
       } else {
         lives--;

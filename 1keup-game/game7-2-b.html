@@ -58,7 +58,16 @@
       border-radius: 20px;
       border: 1px solid rgba(56, 139, 253, 0.3);
     }
-    .lives { font-size: 1.1rem; letter-spacing: 2px; }
+        @keyframes heartHeal {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.5s ease-in-out;
+    }
+    .lives { display: inline-block; transition: transform 0.2s ease;  font-size: 1.1rem; letter-spacing: 2px; }
 
     .hud-center {
       display: flex;
@@ -249,7 +258,7 @@
     <div class="hud-left">
       <a href="../games.html" class="btn-exit-game">← 허브로</a>
       <div class="score-badge">SCORE <span id="score-val">0</span></div>
-      <div class="lives" id="lives-display">❤️❤️❤️</div>
+      <div class="lives" id="lives-display">❤️❤️❤️🖤🖤</div>
     </div>
     <div class="hud-center">
       <div style="display:flex;gap:4px;background:#161b22;padding:3px;border-radius:8px;border:1px solid #30363d;">
@@ -384,6 +393,7 @@
 
     let currentRoundIndex = 0;
     let score = 0;
+    const MAX_LIVES = 5;
     let lives = 3;
     let speedMultiplier = 1.0;
     let wrongHistory = [];
@@ -426,8 +436,16 @@
       btn.classList.add("active");
     }
 
+        function triggerHeartHealAnim() {
+      const el = document.getElementById("lives-display");
+      if (!el) return;
+      el.classList.remove("heart-heal-bounce");
+      void el.offsetWidth;
+      el.classList.add("heart-heal-bounce");
+    }
+
     function updateHeartsUI() {
-      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives));
+      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, MAX_LIVES - lives));
     }
 
     function updateProgressBar() {
@@ -540,6 +558,11 @@
         item.element.style.opacity = "0";
         setTimeout(() => item.element.remove(), 200);
 
+        if (lives < MAX_LIVES) {
+          lives++;
+          updateHeartsUI();
+          triggerHeartHealAnim();
+        }
         remainingTargetCount--;
         updateProgressBar();
 
