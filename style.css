@@ -190,7 +190,7 @@ body {
    =================================================== */
 .nav-tabs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 6px;
   margin-bottom: 12px;
 }
@@ -199,12 +199,13 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 10px 3px;
+  padding: 8px 2px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
+  min-width: 0;
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s;
@@ -240,12 +241,15 @@ body {
 }
 
 .tab-icon {
-  font-size: 18px;
+  font-size: 16px;
+  line-height: 1;
 }
 
 .tab-name {
-  font-size: 0.8rem;
+  font-size: 0.74rem;
   font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: -0.3px;
 }
 
 .tab-badge {
@@ -1175,21 +1179,23 @@ body {
     font-size: 1.1rem;
   }
   .nav-tabs {
-    grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
   }
   .nav-tab {
-    padding: 8px 2px;
+    padding: 6px 1px;
+    gap: 2px;
   }
   .tab-icon {
     font-size: 16px;
   }
   .tab-name {
-    font-size: 0.72rem;
+    font-size: 0.65rem;
+    letter-spacing: -0.5px;
   }
   .tab-badge {
-    font-size: 0.65rem;
-    padding: 1px 5px;
+    font-size: 0.60rem;
+    padding: 1px 3px;
   }
   .quiz-box-card {
     padding: 10px 12px;
