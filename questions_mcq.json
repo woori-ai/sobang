@@ -2369,7 +2369,7 @@
     "date": "10월 14일",
     "subject": "소화기구",
     "difficulty": "실기응용",
-    "image": "images/q_gauge_state.png",
+    "image": "pic-mun/q_gauge_state.png",
     "question": "[실전 그림 문제] 다음 중 축압식 분말소화기 지시압력계의 정상 상태로 옳은 것은?",
     "options": [
       "①번 사진 (압력 미달 / 좌측 황색 지시)",
@@ -2390,7 +2390,7 @@
     "date": "10월 14일",
     "subject": "소화기구",
     "difficulty": "기본빈출",
-    "image": "images/q_gauge_explain.png",
+    "image": "pic-mun/q_gauge_explain.png",
     "question": "[실전 그림 문제] 다음 그림의 축압식 분말소화기 지시압력계에 대한 설명으로 옳은 것은?",
     "options": [
       "① 압력이 부족한 상태이다",
@@ -2411,7 +2411,7 @@
     "date": "10월 14일",
     "subject": "소화기구",
     "difficulty": "실기응용",
-    "image": "images/q_extinguisher_check.png",
+    "image": "pic-mun/q_extinguisher_check.png",
     "question": "[실전 그림 문제] 다음 그림의 소화기를 점검하고 있다. 설명으로 옳지 않은 것은?",
     "options": [
       "① 축압식 분말소화기를 점검하고 있다",
@@ -2432,7 +2432,7 @@
     "date": "10월 14일",
     "subject": "소화기구",
     "difficulty": "기본빈출",
-    "image": "images/q_dialog_extinguisher.png",
+    "image": "pic-mun/q_dialog_extinguisher.png",
     "question": "[실전 그림 문제] 다음 그림의 소화기 설명으로 옳은 대화를 한 사람은?",
     "options": [
       "① 철수 : 고무공장에서 발생하는 화재에 적응성을 갖기 위해서 제1인산암모늄을 주성분으로 하는 분말소화기를 새로 비치해야 겠어",
@@ -2453,7 +2453,7 @@
     "date": "10월 14일",
     "subject": "소화기구",
     "difficulty": "실기응용",
-    "image": "images/q_floor_plan_placement.png",
+    "image": "pic-mun/q_floor_plan_placement.png",
     "question": "[실전 그림 문제] 소화기를 아래 평면도와 같이 배치했을 경우, 보기의 설명으로 옳지 않은 것은?",
     "options": [
       "① 전산실 : 소화기의 내용연수가 초과하여 소화기를 교체해야 한다",
@@ -2474,7 +2474,7 @@
     "date": "10월 14일",
     "subject": "경보설비",
     "difficulty": "실기응용",
-    "image": "images/q_detector_count.png",
+    "image": "pic-mun/q_detector_count.png",
     "question": "[실전 계산 문제] 천장 높이가 4m이고, 주요구조부가 내화구조이며 바닥면적이 200㎡인 거실에 '차동식 스포트형 감지기 2종'을 설치할 때 최소 설치 개수는?",
     "options": [
       "① 3개",
