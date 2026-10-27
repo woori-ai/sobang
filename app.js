@@ -21,6 +21,7 @@
       difficulty: 'all',
       bookmarkOnly: false,
       incorrectOnly: false,
+      unsolvedOnly: false,
       alwaysShowExplanation: false
     },
     userStore: {
@@ -58,6 +59,7 @@
     diffFilter: document.getElementById('diff-filter'),
     filterBookmarkBtn: document.getElementById('filter-bookmark-btn'),
     filterIncorrectBtn: document.getElementById('filter-incorrect-btn'),
+    filterUnsolvedBtn: document.getElementById('filter-unsolved-btn'),
     alwaysShowExp: document.getElementById('always-show-explanation'),
 
     // 메인 카드
@@ -224,6 +226,12 @@
         if (!ansInfo || ansInfo.isCorrect !== false) return false;
       }
 
+      // 안 푼 문제 필터 (풀이 이력이 없는 문제만 표시)
+      if (state.filters.unsolvedOnly) {
+        const ansInfo = tabAnswers[itemId];
+        if (ansInfo) return false;
+      }
+
       return true;
     });
 
@@ -246,6 +254,15 @@
       dom.emptyState.style.display = 'block';
       dom.currentIndexDisplay.textContent = '0';
       dom.totalFilterDisplay.textContent = '0';
+      const emptyH3 = dom.emptyState.querySelector('h3');
+      const emptyDesc = document.getElementById('empty-desc');
+      if (state.filters.unsolvedOnly) {
+        if (emptyH3) emptyH3.textContent = '축하합니다! 모든 문제를 다 풀었습니다! 🎉';
+        if (emptyDesc) emptyDesc.textContent = '현재 탭의 모든 문제를 완료했습니다. 필터를 초기화하여 복습해 보세요.';
+      } else {
+        if (emptyH3) emptyH3.textContent = '해당 조건의 문제가 없습니다.';
+        if (emptyDesc) emptyDesc.textContent = '필터를 변경하거나 전체 문제를 선택해 보세요.';
+      }
       return;
     }
 
@@ -586,7 +603,21 @@
 
     dom.filterIncorrectBtn.addEventListener('click', () => {
       state.filters.incorrectOnly = !state.filters.incorrectOnly;
+      if (state.filters.incorrectOnly && state.filters.unsolvedOnly) {
+        state.filters.unsolvedOnly = false;
+        dom.filterUnsolvedBtn.classList.remove('active');
+      }
       dom.filterIncorrectBtn.classList.toggle('active', state.filters.incorrectOnly);
+      applyFilters();
+    });
+
+    dom.filterUnsolvedBtn.addEventListener('click', () => {
+      state.filters.unsolvedOnly = !state.filters.unsolvedOnly;
+      if (state.filters.unsolvedOnly && state.filters.incorrectOnly) {
+        state.filters.incorrectOnly = false;
+        dom.filterIncorrectBtn.classList.remove('active');
+      }
+      dom.filterUnsolvedBtn.classList.toggle('active', state.filters.unsolvedOnly);
       applyFilters();
     });
 
@@ -600,10 +631,12 @@
       state.filters.difficulty = 'all';
       state.filters.bookmarkOnly = false;
       state.filters.incorrectOnly = false;
+      state.filters.unsolvedOnly = false;
       dom.chapterFilter.value = 'all';
       dom.diffFilter.value = 'all';
       dom.filterBookmarkBtn.classList.remove('active');
       dom.filterIncorrectBtn.classList.remove('active');
+      dom.filterUnsolvedBtn.classList.remove('active');
       applyFilters();
     });
 
