@@ -77,6 +77,7 @@
     qNumber: document.getElementById('q-number'),
     qText: document.getElementById('q-text'),
     quizBoxCard: document.getElementById('quiz-box-card'),
+    qImage: document.getElementById('q-image'),
     optionsContainer: document.getElementById('options-container'),
 
     // 플래시카드 (75선)
@@ -287,6 +288,17 @@
     // 문제 텍스트
     dom.qNumber.textContent = `Q${state.currentIndex + 1}.`;
     dom.qText.textContent = item.question || item.statement || item.title || '';
+
+    // 그림·도면 문제 이미지
+    if (dom.qImage) {
+      if (item.image) {
+        dom.qImage.src = item.image;
+        dom.qImage.style.display = 'block';
+      } else {
+        dom.qImage.removeAttribute('src');
+        dom.qImage.style.display = 'none';
+      }
+    }
 
     // 보기(가, 나, 다) 박스 렌더링
     if (dom.quizBoxCard) {
