@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 *.bak
 *.pdf
+!1keub-pdf/*.pdf
 day*.py
 add_*.py
 debug_*.py
