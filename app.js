@@ -12,7 +12,8 @@
       mcq: [],
       box: [],
       cards: [],
-      calc: []
+      calc: [],
+      pic: []
     },
     filteredList: [],
     currentIndex: 0,
@@ -22,6 +23,7 @@
       bookmarkOnly: false,
       incorrectOnly: false,
       unsolvedOnly: false,
+      imageOnly: false,
       alwaysShowExplanation: false
     },
     userStore: {
@@ -53,6 +55,7 @@
     badgeBox: document.getElementById('badge-box'),
     badgeCards: document.getElementById('badge-cards'),
     badgeCalc: document.getElementById('badge-calc'),
+    badgePic: document.getElementById('badge-pic'),
 
     // 필터
     chapterFilter: document.getElementById('chapter-filter'),
@@ -60,6 +63,7 @@
     filterBookmarkBtn: document.getElementById('filter-bookmark-btn'),
     filterIncorrectBtn: document.getElementById('filter-incorrect-btn'),
     filterUnsolvedBtn: document.getElementById('filter-unsolved-btn'),
+    filterImageBtn: document.getElementById('filter-image-btn'),
     alwaysShowExp: document.getElementById('always-show-explanation'),
 
     // 메인 카드
@@ -77,7 +81,12 @@
     qNumber: document.getElementById('q-number'),
     qText: document.getElementById('q-text'),
     quizBoxCard: document.getElementById('quiz-box-card'),
-    qImage: document.getElementById('q-image'),
+    quizImageBox: document.getElementById('quiz-image-box'),
+    quizImage: document.getElementById('quiz-image'),
+    imageModal: document.getElementById('image-modal'),
+    imageModalImg: document.getElementById('image-modal-img'),
+    imageModalClose: document.getElementById('image-modal-close'),
+    imageModalOverlay: document.getElementById('image-modal-overlay'),
     optionsContainer: document.getElementById('options-container'),
 
     // 플래시카드 (75선)
@@ -157,6 +166,8 @@
       if (dom.badgeBox) dom.badgeBox.textContent = state.data.box.length;
       dom.badgeCards.textContent = state.data.cards.length;
       dom.badgeCalc.textContent = state.data.calc.length;
+      state.data.pic = state.data.mcq.filter(q => q.image);
+      if (dom.badgePic) dom.badgePic.textContent = state.data.pic.length;
 
       dom.loadingSpinner.style.display = 'none';
 
@@ -199,11 +210,15 @@
     const tab = state.activeTab;
     const rawList = state.data[tab] || [];
 
-    const tabAnswers = (state.userStore.answers && state.userStore.answers[tab]) || {};
-    const tabBookmarks = (state.userStore.bookmarks && state.userStore.bookmarks[tab]) || {};
+    const targetTab = (tab === 'pic') ? 'mcq' : tab;
+    const tabAnswers = (state.userStore.answers && state.userStore.answers[targetTab]) || {};
+    const tabBookmarks = (state.userStore.bookmarks && state.userStore.bookmarks[targetTab]) || {};
 
     state.filteredList = rawList.filter(item => {
       const itemId = getItemId(item);
+
+      // 그림 문제 전용 또는 그림문제 필터
+      if ((tab === 'pic' || state.filters.imageOnly) && !item.image) return false;
 
       // 과목/단원 필터
       if (state.filters.chapter !== 'all') {
@@ -281,7 +296,8 @@
     dom.cardPage.style.display = (item.page_ref || item.book) ? 'inline-block' : 'none';
 
     // 북마크 상태
-    const isBookmarked = !!(state.userStore.bookmarks[tab] && state.userStore.bookmarks[tab][itemId]);
+    const targetTab = (tab === 'pic') ? 'mcq' : tab;
+    const isBookmarked = !!(state.userStore.bookmarks[targetTab] && state.userStore.bookmarks[targetTab][itemId]);
     dom.bookmarkToggle.classList.toggle('bookmarked', isBookmarked);
     dom.bookmarkIcon.textContent = isBookmarked ? '★' : '☆';
 
@@ -290,13 +306,14 @@
     dom.qText.textContent = item.question || item.statement || item.title || '';
 
     // 그림·도면 문제 이미지
-    if (dom.qImage) {
+    if (dom.quizImageBox && dom.quizImage) {
       if (item.image) {
-        dom.qImage.src = item.image;
-        dom.qImage.style.display = 'block';
+        dom.quizImageBox.style.display = 'block';
+        dom.quizImage.src = item.image;
+        dom.quizImage.alt = item.question || '문제 관련 그림';
       } else {
-        dom.qImage.removeAttribute('src');
-        dom.qImage.style.display = 'none';
+        dom.quizImageBox.style.display = 'none';
+        dom.quizImage.src = '';
       }
     }
 
@@ -328,7 +345,7 @@
     }
 
     // 기존 풀이 기록 확인
-    const history = state.userStore.answers[tab] && state.userStore.answers[tab][itemId];
+    const history = state.userStore.answers[targetTab] && state.userStore.answers[targetTab][itemId];
 
     // 탭별 뷰 분기
     if (tab === 'cards') {
@@ -402,14 +419,15 @@
   // 8. 정답 제출 처리 로직
   function handleAnswerSubmit(item, selectedValue, correctValue) {
     const tab = state.activeTab;
+    const targetTab = (tab === 'pic') ? 'mcq' : tab;
     const itemId = getItemId(item);
     const isCorrect = (selectedValue === correctValue);
 
-    if (!state.userStore.answers[tab]) {
-      state.userStore.answers[tab] = {};
+    if (!state.userStore.answers[targetTab]) {
+      state.userStore.answers[targetTab] = {};
     }
 
-    state.userStore.answers[tab][itemId] = {
+    state.userStore.answers[targetTab][itemId] = {
       selected: selectedValue,
       isCorrect: isCorrect,
       timestamp: Date.now()
@@ -538,16 +556,17 @@
     const item = state.filteredList[state.currentIndex];
     const itemId = getItemId(item);
     const tab = state.activeTab;
+    const targetTab = (tab === 'pic') ? 'mcq' : tab;
 
-    if (!state.userStore.bookmarks[tab]) {
-      state.userStore.bookmarks[tab] = {};
+    if (!state.userStore.bookmarks[targetTab]) {
+      state.userStore.bookmarks[targetTab] = {};
     }
 
-    const current = !!state.userStore.bookmarks[tab][itemId];
+    const current = !!state.userStore.bookmarks[targetTab][itemId];
     if (current) {
-      delete state.userStore.bookmarks[tab][itemId];
+      delete state.userStore.bookmarks[targetTab][itemId];
     } else {
-      state.userStore.bookmarks[tab][itemId] = true;
+      state.userStore.bookmarks[targetTab][itemId] = true;
     }
 
     saveStorage();
@@ -632,6 +651,14 @@
       dom.filterUnsolvedBtn.classList.toggle('active', state.filters.unsolvedOnly);
       applyFilters();
     });
+    if (dom.filterImageBtn) {
+      dom.filterImageBtn.addEventListener('click', () => {
+        state.filters.imageOnly = !state.filters.imageOnly;
+        dom.filterImageBtn.classList.toggle('active', state.filters.imageOnly);
+        applyFilters();
+      });
+    }
+
 
     dom.alwaysShowExp.addEventListener('change', (e) => {
       state.filters.alwaysShowExplanation = e.target.checked;
@@ -649,8 +676,33 @@
       dom.filterBookmarkBtn.classList.remove('active');
       dom.filterIncorrectBtn.classList.remove('active');
       dom.filterUnsolvedBtn.classList.remove('active');
+      state.filters.imageOnly = false;
+      if (dom.filterImageBtn) dom.filterImageBtn.classList.remove('active');
       applyFilters();
     });
+
+    
+    // 이미지 확대 모달 제어
+    if (dom.quizImageBox && dom.imageModal) {
+      dom.quizImageBox.addEventListener('click', () => {
+        if (dom.quizImage && dom.quizImage.src) {
+          dom.imageModalImg.src = dom.quizImage.src;
+          dom.imageModal.style.display = 'flex';
+        }
+      });
+    }
+
+    if (dom.imageModalClose) {
+      dom.imageModalClose.addEventListener('click', () => {
+        dom.imageModal.style.display = 'none';
+      });
+    }
+
+    if (dom.imageModalOverlay) {
+      dom.imageModalOverlay.addEventListener('click', () => {
+        dom.imageModal.style.display = 'none';
+      });
+    }
 
     // 북마크 클릭
     dom.bookmarkToggle.addEventListener('click', toggleBookmark);

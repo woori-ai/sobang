@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=20261026_v3">
+  <link rel="stylesheet" href="style.css?v=20261027_pic">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚒</text></svg>">
   <script>
     // 모바일 브라우저 구버전 캐시 및 서비스워커 자동 강제 청소
@@ -80,6 +80,11 @@
         <span class="tab-name">계산 37선</span>
         <span class="tab-badge" id="badge-calc">0</span>
       </button>
+      <button class="nav-tab" data-tab="pic">
+        <span class="tab-icon">🖼️</span>
+        <span class="tab-name">그림 문제</span>
+        <span class="tab-badge" id="badge-pic">0</span>
+      </button>
       <a href="./games.html" class="nav-tab nav-tab-link" title="소방 훈련 게임 센터 (게임 목록)">
         <span class="tab-icon">🎮</span>
         <span class="tab-name">소방 게임</span>
@@ -109,6 +114,9 @@
         </button>
         <button id="filter-unsolved-btn" class="toggle-filter-btn" title="아직 풀지 않은 문제만 모아보기">
           📝 안 푼 문제만
+        </button>
+        <button id="filter-image-btn" class="toggle-filter-btn" title="그림/도면/사진이 포함된 문제만 보기">
+          🖼️ 그림문제만
         </button>
         <label class="switch-label" title="문제 풀이 없이 해설을 즉시 확인합니다">
           <input type="checkbox" id="always-show-explanation">
@@ -146,7 +154,10 @@
         </div>
 
         <!-- 그림·도면 문제 이미지 -->
-        <img class="q-image" id="q-image" alt="문제 그림" style="display: none;">
+        <div class="quiz-image-box" id="quiz-image-box" style="display: none;">
+          <img id="quiz-image" src="" alt="문제 관련 그림" loading="lazy">
+          <div class="image-zoom-hint">🔍 클릭 시 원본 고화질 확대</div>
+        </div>
 
         <!-- 보기(가, 나, 다) 박스 영역 -->
         <div class="quiz-box-card" id="quiz-box-card" style="display: none;">
@@ -233,6 +244,16 @@
       </button>
     </footer>
 
+    
+    <!-- 이미지 확대 모달 -->
+    <div id="image-modal" class="image-modal" style="display: none;">
+      <div class="image-modal-overlay" id="image-modal-overlay"></div>
+      <div class="image-modal-content">
+        <button class="image-modal-close" id="image-modal-close">&times;</button>
+        <img id="image-modal-img" src="" alt="확대 이미지">
+      </div>
+    </div>
+
     <!-- 설정/초기화 모달 -->
     <div id="settings-modal" class="modal-overlay" style="display: none;">
       <div class="modal-card">
@@ -260,6 +281,6 @@
 
   </div>
 
-  <script src="app.js?v=20261026_v3"></script>
+  <script src="app.js?v=20261027_pic"></script>
 </body>
 </html>
