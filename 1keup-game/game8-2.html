@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[제 8-2탄 A] 위험물 & 연료가스 요격전</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; display: inline-block; transition: transform 0.2s ease; }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.5s ease-in-out;
+    }
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-a { background: #238636; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .streak-badge { font-size: 0.82rem; font-weight: 800; color: #e3b341; min-width: 75px; text-align: right; }
+
+    #game-zone {
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
+      overflow: hidden;
+    }
+    .danger-line {
+      position: absolute; bottom: 8px; left: 0; width: 100%; height: 2px;
+      background: repeating-linear-gradient(90deg, #f85149, #f85149 10px, transparent 10px, transparent 20px);
+      opacity: 0.7; z-index: 10;
+    }
+    .falling-target {
+      position: absolute; width: 180px; padding: 10px;
+      background: #21262d; border: 2px solid #58a6ff; border-radius: 10px;
+      text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 20;
+    }
+    .falling-target .target-title { font-size: 0.95rem; font-weight: 800; color: #ffffff; margin-bottom: 2px; }
+    .falling-target .target-desc { font-size: 0.75rem; color: #8b949e; }
+
+    footer.control-deck {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+      padding: 8px 12px 14px; background: #161b22; border-top: 1px solid #30363d; z-index: 50;
+    }
+    .deck-btn {
+      padding: 10px 4px; background: #21262d; border: 1.5px solid #30363d;
+      border-radius: 8px; color: #c9d1d9; cursor: pointer; text-align: center;
+      transition: all 0.1s ease;
+    }
+    .deck-btn:active { transform: translateY(2px); }
+    .deck-btn .btn-badge { display: block; font-size: 0.7rem; font-weight: 800; margin-bottom: 2px; }
+    .deck-btn .btn-title { display: block; font-size: 0.82rem; font-weight: 800; color: #ffffff; }
+    .deck-btn .btn-sub { display: block; font-size: 0.68rem; color: #8b949e; margin-top: 2px; }
+
+    .btn-cat-1 { border-color: #e3b341; } .btn-cat-1 .btn-badge { color: #e3b341; }
+    .btn-cat-2 { border-color: #f87171; } .btn-cat-2 .btn-badge { color: #f87171; }
+    .btn-cat-3 { border-color: #fb923c; } .btn-cat-3 .btn-badge { color: #fb923c; }
+    .btn-cat-4 { border-color: #a371f7; } .btn-cat-4 .btn-badge { color: #a371f7; }
+    .btn-cat-5 { border-color: #38bdf8; } .btn-cat-5 .btn-badge { color: #38bdf8; }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+      padding: 24px; max-width: 440px; width: 100%; text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+    .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #58a6ff; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 20px; }
+    .action-btn {
+      width: 100%; padding: 12px; background: #238636; border: 1px solid #2ea043;
+      color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 6px; cursor: pointer; margin-bottom: 8px;
+    }
+    .action-btn:hover { background: #2ea043; }
+    .action-btn.btn-alt { background: #8957e5; border-color: #a371f7; }
+    .sub-action-btn {
+      display: block; width: 100%; padding: 9px; background: #21262d; border: 1px solid #30363d;
+      color: #c9d1d9; font-size: 0.85rem; font-weight: 600; border-radius: 6px; text-decoration: none;
+    }
+    .modal-dual-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game"><span>◀ 게임 목록</span></a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️🖤🖤</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <a href="./game8-1.html" class="type-btn active-a">🎯 A 요격형</a>
+        <a href="./game8-1-b.html" class="type-btn">🛸 B 플로팅형</a>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn" onclick="setSpeed(0.3, this)">0.3x</button>
+      <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
+      <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
+      <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+    </div>
+    <div class="streak-badge" id="streak-val">🔥 0 COMBO</div>
+  </header>
+
+  <main id="game-zone">
+    <div class="danger-line"></div>
+  </main>
+
+  <footer class="control-deck">
+    <button class="deck-btn btn-cat-1" onclick="fireShot('운반혼재')">
+      <span class="btn-badge">1-6 / 2-4-5</span>
+      <span class="btn-title">운반 혼재</span>
+      <span class="btn-sub">3-4 / 5-2-4 가능</span>
+    </button>
+    <button class="deck-btn btn-cat-2" onclick="fireShot('게시판')">
+      <span class="btn-badge">색상 & 문구</span>
+      <span class="btn-title">주의 게시판</span>
+      <span class="btn-sub">물기청색/화기적색</span>
+    </button>
+    <button class="deck-btn btn-cat-3" onclick="fireShot('안전거리')">
+      <span class="btn-badge">황금 수치</span>
+      <span class="btn-title">시설 안전거리</span>
+      <span class="btn-sub">주택10m/학교30m/문화재50m</span>
+    </button>
+    <button class="deck-btn btn-cat-4" onclick="fireShot('특수보관')">
+      <span class="btn-badge">보호액 보관</span>
+      <span class="btn-title">특수 위험물</span>
+      <span class="btn-sub">황린물속/칼륨석유속</span>
+    </button>
+    <button class="deck-btn btn-cat-5" onclick="fireShot('안전관리자')">
+      <span class="btn-badge">30일 & 14일</span>
+      <span class="btn-title">안전관리자</span>
+      <span class="btn-sub">선임30일/신고14일/벌금</span>
+    </button>
+  </footer>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">🛢️</div>
+      <h2 class="modal-title">[제 8-2탄 A] 위험물 & 연료가스 요격전</h2>
+      <p class="modal-desc">
+        하늘에서 떨어지는 위험물 지정수량·성질, 연료가스 특성을 보고<br>
+        하단의 <b>5대 카테고리 버튼</b>을 눌러 정확히 요격하세요!<br><br>
+        • 제4류 지정수량 (특수50L, 1석200/400L, 알400L 등)<br>
+        • 산화성(1·6류), 가연·금수성(2·3류), 자기반응성(5류)<br>
+        • 연료가스(LPG 프로판·부탄 vs LNG 메탄) & 경보기 위치
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🎯 A타입 시작</button>
+        <a href="./game8-1-b.html" class="action-btn btn-alt">🛸 B타입 전환</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 게임 오버 모달 -->
+  <div class="overlay-modal" id="gameover-modal" style="display:none;">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">💥</div>
+      <h2 class="modal-title" style="color:#f85149;">작전 실패!</h2>
+      <p class="modal-desc" id="gameover-desc">최종 점수: 0점</p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 A타입 재도전</button>
+        <a href="./game8-1-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const TARGETS_DATA = [
+      // 1. 운반 혼재 (혼재 가능 조합)
+      { title: "제1류 + 제6류 혼재 가능", desc: "산화성 고체 + 산화성 액체 (1-6 혼재 가능)", cat: "운반혼재" },
+      { title: "제2류 + 제4류 혼재 가능", desc: "가연성 고체 + 인화성 액체 (2-4 혼재 가능)", cat: "운반혼재" },
+      { title: "제2류 + 제5류 혼재 가능", desc: "가연성 고체 + 자기반응성 (2-5 혼재 가능)", cat: "운반혼재" },
+      { title: "제3류 + 제4류 혼재 가능", desc: "자연발화·금수성 + 인화성 액체 (3-4 혼재 가능)", cat: "운반혼재" },
+      { title: "제5류 + 제4류 혼재 가능", desc: "자기반응성 + 인화성 액체 (5-4 혼재 가능)", cat: "운반혼재" },
+      { title: "제4류 위험물 혼재 범위", desc: "제2류, 제3류, 제5류와 혼재 가능", cat: "운반혼재" },
+
+      // 2. 주의 게시판 및 표지
+      { title: "물기엄금 게시판", desc: "청색 바탕 + 백색 문자 (1류 무기과산화물, 2류 철금마, 3류 금수성)", cat: "게시판" },
+      { title: "화기주의 게시판", desc: "황색 바탕 + 백색 문자 (제2류 가연성 고체)", cat: "게시판" },
+      { title: "화기엄금 게시판", desc: "적색 바탕 + 백색 문자 (2류 인화성고체, 3류 자연발화, 4류, 5류)", cat: "게시판" },
+      { title: "제조소등 표지", desc: "백색 바탕 + 흑색 문자 (한변 0.3m 이상, 다른변 0.6m 이상)", cat: "게시판" },
+      { title: "무기과산화물 주의사항", desc: "물기엄금 (청색 바탕 백색 문자)", cat: "게시판" },
+      { title: "철분·금속분·마그네슘 주의사항", desc: "물기엄금 (청색 바탕 백색 문자)", cat: "게시판" },
+
+      // 3. 시설 안전거리
+      { title: "주거용 건축물 안전거리", desc: "제조소 외벽으로부터 10m 이상", cat: "안전거리" },
+      { title: "고압가스·도시가스 시설", desc: "제조소 외벽으로부터 20m 이상", cat: "안전거리" },
+      { title: "학교·병원·극장·교회", desc: "다수인 수용시설 안전거리 30m 이상", cat: "안전거리" },
+      { title: "유형문화재·지정문화재", desc: "국보·보물·문화재 안전거리 50m 이상", cat: "안전거리" },
+      { title: "7,000V 이하 고압가공전선", desc: "고압가공전선 수평 안전거리 3m 이상", cat: "안전거리" },
+      { title: "7,000V~35,000V 특고압전선", desc: "특고압가공전선 안전거리 5m 이상", cat: "안전거리" },
+
+      // 4. 특수 위험물 저장·취급법
+      { title: "황린 (제3류)", desc: "자연발화 방지를 위해 물속(pH 9)에 보관", cat: "특수보관" },
+      { title: "칼륨(K) / 나트륨(Na)", desc: "공기·수분 차단을 위해 석유(등유, 경유) 속에 보관", cat: "특수보관" },
+      { title: "이황화탄소 (특수인화물)", desc: "가연성 증기 발생 억제를 위해 물속(수조) 보관", cat: "특수보관" },
+      { title: "니트로셀룰로오스", desc: "알코올 또는 물에 습윤하여 냉암소 보관", cat: "특수보관" },
+      { title: "알킬알루미늄", desc: "희석제(헥산 등) 투입 및 불활성가스 봉입 보관", cat: "특수보관" },
+
+      // 5. 안전관리자 선임·해임 & 벌칙
+      { title: "안전관리자 선임 기한", desc: "완공검사필증 교부일 또는 해임일로부터 30일 이내", cat: "안전관리자" },
+      { title: "안전관리자 선임 신고", desc: "선임한 날부터 14일 이내 소방본부장/서장에게 신고", cat: "안전관리자" },
+      { title: "직무대리자 지정 기한", desc: "해임·퇴직 후 대리자의 직무 대행 기간 30일 이내", cat: "안전관리자" },
+      { title: "안전관리자 미선임 벌칙", desc: "1,500만원 이하의 벌금 (형벌 처벌)", cat: "안전관리자" },
+      { title: "선임신고 태만·미신고 벌칙", desc: "과태료 500만원 이하", cat: "안전관리자" }
+    ];
+
+    const MAX_LIVES = 5;
+    let score = 0;
+    let lives = 3;
+    let streak = 0;
+    let speedMult = 0.5;
+    let activeTargets = [];
+    let isGameRunning = false;
+    let spawnTimer = null;
+    let animFrame = null;
+
+    const gameZone = document.getElementById('game-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const streakVal = document.getElementById('streak-val');
+
+    function setSpeed(spd, btn) {
+      speedMult = spd;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function triggerHeartHealAnim() {
+      livesVal.classList.remove("heart-heal-bounce");
+      void livesVal.offsetWidth;
+      livesVal.classList.add("heart-heal-bounce");
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
+      streakVal.textContent = streak > 0 ? `🔥 ${streak} COMBO` : '🔥 0 COMBO';
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('gameover-modal').style.display = 'none';
+      gameZone.querySelectorAll('.falling-target').forEach(el => el.remove());
+      activeTargets = [];
+      score = 0;
+      lives = 3;
+      streak = 0;
+      isGameRunning = true;
+      updateHUD();
+
+      clearInterval(spawnTimer);
+      spawnTimer = setInterval(spawnTarget, 2200);
+      spawnTarget();
+
+      if (animFrame) cancelAnimationFrame(animFrame);
+      gameLoop();
+    }
+
+    function spawnTarget() {
+      if (!isGameRunning) return;
+      const zoneW = gameZone.clientWidth || window.innerWidth || 800;
+      const tData = TARGETS_DATA[Math.floor(Math.random() * TARGETS_DATA.length)];
+
+      const el = document.createElement('div');
+      el.className = 'falling-target';
+      el.innerHTML = `
+        <div class="target-title">${tData.title}</div>
+        <div class="target-desc">${tData.desc}</div>
+      `;
+      gameZone.appendChild(el);
+
+      const targetW = el.offsetWidth || 180;
+      const maxX = Math.max(20, zoneW - targetW - 20);
+      const posX = Math.floor(Math.random() * maxX) + 10;
+
+      el.style.left = `${posX}px`;
+      el.style.top = '-80px';
+
+      activeTargets.push({
+        el: el,
+        data: tData,
+        y: -80,
+        x: posX,
+        speed: (1.2 + Math.random() * 0.6) * speedMult
+      });
+    }
+
+    function gameLoop() {
+      if (!isGameRunning) return;
+      const zoneH = gameZone.clientHeight || (window.innerHeight - 150) || 600;
+      const dangerY = zoneH - 70;
+
+      for (let i = activeTargets.length - 1; i >= 0; i--) {
+        const t = activeTargets[i];
+        t.y += t.speed;
+        t.el.style.top = `${t.y}px`;
+
+        if (t.y >= dangerY) {
+          lives--;
+          streak = 0;
+          updateHUD();
+
+          t.el.remove();
+          activeTargets.splice(i, 1);
+
+          if (lives <= 0) {
+            endGame();
+            return;
+          }
+        }
+      }
+
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function fireShot(selectedCat) {
+      if (!isGameRunning || activeTargets.length === 0) return;
+
+      let lowestIdx = 0;
+      let maxY = -999;
+      for (let i = 0; i < activeTargets.length; i++) {
+        if (activeTargets[i].y > maxY) {
+          maxY = activeTargets[i].y;
+          lowestIdx = i;
+        }
+      }
+
+      const target = activeTargets[lowestIdx];
+
+      if (target.data.cat === selectedCat) {
+        streak++;
+        score += 100 + (streak * 10);
+
+        let healed = false;
+        if (lives < MAX_LIVES) {
+          lives++;
+          healed = true;
+          triggerHeartHealAnim();
+        }
+
+        updateHUD();
+
+        target.el.style.borderColor = '#3fb950';
+        target.el.style.background = 'rgba(63, 185, 80, 0.4)';
+        if (healed) {
+          const healText = document.createElement('div');
+          healText.textContent = '❤️ +1';
+          healText.style.position = 'absolute';
+          healText.style.top = '-25px';
+          healText.style.right = '10px';
+          healText.style.color = '#7ee787';
+          healText.style.fontWeight = 'bold';
+          healText.style.fontSize = '1.1rem';
+          healText.style.textShadow = '0 0 5px rgba(0,0,0,0.8)';
+          healText.style.pointerEvents = 'none';
+          target.el.appendChild(healText);
+        }
+        setTimeout(() => target.el.remove(), 140);
+        activeTargets.splice(lowestIdx, 1);
+      } else {
+        lives--;
+        streak = 0;
+        updateHUD();
+
+        target.el.style.borderColor = '#f85149';
+        target.el.style.background = 'rgba(248, 81, 73, 0.4)';
+
+        if (lives <= 0) {
+          endGame();
+        }
+      }
+    }
+
+    function endGame() {
+      isGameRunning = false;
+      clearInterval(spawnTimer);
+      cancelAnimationFrame(animFrame);
+      document.getElementById('gameover-desc').innerHTML = `최종 점수: <strong>${score}점</strong><br>제4류 지정수량과 연료가스 특성을 다시 점검하세요!`;
+      document.getElementById('gameover-modal').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
