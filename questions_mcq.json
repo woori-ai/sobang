@@ -3174,7 +3174,7 @@
     "date": "10월 27일",
     "subject": "소화기구",
     "difficulty": "실기응용",
-    "image": "images/q_b2_powder_extinguisher_structure.jpg",
+    "image": "pic-mun/q_b2_powder_extinguisher_structure.jpg",
     "question": "[실전 그림 문제] 그림은 가압식(좌)과 축압식(우) 분말소화기의 구조이다. 축압식 분말소화기에 대한 설명으로 옳은 것은?",
     "options": [
       "본체용기 내부에 별도의 가스용기(가스 카트리지)가 내장되어 있다.",
@@ -3196,7 +3196,7 @@
     "date": "10월 27일",
     "subject": "소화기구",
     "difficulty": "실전계산",
-    "image": "images/q_b2_co2_weight_check.jpg",
+    "image": "pic-mun/q_b2_co2_weight_check.jpg",
     "question": "[실전 그림 계산] 사진은 이산화탄소소화기의 무게 측정과 제원표이다. 제원표의 총중량이 9.5 kg, 소화약제 중량이 2.3 kg이고 측정한 소화기 무게가 9.36 kg일 때 판정으로 옳은 것은?",
     "options": [
       "손실량 0.14 kg은 총중량의 약 1.5 %이므로 정상이다.",
@@ -3218,7 +3218,7 @@
     "date": "10월 27일",
     "subject": "옥내외소화전",
     "difficulty": "실기응용",
-    "image": "images/q_b2_circulation_pipe.jpg",
+    "image": "pic-mun/q_b2_circulation_pipe.jpg",
     "question": "[실전 그림 문제] 그림의 펌프 주변 계통도에서 표시된 '순환배관'에 대한 설명으로 옳은 것은?",
     "options": [
       "펌프 체절운전 시 수온 상승을 방지하기 위해 설치하며, 펌프 토출측 체크밸브 이전에서 분기한다.",
@@ -3240,7 +3240,7 @@
     "date": "10월 27일",
     "subject": "옥내외소화전",
     "difficulty": "기본빈출",
-    "image": "images/q_b2_mcc_select_switch.jpg",
+    "image": "pic-mun/q_b2_mcc_select_switch.jpg",
     "question": "[실전 그림 문제] 사진은 동력제어반(MCC)의 주펌프·충압펌프 선택스위치(MAN·OFF·AUTO)이다. 평상시 선택스위치의 올바른 위치는?",
     "options": [
       "주펌프·충압펌프 모두 MAN(수동)",
@@ -3262,7 +3262,7 @@
     "date": "10월 27일",
     "subject": "펌프성능실습",
     "difficulty": "실기응용",
-    "image": "images/q_b2_pump_test_valves.jpg",
+    "image": "pic-mun/q_b2_pump_test_valves.jpg",
     "question": "[실전 그림 문제] 그림의 펌프성능시험 배관에서 '체절운전' 시 ① 펌프토출측 개폐표시형밸브, ② 성능시험배관 개폐밸브, ③ 유량조절밸브의 상태로 옳은 것은?",
     "options": [
       "① 개방, ② 폐쇄, ③ 폐쇄",
@@ -3284,7 +3284,7 @@
     "date": "10월 27일",
     "subject": "펌프성능실습",
     "difficulty": "실기응용",
-    "image": "images/q_b2_relief_valve_section.jpg",
+    "image": "pic-mun/q_b2_relief_valve_section.jpg",
     "question": "[실전 그림 문제] 그림은 릴리프밸브의 작동 전·후 단면이다. 상단의 조절볼트를 '시계방향'으로 돌릴 때의 변화와 세팅 기준으로 옳은 것은?",
     "options": [
       "스프링의 힘이 약해져 작동압력이 낮아지며, 체절압력 이상에서 개방되도록 세팅한다.",
@@ -3306,7 +3306,7 @@
     "date": "10월 27일",
     "subject": "펌프성능실습",
     "difficulty": "실전계산",
-    "image": "images/q_b2_pump_curve.jpg",
+    "image": "pic-mun/q_b2_pump_curve.jpg",
     "question": "[실전 그림 계산] 그림은 펌프의 성능곡선이다. 정격토출량 400 L/min, 정격양정 80 m인 펌프의 성능시험 합격 기준으로 옳은 것은? (단, 10 m = 0.1 MPa로 환산)",
     "options": [
       "체절운전 시 0.8 MPa 이하, 150 % 유량(600 L/min)에서 0.52 MPa 이상",
@@ -3328,7 +3328,7 @@
     "date": "10월 27일",
     "subject": "스프링클러",
     "difficulty": "실기응용",
-    "image": "images/q_b2_alarm_valve_pressure_switch.jpg",
+    "image": "pic-mun/q_b2_alarm_valve_pressure_switch.jpg",
     "question": "[실전 그림 문제] 그림은 알람밸브 클래퍼 개방에 따라 시트링홀로 유입된 압력수가 압력스위치를 작동시키는 계통이다. 비화재 시 일시적인 압력변동에 의한 오경보를 방지하기 위해 '구형' 압력스위치 앞에 설치하는 장치는?",
     "options": [
       "리타딩챔버(Retarding Chamber)",
@@ -3350,7 +3350,7 @@
     "date": "10월 27일",
     "subject": "스프링클러",
     "difficulty": "실기응용",
-    "image": "images/q_b2_preaction_valve.jpg",
+    "image": "pic-mun/q_b2_preaction_valve.jpg",
     "question": "[실전 그림 문제] 그림은 교차회로 방식 준비작동식(프리액션) 밸브의 구조이다. 이에 대한 설명으로 옳은 것은?",
     "options": [
       "A 또는 B 감지기 중 하나만 작동해도 ⑨ 전자밸브가 작동하여 밸브가 개방된다.",
@@ -3372,7 +3372,7 @@
     "date": "10월 27일",
     "subject": "압력스위치 세팅",
     "difficulty": "실전계산",
-    "image": "images/q_b2_pressure_switch_range_diff.jpg",
+    "image": "pic-mun/q_b2_pressure_switch_range_diff.jpg",
     "question": "[실전 그림 계산] 그림은 기동용 수압개폐장치(압력챔버)의 압력스위치이다. RANGE를 0.7 MPa, DIFF를 0.2 MPa로 세팅하였을 때 펌프의 기동압력과 정지압력은?",
     "options": [
       "기동 0.2 MPa, 정지 0.7 MPa",
@@ -3394,7 +3394,7 @@
     "date": "10월 27일",
     "subject": "가스계소화설비",
     "difficulty": "실기응용",
-    "image": "images/q_b2_gas_operation_sequence.jpg",
+    "image": "pic-mun/q_b2_gas_operation_sequence.jpg",
     "question": "[실전 그림 문제] 그림은 가스압식 전역방출방식 가스계소화설비의 작동순서도이다. 작동순서로 옳은 것은?",
     "options": [
       "감지기 작동 → 압력스위치 작동 → 수신기 → 솔레노이드밸브 격발 → 기동용기 개방 → 저장용기 개방 → 약제 방출",
@@ -3416,7 +3416,7 @@
     "date": "10월 27일",
     "subject": "가스계소화설비",
     "difficulty": "실기응용",
-    "image": "images/q_b2_solenoid_safety_steps.jpg",
+    "image": "pic-mun/q_b2_solenoid_safety_steps.jpg",
     "question": "[실전 그림 문제] 사진 (A)~(C)는 가스계소화설비 점검 전 기동용기 솔레노이드밸브에 대한 안전조치를 순서 없이 나열한 것이다. (A) 솔레노이드밸브 분리, (B) 안전핀 제거, (C) 안전핀 체결일 때 올바른 순서는?",
     "options": [
       "(A) → (B) → (C)",
@@ -3438,7 +3438,7 @@
     "date": "10월 27일",
     "subject": "경보설비",
     "difficulty": "실기응용",
-    "image": "images/q_b2_p_type_receiver_panel.jpg",
+    "image": "pic-mun/q_b2_p_type_receiver_panel.jpg",
     "question": "[실전 그림 문제] 그림은 P형 수신기(로터리 방식)이다. 1(동작시험스위치), 2(자동복구스위치), 3(회로시험스위치)를 이용해 동작시험을 마친 후 '복구'하는 순서로 옳은 것은?",
     "options": [
       "3 회로시험스위치 정상위치로 돌림 → 1 동작시험스위치 누름 → 2 자동복구스위치 누름",
@@ -3460,7 +3460,7 @@
     "date": "10월 27일",
     "subject": "경보설비",
     "difficulty": "실기응용",
-    "image": "images/q_b2_backup_power_test.jpg",
+    "image": "pic-mun/q_b2_backup_power_test.jpg",
     "question": "[실전 그림 문제] 사진 (A)~(C)는 P형 복합식 수신기에서 예비전원시험 스위치를 누른 상태의 전압표시등이다. 판정으로 옳은 것은?",
     "options": [
       "(A) 예비전원 불량, (B) 전압 정상, (C) 전압 낮음",
@@ -3482,7 +3482,7 @@
     "date": "10월 27일",
     "subject": "경보설비",
     "difficulty": "기본빈출",
-    "image": "images/q_b2_detector_types.jpg",
+    "image": "pic-mun/q_b2_detector_types.jpg",
     "question": "[실전 그림 문제] 사진 (A)~(C)는 차동식 스포트형, 정온식 스포트형, 연기감지기이다. 보일러실·주방 등에 설치하며 바이메탈을 이용하는 감지기와 그 작동원리로 옳은 것은?",
     "options": [
       "(A) 차동식 – 화재 시 감열실 내 공기가 팽창하여 다이아프램을 밀어 접점이 붙는다.",
