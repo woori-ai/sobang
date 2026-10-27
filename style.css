@@ -510,6 +510,16 @@ body {
   word-break: keep-all;
 }
 
+/* 그림·도면 문제 이미지 */
+.q-image {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  margin: 12px auto 4px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
 /* 보기(가, 나, 다) 박스 스타일 */
 .quiz-box-card {
   background: var(--bg-card-subtle);
