@@ -690,14 +690,13 @@
       '2-1-1': "소화기구 능력단위(소형 1단위↑/대형 A10·B20), 용도별 기준면적(위락 30/집회·의료 50/근생·숙박 100/기타 200), 보행거리(소형 20m/대형 30m), 높이 1.5m, 지시압력계(0.7~0.98MPa), 내용연수 10년"
     };
 
-    // 레거시 파라미터 매핑
+    // 레거시 파라미터 매핑 (구버전 단일 숫자 1~8 지원)
     const LEGACY_MAP = {
       '1': '1-1', '2': '1-2', '3': '1-3',
       '4': '2-1', '5': '2-2',
       '6': '3-1',
-      '7': '4-1', '7-1': '4-1', '7-2': '4-2', '7-3': '4-3',
-      '8-1': '5-1', '8-2': '5-2', '8-3': '5-3', '8-4': '5-4',
-      '6-1': '6-1', '6-2': '6-2', '6-3': '6-3'
+      '7': '4-1',
+      '8': '5-1'
     };
 
     // ----------------------------------------------------
@@ -1639,9 +1638,8 @@
       const params = new URLSearchParams(window.location.search);
       const val = params.get('round');
       if (!val) return "1-1";
-      if (STUDY_DATA[val]) {
-        return LEGACY_MAP[val] || val;
-      }
+      if (STUDY_DATA[val]) return val;
+      if (LEGACY_MAP[val] && STUDY_DATA[LEGACY_MAP[val]]) return LEGACY_MAP[val];
       return "1-1";
     }
 
@@ -1675,8 +1673,8 @@
 
     // 라운드 선택 시 통합 처리
     function selectRound(roundId) {
-      // 레거시 번호 대응
-      currentRound = LEGACY_MAP[roundId] || roundId;
+      // modern ID가 있으면 그대로 사용, 없으면 legacy 매핑 확인
+      currentRound = STUDY_DATA[roundId] ? roundId : (LEGACY_MAP[roundId] || roundId);
 
       // URL 파라미터 업데이트 (새로고침 없이)
       const url = new URL(window.location);
