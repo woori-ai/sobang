@@ -274,7 +274,7 @@
       max-width: 920px;
       width: 100%;
       margin: 0 auto;
-      padding: 24px 20px 140px;
+      padding: 24px 20px 50px;
     }
 
     /* 히어로 헤더 */
@@ -286,7 +286,7 @@
       margin-bottom: 22px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
     }
     .round-tag {
@@ -378,69 +378,44 @@
       border-radius: 4px;
     }
 
-    /* 4. 하단 고정 게임 시작 액션 바 (PC: 사이드바 우측 고정) */
-    .bottom-action-bar {
-      position: fixed;
-      bottom: 0;
-      left: 290px;
-      right: 0;
-      background: rgba(22, 27, 34, 0.96);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid #30363d;
-      padding: 12px 24px;
-      z-index: 150;
-      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.35);
-    }
-    .bottom-inner {
-      max-width: 920px;
-      margin: 0 auto;
+    /* 상단 게임 바로가기 버튼 */
+    .hero-play-buttons {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-    }
-    .bottom-label {
-      font-size: 0.85rem;
-      color: #8b949e;
-      display: flex;
-      flex-direction: column;
-    }
-    .bottom-label strong {
-      color: #f0f6fc;
-      font-size: 0.96rem;
-    }
-    .bottom-buttons {
-      display: flex;
-      gap: 8px;
-      flex: 1;
-      justify-content: flex-end;
-      max-width: 460px;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(48, 54, 61, 0.7);
     }
     .btn-play-action {
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 0.92rem;
+      padding: 11px 20px;
+      border-radius: 9px;
+      font-size: 0.94rem;
       font-weight: 800;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 7px;
       text-decoration: none;
       transition: all 0.2s ease;
       background: #238636;
       color: #ffffff;
-      flex: 1;
+      flex: 1 1 200px;
+      max-width: 320px;
       text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
     .btn-play-action:hover {
       background: #2ea043;
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(46, 160, 67, 0.3);
     }
     .btn-play-action.btn-b {
       background: #8957e5;
     }
     .btn-play-action.btn-b:hover {
       background: #a371f7;
+      box-shadow: 0 4px 12px rgba(163, 113, 247, 0.3);
     }
 
     /* 5. 반응형 미디어 쿼리 (태블릿 & 모바일) */
@@ -468,25 +443,20 @@
       .btn-sidebar-close {
         display: block;
       }
-      .bottom-action-bar {
-        left: 0;
-      }
       .content-container {
-        padding: 16px 14px 130px;
+        padding: 16px 14px 40px;
       }
     }
 
     @media (max-width: 600px) {
-      .bottom-label {
-        display: none;
-      }
-      .bottom-buttons {
-        max-width: 100%;
-        width: 100%;
+      .hero-play-buttons {
+        flex-direction: column;
       }
       .btn-play-action {
-        padding: 10px;
-        font-size: 0.85rem;
+        width: 100%;
+        max-width: 100%;
+        padding: 10px 14px;
+        font-size: 0.88rem;
       }
       .study-title {
         font-size: 1.2rem;
@@ -547,7 +517,10 @@
         <div class="study-hero">
           <span class="round-tag" id="hero-tag">ROUND 1-1</span>
           <h1 class="study-title" id="hero-title">로딩 중...</h1>
-          <p class="study-desc" id="hero-desc">핵심 암기 요점을 숙지한 뒤, 하단의 실전 게임으로 완벽하게 체화하세요!</p>
+          <p class="study-desc" id="hero-desc">핵심 암기 요점을 숙지한 뒤, 실전 게임으로 완벽하게 체화하세요!</p>
+          <div class="hero-play-buttons" id="hero-play-buttons">
+            <!-- 동적 주입 -->
+          </div>
         </div>
 
         <div class="study-card-grid" id="study-card-grid">
@@ -556,19 +529,6 @@
       </div>
     </main>
   </div>
-
-  <!-- 3. 하단 고정 게임 시작 액션 바 -->
-  <footer class="bottom-action-bar">
-    <div class="bottom-inner">
-      <div class="bottom-label">
-        <span>요약 암기 완료!</span>
-        <strong>실전 게임으로 실력 검증</strong>
-      </div>
-      <div class="bottom-buttons" id="bottom-play-buttons">
-        <!-- 동적 주입 -->
-      </div>
-    </div>
-  </footer>
 
   <script>
     // ----------------------------------------------------
@@ -1694,7 +1654,7 @@
       // 히어로 영역 갱신
       document.getElementById('hero-tag').textContent = `ROUND ${currentRound}`;
       document.getElementById('hero-title').textContent = data.title;
-      document.getElementById('hero-desc').textContent = ROUND_DESCS[currentRound] || "핵심 암기 요점을 숙지한 뒤, 하단의 실전 게임으로 완벽하게 체화하세요!";
+      document.getElementById('hero-desc').textContent = ROUND_DESCS[currentRound] || "핵심 암기 요점을 숙지한 뒤, 실전 게임으로 완벽하게 체화하세요!";
 
       // 카드 목록 갱신
       const grid = document.getElementById('study-card-grid');
@@ -1711,23 +1671,25 @@
       });
       grid.innerHTML = html;
 
-      // 하단 액션 버튼 갱신
-      const btnContainer = document.getElementById('bottom-play-buttons');
-      if (data.playUrlB) {
-        btnContainer.innerHTML = `
-          <a href="${data.playUrl}" class="btn-play-action">
-            <span>🎯 A 실전 요격형 ▶</span>
-          </a>
-          <a href="${data.playUrlB}" class="btn-play-action btn-b">
-            <span>🛸 B 플로팅 헌터 ▶</span>
-          </a>
-        `;
-      } else {
-        btnContainer.innerHTML = `
-          <a href="${data.playUrl}" class="btn-play-action" style="max-width:100%;">
-            <span>🎮 [제 ${currentRound}탄] 실전 게임 도전하기 ▶</span>
-          </a>
-        `;
+      // 상단 히어로 게임 액션 버튼 갱신
+      const btnContainer = document.getElementById('hero-play-buttons');
+      if (btnContainer) {
+        if (data.playUrlB) {
+          btnContainer.innerHTML = `
+            <a href="${data.playUrl}" class="btn-play-action">
+              <span>🎯 A 실전 요격형 ▶</span>
+            </a>
+            <a href="${data.playUrlB}" class="btn-play-action btn-b">
+              <span>🛸 B 플로팅 헌터 ▶</span>
+            </a>
+          `;
+        } else {
+          btnContainer.innerHTML = `
+            <a href="${data.playUrl}" class="btn-play-action" style="max-width:380px;">
+              <span>🎮 [제 ${currentRound}탄] 실전 게임 도전하기 ▶</span>
+            </a>
+          `;
+        }
       }
 
       // 본문 맨 위로 스크롤
