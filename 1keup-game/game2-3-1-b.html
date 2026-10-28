@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[2권 제 3-1탄 B] 소방계획 수립 원칙 & 절차 버블 헌팅</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #090d13; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(13, 17, 23, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; }
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-b { background: #8957e5; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .round-pill {
+      font-size: 0.8rem; font-weight: 800; background: #1f242c;
+      padding: 4px 10px; border-radius: 12px; border: 1px solid #388bfd; color: #58a6ff;
+    }
+
+    .mission-banner {
+      background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 16px;
+      text-align: center; z-index: 40;
+    }
+    .mission-title { font-size: 1rem; font-weight: 800; color: #58a6ff; margin-bottom: 2px; }
+    .mission-desc { font-size: 0.78rem; color: #8b949e; }
+    .mission-progress-bar {
+      width: 100%; max-width: 320px; height: 6px; background: #21262d;
+      border-radius: 3px; margin: 6px auto 0; overflow: hidden;
+    }
+    .mission-progress-fill {
+      height: 100%; background: linear-gradient(90deg, #388bfd, #58a6ff);
+      width: 0%; transition: width 0.3s ease;
+    }
+
+    #round-clear-bar {
+      display: none; background: rgba(35, 134, 54, 0.95); padding: 12px 18px;
+      color: #ffffff; text-align: center; z-index: 60; border-bottom: 2px solid #3fb950;
+      animation: slideDown 0.3s ease-out;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
+    }
+    .round-clear-text { font-size: 0.92rem; font-weight: 800; display: block; margin-bottom: 6px; }
+    .btn-next-round {
+      padding: 6px 18px; background: #ffffff; color: #238636; border: none;
+      border-radius: 6px; font-weight: 800; font-size: 0.85rem; cursor: pointer;
+    }
+
+    main.space-zone {
+      flex: 1; position: relative; width: 100%; overflow: hidden;
+      background: radial-gradient(circle at 50% 50%, #161b22 0%, #090d13 100%);
+    }
+
+    .bubble {
+      position: absolute; border-radius: 14px; padding: 12px 14px;
+      max-width: 220px; cursor: pointer; transition: transform 0.15s ease, border-color 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4); text-align: center;
+      background: rgba(33, 38, 45, 0.92); border: 2px solid #30363d;
+    }
+    .bubble:hover { transform: scale(1.05); }
+    .bubble:active { transform: scale(0.96); }
+    .bubble.target { border-color: #58a6ff; }
+    .bubble.trap { border-color: #f85149; }
+    .bubble-text { font-size: 0.84rem; font-weight: 700; color: #f0f6fc; line-height: 1.35; }
+    .bubble-tip { font-size: 0.7rem; color: #8b949e; margin-top: 4px; display: none; }
+    .bubble.revealed .bubble-tip { display: block; }
+
+    /* 정답 맞춘 버블: 절대 사라지지 않고 초록색 체크 상태로 영구 보존 */
+    .bubble.solved {
+      background: rgba(46, 160, 67, 0.45) !important;
+      border-color: #3fb950 !important;
+      color: #7ee787 !important;
+      box-shadow: 0 0 16px rgba(63, 185, 80, 0.7);
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.9); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 16px;
+      max-width: 440px; width: 100%; padding: 26px 22px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6); max-height: 90vh; overflow-y: auto;
+    }
+    .modal-title { font-size: 1.35rem; font-weight: 800; color: #f0f6fc; margin-bottom: 10px; }
+    .modal-desc { font-size: 0.86rem; color: #8b949e; line-height: 1.6; margin-bottom: 20px; }
+    .modal-dual-actions { display: flex; gap: 8px; margin-bottom: 10px; }
+    .action-btn {
+      flex: 1; padding: 12px; background: #8957e5; border: none; color: #ffffff;
+      font-size: 0.95rem; font-weight: 800; border-radius: 8px; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .action-btn.btn-alt { background: #238636; }
+    .sub-action-btn { display: block; font-size: 0.82rem; color: #8b949e; margin-top: 10px; text-decoration: underline; cursor: pointer; }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 10px; cursor: pointer; text-align: center; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 12px; box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4);
+      animation: pulseBtn 1.8s infinite;
+    }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4); }
+      50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(46, 160, 67, 0.65); }
+    }
+    .review-list {
+      text-align: left; background: #0d1117; border: 1px solid #30363d;
+      border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 0.78rem;
+    }
+    .review-item { padding: 4px 0; border-bottom: 1px solid #21262d; color: #f85149; }
+    .review-item:last-child { border-bottom: none; }
+
+    @media (max-width: 600px) {
+      .bubble { max-width: 180px; padding: 10px 12px; }
+      .bubble-text { font-size: 0.76rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">◀ 나가기</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <a href="./game2-3-1.html" class="type-btn">A 낙하요격</a>
+        <span class="type-btn active-b">B 버블헌팅</span>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
+      <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
+      <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+    </div>
+    <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
+  </header>
+
+  <section class="mission-banner">
+    <div class="mission-title" id="mission-title">로딩 중...</div>
+    <div class="mission-desc" id="mission-desc">미션 설명</div>
+    <div class="mission-progress-bar">
+      <div class="mission-progress-fill" id="progress-fill"></div>
+    </div>
+  </section>
+
+  <!-- 라운드 클리어 안내 바 -->
+  <div id="round-clear-bar">
+    <span class="round-clear-text">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
+    <button class="btn-next-round" onclick="proceedNextRound()">다음 라운드 ▶</button>
+  </div>
+
+  <main class="space-zone" id="space-zone"></main>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">📋</div>
+      <h2 class="modal-title">[2권 제 3-1탄 B] 소방계획 수립 원칙 버블 헌팅</h2>
+      <p class="modal-desc">
+        화면에 떠다니는 소방계획 기준 버블 중<br>상단 <b>미션 목표</b>에 해당하는 정답만 사냥하세요!<br><br>
+        • 맞힌 정답은 사라지지 않고 <b>초록색(✅)</b>으로 화면에 남아 끝까지 학습할 수 있습니다.<br>
+        • <b>3대 원리</b>: 종합적 안전관리, 통합적 안전관리, 지속적 발전모델(PDCA)<br>
+        • <b>4대 원칙 (실·관·구·실)</b>: 실현가능성, 관계인 참여, 구조화, 실행 우선<br>
+        • <b>수립 4단계 (사·위·개·시)</b>: 사전기획 ➡️ 위험환경 분석 ➡️ 설계 및 개발 ➡️ 시행 및 유지관리<br>
+        • <b>위험환경 분석</b>: 내부(건축구조, 소방시설, 화기) & 외부(소방서 거리, 출동로, 인근위험)
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🛸 B타입 시작</button>
+        <a href="./game2-3-1.html" class="action-btn btn-alt">🎯 A타입 전환</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">작전 성공!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
+        <div class="review-list" id="review-list"></div>
+      </div>
+      <a href="../study.html?round=2-3-1" class="btn-next-stage" id="next-stage-btn">
+        <span>📖 [2권 제 3-1탄] 요약 학습노트 확인하기 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 B타입 재도전</button>
+        <a href="./game2-3-1.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const ROUND_DATA = [
+      {
+        round: 1,
+        title: "🌐 [소방계획서 수립 3대 기본 원리]만 모두 사냥하세요!",
+        desc: "종합적 안전관리, 통합적 안전관리, 지속적 발전모델(PDCA)",
+        targets: [
+          {
+            text: "종합적 안전관리: 예방·대비·대응·복구 전 단계를 아우르는 전방위 관리",
+            tip: "시설 점검뿐 아니라 인명 대피와 훈련 조직까지 전방위로 관리!"
+          },
+          {
+            text: "통합적 안전관리: 건축·방화·전기·가스 등 유관 안전관리 요소를 하나로 통합",
+            tip: "개별적으로 흩어진 안전요소들을 하나의 통합 체계로 연계!"
+          },
+          {
+            text: "지속적 발전모델: PDCA(Plan-Do-Check-Act) 사이클에 의한 지속적 보완·개선",
+            tip: "계획-실행-평가-개선의 선순환 사이클로 소방계획을 끊임없이 발전!"
+          },
+          {
+            text: "전방위 위험 통제: 소방시설뿐 아니라 인적 위험 및 피난 동선까지 종합 포괄",
+            tip: "하드웨어(설비)와 소프트웨어(조직·대피)를 결합한 전방위 관리!"
+          }
+        ],
+        traps: [
+          {
+            text: "개별적 분산관리: 부서별 간섭을 피하기 위해 안전관리를 철저히 분산 격리",
+            tip: "[오답] 소방계획의 원리는 분산이 아닌 '통합적 안전관리'입니다!"
+          },
+          {
+            text: "일회성 고정모델: 소방계획서는 최초 인가 시 1회 작성 후 변경 금지",
+            tip: "[오답] 소방계획서는 PDCA 사이클에 따라 매년 '지속적 발전모델'을 적용합니다!"
+          },
+          {
+            text: "비용절감 우선주의: 소방계획 수립의 가장 핵심 원리는 방재 비용 최소화",
+            tip: "[오답] 소방계획의 최우선 가치는 인명과 재산의 안전 확보입니다!"
+          },
+          {
+            text: "시설 위주 단편관리: 피난 및 인명대피는 제외하고 오직 소방설비 점검만 수록",
+            tip: "[오답] 예방부터 인명대피, 복구까지 포괄하는 '종합적 안전관리'여야 합니다!"
+          }
+        ]
+      },
+      {
+        round: 2,
+        title: "⚖️ [소방계획서 작성 4대 원칙 (실·관·구·실)]만 모두 사냥하세요!",
+        desc: "실현가능성, 관계인의 참여, 계획수립의 구조화, 실행 우선의 원칙",
+        targets: [
+          {
+            text: "실현가능성의 원칙: 대상물의 인력 규모와 현실 여건에 부합하는 실행 가능한 계획",
+            tip: "형식적 계획이 아닌 현장에서 진짜 작동 가능한 현실적 계획 수립!"
+          },
+          {
+            text: "관계인의 참여 원칙: 소방안전관리자 단독이 아닌 소유자·점유자 등 전 재실자 참여",
+            tip: "건물에 입주한 모든 관계인이 계획 수립과 훈련에 동참!"
+          },
+          {
+            text: "계획수립의 구조화: 목적·조직·세부 임무를 논리적이고 표준화된 형식으로 체계화",
+            tip: "누구나 쉽게 이해하고 따를 수 있도록 매뉴얼 형식으로 구조화!"
+          },
+          {
+            text: "실행 우선의 원칙: 단순 서류 작성이 아닌 현장 훈련과 즉시 실행을 최우선 목표",
+            tip: "문서 보관용이 아닌 화재 시 즉시 몸으로 움직일 수 있는 실행 중심!"
+          }
+        ],
+        traps: [
+          {
+            text: "전문화의 원칙: 외부 소방전문가만 이해할 수 있는 고난도 공학 용어로 복잡하게 작성",
+            tip: "[오답] 작성 4대 원칙은 '실·관·구·실'이며, 전문화는 해당하지 않습니다!"
+          },
+          {
+            text: "비용 절감의 원칙: 소방계획서 작성 시 안전시설 투자 비용을 절감하는 원칙",
+            tip: "[오답] 비용 절감은 4대 작성 원칙에 포함되지 않습니다!"
+          },
+          {
+            text: "문서화 우선의 원칙: 현장 행동보다 관공서 제출용 서류 완성을 가장 우선시",
+            tip: "[오답] 서류보다 실제 훈련과 대응이 중요한 '실행 우선의 원칙'입니다!"
+          },
+          {
+            text: "관리자 독단 원칙: 신속한 작성을 위해 재실자 의견을 배제하고 관리자가 단독 결정",
+            tip: "[오답] 전 재실자가 함께하는 '관계인의 참여 원칙'입니다!"
+          }
+        ]
+      },
+      {
+        round: 3,
+        title: "🔄 [소방계획 수립 4단계 절차 (사·위·개·시)]만 모두 사냥하세요!",
+        desc: "1단계 사전기획 ➡️ 2단계 위험환경 분석 ➡️ 3단계 설계 및 개발 ➡️ 4단계 시행 및 유지관리",
+        targets: [
+          {
+            text: "1단계 사전기획: 소방안전관리 기본방침 설정, 기획팀 구성 및 연간 추진일정 수립",
+            tip: "계획 수립의 첫 단추! 목표와 팀, 일정을 사전에 기획!"
+          },
+          {
+            text: "2단계 위험환경 분석: 건축물 내·외부 위험요인 도출 및 위험성 평가 매트릭스 산출",
+            tip: "건물 내외의 화재 취약 요인을 철저히 조사하고 분석!"
+          },
+          {
+            text: "3단계 설계 및 개발: 예방·대비·대응·복구 세부 실행계획서 작성 및 자위소방대 설계",
+            tip: "실제 비상대응 행동 매뉴얼과 자위소방대 조직을 설계!"
+          },
+          {
+            text: "4단계 시행 및 유지관리: 소방계획서 시행, 교육·훈련 실시, 주기적 검토 및 개정",
+            tip: "수립된 계획을 현장에 적용하고 지속적으로 유지 관리!"
+          }
+        ],
+        traps: [
+          {
+            text: "1단계 전략수립: 1단계는 사전기획이 아닌 장기 전략수립 단계로 분류",
+            tip: "[오답] 1단계는 '사전기획' 단계입니다! (암기: 사·위·개·시)"
+          },
+          {
+            text: "위험환경 분석 생략: 신축 건물은 완벽하므로 2단계 위험환경 분석을 생략 가능",
+            tip: "[오답] 2단계 위험환경 분석은 필수 절차입니다!"
+          },
+          {
+            text: "4단계 예산 결산: 4단계는 시행 및 유지관리가 아닌 소방비용 결산 및 정산 단계",
+            tip: "[오답] 4단계는 '시행 및 유지관리' 단계입니다!"
+          },
+          {
+            text: "설계 전 시행 우선: 계획서 설계 단계 없이 무조건 현장 훈련부터 먼저 시행",
+            tip: "[오답] 사전기획 ➡️ 위험환경분석 ➡️ 설계및개발 ➡️ 시행및유지관리 순서를 지켜야 합니다!"
+          }
+        ]
+      },
+      {
+        round: 4,
+        title: "🔍 [위험환경 분석(내·외부) 및 소방계획 종합]만 모두 사냥하세요!",
+        desc: "내부 환경(구조, 설비, 화기), 외부 환경(소방서 거리, 출동로), 위험도 매트릭스, 연간 검토",
+        targets: [
+          {
+            text: "내부 환경 분석: 건축구조, 소방시설 현황, 가연물 및 화기취급 장소 위험성 파악",
+            tip: "건물 내부의 인적, 물리적, 설비적 화재 위험요인을 전수 파악!"
+          },
+          {
+            text: "외부 환경 분석: 관할 소방서와의 거리, 소방차 진입로 확보, 인근 위험물 시설 조사",
+            tip: "소방대 도착 시간과 주변 화재 확산 위험을 철저히 분석!"
+          },
+          {
+            text: "위험도 평가 매트릭스: 사고 발생빈도와 발생 시 피해 심각도(크기)를 결합하여 산정",
+            tip: "빈도 × 심각도 매트릭스로 우선 조치 위험 등급을 결정!"
+          },
+          {
+            text: "연간 정기 검토 및 개정: 대상물 환경 변화나 점검 결과에 따라 매년 소방계획서를 보완",
+            tip: "상황 변화에 맞추어 최소 연 1회 이상 정기 검토 및 개정!"
+          }
+        ],
+        traps: [
+          {
+            text: "외부 환경 분석 제외: 사업장 담장 밖의 소방서 거리나 출동로는 조사 대상에서 제외",
+            tip: "[오답] 소방서 거리와 출동로는 '외부 환경 분석'의 핵심 요소입니다!"
+          },
+          {
+            text: "위험도 산정 방식: 위험도는 공사비 금액에 의해서만 단독 결정됨",
+            tip: "[오답] 위험도는 '발생빈도 × 피해크기(심각도)'로 평가합니다!"
+          },
+          {
+            text: "소방계획서 불개정: 한번 작성된 소방계획서는 건축물 멸실 시까지 개정이 금지됨",
+            tip: "[오답] 매년 정기 검토하여 개정·보완해야 합니다!"
+          },
+          {
+            text: "내부 시설 누락: 소방시설 현황표는 점검업체만 보관하며 소방계획서에는 미첨부",
+            tip: "[오답] 건축물 소방시설 현황표는 소방계획서의 필수 첨부 자료입니다!"
+          }
+        ]
+      }
+    ];
+
+    let currentRoundIdx = 0;
+    let score = 0;
+    let lives = 3;
+    let speedMult = 0.5;
+    let foundTargetsInRound = 0;
+    let totalTargetsInRound = 0;
+    let activeBubbles = [];
+    let animFrame = null;
+    let lastTime = 0;
+    let wrongReviews = [];
+
+    const spaceZone = document.getElementById('space-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const roundIndicator = document.getElementById('round-indicator');
+    const missionTitle = document.getElementById('mission-title');
+    const missionDesc = document.getElementById('mission-desc');
+    const progressFill = document.getElementById('progress-fill');
+    const roundClearBar = document.getElementById('round-clear-bar');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSfx(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'pop') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(450, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now); osc.stop(now + 0.1);
+      } else if (type === 'miss') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.linearRampToValueAtTime(70, now + 0.2);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+      } else if (type === 'clear') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(783.99, now + 0.2);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now); osc.stop(now + 0.35);
+      }
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
+      score = 0;
+      lives = 3;
+      wrongReviews = [];
+      updateHUD();
+      loadRound(0);
+      lastTime = performance.now();
+      if (animFrame) cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, 3 - lives));
+      roundIndicator.textContent = `ROUND ${currentRoundIdx + 1} / ${ROUND_DATA.length}`;
+    }
+
+    function updateProgress() {
+      const pct = (foundTargetsInRound / totalTargetsInRound) * 100;
+      progressFill.style.width = `${pct}%`;
+    }
+
+    function loadRound(idx) {
+      currentRoundIdx = idx;
+      roundClearBar.style.display = 'none';
+      spaceZone.innerHTML = '';
+      activeBubbles = [];
+
+      const rData = ROUND_DATA[idx];
+      missionTitle.textContent = rData.title;
+      missionDesc.textContent = rData.desc;
+      foundTargetsInRound = 0;
+      totalTargetsInRound = rData.targets.length;
+      updateProgress();
+      updateHUD();
+
+      const allItems = [
+        ...rData.targets.map(t => ({ ...t, isTarget: true })),
+        ...rData.traps.map(t => ({ ...t, isTarget: false }))
+      ];
+      allItems.sort(() => Math.random() - 0.5);
+
+      const zoneW = spaceZone.clientWidth || 360;
+      const zoneH = spaceZone.clientHeight || 420;
+
+      allItems.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = `bubble ${item.isTarget ? 'target' : 'trap'}`;
+        el.innerHTML = `
+          <div class="bubble-text">${item.text}</div>
+          <div class="bubble-tip">${item.tip}</div>
+        `;
+        const bx = Math.max(10, Math.random() * (zoneW - 200));
+        const by = Math.max(10, Math.random() * (zoneH - 120));
+        el.style.left = `${bx}px`;
+        el.style.top = `${by}px`;
+        spaceZone.appendChild(el);
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (25 + Math.random() * 20) * speedMult;
+        activeBubbles.push({
+          el,
+          item,
+          x: bx,
+          y: by,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          isSolved: false
+        });
+      });
+
+      activeBubbles.forEach(b => {
+        b.el.onclick = () => onBubbleClick(b);
+      });
+    }
+
+    function onBubbleClick(bubble) {
+      if (bubble.isSolved) return;
+
+      if (bubble.item.isTarget) {
+        playSfx('pop');
+        bubble.isSolved = true;
+        // 버블이 사라지지 않고 초록색 체크 상태로 화면에 계속 남아 학습 내용을 보존
+        bubble.el.classList.add('solved');
+        const textEl = bubble.el.querySelector('.bubble-text');
+        if (textEl) {
+          textEl.innerHTML = '<span style="color:#7ee787; font-weight:800; margin-right:4px;">✅</span>' + bubble.item.text;
+        }
+        score += 150;
+        foundTargetsInRound++;
+        updateHUD();
+        updateProgress();
+
+        if (foundTargetsInRound >= totalTargetsInRound) {
+          onRoundSuccess();
+        }
+      } else {
+        playSfx('miss');
+        lives--;
+        score = Math.max(0, score - 80);
+        bubble.el.classList.add('revealed');
+        bubble.el.style.borderColor = '#f85149';
+        bubble.el.style.background = 'rgba(248, 81, 73, 0.25)';
+
+        if (!wrongReviews.includes(bubble.item.text)) {
+          wrongReviews.push(`${bubble.item.text} ➡️ ${bubble.item.tip}`);
+        }
+        updateHUD();
+
+        if (lives <= 0) {
+          gameOver(false);
+        }
+      }
+    }
+
+    function onRoundSuccess() {
+      playSfx('clear');
+      roundClearBar.style.display = 'block';
+
+      // 라운드 내 모든 트랩 버블도 정답 및 해설을 공개하여 학습 유도
+      activeBubbles.forEach(b => {
+        if (!b.item.isTarget) {
+          b.el.classList.add('revealed');
+          b.el.style.borderColor = '#f85149';
+        }
+      });
+    }
+
+    function proceedNextRound() {
+      roundClearBar.style.display = 'none';
+      if (currentRoundIdx + 1 < ROUND_DATA.length) {
+        loadRound(currentRoundIdx + 1);
+      } else {
+        gameOver(true);
+      }
+    }
+
+    function gameLoop(now) {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      const zoneW = spaceZone.clientWidth;
+      const zoneH = spaceZone.clientHeight;
+
+      activeBubbles.forEach(b => {
+        b.x += b.vx * dt * speedMult;
+        b.y += b.vy * dt * speedMult;
+
+        const w = b.el.offsetWidth || 180;
+        const h = b.el.offsetHeight || 60;
+
+        if (b.x <= 0) { b.x = 0; b.vx *= -1; }
+        else if (b.x + w >= zoneW) { b.x = zoneW - w; b.vx *= -1; }
+
+        if (b.y <= 0) { b.y = 0; b.vy *= -1; }
+        else if (b.y + h >= zoneH) { b.y = zoneH - h; b.vy *= -1; }
+
+        b.el.style.left = `${b.x}px`;
+        b.el.style.top = `${b.y}px`;
+      });
+
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function gameOver(isWin) {
+      if (animFrame) cancelAnimationFrame(animFrame);
+      const resModal = document.getElementById('result-modal');
+      const rIcon = document.getElementById('result-icon');
+      const rTitle = document.getElementById('result-title');
+      const rDesc = document.getElementById('result-desc');
+      const reviewContainer = document.getElementById('review-container');
+      const reviewList = document.getElementById('review-list');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      resModal.style.display = 'flex';
+      if (isWin) {
+        rIcon.textContent = '🏆';
+        rTitle.textContent = '전 라운드 올 클리어!';
+        rTitle.style.color = '#58a6ff';
+        rDesc.textContent = `축하합니다! 소방계획 수립 원칙과 절차를 완벽하게 마스터했습니다! 최종 점수: ${score}점`;
+        nextBtn.style.display = 'inline-flex';
+      } else {
+        rIcon.textContent = '💥';
+        rTitle.textContent = '작전 실패 (하트 소진)';
+        rTitle.style.color = '#f85149';
+        rDesc.textContent = `함정 버블에 걸려 하트가 모두 소진되었습니다. 다시 도전해보세요! 최종 점수: ${score}점`;
+        nextBtn.style.display = 'none';
+      }
+
+      if (wrongReviews.length > 0) {
+        reviewContainer.style.display = 'block';
+        reviewList.innerHTML = wrongReviews.map(r => `<div class="review-item">${r}</div>`).join('');
+      } else {
+        reviewContainer.style.display = 'none';
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      const zoneW = spaceZone.clientWidth;
+      const zoneH = spaceZone.clientHeight;
+      activeBubbles.forEach(b => {
+        const w = b.el.offsetWidth || 180;
+        const h = b.el.offsetHeight || 60;
+        if (b.x + w > zoneW) b.x = Math.max(0, zoneW - w);
+        if (b.y + h > zoneH) b.y = Math.max(0, zoneH - h);
+      });
+    });
+  </script>
+</body>
+</html>
