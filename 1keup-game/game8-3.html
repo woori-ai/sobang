@@ -95,12 +95,16 @@
       background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
       display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
     }
-    .btn-next-stage {
+        .btn-next-stage {
       width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
       border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
-      border-radius: 8px; cursor: pointer; margin-bottom: 8px; text-decoration: none;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
+      border-radius: 8px; cursor: pointer; margin-top: 14px; margin-bottom: 8px; text-decoration: none;
+      display: none; align-items: center; justify-content: center; gap: 8px;
       box-shadow: 0 4px 12px rgba(46, 160, 67, 0.35); transition: all 0.2s ease;
+    }
+    .btn-next-stage:hover {
+      background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+      transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46, 160, 67, 0.5);
     }
     .btn-next-stage:hover {
       background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
@@ -112,10 +116,17 @@
       display: flex; align-items: center; justify-content: center; border-radius: 6px;
     }
     .btn-close-modal:hover { color: #f0f6fc; background: #21262d; }
-    .modal-box { position: relative;
-      background: #161b22; border: 1px solid #30363d; border-radius: 12px;
-      padding: 24px; max-width: 440px; width: 100%; text-align: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        .modal-box { position: relative;
+      background: #161b22; border: 1px solid #30363d; border-radius: 14px;
+      padding: 24px 20px; max-width: 440px; width: 100%; text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8); max-height: 88vh;
+      overflow-y: auto;
+    }
+    .modal-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .modal-box::-webkit-scrollbar-thumb {
+      background: #30363d; border-radius: 4px;
     }
     .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #58a6ff; }
     .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 20px; }
@@ -207,12 +218,15 @@
     </div>
   </div>
 
-  <!-- 게임 오버 모달 -->
+    <!-- 게임 오버 모달 -->
   <div class="overlay-modal" id="gameover-modal" style="display:none;">
     <div class="modal-box">
-      <div style="font-size:2.8rem; margin-bottom:8px;">💥</div>
-      <h2 class="modal-title" style="color:#f85149;">작전 실패!</h2>
+      <div id="gameover-icon" style="font-size:2.8rem; margin-bottom:8px;">💥</div>
+      <h2 class="modal-title" id="gameover-title" style="color:#f85149;">작전 실패!</h2>
       <p class="modal-desc" id="gameover-desc">최종 점수: 0점</p>
+      <a href="./game8-4.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>🚀 [제 5-4탄 A] 전기·가스시설 안전관리 도전 ▶</span>
+      </a>
       <div class="modal-dual-actions">
         <button class="action-btn" onclick="startGame()">🔄 A타입 재도전</button>
         <a href="./game8-3-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>

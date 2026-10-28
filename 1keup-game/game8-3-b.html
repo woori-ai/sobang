@@ -84,27 +84,31 @@
       background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
       display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
     }
-    .modal-box {
-      background: #161b22; border: 1px solid #30363d; border-radius: 12px;
-      padding: 20px; max-width: 480px; width: 100%; text-align: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); max-height: 90vh;
-      display: flex; flex-direction: column; position: relative;
+        .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 14px;
+      padding: 24px 20px; max-width: 480px; width: 100%; text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8); max-height: 88vh;
+      overflow-y: auto; position: relative;
     }
-    .modal-scroll-body {
-      overflow-y: auto; max-height: 42vh; margin-bottom: 12px; padding-right: 4px;
-    }
-    .modal-scroll-body::-webkit-scrollbar {
+    .modal-box::-webkit-scrollbar {
       width: 6px;
     }
-    .modal-scroll-body::-webkit-scrollbar-thumb {
+    .modal-box::-webkit-scrollbar-thumb {
       background: #30363d; border-radius: 4px;
     }
-    .btn-next-stage {
+    
+    
+    
+        .btn-next-stage {
       width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
       border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
-      border-radius: 8px; cursor: pointer; margin-bottom: 8px; text-decoration: none;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
+      border-radius: 8px; cursor: pointer; margin-top: 14px; margin-bottom: 8px; text-decoration: none;
+      display: none; align-items: center; justify-content: center; gap: 8px;
       box-shadow: 0 4px 12px rgba(46, 160, 67, 0.35); transition: all 0.2s ease;
+    }
+    .btn-next-stage:hover {
+      background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+      transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46, 160, 67, 0.5);
     }
     .btn-next-stage:hover {
       background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
@@ -205,7 +209,7 @@
     </div>
   </div>
 
-  <!-- 결과 모달 -->
+    <!-- 결과 모달 -->
   <div class="overlay-modal" id="result-modal" style="display:none;">
     <div class="modal-box">
       <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
@@ -215,9 +219,12 @@
         <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
         <div class="review-list" id="review-list"></div>
       </div>
+      <a href="./game8-4-b.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>🚀 [제 5-4탄 B] 전기·가스시설 안전관리 도전 ▶</span>
+      </a>
       <div class="modal-dual-actions">
         <button class="action-btn" onclick="startGame()">🔄 B타입 재도전</button>
-        <a href="./game8-1.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+        <a href="./game8-3.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
       </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
     </div>
