@@ -95,7 +95,24 @@
       background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
       display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
     }
-    .modal-box {
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 8px; cursor: pointer; margin-bottom: 8px; text-decoration: none;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(46, 160, 67, 0.35); transition: all 0.2s ease;
+    }
+    .btn-next-stage:hover {
+      background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+      transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46, 160, 67, 0.5);
+    }
+    .btn-close-modal {
+      position: absolute; top: 12px; right: 12px; background: transparent; border: none;
+      color: #8b949e; font-size: 1.3rem; cursor: pointer; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center; border-radius: 6px;
+    }
+    .btn-close-modal:hover { color: #f0f6fc; background: #21262d; }
+    .modal-box { position: relative;
       background: #161b22; border: 1px solid #30363d; border-radius: 12px;
       padding: 24px; max-width: 440px; width: 100%; text-align: center;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
@@ -184,7 +201,7 @@
       </p>
       <div class="modal-dual-actions">
         <button class="action-btn" onclick="startGame()">🎯 A타입 시작</button>
-        <a href="./game8-1-b.html" class="action-btn btn-alt">🛸 B타입 전환</a>
+        <a href="./game8-3-b.html" class="action-btn btn-alt">🛸 B타입 전환</a>
       </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
     </div>
@@ -198,7 +215,7 @@
       <p class="modal-desc" id="gameover-desc">최종 점수: 0점</p>
       <div class="modal-dual-actions">
         <button class="action-btn" onclick="startGame()">🔄 A타입 재도전</button>
-        <a href="./game8-1-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
+        <a href="./game8-3-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
       </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
     </div>
@@ -409,7 +426,26 @@
       isGameRunning = false;
       clearInterval(spawnTimer);
       cancelAnimationFrame(animFrame);
-      document.getElementById('gameover-desc').innerHTML = `최종 점수: <strong>${score}점</strong><br>제4류 지정수량과 연료가스 특성을 다시 점검하세요!`;
+
+      const title = document.getElementById('gameover-title');
+      const icon = document.getElementById('gameover-icon');
+      const desc = document.getElementById('gameover-desc');
+      const nextBtn = document.getElementById('next-stage-btn-a');
+
+      if (score >= 1000) {
+        icon.textContent = "🏆";
+        title.textContent = "작전 성공! 제조소 건축구조 & 환기배출 돌파!";
+        title.style.color = "#3fb950";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>기준 점수를 돌파하여 작전에 성공하셨습니다!`;
+        if (nextBtn) nextBtn.style.display = 'flex';
+      } else {
+        icon.textContent = "💥";
+        title.textContent = "작전 실패!";
+        title.style.color = "#f85149";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>핵심 요점을 복습하고 다시 도전하세요!`;
+        if (nextBtn) nextBtn.style.display = 'none';
+      }
+
       document.getElementById('gameover-modal').style.display = 'flex';
     }
   </script>
