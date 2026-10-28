@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[2권 제 2-3탄 B] 경보·방송·발신기 버블 헌팅</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #090d13; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(13, 17, 23, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; }
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-b { background: #8957e5; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .round-pill {
+      font-size: 0.8rem; font-weight: 800; background: #1f242c;
+      padding: 4px 10px; border-radius: 12px; border: 1px solid #388bfd; color: #58a6ff;
+    }
+
+    .mission-banner {
+      background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 16px;
+      text-align: center; z-index: 40;
+    }
+    .mission-title { font-size: 1rem; font-weight: 800; color: #58a6ff; margin-bottom: 2px; }
+    .mission-desc { font-size: 0.78rem; color: #8b949e; }
+    .mission-progress-bar {
+      width: 100%; max-width: 320px; height: 6px; background: #21262d;
+      border-radius: 3px; margin: 6px auto 0; overflow: hidden;
+    }
+    .mission-progress-fill {
+      height: 100%; background: linear-gradient(90deg, #388bfd, #58a6ff);
+      width: 0%; transition: width 0.3s ease;
+    }
+
+    #round-clear-bar {
+      display: none; background: rgba(35, 134, 54, 0.95); padding: 12px 18px;
+      color: #ffffff; text-align: center; z-index: 60; border-bottom: 2px solid #3fb950;
+      animation: slideDown 0.3s ease-out;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
+    }
+    .round-clear-text { font-size: 0.92rem; font-weight: 800; display: block; margin-bottom: 6px; }
+    .btn-next-round {
+      padding: 6px 18px; background: #ffffff; color: #238636; border: none;
+      border-radius: 6px; font-weight: 800; font-size: 0.85rem; cursor: pointer;
+    }
+
+    main.space-zone {
+      flex: 1; position: relative; width: 100%; overflow: hidden;
+      background: radial-gradient(circle at 50% 50%, #161b22 0%, #090d13 100%);
+    }
+
+    .bubble {
+      position: absolute; border-radius: 14px; padding: 12px 14px;
+      max-width: 220px; cursor: pointer; transition: transform 0.15s ease, border-color 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4); text-align: center;
+      background: rgba(33, 38, 45, 0.92); border: 2px solid #30363d;
+    }
+    .bubble:hover { transform: scale(1.05); }
+    .bubble:active { transform: scale(0.96); }
+    .bubble.target { border-color: #58a6ff; }
+    .bubble.trap { border-color: #f85149; }
+    .bubble-text { font-size: 0.84rem; font-weight: 700; color: #f0f6fc; line-height: 1.35; }
+    .bubble-tip { font-size: 0.7rem; color: #8b949e; margin-top: 4px; display: none; }
+    .bubble.revealed .bubble-tip { display: block; }
+
+    /* 정답 맞춘 버블: 절대 사라지지 않고 초록색 체크 상태로 영구 보존 */
+    .bubble.solved {
+      background: rgba(46, 160, 67, 0.45) !important;
+      border-color: #3fb950 !important;
+      color: #7ee787 !important;
+      box-shadow: 0 0 16px rgba(63, 185, 80, 0.7);
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.9); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 16px;
+      max-width: 440px; width: 100%; padding: 26px 22px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6); max-height: 90vh; overflow-y: auto;
+    }
+    .modal-title { font-size: 1.35rem; font-weight: 800; color: #f0f6fc; margin-bottom: 10px; }
+    .modal-desc { font-size: 0.86rem; color: #8b949e; line-height: 1.6; margin-bottom: 20px; }
+    .modal-dual-actions { display: flex; gap: 8px; margin-bottom: 10px; }
+    .action-btn {
+      flex: 1; padding: 12px; background: #8957e5; border: none; color: #ffffff;
+      font-size: 0.95rem; font-weight: 800; border-radius: 8px; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .action-btn.btn-alt { background: #238636; }
+    .sub-action-btn { display: block; font-size: 0.82rem; color: #8b949e; margin-top: 10px; text-decoration: underline; cursor: pointer; }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 10px; cursor: pointer; text-align: center; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 12px; box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4);
+      animation: pulseBtn 1.8s infinite;
+    }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4); }
+      50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(46, 160, 67, 0.65); }
+    }
+    .review-list {
+      text-align: left; background: #0d1117; border: 1px solid #30363d;
+      border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 0.78rem;
+    }
+    .review-item { padding: 4px 0; border-bottom: 1px solid #21262d; color: #f85149; }
+    .review-item:last-child { border-bottom: none; }
+
+    @media (max-width: 600px) {
+      .bubble { max-width: 180px; padding: 10px 12px; }
+      .bubble-text { font-size: 0.76rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">◀ 나가기</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <a href="./game2-2-3.html" class="type-btn">A 낙하요격</a>
+        <span class="type-btn active-b">B 버블헌팅</span>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
+      <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
+      <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+    </div>
+    <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
+  </header>
+
+  <section class="mission-banner">
+    <div class="mission-title" id="mission-title">로딩 중...</div>
+    <div class="mission-desc" id="mission-desc">미션 설명</div>
+    <div class="mission-progress-bar">
+      <div class="mission-progress-fill" id="progress-fill"></div>
+    </div>
+  </section>
+
+  <!-- 라운드 클리어 안내 바 -->
+  <div id="round-clear-bar">
+    <span class="round-clear-text">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
+    <button class="btn-next-round" onclick="proceedNextRound()">다음 라운드 ▶</button>
+  </div>
+
+  <main class="space-zone" id="space-zone"></main>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">📢</div>
+      <h2 class="modal-title">[2권 제 2-3탄 B] 경보·방송·발신기 버블 헌팅</h2>
+      <p class="modal-desc">
+        화면에 떠다니는 음향·방송·발신기 정보 버블 중<br>상단 <b>미션 목표</b>에 해당하는 정답만 사냥하세요!<br><br>
+        • 맞힌 정답은 사라지지 않고 <b>초록색(✅)</b>으로 화면에 남아 끝까지 학습할 수 있습니다.<br>
+        • <b>음향장치</b>: 1m 거리 90dB 이상, 수평거리 25m 이하, 전압강하 80%(19.2V)<br>
+        • <b>비상방송</b>: 실내 1W / 실외 3W, 3선식 배선(공통, 업무, 긴급)<br>
+        • <b>우선경보 개정</b>: 5층↑ 3천㎡↑ (2층↑: 발화+직상4개층, 1층: 직상4+지하전층, 지하: 직상+기타지하전층)<br>
+        • <b>시각경보</b>: 높이 2~2.5m, 1~3Hz 섬광 점멸 / <b>발신기</b>: 높이 0.8~1.5m, 기본 7가닥
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🛸 B타입 시작</button>
+        <a href="./game2-2-3.html" class="action-btn btn-alt">🎯 A타입 전환</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">작전 성공!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
+        <div class="review-list" id="review-list"></div>
+      </div>
+      <a href="../study.html?round=2-2-3" class="btn-next-stage" id="next-stage-btn">
+        <span>📖 [2권 제 2-3탄] 요약 학습노트 확인하기 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 B타입 재도전</button>
+        <a href="./game2-2-3.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const ROUND_DATA = [
+      {
+        round: 1,
+        title: "🔔 [음향장치 & 비상방송설비 설치 및 배선 기준]만 모두 사냥하세요!",
+        desc: "음향장치(1m 90dB, 수평거리 25m), 비상방송(실내 1W/실외 3W, 3선식 배선)",
+        targets: [
+          {
+            text: "음향장치 음압 기준: 중심 1m 거리에서 90dB 이상",
+            tip: "경종 중심 1m 떨어진 위치에서 90데시벨 이상 음압 확보!"
+          },
+          {
+            text: "음향장치 배치 기준: 각 부분으로부터 수평거리 25m 이하",
+            tip: "모든 층의 각 부분에서 25m 이내에 도달하도록 배치!"
+          },
+          {
+            text: "비상방송 스피커 정격출력: 실내 1W 이상, 실외 3W 이상",
+            tip: "일반 실내는 1W, 소음이 크거나 실외는 3W 이상 확성기!"
+          },
+          {
+            text: "음량조절기 배선 방식: 3선식 배선 (공통선, 업무선, 긴급선)",
+            tip: "3선식 배선으로 평상시 음량을 줄여도 화재 시 최대음량 강제 방송!"
+          }
+        ],
+        traps: [
+          {
+            text: "음향장치 음압 기준: 중심 1m 거리에서 70dB 이상이면 합격",
+            tip: "[오답] 소방법상 음압 기준은 '90dB 이상'입니다!"
+          },
+          {
+            text: "음향장치는 수평거리 40m 이하마다 설치",
+            tip: "[오답] 40m는 옥외소화전 기준이며, 음향장치는 '25m 이하'입니다!"
+          },
+          {
+            text: "비상방송 음량조절기는 시공 편의를 위해 2선식 배선으로 통일",
+            tip: "[오답] 2선식이면 볼륨을 꺼둘 때 화재 방송이 안 들리므로 반드시 '3선식'!"
+          },
+          {
+            text: "비상방송 기동 지연시간은 화재 접수 후 60초 이내에만 송출되면 정상",
+            tip: "[오답] 비상방송 개시 지연시간은 '10초 이내'여야 합니다!"
+          }
+        ]
+      },
+      {
+        round: 2,
+        title: "🏢 [우선경보방식 개정 법정 기준]만 모두 사냥하세요!",
+        desc: "5층 이상+3천㎡ 초과 (2층↑: 발화+직상4개층, 1층: 발화+직상4개층+지하전층, 지하: 발화+직상+기타지하전층)",
+        targets: [
+          {
+            text: "우선경보방식 적용 대상: 층수 5층 이상 + 연면적 3,000㎡ 초과",
+            tip: "두 가지 요건을 동시에 충족해야 우선경보 적용, 미달 시 일제경보!"
+          },
+          {
+            text: "2층 이상 발화 시: 발화층 및 그 직상 4개층 경보",
+            tip: "화재 연기가 상승하므로 발화층과 바로 위 4개 층에 우선 경보!"
+          },
+          {
+            text: "1층 발화 시: 발화층 + 그 직상 4개층 + 지하 전층 경보",
+            tip: "1층 화재는 지하 피난을 막으므로 지하 전층과 직상 4개층 동시 경보!"
+          },
+          {
+            text: "지하층 발화 시: 발화층 + 그 직상층 + 기타 지하 전층 경보",
+            tip: "지하층 화재 시에는 해당 발화층, 바로 위 직상층, 다른 모든 지하층 경보!"
+          }
+        ],
+        traps: [
+          {
+            text: "우선경보방식 적용 대상: 층수 3층 이상 + 연면적 1,000㎡ 초과",
+            tip: "[오답] 우선경보 기준은 '5층 이상이면서 연면적 3,000㎡ 초과'입니다!"
+          },
+          {
+            text: "2층 이상 발화 시에는 발화층과 직상 1개 층에만 우선 경보 발령",
+            tip: "[오답 개정 전!] 2022년 법 개정으로 직상 1개층이 아닌 '직상 4개층'입니다!"
+          },
+          {
+            text: "1층 화재 시에는 지상 1층에만 경보를 울리고 지하층은 나중에 통보",
+            tip: "[오답] 1층 화재는 지하층 탈출을 막으므로 반드시 '지하 전층' 동시 경보!"
+          },
+          {
+            text: "지하 2층 발화 시 지상 10층까지 건물 전체에 즉시 일제경보 발령",
+            tip: "[오답] 우선경보 대상은 발화층, 직상층, 기타 지하층에 한하여 우선 경보합니다!"
+          }
+        ]
+      },
+      {
+        round: 3,
+        title: "💡 [시각경보장치 설치 높이 및 섬광 점멸 규격]만 모두 사냥하세요!",
+        desc: "설치 높이 2~2.5m (천장 2m 이하는 천장 0.15m 이내), 점멸주기 1~3Hz, 섬광광도 75cd 이상",
+        targets: [
+          {
+            text: "시각경보장치 설치 높이: 바닥으로부터 2m 이상 2.5m 이하",
+            tip: "청각장애인의 눈높이 시야 확보를 위해 2m~2.5m에 설치!"
+          },
+          {
+            text: "천장 높이 2m 이하 장소: 천장으로부터 0.15m 이내에 설치",
+            tip: "층고가 낮은 장소는 천장 바로 아래 0.15m 이내에 부착!"
+          },
+          {
+            text: "시각경보 섬광 점멸주기: 초당 1회 이상 3회 이하 (1~3Hz)",
+            tip: "광원이 1~3Hz 주기로 규칙적 점멸하여 강력한 시각 피난 유도!"
+          },
+          {
+            text: "시각경보 섬광 광도: 광축 방향 최소 75 cd 이상",
+            tip: "실내 조명 아래에서도 뚜렷하게 식별되도록 75칸델라 이상 확보!"
+          }
+        ],
+        traps: [
+          {
+            text: "시각경보장치는 바닥으로부터 0.8m 이상 1.5m 이하 높이에 설치",
+            tip: "[오답] 0.8~1.5m는 발신기/유도등 기준이며, 시각경보는 '2m~2.5m'입니다!"
+          },
+          {
+            text: "시각경보장치는 초당 10회 이상 고속 점멸하여 레이저 쇼 효과 연출",
+            tip: "[오답] 광과민성 발작 방지 및 시인성을 위해 초당 '1회~3회(1~3Hz)'로 점멸!"
+          },
+          {
+            text: "청각장애인용 시각경보장치는 시끄러운 사이렌 소리를 함께 발생",
+            tip: "[오답] 시각경보장치는 청각장애인을 위한 '빛(섬광)' 전용 피난 유도 장치입니다!"
+          },
+          {
+            text: "시각경보장치는 화장실이나 욕실 내부 천장 중앙에만 의무 설치",
+            tip: "[오답] 복도, 통로, 청문각실, 거실 등 피난 동선에 설치해야 합니다!"
+          }
+        ]
+      },
+      {
+        round: 4,
+        title: "🔘 [발신기 설치 기준 & P형 기본 7가닥 배선]만 모두 사냥하세요!",
+        desc: "발신기 높이 0.8~1.5m, 전화잭 구비, 기본 7가닥(구역 증설 시 회로선 1선 추가, 공통선 7구역)",
+        targets: [
+          {
+            text: "발신기 설치 높이: 바닥으로부터 0.8m 이상 1.5m 이하",
+            tip: "사람이 손으로 누르기 가장 편한 높이인 0.8m~1.5m에 설치!"
+          },
+          {
+            text: "P형 1급 발신기: 수신기와 통화 가능한 인터폰 전화잭 구비",
+            tip: "송수화기를 꽂아 수신기와 통화할 수 있는 전화 잭이 내장된 1급 규격!"
+          },
+          {
+            text: "자탐 기본 배선: 회로, 공통, 경종, 표시등, 응답, 전화 등 7가닥",
+            tip: "기본 1개 경계구역에 필요한 자탐 7대 기본 선로!"
+          },
+          {
+            text: "경계구역 증설 시 배선: 회로선(지구선)이 1가닥씩 추가",
+            tip: "구역이 늘어나면 회로선이 1가닥씩 늘어나며, 공통선은 7구역마다 1가닥 추가!"
+          }
+        ],
+        traps: [
+          {
+            text: "발신기는 오동작 방지를 위해 바닥으로부터 2.5m 이상 높이에 설치",
+            tip: "[오답] 손으로 눌러야 하므로 바닥으로부터 '0.8m~1.5m 이하'에 설치합니다!"
+          },
+          {
+            text: "P형 2급 발신기에도 전화 잭이 내장되어 상호 음성 통화 가능",
+            tip: "[오답] 전화 잭은 'P형 1급' 발신기에만 있습니다!"
+          },
+          {
+            text: "경계구역이 1개 늘어날 때마다 기본 7가닥 전체가 통째로 7가닥씩 증설",
+            tip: "[오답] 공통선 등은 공유하므로 '회로선(지구선)'만 1가닥씩 추가됩니다!"
+          },
+          {
+            text: "회로공통선 1가닥은 건물의 모든 경계구역(100개 구역)을 무제한 담당 가능",
+            tip: "[오답] 회로공통선 1가닥이 담당하는 경계구역은 '최대 7개 이하'입니다!"
+          }
+        ]
+      }
+    ];
+
+    let currentRoundIdx = 0;
+    let score = 0;
+    let lives = 3;
+    let speedMult = 0.5;
+    let foundTargetsInRound = 0;
+    let totalTargetsInRound = 0;
+    let activeBubbles = [];
+    let animFrame = null;
+    let lastTime = 0;
+    let wrongReviews = [];
+
+    const spaceZone = document.getElementById('space-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const roundIndicator = document.getElementById('round-indicator');
+    const missionTitle = document.getElementById('mission-title');
+    const missionDesc = document.getElementById('mission-desc');
+    const progressFill = document.getElementById('progress-fill');
+    const roundClearBar = document.getElementById('round-clear-bar');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSfx(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'pop') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(450, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now); osc.stop(now + 0.1);
+      } else if (type === 'miss') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.linearRampToValueAtTime(70, now + 0.2);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+      } else if (type === 'clear') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(783.99, now + 0.2);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now); osc.stop(now + 0.35);
+      }
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
+      score = 0;
+      lives = 3;
+      wrongReviews = [];
+      updateHUD();
+      loadRound(0);
+      lastTime = performance.now();
+      if (animFrame) cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, 3 - lives));
+      roundIndicator.textContent = `ROUND ${currentRoundIdx + 1} / ${ROUND_DATA.length}`;
+    }
+
+    function updateProgress() {
+      const pct = (foundTargetsInRound / totalTargetsInRound) * 100;
+      progressFill.style.width = `${pct}%`;
+    }
+
+    function loadRound(idx) {
+      currentRoundIdx = idx;
+      roundClearBar.style.display = 'none';
+      spaceZone.innerHTML = '';
+      activeBubbles = [];
+
+      const rData = ROUND_DATA[idx];
+      missionTitle.textContent = rData.title;
+      missionDesc.textContent = rData.desc;
+      foundTargetsInRound = 0;
+      totalTargetsInRound = rData.targets.length;
+      updateProgress();
+      updateHUD();
+
+      const allItems = [
+        ...rData.targets.map(t => ({ ...t, isTarget: true })),
+        ...rData.traps.map(t => ({ ...t, isTarget: false }))
+      ];
+      allItems.sort(() => Math.random() - 0.5);
+
+      const zoneW = spaceZone.clientWidth || 360;
+      const zoneH = spaceZone.clientHeight || 420;
+
+      allItems.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = `bubble ${item.isTarget ? 'target' : 'trap'}`;
+        el.innerHTML = `
+          <div class="bubble-text">${item.text}</div>
+          <div class="bubble-tip">${item.tip}</div>
+        `;
+        const bx = Math.max(10, Math.random() * (zoneW - 200));
+        const by = Math.max(10, Math.random() * (zoneH - 120));
+        el.style.left = `${bx}px`;
+        el.style.top = `${by}px`;
+        spaceZone.appendChild(el);
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (25 + Math.random() * 20) * speedMult;
+        activeBubbles.push({
+          el,
+          item,
+          x: bx,
+          y: by,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          isSolved: false
+        });
+      });
+
+      activeBubbles.forEach(b => {
+        b.el.onclick = () => onBubbleClick(b);
+      });
+    }
+
+    function onBubbleClick(bubble) {
+      if (bubble.isSolved) return;
+
+      if (bubble.item.isTarget) {
+        playSfx('pop');
+        bubble.isSolved = true;
+        // 버블이 사라지지 않고 초록색 체크 상태로 화면에 계속 남아 학습 내용을 보존
+        bubble.el.classList.add('solved');
+        const textEl = bubble.el.querySelector('.bubble-text');
+        if (textEl) {
+          textEl.innerHTML = '<span style="color:#7ee787; font-weight:800; margin-right:4px;">✅</span>' + bubble.item.text;
+        }
+        score += 150;
+        foundTargetsInRound++;
+        updateHUD();
+        updateProgress();
+
+        if (foundTargetsInRound >= totalTargetsInRound) {
+          onRoundSuccess();
+        }
+      } else {
+        playSfx('miss');
+        lives--;
+        score = Math.max(0, score - 80);
+        bubble.el.classList.add('revealed');
+        bubble.el.style.borderColor = '#f85149';
+        bubble.el.style.background = 'rgba(248, 81, 73, 0.25)';
+
+        if (!wrongReviews.includes(bubble.item.text)) {
+          wrongReviews.push(`${bubble.item.text} ➡️ ${bubble.item.tip}`);
+        }
+        updateHUD();
+
+        if (lives <= 0) {
+          gameOver(false);
+        }
+      }
+    }
+
+    function onRoundSuccess() {
+      playSfx('clear');
+      roundClearBar.style.display = 'block';
+
+      // 라운드 내 모든 트랩 버블도 정답 및 해설을 공개하여 학습 유도
+      activeBubbles.forEach(b => {
+        if (!b.item.isTarget) {
+          b.el.classList.add('revealed');
+          b.el.style.borderColor = '#f85149';
+        }
+      });
+    }
+
+    function proceedNextRound() {
+      roundClearBar.style.display = 'none';
+      if (currentRoundIdx + 1 < ROUND_DATA.length) {
+        loadRound(currentRoundIdx + 1);
+      } else {
+        gameOver(true);
+      }
+    }
+
+    function gameLoop(now) {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      const zoneW = spaceZone.clientWidth;
+      const zoneH = spaceZone.clientHeight;
+
+      activeBubbles.forEach(b => {
+        b.x += b.vx * dt * speedMult;
+        b.y += b.vy * dt * speedMult;
+
+        const w = b.el.offsetWidth || 180;
+        const h = b.el.offsetHeight || 60;
+
+        if (b.x <= 0) { b.x = 0; b.vx *= -1; }
+        else if (b.x + w >= zoneW) { b.x = zoneW - w; b.vx *= -1; }
+
+        if (b.y <= 0) { b.y = 0; b.vy *= -1; }
+        else if (b.y + h >= zoneH) { b.y = zoneH - h; b.vy *= -1; }
+
+        b.el.style.left = `${b.x}px`;
+        b.el.style.top = `${b.y}px`;
+      });
+
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function gameOver(isWin) {
+      if (animFrame) cancelAnimationFrame(animFrame);
+      const resModal = document.getElementById('result-modal');
+      const rIcon = document.getElementById('result-icon');
+      const rTitle = document.getElementById('result-title');
+      const rDesc = document.getElementById('result-desc');
+      const reviewContainer = document.getElementById('review-container');
+      const reviewList = document.getElementById('review-list');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      resModal.style.display = 'flex';
+      if (isWin) {
+        rIcon.textContent = '🏆';
+        rTitle.textContent = '전 라운드 올 클리어!';
+        rTitle.style.color = '#58a6ff';
+        rDesc.textContent = `축하합니다! 경보·방송·발신기 기준을 완벽하게 마스터했습니다! 최종 점수: ${score}점`;
+        nextBtn.style.display = 'inline-flex';
+      } else {
+        rIcon.textContent = '💥';
+        rTitle.textContent = '작전 실패 (하트 소진)';
+        rTitle.style.color = '#f85149';
+        rDesc.textContent = `함정 버블에 걸려 하트가 모두 소진되었습니다. 다시 도전해보세요! 최종 점수: ${score}점`;
+        nextBtn.style.display = 'none';
+      }
+
+      if (wrongReviews.length > 0) {
+        reviewContainer.style.display = 'block';
+        reviewList.innerHTML = wrongReviews.map(r => `<div class="review-item">${r}</div>`).join('');
+      } else {
+        reviewContainer.style.display = 'none';
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      const zoneW = spaceZone.clientWidth;
+      const zoneH = spaceZone.clientHeight;
+      activeBubbles.forEach(b => {
+        const w = b.el.offsetWidth || 180;
+        const h = b.el.offsetHeight || 60;
+        if (b.x + w > zoneW) b.x = Math.max(0, zoneW - w);
+        if (b.y + h > zoneH) b.y = Math.max(0, zoneH - h);
+      });
+    });
+  </script>
+</body>
+</html>
