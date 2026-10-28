@@ -150,7 +150,7 @@
     <div class="hud-center">
       <div class="type-switcher">
         <span class="type-btn active-a">A 낙하요격</span>
-        <a href="./game6-1-b.html" class="type-btn">B 버블헌팅</a>
+        <a href="./game2-1-1-b.html" class="type-btn">B 버블헌팅</a>
       </div>
       <span class="speed-tag">속도:</span>
       <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
@@ -165,45 +165,40 @@
     <div class="danger-line"></div>
   </main>
 
-  <footer class="control-deck">
-    <button class="deck-btn btn-cat-1" onclick="fireShot('소화기')">
-      <span class="btn-badge">반경 5m</span>
-      <span class="btn-title">소화기</span>
-      <span class="btn-sub">3단위 2개/대형 1개</span>
+  <footer class="control-deck" style="grid-template-columns: repeat(4, 1fr);">
+    <button class="deck-btn btn-cat-1" onclick="fireShot('소화기분류·수치')">
+      <span class="btn-badge">소형/대형/압력</span>
+      <span class="btn-title">소화기 분류·수치</span>
+      <span class="btn-sub">0.7~0.98MPa/10년</span>
     </button>
-    <button class="deck-btn btn-cat-2" onclick="fireShot('간이소화')">
-      <span class="btn-badge">0.1 MPa</span>
-      <span class="btn-title">간이 소화장치</span>
-      <span class="btn-sub">20분/수원 1.3톤 이상</span>
+    <button class="deck-btn btn-cat-2" onclick="fireShot('능력단위기준면적')">
+      <span class="btn-badge">30/50/100/200</span>
+      <span class="btn-title">능력단위 기준면적</span>
+      <span class="btn-sub">위락30/공연50/근생100</span>
     </button>
-    <button class="deck-btn btn-cat-3" onclick="fireShot('비상경보')">
-      <span class="btn-badge">연면적 400㎡</span>
-      <span class="btn-title">비상 경보장치</span>
-      <span class="btn-sub">지하·무창 150㎡/경보음</span>
+    <button class="deck-btn btn-cat-3" onclick="fireShot('간이소화·자동확산')">
+      <span class="btn-badge">모래/질석/투척</span>
+      <span class="btn-title">간이소화·자동확산</span>
+      <span class="btn-sub">모래50L/질석80L/0.5단위</span>
     </button>
-    <button class="deck-btn btn-cat-4" onclick="fireShot('피난유도선')">
-      <span class="btn-badge">바닥 1m 이하</span>
-      <span class="btn-title">간이피난유도선</span>
-      <span class="btn-sub">5m 간격/20분 점등</span>
-    </button>
-    <button class="deck-btn btn-cat-5" onclick="fireShot('가스·방화포')">
-      <span class="btn-badge">유기용제·불티</span>
-      <span class="btn-title">가스경보·방화포</span>
-      <span class="btn-sub">비상조명/KS 방화포</span>
+    <button class="deck-btn btn-cat-4" onclick="fireShot('설치거리·점검관리')">
+      <span class="btn-badge">20m/30m/1.5m</span>
+      <span class="btn-title">설치거리·배치기준</span>
+      <span class="btn-sub">소형20m/대형30m/K급</span>
     </button>
   </footer>
 
   <!-- 시작 모달 -->
   <div class="overlay-modal" id="start-modal">
     <div class="modal-box">
-      <div style="font-size:2.8rem; margin-bottom:8px;">🏗️</div>
-      <h2 class="modal-title">[제 6-1탄 A] 공사장 임시소방시설 요격전</h2>
+      <div style="font-size:2.8rem; margin-bottom:8px;">🧯</div>
+      <h2 class="modal-title">[2권 제 1-1탄 A] 소화기구 구조·점검 요격전</h2>
       <p class="modal-desc">
-        하늘에서 떨어지는 공사장 임시소방시설(소화기, 간이소화, 비상경보 등)의<br>법정 설치 규격과 수치를 보고 하단 <b>5대 카테고리 버튼</b>으로 요격하세요!<br><br>• 소화기: 반경 5m 이내, 능력단위 3단위 2대 + 대형 1대<br>• 간이소화장치: 방수압 0.1MPa 이상, 20분 방수 (수원 1.3톤 이상)<br>• 비상경보: 연면적 400㎡ / 간이피난유도선: 지하·무창 150㎡ (바닥 1m 이하)
+        하늘에서 떨어지는 소화기구(소화기, 간이소화, 자동확산 등)의<br>법정 설치 규격과 수치를 보고 하단 <b>4대 카테고리 버튼</b>으로 요격하세요!<br><br>• 소화기 분류: 소형 1단위 이상, 대형 A10/B20, 압력계 녹색 0.7~0.98MPa<br>• 기준면적: 위락 30㎡, 집회·의료 50㎡, 근생·숙박 100㎡, 기타 200㎡ (내화구조 2배)<br>• 보행거리: 소형 20m, 대형 30m, 높이 1.5m 이하, 모래 50L·질석 80L 0.5단위
       </p>
       <div class="modal-dual-actions">
         <button class="action-btn" onclick="startGame()">🎯 A타입 시작</button>
-        <a href="./game6-1-b.html" class="action-btn btn-alt">🛸 B타입 전환</a>
+        <a href="./game2-1-1-b.html" class="action-btn btn-alt">🛸 B타입 전환</a>
       </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
     </div>
@@ -215,12 +210,12 @@
       <div id="gameover-icon" style="font-size:2.8rem; margin-bottom:8px;">💥</div>
       <h2 class="modal-title" id="gameover-title" style="color:#f85149;">작전 실패!</h2>
       <p class="modal-desc" id="gameover-desc">최종 점수: 0점</p>
-      <a href="../games.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
-        <span>🚀 [제 6-2탄 A] 용접 화기취급 안전 도전 ▶</span>
+      <a href="./game2-1-2.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>🚀 [2권 제 1-2탄 A] 옥내소화전 구조·점검 도전 ▶</span>
       </a>
       <div class="modal-dual-actions">
         <button class="action-btn" onclick="startGame()">🔄 A타입 재도전</button>
-        <a href="./game6-1-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
+        <a href="./game2-1-1-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
       </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
     </div>
