@@ -107,6 +107,10 @@
     memoText: document.getElementById('memo-text'),
     refFooter: document.getElementById('ref-footer'),
     refText: document.getElementById('ref-text'),
+    cardStudyBtn: document.getElementById('card-study-btn'),
+    studyLinkBox: document.getElementById('study-link-box'),
+    btnStudyLink: document.getElementById('btn-study-link'),
+    studyLinkBadge: document.getElementById('study-link-badge'),
 
     // 하단 페이저
     prevBtn: document.getElementById('prev-btn'),
@@ -294,6 +298,13 @@
     dom.cardDiff.textContent = item.difficulty || (item.source ? `출처: ${item.source}` : '실전핵심');
     dom.cardPage.textContent = item.page_ref || (item.book ? item.book : '');
     dom.cardPage.style.display = (item.page_ref || item.book) ? 'inline-block' : 'none';
+
+    // 상단 요약노트 원클릭 링크 갱신
+    const studyInfo = getStudyRound(item);
+    if (dom.cardStudyBtn) {
+      dom.cardStudyBtn.href = `./study.html?round=${studyInfo.round}`;
+      dom.cardStudyBtn.title = `[${studyInfo.label}] 1분 족집게 요약노트 새 탭으로 보기`;
+    }
 
     // 북마크 상태
     const targetTab = (tab === 'pic') ? 'mcq' : tab;
@@ -492,6 +503,14 @@
       dom.refText.textContent = `출처: ${refInfo}`;
     } else {
       dom.refFooter.style.display = 'none';
+    }
+
+    // 해설 하단 요약노트 배너 갱신
+    const studyInfo = getStudyRound(item);
+    if (dom.btnStudyLink && dom.studyLinkBadge) {
+      dom.btnStudyLink.href = `./study.html?round=${studyInfo.round}`;
+      dom.studyLinkBadge.textContent = studyInfo.label;
+      dom.btnStudyLink.title = `[${studyInfo.label}] 1분 족집게 핵심 암기카드 새 탭으로 정독`;
     }
   }
 

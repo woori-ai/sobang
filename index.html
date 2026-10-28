@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=20261027_tabs6">
+  <link rel="stylesheet" href="style.css?v=20261028_study">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚒</text></svg>">
   <script>
     // 모바일 브라우저 구버전 캐시 및 서비스워커 자동 강제 청소
@@ -141,6 +141,7 @@
             <span class="tag tag-chapter" id="card-chapter">과목</span>
             <span class="tag tag-diff" id="card-diff">기본빈출</span>
             <span class="tag tag-page" id="card-page">p.0</span>
+            <a href="./study.html" target="_blank" rel="noopener noreferrer" class="tag tag-study-link" id="card-study-btn" title="해당 단원 1분 요약노트 새 탭으로 보기">📖 요약노트 ↗</a>
           </div>
           <button id="bookmark-toggle" class="bookmark-btn" title="북마크 토글">
             <span id="bookmark-icon">☆</span>
@@ -214,6 +215,20 @@
             <div class="ref-footer" id="ref-footer">
               <span id="ref-text">기본서 참조</span>
             </div>
+
+            <!-- 관련 요약노트 새 탭 정독 배너 -->
+            <div class="study-link-box" id="study-link-box">
+              <a href="./study.html" target="_blank" rel="noopener noreferrer" class="btn-study-link" id="btn-study-link">
+                <div class="study-link-left">
+                  <span class="study-link-icon">📖</span>
+                  <div class="study-link-text">
+                    <span class="study-link-title">이 문제 핵심 요약노트 정독하기</span>
+                    <span class="study-link-badge" id="study-link-badge">1분 족집게 핵심 암기카드</span>
+                  </div>
+                </div>
+                <span class="study-link-arrow">새 탭으로 열기 ↗</span>
+              </a>
+            </div>
           </div>
         </section>
       </article>
@@ -281,6 +296,6 @@
 
   </div>
 
-  <script src="app.js?v=20261027_pic"></script>
+  <script src="app.js?v=20261028_study"></script>
 </body>
 </html>
