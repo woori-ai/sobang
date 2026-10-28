@@ -3,278 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>[제 7-2탄 B] 화재이론 & 특수현상 플로팅 헌팅</title>
+  <title>[제 7-2탄 B] 구조·면적 & 설비 및 인력 버블 헌터</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
-      overflow: hidden;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
     }
-
     header {
-      height: 60px;
-      padding: 10px 16px;
-      background: rgba(22, 27, 34, 0.95);
-      border-bottom: 1px solid #30363d;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 20;
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
     }
-    .hud-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
     .btn-exit-game {
-      background: #21262d;
-      color: #8b949e;
-      border: 1px solid #30363d;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
     }
-    .btn-exit-game:hover { background: #30363d; color: #f0f6fc; }
-    .score-badge {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #58a6ff;
-      background: rgba(56, 139, 253, 0.1);
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid rgba(56, 139, 253, 0.3);
-    }
-        @keyframes heartHeal {
-      0% { transform: scale(1); }
-      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
-      70% { transform: scale(0.95); }
-      100% { transform: scale(1); }
-    }
-    .heart-heal-bounce {
-      animation: heartHeal 0.5s ease-in-out;
-    }
-    .lives { display: inline-block; transition: transform 0.2s ease;  font-size: 1.1rem; letter-spacing: 2px; }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #a371f7; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; }
 
     .hud-center {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
     }
-    .speed-label { font-size: 0.78rem; color: #8b949e; font-weight: 600; }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-b { background: #8957e5; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
     .speed-btn {
-      background: #21262d;
-      color: #c9d1d9;
-      border: 1px solid #30363d;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-weight: 700;
-      transition: all 0.15s;
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
     }
-    .speed-btn.active {
-      background: #1f6feb;
-      border-color: #388bfd;
-      color: #fff;
-    }
-
-    .hud-right { display: flex; align-items: center; gap: 12px; }
-    .round-pill {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #f0883e;
-      background: rgba(240, 136, 62, 0.12);
-      padding: 4px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(240, 136, 62, 0.3);
-    }
+    .speed-btn.active { background: #8957e5; color: #ffffff; border-color: #a371f7; }
+    .round-pill { font-size: 0.82rem; font-weight: 800; color: #a371f7; background: rgba(137, 87, 229, 0.15); padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(163, 113, 247, 0.3); }
 
     section.mission-banner {
-      background: #161b22;
-      border-bottom: 1px solid #30363d;
-      padding: 10px 16px;
-      text-align: center;
-      z-index: 15;
+      background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 16px;
+      text-align: center; z-index: 15;
     }
-    .mission-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #f0f6fc;
-      margin-bottom: 2px;
-    }
+    .mission-title { font-size: 1.05rem; font-weight: 800; color: #f0f6fc; margin-bottom: 2px; }
     .mission-desc { font-size: 0.8rem; color: #8b949e; }
-    .mission-progress-bar {
-      width: 100%;
-      max-width: 320px;
-      height: 6px;
-      background: #21262d;
-      border-radius: 3px;
-      margin: 6px auto 0;
-      overflow: hidden;
+    .mission-progress-bar { width: 100%; max-width: 320px; height: 6px; background: #21262d; border-radius: 3px; margin: 6px auto 0; overflow: hidden; }
+    .mission-progress-fill { width: 0%; height: 100%; background: #a371f7; transition: width 0.3s ease; }
+
+    #round-clear-bar {
+      display: none; margin: 8px 16px; padding: 10px 16px;
+      background: rgba(35, 134, 54, 0.25); border: 1px solid #3fb950; border-radius: 8px;
+      text-align: center; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; z-index: 30;
     }
-    .mission-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #238636, #2ea043);
-      width: 0%;
-      transition: width 0.3s;
+    .round-clear-text { color: #7ee787; font-weight: 700; font-size: 0.95rem; }
+    .btn-next-round {
+      padding: 6px 18px; background: #238636; border: 1px solid #3fb950;
+      color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.9rem;
     }
 
     main.space-zone {
-      flex: 1;
-      position: relative;
-      background: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%);
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
       overflow: hidden;
     }
-
-    .floating-bubble {
-      position: absolute;
-      padding: 10px 14px;
-      background: linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95));
-      border: 1.5px solid #30363d;
-      border-radius: 20px;
-      color: #f0f6fc;
-      font-size: 0.88rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      white-space: nowrap;
-      transition: transform 0.1s, border-color 0.2s, background 0.2s;
-      z-index: 5;
+    .float-item {
+      position: absolute; padding: 10px 14px; background: #21262d;
+      border: 1.5px solid #30363d; border-radius: 20px; color: #f0f6fc;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4); transition: transform 0.15s ease, border-color 0.15s ease;
+      z-index: 20;
     }
-    .floating-bubble:active { transform: scale(0.95); }
+    .float-item:hover { border-color: #a371f7; transform: scale(1.05); }
 
     .overlay-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 16px;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
     }
     .modal-box {
-      width: 100%;
-      max-width: 440px;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 14px;
-      padding: 24px;
-      text-align: center;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
-      max-height: 90vh;
-      overflow-y: auto;
+      background: #161b22; border: 1px solid #30363d; border-radius: 14px;
+      padding: 24px 20px; max-width: 480px; width: 100%; text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8); max-height: 88vh;
+      overflow-y: auto; position: relative;
     }
-    .modal-title { font-size: 1.4rem; font-weight: 800; color: #f0f6fc; margin-bottom: 8px; }
-    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 18px; }
+    .modal-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .modal-box::-webkit-scrollbar-thumb {
+      background: #30363d; border-radius: 4px;
+    }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 8px; cursor: pointer; margin-top: 14px; margin-bottom: 8px; text-decoration: none;
+      display: none; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(46, 160, 67, 0.35); transition: all 0.2s ease;
+    }
+    .btn-next-stage:hover {
+      background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+      transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46, 160, 67, 0.5);
+    }
+    .btn-close-modal {
+      position: absolute; top: 12px; right: 12px; background: transparent; border: none;
+      color: #8b949e; font-size: 1.3rem; cursor: pointer; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center; border-radius: 6px;
+    }
+    .btn-close-modal:hover { color: #f0f6fc; background: #21262d; }
+    .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #a371f7; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 20px; }
     .action-btn {
-      width: 100%;
-      padding: 12px;
-      background: #238636;
-      border: 1px solid #2ea043;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 10px;
+      width: 100%; padding: 12px; background: #8957e5; border: 1px solid #a371f7;
+      color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 6px; cursor: pointer; margin-bottom: 8px;
     }
-    .action-btn:hover { background: #2ea043; }
+    .action-btn:hover { background: #9e6cf4; }
+    .action-btn.btn-alt { background: #238636; border-color: #2ea043; }
     .sub-action-btn {
-      width: 100%;
-      padding: 10px;
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #c9d1d9;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-      text-decoration: none;
-      display: inline-block;
+      display: block; width: 100%; padding: 9px; background: #21262d; border: 1px solid #30363d;
+      color: #c9d1d9; font-size: 0.85rem; font-weight: 600; border-radius: 6px; text-decoration: none;
     }
+    .modal-dual-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 
-    .review-list {
-      text-align: left;
-      margin: 14px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: 280px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
     .review-item {
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 0.82rem;
+      background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      padding: 12px; margin-bottom: 12px; text-align: left;
     }
-    .review-q { font-weight: 700; color: #f0f6fc; margin-bottom: 4px; line-height: 1.4; }
-    .review-a { color: #f85149; font-weight: 600; margin-bottom: 2px; }
-    .review-tip { color: #e3b341; font-size: 0.78rem; margin-bottom: 8px; }
-    .review-targets {
-      background: rgba(35, 134, 54, 0.15);
-      border: 1px solid rgba(46, 160, 67, 0.4);
-      border-radius: 6px;
-      padding: 8px 10px;
-    }
-    .review-targets-title {
-      color: #3fb950;
-      font-weight: 700;
-      font-size: 0.78rem;
-      margin-bottom: 4px;
-    }
-    .review-targets-list {
-      margin: 0;
-      padding-left: 14px;
-      color: #c9d1d9;
-      font-size: 0.76rem;
-      line-height: 1.45;
-    }
-    .review-targets-list li { margin-bottom: 2px; }
+    .review-q { font-size: 0.88rem; font-weight: 800; color: #f0f6fc; margin-bottom: 4px; }
+    .review-a { font-size: 0.82rem; color: #f85149; margin-bottom: 4px; }
+    .review-tip { font-size: 0.82rem; color: #e3b341; margin-bottom: 8px; }
+    .review-targets { background: rgba(56, 139, 253, 0.08); border: 1px solid rgba(56, 139, 253, 0.25); border-radius: 6px; padding: 8px 10px; }
+    .review-targets-title { font-size: 0.78rem; font-weight: 800; color: #58a6ff; margin-bottom: 4px; }
+    .review-targets-list { list-style: disc; padding-left: 18px; font-size: 0.78rem; color: #c9d1d9; }
   </style>
 </head>
 <body>
 
   <header>
     <div class="hud-left">
-      <a href="../games.html" class="btn-exit-game">← 허브로</a>
-      <div class="score-badge">SCORE <span id="score-val">0</span></div>
-      <div class="lives" id="lives-display">❤️❤️❤️🖤🖤</div>
+      <a href="../games.html" class="btn-exit-game"><span>◀ 게임 목록</span></a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
     </div>
     <div class="hud-center">
-      <div style="display:flex;gap:4px;background:#161b22;padding:3px;border-radius:8px;border:1px solid #30363d;">
-        <a href="./game7-2.html" style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;text-decoration:none;color:#8b949e;">🎯 A 요격형</a>
-        <span style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;background:#1f6feb;color:#fff;">🛸 B 플로팅형</span>
+      <div class="type-switcher">
+        <a href="./game6-1.html" class="type-btn">A 낙하요격</a>
+        <span class="type-btn active-b">B 버블헌팅</span>
       </div>
-      <span class="speed-label">속도</span>
-      <button class="speed-btn" onclick="setSpeed(0.3, this)">0.3x</button>
+      <span class="speed-tag">속도:</span>
       <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
       <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
       <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
       <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
     </div>
-    <div class="hud-right">
-      <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
-    </div>
+    <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
   </header>
 
   <section class="mission-banner">
@@ -285,28 +168,26 @@
     </div>
   </section>
 
-  <!-- 라운드 클리어 안내 및 다음 라운드 진행 바 (계속 읽기 지원) -->
-  <div id="round-clear-bar" style="display:none; margin: 8px 16px; padding: 10px 16px; background: rgba(35, 134, 54, 0.25); border: 1px solid #3fb950; border-radius: 8px; text-align: center; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
-    <span style="color:#7ee787; font-weight:700; font-size:0.95rem;">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
-    <button id="btn-next-round" onclick="proceedNextRound()" style="padding: 6px 18px; background: #238636; border: 1px solid #3fb950; color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">다음 라운드 ▶</button>
+  <!-- 라운드 클리어 안내 바 -->
+  <div id="round-clear-bar">
+    <span class="round-clear-text">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
+    <button class="btn-next-round" onclick="proceedNextRound()">다음 라운드 ▶</button>
   </div>
 
   <main class="space-zone" id="space-zone"></main>
 
-  <!-- 인트로 모달 -->
+  <!-- 시작 모달 -->
   <div class="overlay-modal" id="start-modal">
     <div class="modal-box">
-      <div style="font-size:2.8rem; margin-bottom:10px;">🌪️</div>
-      <h2 class="modal-title">[제 7-2탄 B] 화재이론 & 특수현상 플로팅 헌팅</h2>
+      <div style="font-size:2.8rem; margin-bottom:8px;">🏗️</div>
+      <h2 class="modal-title">[제 6-1탄 B] 공사장 임시소방시설 헌팅</h2>
       <p class="modal-desc">
-        화면에 둥둥 떠다니는 화재 지문 중<br>
-        상단 <b>미션 목표</b>에 해당하는 것을 모두 클릭해 사냥하세요!<br><br>
-        • A·B·C·D·K급 화재 분류 및 색상 매칭<br>
-        • 전도·대류·복사 및 비화·접염<br>
-        • 플래시오버 vs 백드래프트 vs 롤오버 특성<br>
-        • 연기 유동 속도 및 일산화탄소·시안화수소 등 유독가스
+        화면에 떠다니는 공사장 임시소방시설 정보 버블 중<br>상단 <b>미션 목표</b>에 해당하는 정답만 사냥하세요!<br><br>• 임시소방시설 설치 대상 규모 (3,000㎡ / 600㎡)<br>• 소화기(5m/3단위), 간이소화(0.1MPa/1.3톤), 비상경보(400㎡)<br>• 간이피난유도선(바닥 1m/5m간격), 방화포, 가스경보기
       </p>
-      <button class="action-btn" onclick="startGame()">🚀 미션 시작하기</button>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🛸 B타입 시작</button>
+        <a href="./game6-1.html" class="action-btn btn-alt">🎯 A타입 전환</a>
+      </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
     </div>
   </div>
@@ -321,7 +202,13 @@
         <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
         <div class="review-list" id="review-list"></div>
       </div>
-      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
+      <a href="./game7-3-b.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>🚀 [제 6-2탄 B] 용접 화기취급 안전 도전 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 B타입 재도전</button>
+        <a href="./game6-1.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+      </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
     </div>
   </div>
@@ -329,384 +216,341 @@
   <script>
     const ROUND_DATA = [
       {
-        round: 1,
-        title: "🚒 [화재 분류(A/B/C/D/K급) 및 표시색상] 올바른 연결을 모두 사냥하시오!",
-        desc: "일반(백색), 유류(황색), 전기(청색), 금속(무색), 주방(비누화)",
-        targets: [
-          { text: "A급 화재 (일반화재) - 백색 표시", tip: "A급 일반화재 = 백색 (재를 남김)" },
-          { text: "B급 화재 (유류화재) - 황색 표시", tip: "B급 유류화재 = 황색 (재를 남기지 않음)" },
-          { text: "C급 화재 (전기화재) - 청색 표시", tip: "C급 전기화재 = 청색 (감전 위험으로 주수 금지)" },
-          { text: "D급 화재 (금속화재) - 별도 표시색상 없음(무색)", tip: "D급 금속화재 = 무색 (마른 모래로 소화)" },
-          { text: "K급 화재 (주방화재) - 식용유 비누화 반응", tip: "K급 주방화재 = 식용유 발화 (비누화 피막 형성)" }
-        ],
-        traps: [
-          { text: "A급 화재 (일반화재) - 황색 표시", tip: "황색은 B급 유류화재입니다!" },
-          { text: "C급 화재 (전기화재) - 적색 표시", tip: "전기화재는 청색입니다! (적색 표시는 없음)" },
-          { text: "B급 화재 - 주수 냉각소화가 주원리", tip: "유류화재는 물 주수 시 연소확대되므로 질식소화가 원칙!" },
-          { text: "D급 금속화재 - 물 분무로 냉각소화", tip: "금속화재에 주수 시 수소 발생 폭발합니다!" }
-        ]
+            "round": 1,
+            "title": "📐 [종합방재실 구조·면적 & 감시창 완화 기준]만 모두 사냥하세요!",
+            "desc": "면적 20㎡ 이상 / 부속실 방화구획 / 4㎡ 미만 창(망입 7mm, 접합 16.3mm, 복층 28mm)",
+            "targets": [
+                  {
+                        "text": "바닥면적 20㎡ 이상 확보",
+                        "tip": "종합방재실 최소 면적은 20㎡ 이상!"
+                  },
+                  {
+                        "text": "다른 부분과 완벽한 방화구획",
+                        "tip": "내화구조 및 방화문으로 타 구역과 방화구획!"
+                  },
+                  {
+                        "text": "대기·휴식 부속실도 방화구획",
+                        "tip": "인력 대기 및 휴식용 부속실도 방화구획 설치!"
+                  },
+                  {
+                        "text": "4㎡ 미만 붙박이창 설치 허용",
+                        "tip": "다른 제어실 감시용 창문은 4㎡ 미만 붙박이창 허용!"
+                  },
+                  {
+                        "text": "두께 7mm 이상 망입유리 사용",
+                        "tip": "완화창 유리: 7mm 망입, 16.3mm 접합, 28mm 복층유리!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "바닥면적 15㎡ 이상 확보",
+                        "tip": "[오답] 종합방재실 법정 면적은 20㎡ 이상입니다!"
+                  },
+                  {
+                        "text": "10㎡ 크기의 개폐식 미닫이 창문",
+                        "tip": "[오답] 창문 크기는 4㎡ 미만이며 반드시 '붙박이창'이어야 함!"
+                  },
+                  {
+                        "text": "일반 판유리 3mm 설치",
+                        "tip": "[오답] 화재에 견디는 망입(7mm), 접합(16.3mm), 복층(28mm)만 가능!"
+                  },
+                  {
+                        "text": "출입구는 상시 개방하여 개방성 유지",
+                        "tip": "[오답] 출입 제한 및 통제장치를 반드시 갖추어야 함!"
+                  }
+            ]
       },
       {
-        round: 2,
-        title: "🌡️ [열전달 3방식(전도·대류·복사) 및 비화/접염]만 모두 사냥하시오!",
-        desc: "고체 열이동, 유체 순환, 전자파 복사열, 날아가는 불티",
-        targets: [
-          { text: "전도: 고체 분자의 진동을 통해 열이 직접 이동", tip: "철골, 콘크리트 벽체를 통한 열이동 = 전도" },
-          { text: "대류: 액체나 기체의 순환에 의해 열이 이동", tip: "뜨거운 화재 연기의 상승 및 확산 = 대류" },
-          { text: "복사: 전자파 형태로 전달 (플래시오버의 주원인)", tip: "실내 화재 확산 및 플래시오버를 일으키는 가장 큰 원인 = 복사" },
-          { text: "비화: 불티가 바람에 날려 원거리 가연물에 착화", tip: "비화(Flying Brand) = 불티가 바람에 날려 번짐" },
-          { text: "접염: 화염의 불꽃이 가연물에 직접 닿아 연소확대", tip: "접염 = 화염의 직접 접촉" }
-        ],
-        traps: [
-          { text: "복사: 고체 금속을 통해 열이 천천히 이동", tip: "고체를 통한 열 이동은 '전도'입니다!" },
-          { text: "전도: 전자파 형태로 공기를 건너뛰어 이동", tip: "전자파 형태 열전달은 '복사'입니다!" },
-          { text: "대류: 플래시오버를 유발하는 가장 지배적인 열전달", tip: "플래시오버의 지배적 원인은 '복사'입니다!" }
-        ]
-      },
-      {
-        round: 3,
-        title: "🌪️ [특수 화재 현상 (플래시오버 · 백드래프트 · 롤오버)] 올바른 설명을 사냥하시오!",
-        desc: "발생 시기, 징후, 산소 결핍 및 복사열 폭발",
-        targets: [
-          { text: "롤오버: 성장기 천장 가연성 가스 층이 파도처럼 연소", tip: "롤오버(Flameover) = 천장 화염 파도 (플래시오버 직전 전조)" },
-          { text: "플래시오버: 성장기 말기 복사열로 실내 전체가 순식간 전소", tip: "플래시오버 = 최성기 도달 직전 실내 전체 동시 발화" },
-          { text: "백드래프트: 감퇴기 산소 결핍 훈소 중 산소 급유입 폭발", tip: "백드래프트 = 개구부 개방으로 신선 산소 유입 시 순간 폭발" },
-          { text: "보일오버: 유류탱크 바닥 물이 비등하여 기름 분출", tip: "보일오버 = 유류탱크 바닥 수분의 비등 분출" }
-        ],
-        traps: [
-          { text: "백드래프트: 성장기 말기에 복사열 축적으로 발생", tip: "성장기 말기 복사열 축적은 '플래시오버'입니다!" },
-          { text: "플래시오버: 감퇴기에 문을 열었을 때 산소 유입 폭발", tip: "감퇴기 문 개방 산소 폭발은 '백드래프트'입니다!" },
-          { text: "롤오버: 최성기를 지나 화재가 꺼져가는 단계에서 발생", tip: "롤오버는 '성장기'에 발생합니다!" }
-        ]
-      },
-      {
-        round: 4,
-        title: "💨 [연기 유동 속도 & 주요 유독가스 족보] 올바른 수치를 모두 사냥하시오!",
-        desc: "수평/수직/계단실 속도 및 CO, HCN, HCl",
-        targets: [
-          { text: "연기 수평 방향 이동 속도: 0.5 ~ 1.0 m/s", tip: "수평 이동 속도 = 0.5~1.0 m/s (보행속도와 유사)" },
-          { text: "연기 수직 방향 이동 속도: 2.0 ~ 3.0 m/s", tip: "수직 이동 속도 = 2.0~3.0 m/s" },
-          { text: "계단실·수직샤프트 연기 상승 속도: 3.0 ~ 5.0 m/s", tip: "계단실 수직샤프트 속도 = 3.0~5.0 m/s (가장 빠름)" },
-          { text: "CO(일산화탄소): 헤모글로빈 결합력 산소의 200배", tip: "일산화탄소는 체내 산소 공급을 차단하여 질식 유발 (사망 1위)" },
-          { text: "HCN(시안화수소): 우레탄·나일론 연소 시 청산가스", tip: "질소 함유 고분자 연소 시 발생하는 맹독성 가스" },
-          { text: "HCl(염화수소): PVC 전선 피복 연소 시 부식성 유독가스", tip: "PVC 연소 시 호흡기 손상 및 금속 부식 가스" }
-        ],
-        traps: [
-          { text: "연기 수평 방향 이동 속도: 3.0 ~ 5.0 m/s", tip: "3.0~5.0 m/s는 계단실/수직샤프트 속도입니다! (수평은 0.5~1m/s)" },
-          { text: "연기 수직 방향 이동 속도: 0.5 ~ 1.0 m/s", tip: "0.5~1.0 m/s는 수평 속도입니다! (수직은 2~3m/s)" },
-          { text: "CO(일산화탄소): 헤모글로빈 결합력 산소의 2배", tip: "2배가 아니라 '200배'나 강합니다!" }
-        ]
+            "round": 2,
+            "title": "⚡ [종합방재실 필수 설치 설비 & 상주인력 기준]만 모두 사냥하세요!",
+            "desc": "상주인력 3명 이상 / 조명·급배수 / 상용·예비전원 / 초고층 지진계·풍향풍속계",
+            "targets": [
+                  {
+                        "text": "상주(常住) 인력 3명 이상 배치",
+                        "tip": "종합방재실 상주 인력은 반드시 3명 이상!"
+                  },
+                  {
+                        "text": "상용전원 및 예비전원 자동전환 설비",
+                        "tip": "정전 대비 자동/수동 전환 설비 필수!"
+                  },
+                  {
+                        "text": "지진계 및 풍향·풍속계(초고층 한정)",
+                        "tip": "초고층 건축물 종합방재실 필수 특화 설비: 지진계, 풍향·풍속계!"
+                  },
+                  {
+                        "text": "조명설비(비상전원 포함) 및 급·배수설비",
+                        "tip": "비상시 연속 근무를 위한 조명 및 급배수설비 구비!"
+                  },
+                  {
+                        "text": "무정전전원공급장치(UPS) 및 자료저장",
+                        "tip": "전원 차단 시에도 시스템 작동 유지 및 기록 저장!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "상주 인력 1명만 배치 가능",
+                        "tip": "[오답] 상주 인력은 최소 3명 이상이어야 합니다!"
+                  },
+                  {
+                        "text": "예비전원 없이 일반 상용전원만 연결",
+                        "tip": "[오답] 화재 및 비상시를 위한 예비전원 전환설비 필수!"
+                  },
+                  {
+                        "text": "지진계는 모든 5층 이상 건물에 의무 설치",
+                        "tip": "[오답] 지진계·풍향풍속계는 '초고층 건축물'에 한정됩니다!"
+                  },
+                  {
+                        "text": "공조설비 감시는 별도 기계실에서만 수행",
+                        "tip": "[오답] 방재실에서 공조·냉난방·소방·승강기를 통합 감시·제어!"
+                  }
+            ]
       }
-    ];
+];
 
-    let currentRoundIndex = 0;
+    const MAX_LIVES = 3;
     let score = 0;
-    const MAX_LIVES = 5;
     let lives = 3;
-    let speedMultiplier = 0.5;
-    let wrongHistory = [];
-    let isGameOver = false;
-
-    let floatingItems = [];
-    let remainingTargetCount = 0;
+    let speedMult = 0.5;
+    let currentRoundIndex = 0;
+    let currentRoundTargets = [];
+    let currentRoundTraps = [];
+    let remainingTargetsCount = 0;
     let totalTargetsInRound = 0;
-    let animFrameId = null;
+    let floatingElements = [];
+    let isRoundRunning = false;
+    let animFrame = null;
+    let wrongHistory = [];
 
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      if (type === 'hit') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.12);
-      } else {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.25);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.25);
-      }
+    const spaceZone = document.getElementById('space-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const roundIndicator = document.getElementById('round-indicator');
+    const missionTitle = document.getElementById('mission-title');
+    const missionDesc = document.getElementById('mission-desc');
+    const progressFill = document.getElementById('progress-fill');
+    const roundClearBar = document.getElementById('round-clear-bar');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
-    function setSpeed(spd, btn) {
-      speedMultiplier = spd;
-      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-    }
-
-        function triggerHeartHealAnim() {
-      const el = document.getElementById("lives-display");
-      if (!el) return;
-      el.classList.remove("heart-heal-bounce");
-      void el.offsetWidth;
-      el.classList.add("heart-heal-bounce");
-    }
-
-    function updateHeartsUI() {
-      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, MAX_LIVES - lives));
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
     }
 
     function updateProgressBar() {
-      const fill = document.getElementById("progress-fill");
-      const done = totalTargetsInRound - remainingTargetCount;
-      const pct = (done / totalTargetsInRound) * 100;
-      fill.style.width = pct + "%";
+      if (totalTargetsInRound === 0) return;
+      const found = totalTargetsInRound - remainingTargetsCount;
+      const pct = Math.floor((found / totalTargetsInRound) * 100);
+      progressFill.style.width = `${pct}%`;
     }
 
     function startGame() {
-      document.getElementById("start-modal").style.display = "none";
       score = 0;
       lives = 3;
       currentRoundIndex = 0;
       wrongHistory = [];
-      isGameOver = false;
-      document.getElementById("score-val").textContent = score;
-      updateHeartsUI();
-      loadRound(0);
+      updateHUD();
+
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
+      if (roundClearBar) roundClearBar.style.display = 'none';
+
+      loadRound(currentRoundIndex);
     }
 
-    function loadRound(roundIdx) {
-      currentRoundIndex = roundIdx;
-      const data = ROUND_DATA[roundIdx];
-      document.getElementById("round-indicator").textContent = `ROUND ${data.round} / ${ROUND_DATA.length}`;
-      document.getElementById("mission-title").textContent = data.title;
-      document.getElementById("mission-desc").textContent = data.desc;
+    function loadRound(idx) {
+      if (idx >= ROUND_DATA.length) {
+        showFinalResult(true);
+        return;
+      }
 
-      const space = document.getElementById("space-zone");
-      space.innerHTML = "";
-      floatingItems = [];
+      const rData = ROUND_DATA[idx];
+      roundIndicator.textContent = `ROUND ${idx + 1} / ${ROUND_DATA.length}`;
+      missionTitle.textContent = rData.title;
+      missionDesc.textContent = rData.desc;
 
-      remainingTargetCount = data.targets.length;
-      totalTargetsInRound = data.targets.length;
+      spaceZone.innerHTML = '';
+      floatingElements = [];
+
+      currentRoundTargets = [...rData.targets];
+      currentRoundTraps = [...rData.traps];
+      remainingTargetsCount = currentRoundTargets.length;
+      totalTargetsInRound = currentRoundTargets.length;
       updateProgressBar();
 
-      const combined = [
-        ...data.targets.map(t => ({ ...t, isTarget: true })),
-        ...data.traps.map(t => ({ ...t, isTarget: false }))
-      ].sort(() => Math.random() - 0.5);
+      const allItems = [
+        ...currentRoundTargets.map(t => ({ text: t.text, isTarget: true, tip: t.tip })),
+        ...currentRoundTraps.map(t => ({ text: t.text, isTarget: false, tip: t.tip }))
+      ];
 
-      const zoneW = space.clientWidth || 360;
-      const zoneH = space.clientHeight || 480;
+      allItems.sort(() => Math.random() - 0.5);
 
-      combined.forEach(itemData => {
-        const bubble = document.createElement("div");
-        bubble.className = "floating-bubble";
-        bubble.textContent = itemData.text;
-        space.appendChild(bubble);
+      const zoneW = spaceZone.clientWidth || (window.innerWidth - 30) || 600;
+      const zoneH = spaceZone.clientHeight || (window.innerHeight - 150) || 500;
 
-        const bW = bubble.offsetWidth || 140;
-        const bH = bubble.offsetHeight || 36;
-        const x = Math.random() * (zoneW - bW - 20) + 10;
-        const y = Math.random() * (zoneH - bH - 20) + 10;
+      allItems.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'float-item';
+        el.textContent = item.text;
+        spaceZone.appendChild(el);
+
+        const elW = el.offsetWidth || 140;
+        const elH = el.offsetHeight || 40;
+
+        const posX = Math.random() * Math.max(10, zoneW - elW - 20) + 10;
+        const posY = Math.random() * Math.max(10, zoneH - elH - 20) + 10;
 
         const angle = Math.random() * Math.PI * 2;
-        const speed = (0.7 + Math.random() * 0.6);
-        const vx = Math.cos(angle) * speed;
-        const vy = Math.sin(angle) * speed;
+        const speed = (0.7 + Math.random() * 0.6) * speedMult;
 
-        const obj = {
-          element: bubble,
-          data: itemData,
-          x, y, vx, vy,
-          w: bW, h: bH,
-          isAlive: true
+        el.style.left = `${posX}px`;
+        el.style.top = `${posY}px`;
+
+        const fObj = {
+          el: el,
+          item: item,
+          x: posX,
+          y: posY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          w: elW,
+          h: elH,
+          active: true
         };
 
-        bubble.addEventListener("click", () => handleBubbleClick(obj));
-        floatingItems.push(obj);
+        el.addEventListener('click', () => onItemClick(fObj));
+        floatingElements.push(fObj);
       });
 
-      if (animFrameId) cancelAnimationFrame(animFrameId);
-      animFrameId = requestAnimationFrame(updatePhysics);
+      isRoundRunning = true;
+      cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(updatePhysics);
     }
-
-        function clampAllItemsInsideZone() {
-      const space = document.getElementById("space-zone");
-      if (!space) return;
-      const rect = space.getBoundingClientRect();
-      const zoneW = rect.width;
-      const zoneH = rect.height;
-      const MARGIN = 15;
-      if (!zoneW || !zoneH) return;
-
-      floatingItems.forEach(item => {
-        const w = item.element.offsetWidth || item.w || 150;
-        const h = item.element.offsetHeight || item.h || 44;
-        item.w = w;
-        item.h = h;
-
-        if (item.x + w > zoneW - MARGIN) item.x = Math.max(MARGIN, zoneW - w - MARGIN);
-        if (item.x < MARGIN) item.x = MARGIN;
-
-        if (item.y + h > zoneH - MARGIN) item.y = Math.max(MARGIN, zoneH - h - MARGIN);
-        if (item.y < MARGIN) item.y = MARGIN;
-
-        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
-      });
-    }
-
-    window.addEventListener('resize', clampAllItemsInsideZone);
 
     function updatePhysics() {
-      if (isGameOver) return;
-      const space = document.getElementById("space-zone");
-      if (!space) return;
-      const rect = space.getBoundingClientRect();
-      const zoneW = rect.width;
-      const zoneH = rect.height;
-      const MARGIN = 15;
+      if (!isRoundRunning) return;
 
-      floatingItems.forEach(item => {
-        if (!item.isAlive) return;
-        item.x += item.vx * speedMultiplier;
-        item.y += item.vy * speedMultiplier;
+      const zoneW = spaceZone.clientWidth || (window.innerWidth - 30) || 600;
+      const zoneH = spaceZone.clientHeight || (window.innerHeight - 150) || 500;
 
-        const w = item.element.offsetWidth || item.w || 150;
-        const h = item.element.offsetHeight || item.h || 44;
-        item.w = w;
-        item.h = h;
+      floatingElements.forEach(f => {
+        if (!f.active) return;
+        f.x += f.vx;
+        f.y += f.vy;
 
-        if (item.x <= MARGIN) {
-          item.x = MARGIN;
-          item.vx = Math.abs(item.vx);
-        } else if (item.x + w >= zoneW - MARGIN) {
-          item.x = Math.max(MARGIN, zoneW - w - MARGIN);
-          item.vx = -Math.abs(item.vx);
-        }
+        if (f.x <= 5) { f.x = 5; f.vx *= -1; }
+        if (f.x + f.w >= zoneW - 5) { f.x = zoneW - f.w - 5; f.vx *= -1; }
+        if (f.y <= 5) { f.y = 5; f.vy *= -1; }
+        if (f.y + f.h >= zoneH - 5) { f.y = zoneH - f.h - 5; f.vy *= -1; }
 
-        if (item.y <= MARGIN) {
-          item.y = MARGIN;
-          item.vy = Math.abs(item.vy);
-        } else if (item.y + h >= zoneH - MARGIN) {
-          item.y = Math.max(MARGIN, zoneH - h - MARGIN);
-          item.vy = -Math.abs(item.vy);
-        }
-
-        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+        f.el.style.left = `${f.x}px`;
+        f.el.style.top = `${f.y}px`;
       });
 
-      animFrameId = requestAnimationFrame(updatePhysics);
+      animFrame = requestAnimationFrame(updatePhysics);
     }
 
-        function handleBubbleClick(item) {
-      if (item.isSolved || isGameOver) return;
+    function onItemClick(fObj) {
+      if (!fObj.active) return;
 
-      if (item.data.isTarget) {
-        playSound('hit');
+      if (fObj.item.isTarget) {
+        fObj.active = false;
+        fObj.el.style.background = 'rgba(46, 160, 67, 0.4)';
+        fObj.el.style.borderColor = '#3fb950';
+        fObj.el.style.color = '#7ee787';
+        fObj.el.style.transform = 'scale(1.1)';
+        fObj.el.style.pointerEvents = 'none';
+
         score += 100;
-        document.getElementById("score-val").textContent = score;
-
-        item.isSolved = true;
-        // 맞으면 초록색으로 표시되고 사라지지 않고 유지됨
-        item.element.style.borderColor = "#3fb950";
-        item.element.style.background = "rgba(63, 185, 80, 0.45)";
-        item.element.style.boxShadow = "0 0 12px rgba(63, 185, 80, 0.6)";
-        item.element.style.cursor = "default";
-        item.element.innerHTML = '<span style="color:#7ee787; font-weight:800; margin-right:4px;">✅</span>' + item.data.text;
-
-        if (lives < MAX_LIVES) {
-          lives++;
-          updateHeartsUI();
-          triggerHeartHealAnim();
-        }
-        remainingTargetCount--;
+        remainingTargetsCount--;
+        updateHUD();
         updateProgressBar();
 
-        if (remainingTargetCount <= 0) {
-          if (animFrameId) cancelAnimationFrame(animFrameId);
-          clampAllItemsInsideZone();
-          setTimeout(clampAllItemsInsideZone, 60);
-          const roundClearBar = document.getElementById("round-clear-bar");
-          const btnNextRound = document.getElementById("btn-next-round");
-          if (roundClearBar && btnNextRound) {
-            btnNextRound.textContent = (currentRoundIndex + 1 >= ROUND_DATA.length) ? '최종 결과 보기 🏆' : '다음 라운드 ▶';
-            roundClearBar.style.display = 'flex';
-          }
+        if (remainingTargetsCount <= 0) {
+          isRoundRunning = false;
+          if (roundClearBar) roundClearBar.style.display = 'flex';
         }
       } else {
-        if (item.isFailed) return;
-        item.isFailed = true;
+        lives--;
+        updateHUD();
 
-        playSound('wrong');
-        item.element.style.borderColor = "#ff4d4f";
-        item.element.style.background = "rgba(248, 81, 73, 0.45)";
-        item.element.style.boxShadow = "0 0 10px rgba(248, 81, 73, 0.6)";
-        item.element.innerHTML = '<span style="color:#f85149; font-weight:800; margin-right:4px;">❌</span>' + item.data.text +
-          (item.data.tip ? '<div style="font-size:0.75rem; color:#ffa657; margin-top:4px; font-weight:normal;">💡 ' + item.data.tip + '</div>' : '');
+        fObj.el.style.background = 'rgba(248, 81, 73, 0.4)';
+        fObj.el.style.borderColor = '#f85149';
+        fObj.el.style.color = '#ff7b72';
 
         wrongHistory.push({
           roundTitle: ROUND_DATA[currentRoundIndex].title,
-          targets: ROUND_DATA[currentRoundIndex].targets,
-          clicked: item.data.text,
-          tip: item.data.tip
+          clicked: fObj.item.text,
+          tip: fObj.item.tip,
+          targets: ROUND_DATA[currentRoundIndex].targets
         });
 
-        lives--;
-        updateHeartsUI();
-        if (lives <= 0) showGameOver();
+        setTimeout(() => {
+          if (fObj.el) {
+            fObj.el.style.background = '#21262d';
+            fObj.el.style.borderColor = '#30363d';
+            fObj.el.style.color = '#f0f6fc';
+          }
+        }, 400);
+
+        if (lives <= 0) {
+          isRoundRunning = false;
+          showFinalResult(false);
+        }
       }
     }
 
     function proceedNextRound() {
-      const roundClearBar = document.getElementById("round-clear-bar");
-      if (roundClearBar) roundClearBar.style.display = "none";
-      if (currentRoundIndex + 1 < ROUND_DATA.length) {
-        loadRound(currentRoundIndex + 1);
+      if (roundClearBar) roundClearBar.style.display = 'none';
+      currentRoundIndex++;
+      loadRound(currentRoundIndex);
+    }
+
+    function showFinalResult(isSuccess) {
+      isRoundRunning = false;
+      cancelAnimationFrame(animFrame);
+
+      const modal = document.getElementById('result-modal');
+      const icon = document.getElementById('result-icon');
+      const title = document.getElementById('result-title');
+      const desc = document.getElementById('result-desc');
+      const container = document.getElementById('review-container');
+      const list = document.getElementById('review-list');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      modal.style.display = 'flex';
+
+      if (isSuccess) {
+        icon.textContent = "🏆";
+        title.textContent = "작전 대성공! 공사장 임시소방시설 헌팅 마스터!";
+        title.style.color = "#3fb950";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>모든 라운드를 완벽하게 클리어하셨습니다!`;
+        if (nextBtn) nextBtn.style.display = 'flex';
       } else {
-        showGameClear();
+        icon.textContent = "💥";
+        title.textContent = "작전 실패!";
+        title.style.color = "#f85149";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>오답을 복습하고 다시 도전하세요!`;
+        if (nextBtn) nextBtn.style.display = 'none';
       }
-    }
 
-    function showGameClear() {
-      isGameOver = true;
-      document.getElementById("result-icon").textContent = "🏆";
-      document.getElementById("result-title").textContent = "화재이론 올클리어!";
-      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#58a6ff; font-size:1.2rem;">${score}점</b><br>화재 분류와 특수 현상 족보를 모두 정복하셨습니다!`;
-      setupReviewUI();
-      document.getElementById("result-modal").style.display = "flex";
-    }
-
-    function showGameOver() {
-      isGameOver = true;
-      document.getElementById("result-icon").textContent = "💥";
-      document.getElementById("result-title").textContent = "작전 실패!";
-      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#ff7b72; font-size:1.2rem;">${score}점</b><br>함정에 걸려 하트가 모두 소진되었습니다.`;
-      setupReviewUI();
-      document.getElementById("result-modal").style.display = "flex";
-    }
-
-    function setupReviewUI() {
-      const container = document.getElementById("review-container");
-      const list = document.getElementById("review-list");
       if (wrongHistory.length > 0) {
         container.style.display = "block";
         let html = "";
         wrongHistory.forEach(w => {
-          let match = w.roundTitle.match(/\[(.*?)\]/);
-          let targetCategory = match ? match[1] : "정답";
-          let count = w.targets.length;
           let targetsHtml = w.targets.map(t => `<li>${t.text}</li>`).join("");
-
           html += `
             <div class="review-item">
               <div class="review-q">${w.roundTitle}</div>
               <div class="review-a">❌ <b>잘못 누른 함정:</b> ${w.clicked}</div>
               <div class="review-tip">💡 <b>족집게 해설:</b> ${w.tip}</div>
               <div class="review-targets">
-                <div class="review-targets-title">🎯 <b>반드시 외워야 할 [${targetCategory}] 핵심 ${count}총사:</b></div>
-                <ul class="review-targets-list">
-                  ${targetsHtml}
-                </ul>
+                <div class="review-targets-title">🎯 <b>반드시 외워야 할 핵심 정답:</b></div>
+                <ul class="review-targets-list">${targetsHtml}</ul>
               </div>
             </div>
           `;
@@ -715,11 +559,6 @@
       } else {
         container.style.display = "none";
       }
-    }
-
-    function restartAll() {
-      document.getElementById("result-modal").style.display = "none";
-      startGame();
     }
   </script>
 </body>

@@ -3,65 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>[제 7-2탄 A] 화재이론 & 특수현상 마스터 요격전</title>
+  <title>[제 7-2탄 A] 구조·면적 & 설비 및 인력 기준</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
-      overflow: hidden;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
     }
-
     header {
-      height: 60px;
-      padding: 10px 16px;
-      background: rgba(22, 27, 34, 0.95);
-      border-bottom: 1px solid #30363d;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 20;
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
     }
-    .hud-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
     .btn-exit-game {
-      background: #21262d;
-      color: #8b949e;
-      border: 1px solid #30363d;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
     }
-    .btn-exit-game:hover {
-      background: #30363d;
-      color: #f0f6fc;
-    }
-    .score-badge {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #58a6ff;
-      background: rgba(56, 139, 253, 0.1);
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid rgba(56, 139, 253, 0.3);
-    }
-        @keyframes heartHeal {
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; display: inline-block; transition: transform 0.2s ease; }
+    @keyframes heartHeal {
       0% { transform: scale(1); }
       40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
       70% { transform: scale(0.95); }
@@ -70,631 +33,500 @@
     .heart-heal-bounce {
       animation: heartHeal 0.5s ease-in-out;
     }
-    .lives { display: inline-block; transition: transform 0.2s ease; 
-      font-size: 1.1rem;
-      letter-spacing: 2px;
-    }
-
     .hud-center {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
     }
-    .speed-label {
-      font-size: 0.78rem;
-      color: #8b949e;
-      font-weight: 600;
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
     }
+    .type-btn.active-a { background: #238636; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
     .speed-btn {
-      background: #21262d;
-      color: #c9d1d9;
-      border: 1px solid #30363d;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-weight: 700;
-      transition: all 0.15s;
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
     }
-    .speed-btn.active {
-      background: #f78166;
-      border-color: #f78166;
-      color: #fff;
-    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .streak-badge { font-size: 0.82rem; font-weight: 800; color: #e3b341; min-width: 75px; text-align: right; }
 
-    .hud-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .progress-pill {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #8b949e;
-      background: #161b22;
-      padding: 4px 10px;
-      border-radius: 12px;
-      border: 1px solid #30363d;
-    }
-
-    main.battlefield {
-      flex: 1;
-      position: relative;
-      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 100%);
+    #game-zone {
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
       overflow: hidden;
     }
-
     .danger-line {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: repeating-linear-gradient(90deg, #ff7b72, #ff7b72 10px, transparent 10px, transparent 20px);
-      box-shadow: 0 0 10px rgba(255, 123, 114, 0.5);
-      z-index: 5;
+      position: absolute; bottom: 8px; left: 0; width: 100%; height: 2px;
+      background: repeating-linear-gradient(90deg, #f85149, #f85149 10px, transparent 10px, transparent 20px);
+      opacity: 0.7; z-index: 10;
     }
-
-    .falling-block {
-      position: absolute;
-      width: 290px;
-      left: calc(50% - 145px);
-      background: linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95));
-      border: 2px solid #58a6ff;
-      border-radius: 10px;
-      padding: 12px 14px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 12px rgba(88, 166, 255, 0.2);
-      text-align: center;
-      z-index: 10;
-      pointer-events: none;
+    .falling-target {
+      position: absolute; width: 180px; padding: 10px;
+      background: #21262d; border: 2px solid #58a6ff; border-radius: 10px;
+      text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 20;
     }
-    .block-category-tag {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #ffa657;
-      background: rgba(255, 166, 87, 0.15);
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-bottom: 6px;
-      border: 1px solid rgba(255, 166, 87, 0.3);
-    }
-    .block-text {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #f0f6fc;
-      line-height: 1.4;
-      margin-bottom: 8px;
-    }
-    .countdown-bar {
-      height: 4px;
-      background: #30363d;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .countdown-fill {
-      height: 100%;
-      background: #58a6ff;
-      width: 100%;
-      transform-origin: left;
-    }
+    .falling-target .target-title { font-size: 0.95rem; font-weight: 800; color: #ffffff; margin-bottom: 2px; }
+    .falling-target .target-desc { font-size: 0.75rem; color: #8b949e; }
 
     footer.control-deck {
-      height: 170px;
-      background: #161b22;
-      border-top: 1px solid #30363d;
-      padding: 10px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      z-index: 20;
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+      padding: 8px 12px 14px; background: #161b22; border-top: 1px solid #30363d; z-index: 50;
     }
-    .fire-btn {
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #c9d1d9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 6px;
-      cursor: pointer;
-      transition: all 0.1s;
-      position: relative;
+    .deck-btn {
+      padding: 10px 4px; background: #21262d; border: 1.5px solid #30363d;
+      border-radius: 8px; color: #c9d1d9; cursor: pointer; text-align: center;
+      transition: all 0.1s ease;
     }
-    .fire-btn:active {
-      transform: scale(0.97);
-    }
-    .btn-badge {
-      font-size: 0.68rem;
-      font-weight: 800;
-      padding: 1px 6px;
-      border-radius: 4px;
-      margin-bottom: 3px;
-    }
-    .btn-title {
-      font-size: 0.88rem;
-      font-weight: 800;
-      color: #f0f6fc;
-      margin-bottom: 2px;
-    }
-    .btn-sub {
-      font-size: 0.72rem;
-      color: #8b949e;
-      text-align: center;
-      line-height: 1.2;
-    }
+    .deck-btn:active { transform: translateY(2px); }
+    .deck-btn .btn-badge { display: block; font-size: 0.7rem; font-weight: 800; margin-bottom: 2px; }
+    .deck-btn .btn-title { display: block; font-size: 0.82rem; font-weight: 800; color: #ffffff; }
+    .deck-btn .btn-sub { display: block; font-size: 0.68rem; color: #8b949e; margin-top: 2px; }
 
-    .btn-cat-1 { border-color: #388bfd; }
-    .btn-cat-1 .btn-badge { background: rgba(56, 139, 253, 0.2); color: #58a6ff; }
-    .btn-cat-2 { border-color: #f0883e; }
-    .btn-cat-2 .btn-badge { background: rgba(240, 136, 62, 0.2); color: #f0883e; }
-    .btn-cat-3 { border-color: #d29922; }
-    .btn-cat-3 .btn-badge { background: rgba(210, 153, 34, 0.2); color: #d29922; }
-    .btn-cat-4 { border-color: #f85149; }
-    .btn-cat-4 .btn-badge { background: rgba(248, 81, 73, 0.2); color: #f85149; }
-    .btn-cat-5 { border-color: #a371f7; }
-    .btn-cat-5 .btn-badge { background: rgba(163, 113, 247, 0.2); color: #a371f7; }
-    .btn-cat-6 { border-color: #3fb950; }
-    .btn-cat-6 .btn-badge { background: rgba(63, 185, 80, 0.2); color: #3fb950; }
+    .btn-cat-1 { border-color: #e3b341; } .btn-cat-1 .btn-badge { color: #e3b341; }
+    .btn-cat-2 { border-color: #f87171; } .btn-cat-2 .btn-badge { color: #f87171; }
+    .btn-cat-3 { border-color: #fb923c; } .btn-cat-3 .btn-badge { color: #fb923c; }
+    .btn-cat-4 { border-color: #a371f7; } .btn-cat-4 .btn-badge { color: #a371f7; }
+    .btn-cat-5 { border-color: #38bdf8; } .btn-cat-5 .btn-badge { color: #38bdf8; }
 
     .overlay-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 16px;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
     }
-    .modal-box {
-      width: 100%;
-      max-width: 440px;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 14px;
-      padding: 24px;
-      text-align: center;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
-      max-height: 90vh;
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 8px; cursor: pointer; margin-top: 14px; margin-bottom: 8px; text-decoration: none;
+      display: none; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(46, 160, 67, 0.35); transition: all 0.2s ease;
+    }
+    .btn-next-stage:hover {
+      background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+      transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46, 160, 67, 0.5);
+    }
+    .btn-close-modal {
+      position: absolute; top: 12px; right: 12px; background: transparent; border: none;
+      color: #8b949e; font-size: 1.3rem; cursor: pointer; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center; border-radius: 6px;
+    }
+    .btn-close-modal:hover { color: #f0f6fc; background: #21262d; }
+    .modal-box { position: relative;
+      background: #161b22; border: 1px solid #30363d; border-radius: 14px;
+      padding: 24px 20px; max-width: 440px; width: 100%; text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8); max-height: 88vh;
       overflow-y: auto;
     }
-    .modal-title {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #f0f6fc;
-      margin-bottom: 8px;
+    .modal-box::-webkit-scrollbar {
+      width: 6px;
     }
-    .modal-desc {
-      font-size: 0.88rem;
-      color: #8b949e;
-      line-height: 1.5;
-      margin-bottom: 18px;
+    .modal-box::-webkit-scrollbar-thumb {
+      background: #30363d; border-radius: 4px;
     }
+    .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #58a6ff; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 20px; }
     .action-btn {
-      width: 100%;
-      padding: 12px;
-      background: #238636;
-      border: 1px solid #2ea043;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 10px;
+      width: 100%; padding: 12px; background: #238636; border: 1px solid #2ea043;
+      color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 6px; cursor: pointer; margin-bottom: 8px;
     }
     .action-btn:hover { background: #2ea043; }
+    .action-btn.btn-alt { background: #8957e5; border-color: #a371f7; }
     .sub-action-btn {
-      width: 100%;
-      padding: 10px;
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #c9d1d9;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-      text-decoration: none;
-      display: inline-block;
+      display: block; width: 100%; padding: 9px; background: #21262d; border: 1px solid #30363d;
+      color: #c9d1d9; font-size: 0.85rem; font-weight: 600; border-radius: 6px; text-decoration: none;
     }
-
-    .review-list {
-      text-align: left;
-      margin: 14px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: 280px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-    .review-item {
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 0.82rem;
-    }
-    .review-q { font-weight: 700; color: #f0f6fc; margin-bottom: 4px; }
-    .review-a { color: #f85149; font-weight: 600; margin-bottom: 2px; }
-    .review-tip { color: #e3b341; font-size: 0.78rem; margin-bottom: 6px; }
-    .review-targets {
-      background: rgba(35, 134, 54, 0.15);
-      border: 1px solid rgba(46, 160, 67, 0.4);
-      border-radius: 6px;
-      padding: 8px 10px;
-    }
-    .review-targets-title {
-      color: #3fb950;
-      font-weight: 700;
-      font-size: 0.78rem;
-      margin-bottom: 3px;
-    }
+    .modal-dual-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
   </style>
 </head>
 <body>
 
   <header>
     <div class="hud-left">
-      <a href="../games.html" class="btn-exit-game">← 허브로</a>
-      <div class="score-badge">SCORE <span id="score-val">0</span></div>
-      <div class="lives" id="lives-display">❤️❤️❤️🖤🖤</div>
+      <a href="../games.html" class="btn-exit-game"><span>◀ 게임 목록</span></a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
     </div>
     <div class="hud-center">
-      <div style="display:flex;gap:4px;background:#161b22;padding:3px;border-radius:8px;border:1px solid #30363d;">
-        <span style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;background:#238636;color:#fff;">🎯 A 요격형</span>
-        <a href="./game7-2-b.html" style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;text-decoration:none;color:#8b949e;">🛸 B 플로팅형</a>
+      <div class="type-switcher">
+        <span class="type-btn active-a">A 낙하요격</span>
+        <a href="./game6-1-b.html" class="type-btn">B 버블헌팅</a>
       </div>
-      <span class="speed-label">속도</span>
-      <button class="speed-btn" onclick="setSpeed(0.3, this)">0.3x</button>
+      <span class="speed-tag">속도:</span>
       <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
       <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
       <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
       <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
     </div>
-    <div class="hud-right">
-      <div class="progress-pill"><span id="current-q-num">1</span> / <span id="total-q-num">20</span></div>
-    </div>
+    <div class="streak-badge" id="streak-val">🔥 0 STREAK</div>
   </header>
 
-  <main class="battlefield" id="battlefield">
+  <main id="game-zone">
     <div class="danger-line"></div>
   </main>
 
   <footer class="control-deck">
-    <!-- 1: A급/B급 화재 -->
-    <button class="fire-btn btn-cat-1" onclick="handleFire(1)">
-      <span class="btn-badge">일반·유류</span>
-      <span class="btn-title">A급 · B급 화재</span>
-      <span class="btn-sub">백색(목재·재) / 황색(유류)</span>
+    <button class="deck-btn btn-cat-1" onclick="fireShot('소화기')">
+      <span class="btn-badge">반경 5m</span>
+      <span class="btn-title">소화기</span>
+      <span class="btn-sub">3단위 2개/대형 1개</span>
     </button>
-    <!-- 2: C급/D급/K급 화재 -->
-    <button class="fire-btn btn-cat-2" onclick="handleFire(2)">
-      <span class="btn-badge">전기·금속·주방</span>
-      <span class="btn-title">C·D·K급 화재</span>
-      <span class="btn-sub">청색(전기)/무색(건조사)/비누화</span>
+    <button class="deck-btn btn-cat-2" onclick="fireShot('간이소화')">
+      <span class="btn-badge">0.1 MPa</span>
+      <span class="btn-title">간이 소화장치</span>
+      <span class="btn-sub">20분/수원 1.3톤 이상</span>
     </button>
-    <!-- 3: 열전달 3방식 -->
-    <button class="fire-btn btn-cat-3" onclick="handleFire(3)">
-      <span class="btn-badge">열전달</span>
-      <span class="btn-title">전도 · 대류 · 복사</span>
-      <span class="btn-sub">고체이동/기체순환/전자파</span>
+    <button class="deck-btn btn-cat-3" onclick="fireShot('비상경보')">
+      <span class="btn-badge">연면적 400㎡</span>
+      <span class="btn-title">비상 경보장치</span>
+      <span class="btn-sub">지하·무창 150㎡/경보음</span>
     </button>
-    <!-- 4: 롤오버/플래시오버 -->
-    <button class="fire-btn btn-cat-4" onclick="handleFire(4)">
-      <span class="btn-badge">성장기·최성기</span>
-      <span class="btn-title">롤오버 · 플래시오버</span>
-      <span class="btn-sub">천장 화염파도 / 실내 순식간 전소</span>
+    <button class="deck-btn btn-cat-4" onclick="fireShot('피난유도선')">
+      <span class="btn-badge">바닥 1m 이하</span>
+      <span class="btn-title">간이피난유도선</span>
+      <span class="btn-sub">5m 간격/20분 점등</span>
     </button>
-    <!-- 5: 백드래프트 -->
-    <button class="fire-btn btn-cat-5" onclick="handleFire(5)">
-      <span class="btn-badge">감퇴기 산소</span>
-      <span class="btn-title">백드래프트 (폭발)</span>
-      <span class="btn-sub">산소결핍 훈소 + 개구부 개방</span>
-    </button>
-    <!-- 6: 연기 및 유독가스 -->
-    <button class="fire-btn btn-cat-6" onclick="handleFire(6)">
-      <span class="btn-badge">연기·가스</span>
-      <span class="btn-title">연기속도 · 유독가스</span>
-      <span class="btn-sub">CO/HCN/HCl/수평·수직속도</span>
+    <button class="deck-btn btn-cat-5" onclick="fireShot('가스·방화포')">
+      <span class="btn-badge">유기용제·불티</span>
+      <span class="btn-title">가스경보·방화포</span>
+      <span class="btn-sub">비상조명/KS 방화포</span>
     </button>
   </footer>
 
-  <!-- 인트로 모달 -->
+  <!-- 시작 모달 -->
   <div class="overlay-modal" id="start-modal">
     <div class="modal-box">
-      <div style="font-size:2.8rem; margin-bottom:10px;">🔥</div>
-      <h2 class="modal-title">[제 7-2탄 A] 화재이론 & 특수현상 요격전</h2>
+      <div style="font-size:2.8rem; margin-bottom:8px;">🏗️</div>
+      <h2 class="modal-title">[제 6-1탄 A] 공사장 임시소방시설 요격전</h2>
       <p class="modal-desc">
-        상단에서 낙하하는 <b>화재 특성 및 유독가스 지문</b>을 읽고,<br>
-        바닥에 닿기 전 <b>하단 6대 분류 버튼</b>을 눌러 격추하세요!<br><br>
-        • A·B·C·D·K 화재 분류 및 표시색상<br>
-        • 열전달 3방식 & 비화/접염<br>
-        • 롤오버 vs 플래시오버 vs 백드래프트 구분<br>
-        • 연기 이동 속도 및 치명적 유독가스 족보
+        하늘에서 떨어지는 공사장 임시소방시설(소화기, 간이소화, 비상경보 등)의<br>법정 설치 규격과 수치를 보고 하단 <b>5대 카테고리 버튼</b>으로 요격하세요!<br><br>• 소화기: 반경 5m 이내, 능력단위 3단위 2대 + 대형 1대<br>• 간이소화장치: 방수압 0.1MPa 이상, 20분 방수 (수원 1.3톤 이상)<br>• 비상경보: 연면적 400㎡ / 간이피난유도선: 지하·무창 150㎡ (바닥 1m 이하)
       </p>
-      <button class="action-btn" onclick="startGame()">🚀 요격전 시작하기</button>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🎯 A타입 시작</button>
+        <a href="./game6-1-b.html" class="action-btn btn-alt">🛸 B타입 전환</a>
+      </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
     </div>
   </div>
 
-  <!-- 결과 모달 -->
-  <div class="overlay-modal" id="result-modal" style="display:none;">
+  <!-- 게임 오버 모달 -->
+  <div class="overlay-modal" id="gameover-modal" style="display:none;">
     <div class="modal-box">
-      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
-      <h2 class="modal-title" id="result-title">미션 완료!</h2>
-      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
-      <div id="review-container" style="display:none;">
-        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 틀린 문제 족집게 복습</h4>
-        <div class="review-list" id="review-list"></div>
+      <div id="gameover-icon" style="font-size:2.8rem; margin-bottom:8px;">💥</div>
+      <h2 class="modal-title" id="gameover-title" style="color:#f85149;">작전 실패!</h2>
+      <p class="modal-desc" id="gameover-desc">최종 점수: 0점</p>
+      <a href="./game7-3.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>🚀 [제 6-2탄 A] 용접 화기취급 안전 도전 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 A타입 재도전</button>
+        <a href="./game6-1-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
       </div>
-      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
     </div>
   </div>
 
   <script>
-    const QUESTIONS = [
-      { category: "화재분류", text: "목재, 종이, 섬유 화재 - 재를 남기며 백색 표시", ans: 1, desc: "A급 일반화재 (냉각소화가 주효과)" },
-      { category: "화재분류", text: "인화성 액체(휘발유, 등유) 화재 - 황색 표시", ans: 1, desc: "B급 유류화재 (질식소화가 주효과)" },
-      { category: "화재분류", text: "통전 중인 전기기기 화재 - 청색 표시", ans: 2, desc: "C급 전기화재 (물 주수 금지, 비전도성 약제)" },
-      { category: "화재분류", text: "마그네슘, 나트륨 금속 화재 - 마른 모래로 소화", ans: 2, desc: "D급 금속화재 (별도 표시색상 없음, 주수 절대금지)" },
-      { category: "화재분류", text: "주방 식용유 화재 - 비누화 반응 소화", ans: 2, desc: "K급 주방화재 (식용유 화재 전용 소화기)" },
-      { category: "특수현상", text: "천장 아래 모인 미연소 가스가 파도처럼 굴러가는 현상", ans: 4, desc: "롤오버 (성장기 발생, 플래시오버의 강력한 전조!)" },
-      { category: "특수현상", text: "성장기 말기 복사열 축적으로 실내 전체가 순식간에 불바다", ans: 4, desc: "플래시오버 (Flashover, 최성기로 넘어가는 전이 현상)" },
-      { category: "특수현상", text: "감퇴기 산소 결핍 훈소 중 문 개방으로 신선 공기 유입 폭발", ans: 5, desc: "백드래프트 (Backdraft, 소방관 순직의 주원인)" },
-      { category: "열전달", text: "고체 물질을 통해 열이 직접 전달되는 방식 (철골, 벽)", ans: 3, desc: "전도 (Conduction)" },
-      { category: "열전달", text: "기체나 액체의 순환을 통해 열이 위로 이동하는 방식", ans: 3, desc: "대류 (Convection, 뜨거운 연기 상승)" },
-      { category: "열전달", text: "전자파 형태로 열이 직접 전달 (플래시오버의 주원인)", ans: 3, desc: "복사 (Radiation, 실내 화재 확대 최우선 요인)" },
-      { category: "열전달", text: "바람에 의해 불티가 멀리 날아가 다른 곳에 착화", ans: 3, desc: "비화 (Flying Brand, 화염전달/연소확대 방식)" },
-      { category: "연기속도", text: "연기의 수평 방향 이동 속도 (0.5 ~ 1.0 m/s)", ans: 6, desc: "수평 이동 속도는 사람의 평상시 보행속도와 유사" },
-      { category: "연기속도", text: "연기의 수직 방향 이동 속도 (2.0 ~ 3.0 m/s)", ans: 6, desc: "수직 이동 속도는 사람 피난 속도보다 4~5배 빠름" },
-      { category: "연기속도", text: "계단실 및 수직 샤프트 내 연기 상승 속도 (3 ~ 5 m/s)", ans: 6, desc: "계단실 굴뚝효과로 가장 빠른 속도로 상승" },
-      { category: "유독가스", text: "헤모글로빈 결합력이 산소보다 200배 강해 질식 유발", ans: 6, desc: "일산화탄소 (CO, 화재 사망 원인 1순위)" },
-      { category: "유독가스", text: "우레탄, 나일론 등 질소 함유 섬유 연소 시 발생하는 청산가스", ans: 6, desc: "시안화수소 (HCN)" },
-      { category: "유독가스", text: "PVC 전선 피복 연소 시 발생하는 호흡기 자극 및 부식성 가스", ans: 6, desc: "염화수소 (HCl)" },
-      { category: "특수현상", text: "유류 탱크 화재 시 바닥 수분이 비등하여 기름이 분출", ans: 4, desc: "보일오버 (Boilover)" },
-      { category: "특수현상", text: "실내 압력과 실외 압력이 같아지는 경계면 (상부 배출/하부 유입)", ans: 6, desc: "중성대 (Neutral Plane)" }
-    ];
+    const TARGETS_DATA = [
+      {
+            "title": "바닥면적 20㎡ 이상",
+            "desc": "종합방재실의 최소 바닥면적 법정 기준 (20㎡ 이상)",
+            "cat": "구조·면적(20㎡)"
+      },
+      {
+            "title": "다른 부분과 방화구획",
+            "desc": "종합방재실은 내화구조 및 갑종방화문으로 방화구획",
+            "cat": "구조·면적(20㎡)"
+      },
+      {
+            "title": "출입 제한 및 통제장치",
+            "desc": "외부인 무단출입 방지를 위한 보안 통제장치 설치",
+            "cat": "구조·면적(20㎡)"
+      },
+      {
+            "title": "소방대 지휘활동 지장없을 것",
+            "desc": "재난 발생 시 소방대원의 지휘 본부 역할을 수행할 공간 확보",
+            "cat": "구조·면적(20㎡)"
+      },
+      {
+            "title": "휴식용 부속실 방화구획",
+            "desc": "인력의 대기 및 휴식을 위한 부속실은 방화구획하여 설치",
+            "cat": "부속실·완화창(4㎡)"
+      },
+      {
+            "title": "4㎡ 미만 붙박이창 가능",
+            "desc": "다른 제어실 감시용 창문은 4㎡ 미만 붙박이창 허용",
+            "cat": "부속실·완화창(4㎡)"
+      },
+      {
+            "title": "두께 7mm 이상 망입유리",
+            "desc": "감시용 붙박이창 허용 유리: 7mm 이상 망입유리",
+            "cat": "부속실·완화창(4㎡)"
+      },
+      {
+            "title": "두께 16.3mm 접합유리",
+            "desc": "감시용 붙박이창 허용 유리: 16.3mm 이상 접합유리",
+            "cat": "부속실·완화창(4㎡)"
+      },
+      {
+            "title": "두께 28mm 복층유리",
+            "desc": "감시용 붙박이창 허용 유리: 28mm 이상 복층유리",
+            "cat": "부속실·완화창(4㎡)"
+      },
+      {
+            "title": "상용전원 및 예비전원 전환",
+            "desc": "정전 시 즉시 비상예비전원으로 자동/수동 전환되는 설비",
+            "cat": "필수설비·지진계"
+      },
+      {
+            "title": "조명설비 및 급·배수설비",
+            "desc": "비상시에도 장시간 운용을 유지하기 위한 필수 환경 설비",
+            "cat": "필수설비·지진계"
+      },
+      {
+            "title": "공기조화·소방·승강기 감시제어반",
+            "desc": "방재실 내 건물 주요 기계·전기·소방 총괄 제어시스템",
+            "cat": "필수설비·지진계"
+      },
+      {
+            "title": "지진계 및 풍향·풍속계",
+            "desc": "초고층 건축물에 한하여 의무적으로 설치해야 하는 특화 계측기",
+            "cat": "필수설비·지진계"
+      },
+      {
+            "title": "무정전전원공급장치(UPS)",
+            "desc": "순간 정전 시에도 데이터 유실 없이 전원을 공급하는 장치",
+            "cat": "필수설비·지진계"
+      },
+      {
+            "title": "상주(常住) 인력: 3명 이상",
+            "desc": "종합방재실에 항시 상주하여 교대 근무하는 필수 인력 수",
+            "cat": "상주인력(3명)"
+      },
+      {
+            "title": "24시간 연속 감시·제어",
+            "desc": "365일 24시간 공백 없는 재난 안전 모니터링 수행",
+            "cat": "상주인력(3명)"
+      },
+      {
+            "title": "CCTV 및 통합 방재 모니터링",
+            "desc": "화재·침수·테러·승강기 갇힘 사고 등 종합 안전 통제",
+            "cat": "상주인력(3명)"
+      },
+      {
+            "title": "재난 발생 시 초동조치 지휘",
+            "desc": "비상방송 발령, 피난유도 및 소방대 진입로 확보 지휘",
+            "cat": "상주인력(3명)"
+      }
+];
 
-    let currentQuestions = [];
-    let currentIndex = 0;
-    let score = 0;
     const MAX_LIVES = 5;
+    let score = 0;
     let lives = 3;
+    let streak = 0;
     let speedMult = 0.5;
-    let wrongHistory = [];
-    let isGameOver = false;
-
-    let activeBlock = null;
-    let animStartTime = 0;
-    let baseDuration = 5500;
+    let isGameRunning = false;
+    let activeTargets = [];
+    let spawnTimer = null;
     let animFrame = null;
 
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playBeep(freq, type, duration) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + duration);
+    const gameZone = document.getElementById('game-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const streakVal = document.getElementById('streak-val');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
-    function setGameSpeed(spd, btn) {
-      speedMult = spd;
-      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-    }
-
-        function triggerHeartHealAnim() {
-      const el = document.getElementById("lives-display");
-      if (!el) return;
-      el.classList.remove("heart-heal-bounce");
-      void el.offsetWidth;
-      el.classList.add("heart-heal-bounce");
+    function triggerHeartHealAnim() {
+      livesVal.classList.remove('heart-heal-bounce');
+      void livesVal.offsetWidth;
+      livesVal.classList.add('heart-heal-bounce');
     }
 
     function updateHUD() {
-      document.getElementById("score-val").textContent = score;
-      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, MAX_LIVES - lives));
-      document.getElementById("current-q-num").textContent = Math.min(currentIndex + 1, currentQuestions.length);
-      document.getElementById("total-q-num").textContent = currentQuestions.length;
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
+      streakVal.textContent = streak > 1 ? `🔥 ${streak} STREAK` : (streak === 1 ? '🔥 1 HIT' : '');
+    }
+
+    function spawnTarget() {
+      if (!isGameRunning) return;
+      const zoneW = gameZone.clientWidth || (window.innerWidth - 30) || 500;
+      const tData = TARGETS_DATA[Math.floor(Math.random() * TARGETS_DATA.length)];
+
+      const el = document.createElement('div');
+      el.className = 'falling-target';
+      el.innerHTML = `
+        <div class="target-title">${tData.title}</div>
+        <div class="target-desc">${tData.desc}</div>
+      `;
+      gameZone.appendChild(el);
+
+      const targetW = el.offsetWidth || 180;
+      const maxX = Math.max(20, zoneW - targetW - 20);
+      const posX = Math.floor(Math.random() * maxX) + 10;
+
+      el.style.left = `${posX}px`;
+      el.style.top = '-80px';
+
+      activeTargets.push({
+        el: el,
+        data: tData,
+        y: -80,
+        x: posX,
+        speed: (1.2 + Math.random() * 0.6) * speedMult
+      });
+    }
+
+    function gameLoop() {
+      if (!isGameRunning) return;
+      const zoneH = gameZone.clientHeight || (window.innerHeight - 150) || 600;
+      const dangerY = zoneH - 70;
+
+      for (let i = activeTargets.length - 1; i >= 0; i--) {
+        const t = activeTargets[i];
+        t.y += t.speed;
+        t.el.style.top = `${t.y}px`;
+
+        if (t.y >= dangerY) {
+          lives--;
+          streak = 0;
+          updateHUD();
+
+          t.el.remove();
+          activeTargets.splice(i, 1);
+
+          if (lives <= 0) {
+            endGame();
+            return;
+          }
+        }
+      }
+
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function fireShot(selectedCat) {
+      if (!isGameRunning || activeTargets.length === 0) return;
+
+      let lowestIdx = 0;
+      let maxY = -999;
+      for (let i = 0; i < activeTargets.length; i++) {
+        if (activeTargets[i].y > maxY) {
+          maxY = activeTargets[i].y;
+          lowestIdx = i;
+        }
+      }
+
+      const target = activeTargets[lowestIdx];
+
+      if (target.data.cat === selectedCat) {
+        streak++;
+        score += 100 + (streak * 10);
+
+        let healed = false;
+        if (lives < MAX_LIVES) {
+          lives++;
+          healed = true;
+          triggerHeartHealAnim();
+        }
+
+        updateHUD();
+
+        target.el.style.borderColor = '#3fb950';
+        target.el.style.background = 'rgba(63, 185, 80, 0.4)';
+        if (healed) {
+          const healText = document.createElement('div');
+          healText.textContent = '❤️ +1';
+          healText.style.position = 'absolute';
+          healText.style.top = '-25px';
+          healText.style.left = '50%';
+          healText.style.transform = 'translateX(-50%)';
+          healText.style.color = '#7ee787';
+          healText.style.fontWeight = 'bold';
+          healText.style.fontSize = '1.1rem';
+          healText.style.textShadow = '0 0 6px rgba(46,160,67,0.8)';
+          target.el.appendChild(healText);
+        }
+
+        setTimeout(() => {
+          target.el.remove();
+        }, 180);
+
+        activeTargets.splice(lowestIdx, 1);
+      } else {
+        lives--;
+        streak = 0;
+        updateHUD();
+
+        target.el.style.borderColor = '#f85149';
+        target.el.style.background = 'rgba(248, 81, 73, 0.4)';
+        setTimeout(() => {
+          if (target.el) {
+            target.el.style.borderColor = '#58a6ff';
+            target.el.style.background = '#21262d';
+          }
+        }, 300);
+
+        if (lives <= 0) {
+          endGame();
+        }
+      }
     }
 
     function startGame() {
-      document.getElementById("start-modal").style.display = "none";
       score = 0;
       lives = 3;
-      currentIndex = 0;
-      wrongHistory = [];
-      isGameOver = false;
-      currentQuestions = [...QUESTIONS].sort(() => Math.random() - 0.5);
-      updateHUD();
-      spawnNext();
-    }
+      streak = 0;
+      isGameRunning = true;
+      activeTargets.forEach(t => t.el.remove());
+      activeTargets = [];
 
-    function spawnNext() {
-      if (currentIndex >= currentQuestions.length) {
-        showWin();
-        return;
-      }
-      if (lives <= 0) return;
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('gameover-modal').style.display = 'none';
 
       updateHUD();
-      const q = currentQuestions[currentIndex];
-      const bf = document.getElementById("battlefield");
-      
-      const el = document.createElement("div");
-      el.className = "falling-block";
-      el.innerHTML = `
-        <span class="block-category-tag">${q.category}</span>
-        <div class="block-text">${q.text}</div>
-        <div class="countdown-bar"><div class="countdown-fill" id="c-fill"></div></div>
-      `;
-      bf.appendChild(el);
 
-      activeBlock = {
-        element: el,
-        data: q,
-        duration: baseDuration / speedMult
-      };
+      clearInterval(spawnTimer);
+      spawnTimer = setInterval(spawnTarget, 2400);
 
-      animStartTime = performance.now();
-      requestAnimationFrame(gameLoop);
+      cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(gameLoop);
     }
 
-    function gameLoop(now) {
-      if (!activeBlock || isGameOver) return;
-      const elapsed = now - animStartTime;
-      const progress = Math.min(elapsed / activeBlock.duration, 1);
-
-      const bf = document.getElementById("battlefield");
-      const maxTop = bf.clientHeight - activeBlock.element.offsetHeight - 4;
-      activeBlock.element.style.top = (progress * maxTop) + "px";
-
-      const fill = document.getElementById("c-fill");
-      if (fill) fill.style.transform = `scaleX(${1 - progress})`;
-
-      if (progress >= 1) {
-        handleMiss();
-      } else {
-        animFrame = requestAnimationFrame(gameLoop);
-      }
-    }
-
-    function handleFire(catNumber) {
-      if (!activeBlock || isGameOver) return;
+    function endGame() {
+      isGameRunning = false;
+      clearInterval(spawnTimer);
       cancelAnimationFrame(animFrame);
 
-      const q = activeBlock.data;
-      if (q.ans === catNumber) {
-        playBeep(587, 'sine', 0.1);
-        setTimeout(() => playBeep(880, 'sine', 0.15), 80);
-        score += 100;
-        if (lives < MAX_LIVES) {
-          lives++;
-          triggerHeartHealAnim();
+      const icon = document.getElementById('gameover-icon');
+      const title = document.getElementById('gameover-title');
+      const desc = document.getElementById('gameover-desc');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      if (score >= 1000) {
+        if (icon) icon.textContent = "🏆";
+        if (title) {
+          title.textContent = "작전 성공! 공사장 임시소방시설 요격전 돌파!";
+          title.style.color = "#3fb950";
         }
-        activeBlock.element.style.borderColor = "#3fb950";
-        activeBlock.element.style.boxShadow = "0 0 20px #3fb950";
+        if (desc) desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>기준 점수를 돌파하여 작전에 성공하셨습니다!`;
+        if (nextBtn) nextBtn.style.display = 'flex';
       } else {
-        playBeep(180, 'sawtooth', 0.25);
-        lives--;
-        wrongHistory.push({
-          q: q.text,
-          userAns: getCategoryName(catNumber),
-          correctAns: getCategoryName(q.ans),
-          desc: q.desc
-        });
-        activeBlock.element.style.borderColor = "#f85149";
-        activeBlock.element.style.boxShadow = "0 0 20px #f85149";
-      }
-
-      setTimeout(() => {
-        if (activeBlock && activeBlock.element) activeBlock.element.remove();
-        activeBlock = null;
-        currentIndex++;
-        updateHUD();
-
-        if (lives <= 0) {
-          showGameOver();
-        } else {
-          spawnNext();
+        if (icon) icon.textContent = "💥";
+        if (title) {
+          title.textContent = "작전 실패!";
+          title.style.color = "#f85149";
         }
-      }, 350);
-    }
-
-    function handleMiss() {
-      playBeep(140, 'sawtooth', 0.3);
-      lives--;
-      const q = activeBlock.data;
-      wrongHistory.push({
-        q: q.text,
-        userAns: "시간 초과 (바닥 충돌)",
-        correctAns: getCategoryName(q.ans),
-        desc: q.desc
-      });
-
-      if (activeBlock && activeBlock.element) activeBlock.element.remove();
-      activeBlock = null;
-      currentIndex++;
-      updateHUD();
-
-      if (lives <= 0) {
-        showGameOver();
-      } else {
-        spawnNext();
+        if (desc) desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>핵심 요점을 복습하고 다시 도전하세요!`;
+        if (nextBtn) nextBtn.style.display = 'none';
       }
-    }
 
-    function getCategoryName(num) {
-      const names = {
-        1: "A급/B급 화재 (일반·유류)",
-        2: "C·D·K급 화재 (전기·금속·주방)",
-        3: "열전달 3방식 & 비화",
-        4: "롤오버 & 플래시오버",
-        5: "백드래프트 (폭발)",
-        6: "연기 유동 & 유독가스"
-      };
-      return names[num] || "미확인";
-    }
-
-    function showWin() {
-      isGameOver = true;
-      document.getElementById("result-icon").textContent = "🏆";
-      document.getElementById("result-title").textContent = "화재이론 완전 정복!";
-      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#58a6ff;font-size:1.2rem;">${score}점</b><br>특수현상과 화재 메커니즘을 모두 요격하셨습니다!`;
-      setupReviewUI();
-      document.getElementById("result-modal").style.display = "flex";
-    }
-
-    function showGameOver() {
-      isGameOver = true;
-      document.getElementById("result-icon").textContent = "💥";
-      document.getElementById("result-title").textContent = "작전 실패!";
-      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#ff7b72;font-size:1.2rem;">${score}점</b><br>하트가 모두 소진되었습니다.`;
-      setupReviewUI();
-      document.getElementById("result-modal").style.display = "flex";
-    }
-
-    function setupReviewUI() {
-      const container = document.getElementById("review-container");
-      const list = document.getElementById("review-list");
-      if (wrongHistory.length > 0) {
-        container.style.display = "block";
-        let html = "";
-        wrongHistory.forEach(w => {
-          html += `
-            <div class="review-item">
-              <div class="review-q">❓ ${w.q}</div>
-              <div class="review-a">❌ 내가 누른 답: ${w.userAns}</div>
-              <div class="review-tip">🎯 올바른 정답: <b>[${w.correctAns}]</b></div>
-              <div class="review-targets">
-                <div class="review-targets-title">💡 핵심 해설 족보:</div>
-                <div style="color:#c9d1d9;font-size:0.75rem;">${w.desc}</div>
-              </div>
-            </div>
-          `;
-        });
-        list.innerHTML = html;
-      } else {
-        container.style.display = "none";
-      }
-    }
-
-    function restartAll() {
-      document.getElementById("result-modal").style.display = "none";
-      startGame();
+      document.getElementById('gameover-modal').style.display = 'flex';
     }
   </script>
 </body>

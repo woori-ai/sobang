@@ -3,278 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>[제 7-3탄 B] 소화이론 & 소화약제 플로팅 헌팅</title>
+  <title>[제 7-3탄 B] 설계도서 & 운영·화재대응 버블 헌터</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
-      overflow: hidden;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
     }
-
     header {
-      height: 60px;
-      padding: 10px 16px;
-      background: rgba(22, 27, 34, 0.95);
-      border-bottom: 1px solid #30363d;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 20;
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
     }
-    .hud-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
     .btn-exit-game {
-      background: #21262d;
-      color: #8b949e;
-      border: 1px solid #30363d;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
     }
-    .btn-exit-game:hover { background: #30363d; color: #f0f6fc; }
-    .score-badge {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #58a6ff;
-      background: rgba(56, 139, 253, 0.1);
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid rgba(56, 139, 253, 0.3);
-    }
-        @keyframes heartHeal {
-      0% { transform: scale(1); }
-      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
-      70% { transform: scale(0.95); }
-      100% { transform: scale(1); }
-    }
-    .heart-heal-bounce {
-      animation: heartHeal 0.5s ease-in-out;
-    }
-    .lives { display: inline-block; transition: transform 0.2s ease;  font-size: 1.1rem; letter-spacing: 2px; }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #a371f7; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; }
 
     .hud-center {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
     }
-    .speed-label { font-size: 0.78rem; color: #8b949e; font-weight: 600; }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-b { background: #8957e5; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
     .speed-btn {
-      background: #21262d;
-      color: #c9d1d9;
-      border: 1px solid #30363d;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-weight: 700;
-      transition: all 0.15s;
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
     }
-    .speed-btn.active {
-      background: #1f6feb;
-      border-color: #388bfd;
-      color: #fff;
-    }
-
-    .hud-right { display: flex; align-items: center; gap: 12px; }
-    .round-pill {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #f0883e;
-      background: rgba(240, 136, 62, 0.12);
-      padding: 4px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(240, 136, 62, 0.3);
-    }
+    .speed-btn.active { background: #8957e5; color: #ffffff; border-color: #a371f7; }
+    .round-pill { font-size: 0.82rem; font-weight: 800; color: #a371f7; background: rgba(137, 87, 229, 0.15); padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(163, 113, 247, 0.3); }
 
     section.mission-banner {
-      background: #161b22;
-      border-bottom: 1px solid #30363d;
-      padding: 10px 16px;
-      text-align: center;
-      z-index: 15;
+      background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 16px;
+      text-align: center; z-index: 15;
     }
-    .mission-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #f0f6fc;
-      margin-bottom: 2px;
-    }
+    .mission-title { font-size: 1.05rem; font-weight: 800; color: #f0f6fc; margin-bottom: 2px; }
     .mission-desc { font-size: 0.8rem; color: #8b949e; }
-    .mission-progress-bar {
-      width: 100%;
-      max-width: 320px;
-      height: 6px;
-      background: #21262d;
-      border-radius: 3px;
-      margin: 6px auto 0;
-      overflow: hidden;
+    .mission-progress-bar { width: 100%; max-width: 320px; height: 6px; background: #21262d; border-radius: 3px; margin: 6px auto 0; overflow: hidden; }
+    .mission-progress-fill { width: 0%; height: 100%; background: #a371f7; transition: width 0.3s ease; }
+
+    #round-clear-bar {
+      display: none; margin: 8px 16px; padding: 10px 16px;
+      background: rgba(35, 134, 54, 0.25); border: 1px solid #3fb950; border-radius: 8px;
+      text-align: center; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; z-index: 30;
     }
-    .mission-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #238636, #2ea043);
-      width: 0%;
-      transition: width 0.3s;
+    .round-clear-text { color: #7ee787; font-weight: 700; font-size: 0.95rem; }
+    .btn-next-round {
+      padding: 6px 18px; background: #238636; border: 1px solid #3fb950;
+      color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.9rem;
     }
 
     main.space-zone {
-      flex: 1;
-      position: relative;
-      background: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%);
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
       overflow: hidden;
     }
-
-    .floating-bubble {
-      position: absolute;
-      padding: 10px 14px;
-      background: linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95));
-      border: 1.5px solid #30363d;
-      border-radius: 20px;
-      color: #f0f6fc;
-      font-size: 0.88rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      white-space: nowrap;
-      transition: transform 0.1s, border-color 0.2s, background 0.2s;
-      z-index: 5;
+    .float-item {
+      position: absolute; padding: 10px 14px; background: #21262d;
+      border: 1.5px solid #30363d; border-radius: 20px; color: #f0f6fc;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4); transition: transform 0.15s ease, border-color 0.15s ease;
+      z-index: 20;
     }
-    .floating-bubble:active { transform: scale(0.95); }
+    .float-item:hover { border-color: #a371f7; transform: scale(1.05); }
 
     .overlay-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 16px;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
     }
     .modal-box {
-      width: 100%;
-      max-width: 440px;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 14px;
-      padding: 24px;
-      text-align: center;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
-      max-height: 90vh;
-      overflow-y: auto;
+      background: #161b22; border: 1px solid #30363d; border-radius: 14px;
+      padding: 24px 20px; max-width: 480px; width: 100%; text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8); max-height: 88vh;
+      overflow-y: auto; position: relative;
     }
-    .modal-title { font-size: 1.4rem; font-weight: 800; color: #f0f6fc; margin-bottom: 8px; }
-    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 18px; }
+    .modal-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .modal-box::-webkit-scrollbar-thumb {
+      background: #30363d; border-radius: 4px;
+    }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 8px; cursor: pointer; margin-top: 14px; margin-bottom: 8px; text-decoration: none;
+      display: none; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(46, 160, 67, 0.35); transition: all 0.2s ease;
+    }
+    .btn-next-stage:hover {
+      background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+      transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46, 160, 67, 0.5);
+    }
+    .btn-close-modal {
+      position: absolute; top: 12px; right: 12px; background: transparent; border: none;
+      color: #8b949e; font-size: 1.3rem; cursor: pointer; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center; border-radius: 6px;
+    }
+    .btn-close-modal:hover { color: #f0f6fc; background: #21262d; }
+    .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #a371f7; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 20px; }
     .action-btn {
-      width: 100%;
-      padding: 12px;
-      background: #238636;
-      border: 1px solid #2ea043;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 10px;
+      width: 100%; padding: 12px; background: #8957e5; border: 1px solid #a371f7;
+      color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 6px; cursor: pointer; margin-bottom: 8px;
     }
-    .action-btn:hover { background: #2ea043; }
+    .action-btn:hover { background: #9e6cf4; }
+    .action-btn.btn-alt { background: #238636; border-color: #2ea043; }
     .sub-action-btn {
-      width: 100%;
-      padding: 10px;
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #c9d1d9;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-      text-decoration: none;
-      display: inline-block;
+      display: block; width: 100%; padding: 9px; background: #21262d; border: 1px solid #30363d;
+      color: #c9d1d9; font-size: 0.85rem; font-weight: 600; border-radius: 6px; text-decoration: none;
     }
+    .modal-dual-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 
-    .review-list {
-      text-align: left;
-      margin: 14px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: 280px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
     .review-item {
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 0.82rem;
+      background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      padding: 12px; margin-bottom: 12px; text-align: left;
     }
-    .review-q { font-weight: 700; color: #f0f6fc; margin-bottom: 4px; line-height: 1.4; }
-    .review-a { color: #f85149; font-weight: 600; margin-bottom: 2px; }
-    .review-tip { color: #e3b341; font-size: 0.78rem; margin-bottom: 8px; }
-    .review-targets {
-      background: rgba(35, 134, 54, 0.15);
-      border: 1px solid rgba(46, 160, 67, 0.4);
-      border-radius: 6px;
-      padding: 8px 10px;
-    }
-    .review-targets-title {
-      color: #3fb950;
-      font-weight: 700;
-      font-size: 0.78rem;
-      margin-bottom: 4px;
-    }
-    .review-targets-list {
-      margin: 0;
-      padding-left: 14px;
-      color: #c9d1d9;
-      font-size: 0.76rem;
-      line-height: 1.45;
-    }
-    .review-targets-list li { margin-bottom: 2px; }
+    .review-q { font-size: 0.88rem; font-weight: 800; color: #f0f6fc; margin-bottom: 4px; }
+    .review-a { font-size: 0.82rem; color: #f85149; margin-bottom: 4px; }
+    .review-tip { font-size: 0.82rem; color: #e3b341; margin-bottom: 8px; }
+    .review-targets { background: rgba(56, 139, 253, 0.08); border: 1px solid rgba(56, 139, 253, 0.25); border-radius: 6px; padding: 8px 10px; }
+    .review-targets-title { font-size: 0.78rem; font-weight: 800; color: #58a6ff; margin-bottom: 4px; }
+    .review-targets-list { list-style: disc; padding-left: 18px; font-size: 0.78rem; color: #c9d1d9; }
   </style>
 </head>
 <body>
 
   <header>
     <div class="hud-left">
-      <a href="../games.html" class="btn-exit-game">← 허브로</a>
-      <div class="score-badge">SCORE <span id="score-val">0</span></div>
-      <div class="lives" id="lives-display">❤️❤️❤️🖤🖤</div>
+      <a href="../games.html" class="btn-exit-game"><span>◀ 게임 목록</span></a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
     </div>
     <div class="hud-center">
-      <div style="display:flex;gap:4px;background:#161b22;padding:3px;border-radius:8px;border:1px solid #30363d;">
-        <a href="./game7-3.html" style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;text-decoration:none;color:#8b949e;">🎯 A 요격형</a>
-        <span style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;background:#1f6feb;color:#fff;">🛸 B 플로팅형</span>
+      <div class="type-switcher">
+        <a href="./game6-1.html" class="type-btn">A 낙하요격</a>
+        <span class="type-btn active-b">B 버블헌팅</span>
       </div>
-      <span class="speed-label">속도</span>
-      <button class="speed-btn" onclick="setSpeed(0.3, this)">0.3x</button>
+      <span class="speed-tag">속도:</span>
       <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
       <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
       <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
       <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
     </div>
-    <div class="hud-right">
-      <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
-    </div>
+    <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
   </header>
 
   <section class="mission-banner">
@@ -285,27 +168,26 @@
     </div>
   </section>
 
-  <!-- 라운드 클리어 안내 및 다음 라운드 진행 바 (계속 읽기 지원) -->
-  <div id="round-clear-bar" style="display:none; margin: 8px 16px; padding: 10px 16px; background: rgba(35, 134, 54, 0.25); border: 1px solid #3fb950; border-radius: 8px; text-align: center; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
-    <span style="color:#7ee787; font-weight:700; font-size:0.95rem;">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
-    <button id="btn-next-round" onclick="proceedNextRound()" style="padding: 6px 18px; background: #238636; border: 1px solid #3fb950; color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">다음 라운드 ▶</button>
+  <!-- 라운드 클리어 안내 바 -->
+  <div id="round-clear-bar">
+    <span class="round-clear-text">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
+    <button class="btn-next-round" onclick="proceedNextRound()">다음 라운드 ▶</button>
   </div>
 
   <main class="space-zone" id="space-zone"></main>
 
-  <!-- 인트로 모달 -->
+  <!-- 시작 모달 -->
   <div class="overlay-modal" id="start-modal">
     <div class="modal-box">
-      <div style="font-size:2.8rem; margin-bottom:10px;">🧯</div>
-      <h2 class="modal-title">[제 7-3탄 B] 소화이론 & 소화약제 플로팅 헌팅</h2>
+      <div style="font-size:2.8rem; margin-bottom:8px;">🏗️</div>
+      <h2 class="modal-title">[제 6-1탄 B] 공사장 임시소방시설 헌팅</h2>
       <p class="modal-desc">
-        화면에 둥둥 떠다니는 소화 약제·원리 지문 중<br>
-        상단 <b>미션 목표</b>에 해당하는 것을 모두 클릭해 사냥하세요!<br><br>
-        • 4대 소화원리: 냉각 / 질식 / 제거 / 억제(부촉매)<br>
-        • 분말 소화약제 1~4종 성분 및 착색·적응성<br>
-        • 물 분무 주수 형태 및 물 주수 절대 금지 물질
+        화면에 떠다니는 공사장 임시소방시설 정보 버블 중<br>상단 <b>미션 목표</b>에 해당하는 정답만 사냥하세요!<br><br>• 임시소방시설 설치 대상 규모 (3,000㎡ / 600㎡)<br>• 소화기(5m/3단위), 간이소화(0.1MPa/1.3톤), 비상경보(400㎡)<br>• 간이피난유도선(바닥 1m/5m간격), 방화포, 가스경보기
       </p>
-      <button class="action-btn" onclick="startGame()">🚀 미션 시작하기</button>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🛸 B타입 시작</button>
+        <a href="./game6-1.html" class="action-btn btn-alt">🎯 A타입 전환</a>
+      </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
     </div>
   </div>
@@ -320,7 +202,13 @@
         <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
         <div class="review-list" id="review-list"></div>
       </div>
-      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
+      <a href="../games.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>🚀 [제 6-2탄 B] 용접 화기취급 안전 도전 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 B타입 재도전</button>
+        <a href="./game6-1.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+      </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
     </div>
   </div>
@@ -328,383 +216,341 @@
   <script>
     const ROUND_DATA = [
       {
-        round: 1,
-        title: "❄️ [냉각소화 & 질식소화 원리 및 사례]만 모두 사냥하시오!",
-        desc: "증발잠열 흡수(발화점이하) 또는 산소 농도 15% 이하 희석",
-        targets: [
-          { text: "물 주수로 증발잠열(539 kcal/kg)을 흡수해 발화점 이하로 낮춤", tip: "물의 가장 지배적인 소화원리는 기화잠열에 의한 냉각소화!" },
-          { text: "CO2 방출로 공기 중 산소 농도를 15% 이하로 희석", tip: "이산화탄소 소화설비의 핵심 원리는 질식소화!" },
-          { text: "유류 탱크 화재 시 거품(포)으로 액면을 덮어 산소 차단", tip: "포 소화약제는 액면 피막 형성으로 산소 차단(질식소화)!" },
-          { text: "강화액 소화약제 주수로 연소 반응열 흡수", tip: "강화액의 주원리는 냉각소화!" }
-        ],
-        traps: [
-          { text: "가스 밸브를 신속히 차단하여 불을 끔", tip: "가연물 공급 차단은 '제거소화'입니다!" },
-          { text: "할론 소화약제로 라디칼 연쇄반응 차단", tip: "연쇄반응 차단은 '억제(부촉매)소화'입니다!" },
-          { text: "산불 발생 시 나무를 미리 벌목하여 방화선 구축", tip: "가연물 격리는 '제거소화'입니다!" },
-          { text: "할로겐화합물 약제 방출로 불꽃 억제", tip: "할로겐 약제는 '부촉매(억제)소화'입니다!" }
-        ]
+            "round": 1,
+            "title": "📚 [종합방재실 비치 설계도서 & 위반 시 벌칙]만 모두 사냥하세요!",
+            "desc": "건축물배치도/평면도/방화구획도/소방계통도 / 시방서 제외 / 위반 시 2년·2천만원",
+            "targets": [
+                  {
+                        "text": "건축물 개요 및 배치도",
+                        "tip": "비치 도서: 건물 전체 개요 및 배치도!"
+                  },
+                  {
+                        "text": "각층 평면도 및 방화구획도",
+                        "tip": "비치 도서: 각층 평면도 및 방화구획(창호도)!"
+                  },
+                  {
+                        "text": "소방시설 계통도 및 층별 평면도",
+                        "tip": "비치 도서: 소방시설 계통도 및 평면도!"
+                  },
+                  {
+                        "text": "소방자동차 진입동선 및 부서공간",
+                        "tip": "비치 도서: 소방차 진입로 및 부서 위치도!"
+                  },
+                  {
+                        "text": "미비치 시 2년 이하 징역 또는 2천만원 벌금",
+                        "tip": "강력한 처벌! 설계도서 미비치 시 2년/2천만원 이하 벌금!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "공사 시방서(示方書) 의무 비치",
+                        "tip": "[오답] 건축계획서 및 시방서는 비치 대상에서 제외됩니다!"
+                  },
+                  {
+                        "text": "건축계획서 의무 비치",
+                        "tip": "[오답] 건축계획서는 비치 대상에서 명시적으로 제외!"
+                  },
+                  {
+                        "text": "미비치 시 단순 50만원 과태료",
+                        "tip": "[오답] 과태료가 아닌 2년 이하 징역 또는 2천만원 벌금의 형벌입니다!"
+                  },
+                  {
+                        "text": "인테리어 마감재 견본 샘플 비치",
+                        "tip": "[오답] 마감재료 표 도면은 비치하되 실물 샘플은 대상이 아님!"
+                  }
+            ]
       },
       {
-        round: 2,
-        title: "🚫 [제거소화 & 억제(부촉매)소화 원리 및 사례]만 모두 사냥하시오!",
-        desc: "가연물 격리/공급차단 또는 연쇄반응 화학적 억제",
-        targets: [
-          { text: "가스 화재 시 중간 밸브를 신속히 차단하여 연료 공급 중단", tip: "가연성 가스 공급 차단 = 제거소화" },
-          { text: "산불 발생 시 주변 수목을 미리 벌채하여 방화선 구축", tip: "가연물 격리 = 제거소화" },
-          { text: "촛불을 입김으로 세게 불어 가연성 증기 날려버림", tip: "증기를 불어서 날려버리는 물리적 제거소화" },
-          { text: "할론·할로겐 약제로 연쇄반응 활성 라디칼 화학적 차단", tip: "부촉매 작용으로 연쇄반응 억제소화" }
-        ],
-        traps: [
-          { text: "스프링클러 헤드에서 물을 방사하여 냉각", tip: "물 방사는 '냉각소화'입니다!" },
-          { text: "밀폐실에 이산화탄소를 가득 채워 산소 차단", tip: "산소 차단은 '질식소화'입니다!" },
-          { text: "식용유 화재에 젖은 수건을 덮어 불을 끔", tip: "수건으로 덮는 것은 '질식소화'입니다!" },
-          { text: "모래를 뿌려 화염을 덮어버림", tip: "모래로 덮는 것은 '질식소화'입니다!" }
-        ]
-      },
-      {
-        round: 3,
-        title: "🧪 [분말 소화약제 1~4종 성분 및 착색] 올바른 연결을 모두 사냥하시오!",
-        desc: "탄산수소나트륨(백색), 탄산수소칼륨(자색), 제1인산암모늄(담홍색 ABC급)",
-        targets: [
-          { text: "제1종: 탄산수소나트륨(NaHCO3) - 백색 (BC급)", tip: "제1종 = 탄산수소나트륨, 백색 착색, BC급 전용!" },
-          { text: "제2종: 탄산수소칼륨(KHCO3) - 자색(보라) (BC급)", tip: "제2종 = 탄산수소칼륨, 자색 착색, BC급 전용!" },
-          { text: "제3종: 제1인산암모늄(NH4H2PO4) - 담홍색 (ABC급 만능)", tip: "제3종 = 제1인산암모늄, 담홍색(분홍), 일반(A급) 화재에도 적응!" },
-          { text: "제4종: 탄산수소칼륨 + 요소 - 회색 (BC급)", tip: "제4종 = 탄산수소칼륨+요소, 회색 착색, BC급!" }
-        ],
-        traps: [
-          { text: "제1종: 탄산수소나트륨 - 담홍색 (ABC급)", tip: "담홍색 ABC급은 '제3종(제1인산암모늄)'입니다!" },
-          { text: "제3종: 제1인산암모늄 - 백색 (BC급 전용)", tip: "제3종은 '담홍색'이며 A급 화재에도 적응성이 있습니다!" },
-          { text: "제2종: 탄산수소칼륨 - 회색 착색", tip: "제2종은 '자색(보라)'입니다! (회색은 4종)" },
-          { text: "제4종: 제1인산암모늄 + 물", tip: "제4종은 탄산수소칼륨에 요소를 합성한 것입니다!" }
-        ]
-      },
-      {
-        round: 4,
-        title: "⚠️ [화재 시 물 주수 절대 금지 물질 (폭발·연소확대)]만 모두 사냥하시오!",
-        desc: "물과 반응하여 수소 폭발하거나 기름이 물 위에 떠서 연소확대되는 물질",
-        targets: [
-          { text: "제3류 칼륨, 나트륨, 알킬알루미늄 (금수성)", tip: "물과 접촉 시 수소 가스 발생하여 맹렬히 폭발!" },
-          { text: "제2류 철분, 금속분, 마그네슘 분말", tip: "고온 금속분에 주수 시 물 열분해로 수소 폭발!" },
-          { text: "제1류 무기과산화물 (과산화칼륨, 과산화나트륨)", tip: "물과 반응 시 다량의 산소를 방출하여 폭발!" },
-          { text: "제4류 휘발유, 벤젠 등 인화성 액체 (봉상주수)", tip: "기름이 물 위에 떠서 화재 면적이 급격히 확대!" }
-        ],
-        traps: [
-          { text: "A급 목재, 종이, 섬유 화재", tip: "일반화재(A급)는 물 주수가 가장 효과적인 최우선 소화방법입니다!" },
-          { text: "제5류 유기과산화물, 질산에스테르 화재", tip: "제5류는 자체 산소를 함유하므로 '대량의 물 주수 냉각'이 유일한 소화법입니다!" },
-          { text: "무상(안개모양) 주수로 방사하는 C급 전기화재", tip: "무상 주수는 물 입자가 미세하여 전기 전도성이 없으므로 C급에도 사용 가능합니다!" },
-          { text: "석탄 더미 화재", tip: "석탄 화재는 물 주수를 통해 냉각 소화합니다!" }
-        ]
+            "round": 2,
+            "title": "🚨 [유지보수 주기·절차 & 화재 시 대응 절차]만 모두 사냥하세요!",
+            "desc": "정기보수 월 1회 / 계획-부품-이동-정비-수리-보고서 / 신호➔경보➔CCTV확인➔119신고➔복구",
+            "targets": [
+                  {
+                        "text": "정기 유지보수는 월 1회 실시",
+                        "tip": "종합방재실 정기 유지보수는 '월 1회' 실시!"
+                  },
+                  {
+                        "text": "계획수립 ➔ 부품준비 ➔ 현장이동 ➔ 정비실행",
+                        "tip": "유지보수 표준 절차: 계획-부품-이동-정비-수리-보고서!"
+                  },
+                  {
+                        "text": "감지기 동작 시 CCTV 확인 및 현장 출동",
+                        "tip": "화재신호 수신 즉시 CCTV 및 현장 출동으로 실화재 확인!"
+                  },
+                  {
+                        "text": "실화재 확인 시 119 신고 및 소방차 유도",
+                        "tip": "실화재 판명 즉시 119 신고 및 진입로·주차공간 확보!"
+                  },
+                  {
+                        "text": "상황 종료 후 시스템 정상 복구",
+                        "tip": "화재 진압 완료 후 시스템 이상 유무 점검 및 정상 복구!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "정기 유지보수는 2년에 1회만 실시",
+                        "tip": "[오답] 유지보수는 매월 1회 정기적으로 실시해야 함!"
+                  },
+                  {
+                        "text": "화재 신호 접수 시 현장 확인 없이 즉시 방재실 철수",
+                        "tip": "[오답] CCTV 및 현장출동으로 비화재보 여부를 신속 확인해야 함!"
+                  },
+                  {
+                        "text": "소방대 도착 전까지 경보장치를 꺼두기",
+                        "tip": "[오답] 재실자 조기 피난을 위해 주경종/지구경종/비상방송 즉시 송출!"
+                  },
+                  {
+                        "text": "고장 발생 시 보고서 작성 생략",
+                        "tip": "[오답] 수리 후 반드시 보고서 작성 및 유지보수 기록을 유지해야 함!"
+                  }
+            ]
       }
-    ];
+];
 
-    let currentRoundIndex = 0;
+    const MAX_LIVES = 3;
     let score = 0;
-    const MAX_LIVES = 5;
     let lives = 3;
-    let speedMultiplier = 0.5;
-    let wrongHistory = [];
-    let isGameOver = false;
-
-    let floatingItems = [];
-    let remainingTargetCount = 0;
+    let speedMult = 0.5;
+    let currentRoundIndex = 0;
+    let currentRoundTargets = [];
+    let currentRoundTraps = [];
+    let remainingTargetsCount = 0;
     let totalTargetsInRound = 0;
-    let animFrameId = null;
+    let floatingElements = [];
+    let isRoundRunning = false;
+    let animFrame = null;
+    let wrongHistory = [];
 
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      if (type === 'hit') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.12);
-      } else {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.25);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.25);
-      }
+    const spaceZone = document.getElementById('space-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const roundIndicator = document.getElementById('round-indicator');
+    const missionTitle = document.getElementById('mission-title');
+    const missionDesc = document.getElementById('mission-desc');
+    const progressFill = document.getElementById('progress-fill');
+    const roundClearBar = document.getElementById('round-clear-bar');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
-    function setSpeed(spd, btn) {
-      speedMultiplier = spd;
-      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-    }
-
-        function triggerHeartHealAnim() {
-      const el = document.getElementById("lives-display");
-      if (!el) return;
-      el.classList.remove("heart-heal-bounce");
-      void el.offsetWidth;
-      el.classList.add("heart-heal-bounce");
-    }
-
-    function updateHeartsUI() {
-      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, MAX_LIVES - lives));
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
     }
 
     function updateProgressBar() {
-      const fill = document.getElementById("progress-fill");
-      const done = totalTargetsInRound - remainingTargetCount;
-      const pct = (done / totalTargetsInRound) * 100;
-      fill.style.width = pct + "%";
+      if (totalTargetsInRound === 0) return;
+      const found = totalTargetsInRound - remainingTargetsCount;
+      const pct = Math.floor((found / totalTargetsInRound) * 100);
+      progressFill.style.width = `${pct}%`;
     }
 
     function startGame() {
-      document.getElementById("start-modal").style.display = "none";
       score = 0;
       lives = 3;
       currentRoundIndex = 0;
       wrongHistory = [];
-      isGameOver = false;
-      document.getElementById("score-val").textContent = score;
-      updateHeartsUI();
-      loadRound(0);
+      updateHUD();
+
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
+      if (roundClearBar) roundClearBar.style.display = 'none';
+
+      loadRound(currentRoundIndex);
     }
 
-    function loadRound(roundIdx) {
-      currentRoundIndex = roundIdx;
-      const data = ROUND_DATA[roundIdx];
-      document.getElementById("round-indicator").textContent = `ROUND ${data.round} / ${ROUND_DATA.length}`;
-      document.getElementById("mission-title").textContent = data.title;
-      document.getElementById("mission-desc").textContent = data.desc;
+    function loadRound(idx) {
+      if (idx >= ROUND_DATA.length) {
+        showFinalResult(true);
+        return;
+      }
 
-      const space = document.getElementById("space-zone");
-      space.innerHTML = "";
-      floatingItems = [];
+      const rData = ROUND_DATA[idx];
+      roundIndicator.textContent = `ROUND ${idx + 1} / ${ROUND_DATA.length}`;
+      missionTitle.textContent = rData.title;
+      missionDesc.textContent = rData.desc;
 
-      remainingTargetCount = data.targets.length;
-      totalTargetsInRound = data.targets.length;
+      spaceZone.innerHTML = '';
+      floatingElements = [];
+
+      currentRoundTargets = [...rData.targets];
+      currentRoundTraps = [...rData.traps];
+      remainingTargetsCount = currentRoundTargets.length;
+      totalTargetsInRound = currentRoundTargets.length;
       updateProgressBar();
 
-      const combined = [
-        ...data.targets.map(t => ({ ...t, isTarget: true })),
-        ...data.traps.map(t => ({ ...t, isTarget: false }))
-      ].sort(() => Math.random() - 0.5);
+      const allItems = [
+        ...currentRoundTargets.map(t => ({ text: t.text, isTarget: true, tip: t.tip })),
+        ...currentRoundTraps.map(t => ({ text: t.text, isTarget: false, tip: t.tip }))
+      ];
 
-      const zoneW = space.clientWidth || 360;
-      const zoneH = space.clientHeight || 480;
+      allItems.sort(() => Math.random() - 0.5);
 
-      combined.forEach(itemData => {
-        const bubble = document.createElement("div");
-        bubble.className = "floating-bubble";
-        bubble.textContent = itemData.text;
-        space.appendChild(bubble);
+      const zoneW = spaceZone.clientWidth || (window.innerWidth - 30) || 600;
+      const zoneH = spaceZone.clientHeight || (window.innerHeight - 150) || 500;
 
-        const bW = bubble.offsetWidth || 140;
-        const bH = bubble.offsetHeight || 36;
-        const x = Math.random() * (zoneW - bW - 20) + 10;
-        const y = Math.random() * (zoneH - bH - 20) + 10;
+      allItems.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'float-item';
+        el.textContent = item.text;
+        spaceZone.appendChild(el);
+
+        const elW = el.offsetWidth || 140;
+        const elH = el.offsetHeight || 40;
+
+        const posX = Math.random() * Math.max(10, zoneW - elW - 20) + 10;
+        const posY = Math.random() * Math.max(10, zoneH - elH - 20) + 10;
 
         const angle = Math.random() * Math.PI * 2;
-        const speed = (0.7 + Math.random() * 0.6);
-        const vx = Math.cos(angle) * speed;
-        const vy = Math.sin(angle) * speed;
+        const speed = (0.7 + Math.random() * 0.6) * speedMult;
 
-        const obj = {
-          element: bubble,
-          data: itemData,
-          x, y, vx, vy,
-          w: bW, h: bH,
-          isAlive: true
+        el.style.left = `${posX}px`;
+        el.style.top = `${posY}px`;
+
+        const fObj = {
+          el: el,
+          item: item,
+          x: posX,
+          y: posY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          w: elW,
+          h: elH,
+          active: true
         };
 
-        bubble.addEventListener("click", () => handleBubbleClick(obj));
-        floatingItems.push(obj);
+        el.addEventListener('click', () => onItemClick(fObj));
+        floatingElements.push(fObj);
       });
 
-      if (animFrameId) cancelAnimationFrame(animFrameId);
-      animFrameId = requestAnimationFrame(updatePhysics);
+      isRoundRunning = true;
+      cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(updatePhysics);
     }
-
-        function clampAllItemsInsideZone() {
-      const space = document.getElementById("space-zone");
-      if (!space) return;
-      const rect = space.getBoundingClientRect();
-      const zoneW = rect.width;
-      const zoneH = rect.height;
-      const MARGIN = 15;
-      if (!zoneW || !zoneH) return;
-
-      floatingItems.forEach(item => {
-        const w = item.element.offsetWidth || item.w || 150;
-        const h = item.element.offsetHeight || item.h || 44;
-        item.w = w;
-        item.h = h;
-
-        if (item.x + w > zoneW - MARGIN) item.x = Math.max(MARGIN, zoneW - w - MARGIN);
-        if (item.x < MARGIN) item.x = MARGIN;
-
-        if (item.y + h > zoneH - MARGIN) item.y = Math.max(MARGIN, zoneH - h - MARGIN);
-        if (item.y < MARGIN) item.y = MARGIN;
-
-        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
-      });
-    }
-
-    window.addEventListener('resize', clampAllItemsInsideZone);
 
     function updatePhysics() {
-      if (isGameOver) return;
-      const space = document.getElementById("space-zone");
-      if (!space) return;
-      const rect = space.getBoundingClientRect();
-      const zoneW = rect.width;
-      const zoneH = rect.height;
-      const MARGIN = 15;
+      if (!isRoundRunning) return;
 
-      floatingItems.forEach(item => {
-        if (!item.isAlive) return;
-        item.x += item.vx * speedMultiplier;
-        item.y += item.vy * speedMultiplier;
+      const zoneW = spaceZone.clientWidth || (window.innerWidth - 30) || 600;
+      const zoneH = spaceZone.clientHeight || (window.innerHeight - 150) || 500;
 
-        const w = item.element.offsetWidth || item.w || 150;
-        const h = item.element.offsetHeight || item.h || 44;
-        item.w = w;
-        item.h = h;
+      floatingElements.forEach(f => {
+        if (!f.active) return;
+        f.x += f.vx;
+        f.y += f.vy;
 
-        if (item.x <= MARGIN) {
-          item.x = MARGIN;
-          item.vx = Math.abs(item.vx);
-        } else if (item.x + w >= zoneW - MARGIN) {
-          item.x = Math.max(MARGIN, zoneW - w - MARGIN);
-          item.vx = -Math.abs(item.vx);
-        }
+        if (f.x <= 5) { f.x = 5; f.vx *= -1; }
+        if (f.x + f.w >= zoneW - 5) { f.x = zoneW - f.w - 5; f.vx *= -1; }
+        if (f.y <= 5) { f.y = 5; f.vy *= -1; }
+        if (f.y + f.h >= zoneH - 5) { f.y = zoneH - f.h - 5; f.vy *= -1; }
 
-        if (item.y <= MARGIN) {
-          item.y = MARGIN;
-          item.vy = Math.abs(item.vy);
-        } else if (item.y + h >= zoneH - MARGIN) {
-          item.y = Math.max(MARGIN, zoneH - h - MARGIN);
-          item.vy = -Math.abs(item.vy);
-        }
-
-        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+        f.el.style.left = `${f.x}px`;
+        f.el.style.top = `${f.y}px`;
       });
 
-      animFrameId = requestAnimationFrame(updatePhysics);
+      animFrame = requestAnimationFrame(updatePhysics);
     }
 
-        function handleBubbleClick(item) {
-      if (item.isSolved || isGameOver) return;
+    function onItemClick(fObj) {
+      if (!fObj.active) return;
 
-      if (item.data.isTarget) {
-        playSound('hit');
+      if (fObj.item.isTarget) {
+        fObj.active = false;
+        fObj.el.style.background = 'rgba(46, 160, 67, 0.4)';
+        fObj.el.style.borderColor = '#3fb950';
+        fObj.el.style.color = '#7ee787';
+        fObj.el.style.transform = 'scale(1.1)';
+        fObj.el.style.pointerEvents = 'none';
+
         score += 100;
-        document.getElementById("score-val").textContent = score;
-
-        item.isSolved = true;
-        // 맞으면 초록색으로 표시되고 사라지지 않고 유지됨
-        item.element.style.borderColor = "#3fb950";
-        item.element.style.background = "rgba(63, 185, 80, 0.45)";
-        item.element.style.boxShadow = "0 0 12px rgba(63, 185, 80, 0.6)";
-        item.element.style.cursor = "default";
-        item.element.innerHTML = '<span style="color:#7ee787; font-weight:800; margin-right:4px;">✅</span>' + item.data.text;
-
-        if (lives < MAX_LIVES) {
-          lives++;
-          updateHeartsUI();
-          triggerHeartHealAnim();
-        }
-        remainingTargetCount--;
+        remainingTargetsCount--;
+        updateHUD();
         updateProgressBar();
 
-        if (remainingTargetCount <= 0) {
-          if (animFrameId) cancelAnimationFrame(animFrameId);
-          clampAllItemsInsideZone();
-          setTimeout(clampAllItemsInsideZone, 60);
-          const roundClearBar = document.getElementById("round-clear-bar");
-          const btnNextRound = document.getElementById("btn-next-round");
-          if (roundClearBar && btnNextRound) {
-            btnNextRound.textContent = (currentRoundIndex + 1 >= ROUND_DATA.length) ? '최종 결과 보기 🏆' : '다음 라운드 ▶';
-            roundClearBar.style.display = 'flex';
-          }
+        if (remainingTargetsCount <= 0) {
+          isRoundRunning = false;
+          if (roundClearBar) roundClearBar.style.display = 'flex';
         }
       } else {
-        if (item.isFailed) return;
-        item.isFailed = true;
+        lives--;
+        updateHUD();
 
-        playSound('wrong');
-        item.element.style.borderColor = "#ff4d4f";
-        item.element.style.background = "rgba(248, 81, 73, 0.45)";
-        item.element.style.boxShadow = "0 0 10px rgba(248, 81, 73, 0.6)";
-        item.element.innerHTML = '<span style="color:#f85149; font-weight:800; margin-right:4px;">❌</span>' + item.data.text +
-          (item.data.tip ? '<div style="font-size:0.75rem; color:#ffa657; margin-top:4px; font-weight:normal;">💡 ' + item.data.tip + '</div>' : '');
+        fObj.el.style.background = 'rgba(248, 81, 73, 0.4)';
+        fObj.el.style.borderColor = '#f85149';
+        fObj.el.style.color = '#ff7b72';
 
         wrongHistory.push({
           roundTitle: ROUND_DATA[currentRoundIndex].title,
-          targets: ROUND_DATA[currentRoundIndex].targets,
-          clicked: item.data.text,
-          tip: item.data.tip
+          clicked: fObj.item.text,
+          tip: fObj.item.tip,
+          targets: ROUND_DATA[currentRoundIndex].targets
         });
 
-        lives--;
-        updateHeartsUI();
-        if (lives <= 0) showGameOver();
+        setTimeout(() => {
+          if (fObj.el) {
+            fObj.el.style.background = '#21262d';
+            fObj.el.style.borderColor = '#30363d';
+            fObj.el.style.color = '#f0f6fc';
+          }
+        }, 400);
+
+        if (lives <= 0) {
+          isRoundRunning = false;
+          showFinalResult(false);
+        }
       }
     }
 
     function proceedNextRound() {
-      const roundClearBar = document.getElementById("round-clear-bar");
-      if (roundClearBar) roundClearBar.style.display = "none";
-      if (currentRoundIndex + 1 < ROUND_DATA.length) {
-        loadRound(currentRoundIndex + 1);
+      if (roundClearBar) roundClearBar.style.display = 'none';
+      currentRoundIndex++;
+      loadRound(currentRoundIndex);
+    }
+
+    function showFinalResult(isSuccess) {
+      isRoundRunning = false;
+      cancelAnimationFrame(animFrame);
+
+      const modal = document.getElementById('result-modal');
+      const icon = document.getElementById('result-icon');
+      const title = document.getElementById('result-title');
+      const desc = document.getElementById('result-desc');
+      const container = document.getElementById('review-container');
+      const list = document.getElementById('review-list');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      modal.style.display = 'flex';
+
+      if (isSuccess) {
+        icon.textContent = "🏆";
+        title.textContent = "작전 대성공! 공사장 임시소방시설 헌팅 마스터!";
+        title.style.color = "#3fb950";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>모든 라운드를 완벽하게 클리어하셨습니다!`;
+        if (nextBtn) nextBtn.style.display = 'flex';
       } else {
-        showGameClear();
+        icon.textContent = "💥";
+        title.textContent = "작전 실패!";
+        title.style.color = "#f85149";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>오답을 복습하고 다시 도전하세요!`;
+        if (nextBtn) nextBtn.style.display = 'none';
       }
-    }
 
-    function showGameClear() {
-      isGameOver = true;
-      document.getElementById("result-icon").textContent = "🏆";
-      document.getElementById("result-title").textContent = "소화이론 올클리어!";
-      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#58a6ff; font-size:1.2rem;">${score}점</b><br>4대 소화원리와 분말약제 족보를 완벽하게 정복하셨습니다!`;
-      setupReviewUI();
-      document.getElementById("result-modal").style.display = "flex";
-    }
-
-    function showGameOver() {
-      isGameOver = true;
-      document.getElementById("result-icon").textContent = "💥";
-      document.getElementById("result-title").textContent = "작전 실패!";
-      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#ff7b72; font-size:1.2rem;">${score}점</b><br>함정에 걸려 하트가 모두 소진되었습니다.`;
-      setupReviewUI();
-      document.getElementById("result-modal").style.display = "flex";
-    }
-
-    function setupReviewUI() {
-      const container = document.getElementById("review-container");
-      const list = document.getElementById("review-list");
       if (wrongHistory.length > 0) {
         container.style.display = "block";
         let html = "";
         wrongHistory.forEach(w => {
-          let match = w.roundTitle.match(/\[(.*?)\]/);
-          let targetCategory = match ? match[1] : "정답";
-          let count = w.targets.length;
           let targetsHtml = w.targets.map(t => `<li>${t.text}</li>`).join("");
-
           html += `
             <div class="review-item">
               <div class="review-q">${w.roundTitle}</div>
               <div class="review-a">❌ <b>잘못 누른 함정:</b> ${w.clicked}</div>
               <div class="review-tip">💡 <b>족집게 해설:</b> ${w.tip}</div>
               <div class="review-targets">
-                <div class="review-targets-title">🎯 <b>반드시 외워야 할 [${targetCategory}] 핵심 ${count}총사:</b></div>
-                <ul class="review-targets-list">
-                  ${targetsHtml}
-                </ul>
+                <div class="review-targets-title">🎯 <b>반드시 외워야 할 핵심 정답:</b></div>
+                <ul class="review-targets-list">${targetsHtml}</ul>
               </div>
             </div>
           `;
@@ -713,11 +559,6 @@
       } else {
         container.style.display = "none";
       }
-    }
-
-    function restartAll() {
-      document.getElementById("result-modal").style.display = "none";
-      startGame();
     }
   </script>
 </body>

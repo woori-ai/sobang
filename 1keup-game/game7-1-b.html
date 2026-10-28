@@ -3,316 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>[제 7-1탄 B] 연소이론 & 위험물 플로팅 헌팅</title>
+  <title>[제 7-1탄 B] 종합방재실 개요 & 설치 위치 버블 헌터</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
-      overflow: hidden;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
     }
-
     header {
-      height: 60px;
-      padding: 10px 16px;
-      background: rgba(22, 27, 34, 0.95);
-      border-bottom: 1px solid #30363d;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 20;
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
     }
-    .hud-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
     .btn-exit-game {
-      background: #21262d;
-      color: #8b949e;
-      border: 1px solid #30363d;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
     }
-    .btn-exit-game:hover {
-      background: #30363d;
-      color: #f0f6fc;
-    }
-    .score-badge {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #58a6ff;
-      background: rgba(56, 139, 253, 0.1);
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid rgba(56, 139, 253, 0.3);
-    }
-        @keyframes heartHeal {
-      0% { transform: scale(1); }
-      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
-      70% { transform: scale(0.95); }
-      100% { transform: scale(1); }
-    }
-    .heart-heal-bounce {
-      animation: heartHeal 0.5s ease-in-out;
-    }
-    .lives { display: inline-block; transition: transform 0.2s ease; 
-      font-size: 1.1rem;
-      letter-spacing: 2px;
-    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #a371f7; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; }
 
     .hud-center {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
     }
-    .speed-label {
-      font-size: 0.78rem;
-      color: #8b949e;
-      font-weight: 600;
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
     }
+    .type-btn.active-b { background: #8957e5; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
     .speed-btn {
-      background: #21262d;
-      color: #c9d1d9;
-      border: 1px solid #30363d;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-weight: 700;
-      transition: all 0.15s;
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
     }
-    .speed-btn.active {
-      background: #1f6feb;
-      border-color: #388bfd;
-      color: #fff;
-    }
-
-    .hud-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .round-pill {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #f0883e;
-      background: rgba(240, 136, 62, 0.12);
-      padding: 4px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(240, 136, 62, 0.3);
-    }
+    .speed-btn.active { background: #8957e5; color: #ffffff; border-color: #a371f7; }
+    .round-pill { font-size: 0.82rem; font-weight: 800; color: #a371f7; background: rgba(137, 87, 229, 0.15); padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(163, 113, 247, 0.3); }
 
     section.mission-banner {
-      background: #161b22;
-      border-bottom: 1px solid #30363d;
-      padding: 10px 16px;
-      text-align: center;
-      z-index: 15;
+      background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 16px;
+      text-align: center; z-index: 15;
     }
-    .mission-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #f0f6fc;
-      margin-bottom: 2px;
+    .mission-title { font-size: 1.05rem; font-weight: 800; color: #f0f6fc; margin-bottom: 2px; }
+    .mission-desc { font-size: 0.8rem; color: #8b949e; }
+    .mission-progress-bar { width: 100%; max-width: 320px; height: 6px; background: #21262d; border-radius: 3px; margin: 6px auto 0; overflow: hidden; }
+    .mission-progress-fill { width: 0%; height: 100%; background: #a371f7; transition: width 0.3s ease; }
+
+    #round-clear-bar {
+      display: none; margin: 8px 16px; padding: 10px 16px;
+      background: rgba(35, 134, 54, 0.25); border: 1px solid #3fb950; border-radius: 8px;
+      text-align: center; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; z-index: 30;
     }
-    .mission-desc {
-      font-size: 0.8rem;
-      color: #8b949e;
-    }
-    .mission-progress-bar {
-      width: 100%;
-      max-width: 320px;
-      height: 6px;
-      background: #21262d;
-      border-radius: 3px;
-      margin: 6px auto 0;
-      overflow: hidden;
-    }
-    .mission-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #238636, #2ea043);
-      width: 0%;
-      transition: width 0.3s;
+    .round-clear-text { color: #7ee787; font-weight: 700; font-size: 0.95rem; }
+    .btn-next-round {
+      padding: 6px 18px; background: #238636; border: 1px solid #3fb950;
+      color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.9rem;
     }
 
     main.space-zone {
-      flex: 1;
-      position: relative;
-      background: radial-gradient(circle at 50% 50%, #161b22 0%, #0d1117 100%);
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
       overflow: hidden;
     }
-
-    .floating-bubble {
-      position: absolute;
-      padding: 10px 14px;
-      background: linear-gradient(135deg, rgba(33, 38, 45, 0.95), rgba(22, 27, 34, 0.95));
-      border: 1.5px solid #30363d;
-      border-radius: 20px;
-      color: #f0f6fc;
-      font-size: 0.88rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      white-space: nowrap;
-      transition: transform 0.1s, border-color 0.2s, background 0.2s;
-      z-index: 5;
-    }
-    .floating-bubble:active {
-      transform: scale(0.95);
-    }
-
-    .explosion-particle {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      pointer-events: none;
+    .float-item {
+      position: absolute; padding: 10px 14px; background: #21262d;
+      border: 1.5px solid #30363d; border-radius: 20px; color: #f0f6fc;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4); transition: transform 0.15s ease, border-color 0.15s ease;
       z-index: 20;
     }
+    .float-item:hover { border-color: #a371f7; transform: scale(1.05); }
 
     .overlay-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 16px;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
     }
     .modal-box {
-      width: 100%;
-      max-width: 440px;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 14px;
-      padding: 24px;
-      text-align: center;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
-      max-height: 90vh;
-      overflow-y: auto;
+      background: #161b22; border: 1px solid #30363d; border-radius: 14px;
+      padding: 24px 20px; max-width: 480px; width: 100%; text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8); max-height: 88vh;
+      overflow-y: auto; position: relative;
     }
-    .modal-title {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #f0f6fc;
-      margin-bottom: 8px;
+    .modal-box::-webkit-scrollbar {
+      width: 6px;
     }
-    .modal-desc {
-      font-size: 0.88rem;
-      color: #8b949e;
-      line-height: 1.5;
-      margin-bottom: 18px;
+    .modal-box::-webkit-scrollbar-thumb {
+      background: #30363d; border-radius: 4px;
     }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 8px; cursor: pointer; margin-top: 14px; margin-bottom: 8px; text-decoration: none;
+      display: none; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(46, 160, 67, 0.35); transition: all 0.2s ease;
+    }
+    .btn-next-stage:hover {
+      background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+      transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46, 160, 67, 0.5);
+    }
+    .btn-close-modal {
+      position: absolute; top: 12px; right: 12px; background: transparent; border: none;
+      color: #8b949e; font-size: 1.3rem; cursor: pointer; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center; border-radius: 6px;
+    }
+    .btn-close-modal:hover { color: #f0f6fc; background: #21262d; }
+    .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #a371f7; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 20px; }
     .action-btn {
-      width: 100%;
-      padding: 12px;
-      background: #238636;
-      border: 1px solid #2ea043;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 10px;
+      width: 100%; padding: 12px; background: #8957e5; border: 1px solid #a371f7;
+      color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 6px; cursor: pointer; margin-bottom: 8px;
     }
-    .action-btn:hover { background: #2ea043; }
+    .action-btn:hover { background: #9e6cf4; }
+    .action-btn.btn-alt { background: #238636; border-color: #2ea043; }
     .sub-action-btn {
-      width: 100%;
-      padding: 10px;
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #c9d1d9;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-      text-decoration: none;
-      display: inline-block;
+      display: block; width: 100%; padding: 9px; background: #21262d; border: 1px solid #30363d;
+      color: #c9d1d9; font-size: 0.85rem; font-weight: 600; border-radius: 6px; text-decoration: none;
     }
+    .modal-dual-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 
-    .review-list {
-      text-align: left;
-      margin: 14px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: 280px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
     .review-item {
-      background: #21262d;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 0.82rem;
+      background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      padding: 12px; margin-bottom: 12px; text-align: left;
     }
-    .review-q { font-weight: 700; color: #f0f6fc; margin-bottom: 4px; line-height: 1.4; }
-    .review-a { color: #f85149; font-weight: 600; margin-bottom: 2px; }
-    .review-tip { color: #e3b341; font-size: 0.78rem; margin-bottom: 8px; }
-    .review-targets {
-      background: rgba(35, 134, 54, 0.15);
-      border: 1px solid rgba(46, 160, 67, 0.4);
-      border-radius: 6px;
-      padding: 8px 10px;
-    }
-    .review-targets-title {
-      color: #3fb950;
-      font-weight: 700;
-      font-size: 0.78rem;
-      margin-bottom: 4px;
-    }
-    .review-targets-list {
-      margin: 0;
-      padding-left: 14px;
-      color: #c9d1d9;
-      font-size: 0.76rem;
-      line-height: 1.45;
-    }
-    .review-targets-list li { margin-bottom: 2px; }
+    .review-q { font-size: 0.88rem; font-weight: 800; color: #f0f6fc; margin-bottom: 4px; }
+    .review-a { font-size: 0.82rem; color: #f85149; margin-bottom: 4px; }
+    .review-tip { font-size: 0.82rem; color: #e3b341; margin-bottom: 8px; }
+    .review-targets { background: rgba(56, 139, 253, 0.08); border: 1px solid rgba(56, 139, 253, 0.25); border-radius: 6px; padding: 8px 10px; }
+    .review-targets-title { font-size: 0.78rem; font-weight: 800; color: #58a6ff; margin-bottom: 4px; }
+    .review-targets-list { list-style: disc; padding-left: 18px; font-size: 0.78rem; color: #c9d1d9; }
   </style>
 </head>
 <body>
 
   <header>
     <div class="hud-left">
-      <a href="../games.html" class="btn-exit-game">← 허브로</a>
-      <div class="score-badge">SCORE <span id="score-val">0</span></div>
-      <div class="lives" id="lives-display">❤️❤️❤️🖤🖤</div>
+      <a href="../games.html" class="btn-exit-game"><span>◀ 게임 목록</span></a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
     </div>
     <div class="hud-center">
-      <div style="display:flex;gap:4px;background:#161b22;padding:3px;border-radius:8px;border:1px solid #30363d;">
-        <a href="./game7-1.html" style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;text-decoration:none;color:#8b949e;">🎯 A 요격형</a>
-        <span style="padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700;background:#1f6feb;color:#fff;">🛸 B 플로팅형</span>
+      <div class="type-switcher">
+        <a href="./game6-1.html" class="type-btn">A 낙하요격</a>
+        <span class="type-btn active-b">B 버블헌팅</span>
       </div>
-      <span class="speed-label">속도</span>
-      <button class="speed-btn" onclick="setSpeed(0.3, this)">0.3x</button>
+      <span class="speed-tag">속도:</span>
       <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
       <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
       <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
       <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
     </div>
-    <div class="hud-right">
-      <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
-    </div>
+    <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
   </header>
 
   <section class="mission-banner">
@@ -323,27 +168,26 @@
     </div>
   </section>
 
-  <!-- 라운드 클리어 안내 및 다음 라운드 진행 바 (계속 읽기 지원) -->
-  <div id="round-clear-bar" style="display:none; margin: 8px 16px; padding: 10px 16px; background: rgba(35, 134, 54, 0.25); border: 1px solid #3fb950; border-radius: 8px; text-align: center; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
-    <span style="color:#7ee787; font-weight:700; font-size:0.95rem;">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
-    <button id="btn-next-round" onclick="proceedNextRound()" style="padding: 6px 18px; background: #238636; border: 1px solid #3fb950; color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">다음 라운드 ▶</button>
+  <!-- 라운드 클리어 안내 바 -->
+  <div id="round-clear-bar">
+    <span class="round-clear-text">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
+    <button class="btn-next-round" onclick="proceedNextRound()">다음 라운드 ▶</button>
   </div>
 
   <main class="space-zone" id="space-zone"></main>
 
-  <!-- 인트로 모달 -->
+  <!-- 시작 모달 -->
   <div class="overlay-modal" id="start-modal">
     <div class="modal-box">
-      <div style="font-size:2.8rem; margin-bottom:10px;">🛸</div>
-      <h2 class="modal-title">[제 7-1탄 B] 연소이론 & 위험물 플로팅 헌팅</h2>
+      <div style="font-size:2.8rem; margin-bottom:8px;">🏗️</div>
+      <h2 class="modal-title">[제 6-1탄 B] 공사장 임시소방시설 헌팅</h2>
       <p class="modal-desc">
-        화면에 둥둥 떠다니는 물질 중<br>
-        상단 <b>미션 목표</b>에 해당하는 것을 모두 클릭해 사냥하세요!<br><br>
-        • 산화제·자체산소, 제4류 품명별 인화점, 인화점·연소점·발화점, 연소범위<br>
-        • 잘못된 함정 단어를 클릭하면 하트가 깎입니다.<br>
-        • 총 4개의 라운드를 돌파하여 만점을 달성하세요!
+        화면에 떠다니는 공사장 임시소방시설 정보 버블 중<br>상단 <b>미션 목표</b>에 해당하는 정답만 사냥하세요!<br><br>• 임시소방시설 설치 대상 규모 (3,000㎡ / 600㎡)<br>• 소화기(5m/3단위), 간이소화(0.1MPa/1.3톤), 비상경보(400㎡)<br>• 간이피난유도선(바닥 1m/5m간격), 방화포, 가스경보기
       </p>
-      <button class="action-btn" onclick="startGame()">🚀 미션 시작하기</button>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🛸 B타입 시작</button>
+        <a href="./game6-1.html" class="action-btn btn-alt">🎯 A타입 전환</a>
+      </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
     </div>
   </div>
@@ -358,7 +202,13 @@
         <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
         <div class="review-list" id="review-list"></div>
       </div>
-      <button class="action-btn" onclick="restartAll()">🔄 처음부터 다시 도전</button>
+      <a href="./game7-2-b.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>🚀 [제 6-2탄 B] 용접 화기취급 안전 도전 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 B타입 재도전</button>
+        <a href="./game6-1.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+      </div>
       <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
     </div>
   </div>
@@ -366,385 +216,341 @@
   <script>
     const ROUND_DATA = [
       {
-        round: 1,
-        title: "🎯 [산소공급원 위험물(제1·6류 산화제 및 제5류)]만 모두 사냥하시오!",
-        desc: "불연성 산화제(고체/액체) 또는 자체 산소 함유 물질",
-        targets: [
-          { text: "제1류 무기과산화물·염소산염류 (산화성 고체)", tip: "제1류는 강력한 산화성 고체로 산소공급원!" },
-          { text: "제6류 과산화수소·질산 (산화성 액체)", tip: "제6류는 강산성 산화성 액체로 산소공급원!" },
-          { text: "제5류 질산에스테르류·유기과산화물 (자기반응성)", tip: "제5류는 자체 분자 내 산소를 함유하여 질식소화 불가!" },
-          { text: "제1류 과염소산염류 (50kg)", tip: "제1류 산화성 고체!" }
-        ],
-        traps: [
-          { text: "제2류 황화린·적린·유황 (가연성 고체)", tip: "제2류는 환원성 가연물(탈 물질)입니다!" },
-          { text: "제3류 칼륨·나트륨 (금수성)", tip: "제3류는 가연성 금수성 물질입니다!" },
-          { text: "제4류 휘발유·등유 (인화성 액체)", tip: "제4류는 액체 가연물입니다!" },
-          { text: "제2류 철분·금속분·마그네슘", tip: "제2류 가연물로 물과 접촉 시 수소 폭발!" }
-        ]
+            "round": 1,
+            "title": "🏢 [종합방재실 의무 설치 대상 & 설치 개수 기준]만 모두 사냥하세요!",
+            "desc": "초고층(50층↑/200m↑), 지하연계복합(5천명↑), 1개소 원칙, 100층 이상 예외",
+            "targets": [
+                  {
+                        "text": "초고층(50층 이상 또는 200m 이상)",
+                        "tip": "초고층 건축물 정의: 50층 이상이거나 200m 이상!"
+                  },
+                  {
+                        "text": "지하연계복합(수용인원 5,000명 이상)",
+                        "tip": "지하연계복합건축물: 지하역사/상가 연결 + 5,000명 이상!"
+                  },
+                  {
+                        "text": "종합방재실 개수는 1개소 원칙",
+                        "tip": "종합방재실은 건물당 1개소 설치가 원칙!"
+                  },
+                  {
+                        "text": "100층 이상 초고층은 추가설치/보조체제",
+                        "tip": "100층 이상은 기능상실 대비 추가설치 또는 보조체제 구축!"
+                  },
+                  {
+                        "text": "초고층재난관리법 제16조 규정",
+                        "tip": "종합방재실 법적 근거는 초고층재난관리법!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "30층 이상 일반 아파트 의무 설치",
+                        "tip": "[오답] 30층은 고층 건축물이며 종합방재실 법정 의무는 초고층(50층↑)!"
+                  },
+                  {
+                        "text": "건물 각 층마다 분산 설치 원칙",
+                        "tip": "[오답] 종합방재실은 원칙적으로 1개소만 설치합니다!"
+                  },
+                  {
+                        "text": "소방서장이 직접 설치 주체",
+                        "tip": "[오답] 설치 및 운영 주체는 건물 관리주체(소유자·관리자)!"
+                  },
+                  {
+                        "text": "수용인원 1,000명 이상 지하상가",
+                        "tip": "[오답] 수용인원 기준은 5,000명 이상입니다!"
+                  }
+            ]
       },
       {
-        round: 2,
-        title: "🧪 [제4류 인화성 액체 & 품명별 인화점 기준]만 모두 사냥하시오!",
-        desc: "인화점 21℃ 미만 제1석유류 및 21~70℃ 제2석유류 등",
-        targets: [
-          { text: "휘발유·벤젠·톨루엔 (제1석유류 비수용 200L)", tip: "인화점 21℃ 미만 제1석유류 비수용성!" },
-          { text: "아세톤·피리딘 (제1석유류 수용성 400L)", tip: "인화점 21℃ 미만 제1석유류 수용성!" },
-          { text: "등유·경유 (제2석유류 비수용 1,000L)", tip: "인화점 21℃ 이상 70℃ 미만 제2석유류 비수용성!" },
-          { text: "초산·아크릴산 (제2석유류 수용 2,000L)", tip: "제2석유류 수용성 (2,000L)!" },
-          { text: "디에틸에테르·이황화탄소 (특수인화물 50L)", tip: "인화점 20℃ 이하, 비점 40℃ 이하 특수인화물!" }
-        ],
-        traps: [
-          { text: "중유 (제1석유류 200L)", tip: "중유는 인화점 70~200℃인 제3석유류(2,000L)입니다!" },
-          { text: "경유 (제1석유류 200L)", tip: "경유는 제2석유류(1,000L)입니다!" },
-          { text: "메틸알코올 (특수인화물 50L)", tip: "메틸알코올은 알코올류(400L)입니다!" },
-          { text: "기계유 (제2석유류 1,000L)", tip: "기계유는 인화점 200℃ 이상인 제4석유류(6,000L)입니다!" }
-        ]
-      },
-      {
-        round: 3,
-        title: "🔥 [인화점 vs 연소점 vs 발화점 특성] 올바른 설명을 모두 사냥하시오!",
-        desc: "외부 점화원 유무, 연소 지속 시간, 온도 크기 서열",
-        targets: [
-          { text: "인화점: 불꽃을 접촉시켰을 때 불붙는 최저온도", tip: "인화점 = 점화원 접촉 시 최저온도 (가장 낮음)" },
-          { text: "연소점: 점화원 제거 후 연소가 5초 이상 지속", tip: "연소점 = 5초 이상 연소 지속 최저온도" },
-          { text: "발화점: 점화원(불꽃) 없이 스스로 착화하는 최저온도", tip: "발화점 = 착화점, 세 온도 중 가장 높음" },
-          { text: "온도 서열: 인화점 < 연소점 < 발화점", tip: "인화점이 가장 낮고 발화점이 가장 높습니다!" }
-        ],
-        traps: [
-          { text: "인화점: 점화원 없이 스스로 발화하는 온도", tip: "점화원 없이 스스로 불붙는 것은 '발화점'입니다!" },
-          { text: "연소점: 인화점보다 온도가 5~10℃ 더 낮다", tip: "연소점은 인화점보다 5~10℃ 더 높습니다!" },
-          { text: "온도 서열: 발화점 < 연소점 < 인화점", tip: "서열이 정반대입니다! (인화점 < 연소점 < 발화점)" },
-          { text: "발화점: 불꽃을 대었을 때만 불이 붙는 온도", tip: "발화점은 불꽃 접촉 없이 열 축적만으로 탑니다!" }
-        ]
-      },
-      {
-        round: 4,
-        title: "📊 [가연성 증기 연소범위(vol%) 올바른 수치]만 모두 사냥하시오!",
-        desc: "교재 수록 가연성 가스 및 유류 증기 연소범위",
-        targets: [
-          { text: "아세틸렌: 2.5 ~ 81 vol%", tip: "아세틸렌은 연소범위가 2.5~81%로 가장 넓어 폭발 위험 최상!" },
-          { text: "수소: 4.1 ~ 75 vol%", tip: "수소는 4.1 ~ 75%!" },
-          { text: "휘발유(가솔린): 1.2 ~ 7.6 vol%", tip: "휘발유는 하한계가 1.2%로 극도로 낮아 위험!" },
-          { text: "메틸알코올: 6 ~ 36 vol%", tip: "메틸알코올은 6 ~ 36% ('콜록콜록 36대')!" },
-          { text: "암모니아: 15 ~ 28 vol%", tip: "암모니아는 15 ~ 28% ('보름달 이팔청춘')!" }
-        ],
-        traps: [
-          { text: "휘발유(가솔린): 2.5 ~ 8.1 vol%", tip: "2.5 ~ 8.1%는 에테르의 연소범위입니다! (휘발유는 1.2~7.6%)" },
-          { text: "등유: 1.0 ~ 5.0 vol%", tip: "1.0 ~ 5.0%는 중유입니다! (등유는 0.7~5%)" },
-          { text: "중유: 0.7 ~ 5.0 vol%", tip: "0.7 ~ 5.0%는 등유입니다! (중유는 1~5%)" },
-          { text: "아세틸렌: 15 ~ 28 vol%", tip: "15 ~ 28%는 암모니아입니다!" }
-        ]
+            "round": 2,
+            "title": "📍 [종합방재실 법정 설치 위치 (원칙과 예외)]만 모두 사냥하세요!",
+            "desc": "원칙: 1층 또는 피난층 / 예외: 2층 또는 지하1층 (특별피난계단 출입구 5m 이내)",
+            "targets": [
+                  {
+                        "text": "원칙: 1층 또는 피난층에 설치",
+                        "tip": "가장 중요한 원칙! 소방대 진입 및 탈출이 용이한 1층/피난층!"
+                  },
+                  {
+                        "text": "예외: 지상 2층에 설치 가능",
+                        "tip": "예외 허용 층: 지상 2층 (특별피난계단 5m 이내)!"
+                  },
+                  {
+                        "text": "예외: 지하 1층에 설치 가능",
+                        "tip": "예외 허용 층: 지하 1층 (특별피난계단 5m 이내)!"
+                  },
+                  {
+                        "text": "특별피난계단 출입구로부터 5m 이내",
+                        "tip": "2층/지하1층 설치 시 필수 요건: 특별피난계단 5m 이내!"
+                  },
+                  {
+                        "text": "공동주택은 관리사무소 내 설치 가능",
+                        "tip": "공동주택의 경우 관리사무소 내 설치 허용!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "최상층 헬리포트 바로 아래 설치",
+                        "tip": "[오답] 소방대 접근 및 대피가 곤란하여 절대 불가!"
+                  },
+                  {
+                        "text": "지하 2층에 특별피난계단 5m 이내 설치",
+                        "tip": "[오답] 지하 2층 이하는 절대 설치 불가! (오직 지하1층/지상2층만)"
+                  },
+                  {
+                        "text": "지상 3층에 소방대 전용통로 확보 설치",
+                        "tip": "[오답] 지상 3층 이상도 절대 설치 불가!"
+                  },
+                  {
+                        "text": "특별피난계단 출입구로부터 10m 이내",
+                        "tip": "[오답] 법정 이격거리는 '5m 이내'입니다!"
+                  }
+            ]
       }
-    ];
+];
 
-    let currentRoundIndex = 0;
+    const MAX_LIVES = 3;
     let score = 0;
-    const MAX_LIVES = 5;
     let lives = 3;
-    let speedMultiplier = 0.5;
-    let wrongHistory = [];
-    let isGameOver = false;
-
-    let floatingItems = [];
-    let remainingTargetCount = 0;
+    let speedMult = 0.5;
+    let currentRoundIndex = 0;
+    let currentRoundTargets = [];
+    let currentRoundTraps = [];
+    let remainingTargetsCount = 0;
     let totalTargetsInRound = 0;
-    let animFrameId = null;
+    let floatingElements = [];
+    let isRoundRunning = false;
+    let animFrame = null;
+    let wrongHistory = [];
 
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      if (type === 'hit') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.12);
-      } else {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.25);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.25);
-      }
+    const spaceZone = document.getElementById('space-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const roundIndicator = document.getElementById('round-indicator');
+    const missionTitle = document.getElementById('mission-title');
+    const missionDesc = document.getElementById('mission-desc');
+    const progressFill = document.getElementById('progress-fill');
+    const roundClearBar = document.getElementById('round-clear-bar');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
-    function setSpeed(spd, btn) {
-      speedMultiplier = spd;
-      document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-    }
-
-        function triggerHeartHealAnim() {
-      const el = document.getElementById("lives-display");
-      if (!el) return;
-      el.classList.remove("heart-heal-bounce");
-      void el.offsetWidth;
-      el.classList.add("heart-heal-bounce");
-    }
-
-    function updateHeartsUI() {
-      document.getElementById("lives-display").textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, MAX_LIVES - lives));
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
     }
 
     function updateProgressBar() {
-      const fill = document.getElementById("progress-fill");
-      const done = totalTargetsInRound - remainingTargetCount;
-      const pct = (done / totalTargetsInRound) * 100;
-      fill.style.width = pct + "%";
+      if (totalTargetsInRound === 0) return;
+      const found = totalTargetsInRound - remainingTargetsCount;
+      const pct = Math.floor((found / totalTargetsInRound) * 100);
+      progressFill.style.width = `${pct}%`;
     }
 
     function startGame() {
-      document.getElementById("start-modal").style.display = "none";
       score = 0;
       lives = 3;
       currentRoundIndex = 0;
       wrongHistory = [];
-      isGameOver = false;
-      document.getElementById("score-val").textContent = score;
-      updateHeartsUI();
-      loadRound(0);
+      updateHUD();
+
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
+      if (roundClearBar) roundClearBar.style.display = 'none';
+
+      loadRound(currentRoundIndex);
     }
 
-    function loadRound(roundIdx) {
-      currentRoundIndex = roundIdx;
-      const data = ROUND_DATA[roundIdx];
-      document.getElementById("round-indicator").textContent = `ROUND ${data.round} / ${ROUND_DATA.length}`;
-      document.getElementById("mission-title").textContent = data.title;
-      document.getElementById("mission-desc").textContent = data.desc;
+    function loadRound(idx) {
+      if (idx >= ROUND_DATA.length) {
+        showFinalResult(true);
+        return;
+      }
 
-      const space = document.getElementById("space-zone");
-      space.innerHTML = "";
-      floatingItems = [];
+      const rData = ROUND_DATA[idx];
+      roundIndicator.textContent = `ROUND ${idx + 1} / ${ROUND_DATA.length}`;
+      missionTitle.textContent = rData.title;
+      missionDesc.textContent = rData.desc;
 
-      remainingTargetCount = data.targets.length;
-      totalTargetsInRound = data.targets.length;
+      spaceZone.innerHTML = '';
+      floatingElements = [];
+
+      currentRoundTargets = [...rData.targets];
+      currentRoundTraps = [...rData.traps];
+      remainingTargetsCount = currentRoundTargets.length;
+      totalTargetsInRound = currentRoundTargets.length;
       updateProgressBar();
 
-      const combined = [
-        ...data.targets.map(t => ({ ...t, isTarget: true })),
-        ...data.traps.map(t => ({ ...t, isTarget: false }))
-      ].sort(() => Math.random() - 0.5);
+      const allItems = [
+        ...currentRoundTargets.map(t => ({ text: t.text, isTarget: true, tip: t.tip })),
+        ...currentRoundTraps.map(t => ({ text: t.text, isTarget: false, tip: t.tip }))
+      ];
 
-      const zoneW = space.clientWidth || 360;
-      const zoneH = space.clientHeight || 480;
+      allItems.sort(() => Math.random() - 0.5);
 
-      combined.forEach(itemData => {
-        const bubble = document.createElement("div");
-        bubble.className = "floating-bubble";
-        bubble.textContent = itemData.text;
-        space.appendChild(bubble);
+      const zoneW = spaceZone.clientWidth || (window.innerWidth - 30) || 600;
+      const zoneH = spaceZone.clientHeight || (window.innerHeight - 150) || 500;
 
-        const bW = bubble.offsetWidth || 140;
-        const bH = bubble.offsetHeight || 36;
-        const x = Math.random() * (zoneW - bW - 20) + 10;
-        const y = Math.random() * (zoneH - bH - 20) + 10;
+      allItems.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'float-item';
+        el.textContent = item.text;
+        spaceZone.appendChild(el);
+
+        const elW = el.offsetWidth || 140;
+        const elH = el.offsetHeight || 40;
+
+        const posX = Math.random() * Math.max(10, zoneW - elW - 20) + 10;
+        const posY = Math.random() * Math.max(10, zoneH - elH - 20) + 10;
 
         const angle = Math.random() * Math.PI * 2;
-        const speed = (0.7 + Math.random() * 0.6);
-        const vx = Math.cos(angle) * speed;
-        const vy = Math.sin(angle) * speed;
+        const speed = (0.7 + Math.random() * 0.6) * speedMult;
 
-        const obj = {
-          element: bubble,
-          data: itemData,
-          x, y, vx, vy,
-          w: bW, h: bH,
-          isAlive: true
+        el.style.left = `${posX}px`;
+        el.style.top = `${posY}px`;
+
+        const fObj = {
+          el: el,
+          item: item,
+          x: posX,
+          y: posY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          w: elW,
+          h: elH,
+          active: true
         };
 
-        bubble.addEventListener("click", () => handleBubbleClick(obj));
-        floatingItems.push(obj);
+        el.addEventListener('click', () => onItemClick(fObj));
+        floatingElements.push(fObj);
       });
 
-      if (animFrameId) cancelAnimationFrame(animFrameId);
-      animFrameId = requestAnimationFrame(updatePhysics);
+      isRoundRunning = true;
+      cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(updatePhysics);
     }
-
-        function clampAllItemsInsideZone() {
-      const space = document.getElementById("space-zone");
-      if (!space) return;
-      const rect = space.getBoundingClientRect();
-      const zoneW = rect.width;
-      const zoneH = rect.height;
-      const MARGIN = 15;
-      if (!zoneW || !zoneH) return;
-
-      floatingItems.forEach(item => {
-        const w = item.element.offsetWidth || item.w || 150;
-        const h = item.element.offsetHeight || item.h || 44;
-        item.w = w;
-        item.h = h;
-
-        if (item.x + w > zoneW - MARGIN) item.x = Math.max(MARGIN, zoneW - w - MARGIN);
-        if (item.x < MARGIN) item.x = MARGIN;
-
-        if (item.y + h > zoneH - MARGIN) item.y = Math.max(MARGIN, zoneH - h - MARGIN);
-        if (item.y < MARGIN) item.y = MARGIN;
-
-        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
-      });
-    }
-
-    window.addEventListener('resize', clampAllItemsInsideZone);
 
     function updatePhysics() {
-      if (isGameOver) return;
-      const space = document.getElementById("space-zone");
-      if (!space) return;
-      const rect = space.getBoundingClientRect();
-      const zoneW = rect.width;
-      const zoneH = rect.height;
-      const MARGIN = 15;
+      if (!isRoundRunning) return;
 
-      floatingItems.forEach(item => {
-        if (!item.isAlive) return;
-        item.x += item.vx * speedMultiplier;
-        item.y += item.vy * speedMultiplier;
+      const zoneW = spaceZone.clientWidth || (window.innerWidth - 30) || 600;
+      const zoneH = spaceZone.clientHeight || (window.innerHeight - 150) || 500;
 
-        const w = item.element.offsetWidth || item.w || 150;
-        const h = item.element.offsetHeight || item.h || 44;
-        item.w = w;
-        item.h = h;
+      floatingElements.forEach(f => {
+        if (!f.active) return;
+        f.x += f.vx;
+        f.y += f.vy;
 
-        if (item.x <= MARGIN) {
-          item.x = MARGIN;
-          item.vx = Math.abs(item.vx);
-        } else if (item.x + w >= zoneW - MARGIN) {
-          item.x = Math.max(MARGIN, zoneW - w - MARGIN);
-          item.vx = -Math.abs(item.vx);
-        }
+        if (f.x <= 5) { f.x = 5; f.vx *= -1; }
+        if (f.x + f.w >= zoneW - 5) { f.x = zoneW - f.w - 5; f.vx *= -1; }
+        if (f.y <= 5) { f.y = 5; f.vy *= -1; }
+        if (f.y + f.h >= zoneH - 5) { f.y = zoneH - f.h - 5; f.vy *= -1; }
 
-        if (item.y <= MARGIN) {
-          item.y = MARGIN;
-          item.vy = Math.abs(item.vy);
-        } else if (item.y + h >= zoneH - MARGIN) {
-          item.y = Math.max(MARGIN, zoneH - h - MARGIN);
-          item.vy = -Math.abs(item.vy);
-        }
-
-        item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+        f.el.style.left = `${f.x}px`;
+        f.el.style.top = `${f.y}px`;
       });
 
-      animFrameId = requestAnimationFrame(updatePhysics);
+      animFrame = requestAnimationFrame(updatePhysics);
     }
 
-        function handleBubbleClick(item) {
-      if (item.isSolved || isGameOver) return;
+    function onItemClick(fObj) {
+      if (!fObj.active) return;
 
-      if (item.data.isTarget) {
-        playSound('hit');
+      if (fObj.item.isTarget) {
+        fObj.active = false;
+        fObj.el.style.background = 'rgba(46, 160, 67, 0.4)';
+        fObj.el.style.borderColor = '#3fb950';
+        fObj.el.style.color = '#7ee787';
+        fObj.el.style.transform = 'scale(1.1)';
+        fObj.el.style.pointerEvents = 'none';
+
         score += 100;
-        document.getElementById("score-val").textContent = score;
-
-        item.isSolved = true;
-        // 맞으면 초록색으로 표시되고 사라지지 않고 유지됨
-        item.element.style.borderColor = "#3fb950";
-        item.element.style.background = "rgba(63, 185, 80, 0.45)";
-        item.element.style.boxShadow = "0 0 12px rgba(63, 185, 80, 0.6)";
-        item.element.style.cursor = "default";
-        item.element.innerHTML = '<span style="color:#7ee787; font-weight:800; margin-right:4px;">✅</span>' + item.data.text;
-
-        if (lives < MAX_LIVES) {
-          lives++;
-          updateHeartsUI();
-          triggerHeartHealAnim();
-        }
-        remainingTargetCount--;
+        remainingTargetsCount--;
+        updateHUD();
         updateProgressBar();
 
-        if (remainingTargetCount <= 0) {
-          if (animFrameId) cancelAnimationFrame(animFrameId);
-          clampAllItemsInsideZone();
-          setTimeout(clampAllItemsInsideZone, 60);
-          const roundClearBar = document.getElementById("round-clear-bar");
-          const btnNextRound = document.getElementById("btn-next-round");
-          if (roundClearBar && btnNextRound) {
-            btnNextRound.textContent = (currentRoundIndex + 1 >= ROUND_DATA.length) ? '최종 결과 보기 🏆' : '다음 라운드 ▶';
-            roundClearBar.style.display = 'flex';
-          }
+        if (remainingTargetsCount <= 0) {
+          isRoundRunning = false;
+          if (roundClearBar) roundClearBar.style.display = 'flex';
         }
       } else {
-        if (item.isFailed) return;
-        item.isFailed = true;
+        lives--;
+        updateHUD();
 
-        playSound('wrong');
-        item.element.style.borderColor = "#ff4d4f";
-        item.element.style.background = "rgba(248, 81, 73, 0.45)";
-        item.element.style.boxShadow = "0 0 10px rgba(248, 81, 73, 0.6)";
-        item.element.innerHTML = '<span style="color:#f85149; font-weight:800; margin-right:4px;">❌</span>' + item.data.text +
-          (item.data.tip ? '<div style="font-size:0.75rem; color:#ffa657; margin-top:4px; font-weight:normal;">💡 ' + item.data.tip + '</div>' : '');
+        fObj.el.style.background = 'rgba(248, 81, 73, 0.4)';
+        fObj.el.style.borderColor = '#f85149';
+        fObj.el.style.color = '#ff7b72';
 
         wrongHistory.push({
           roundTitle: ROUND_DATA[currentRoundIndex].title,
-          targets: ROUND_DATA[currentRoundIndex].targets,
-          clicked: item.data.text,
-          tip: item.data.tip
+          clicked: fObj.item.text,
+          tip: fObj.item.tip,
+          targets: ROUND_DATA[currentRoundIndex].targets
         });
 
-        lives--;
-        updateHeartsUI();
-        if (lives <= 0) showGameOver();
+        setTimeout(() => {
+          if (fObj.el) {
+            fObj.el.style.background = '#21262d';
+            fObj.el.style.borderColor = '#30363d';
+            fObj.el.style.color = '#f0f6fc';
+          }
+        }, 400);
+
+        if (lives <= 0) {
+          isRoundRunning = false;
+          showFinalResult(false);
+        }
       }
     }
 
     function proceedNextRound() {
-      const roundClearBar = document.getElementById("round-clear-bar");
-      if (roundClearBar) roundClearBar.style.display = "none";
-      if (currentRoundIndex + 1 < ROUND_DATA.length) {
-        loadRound(currentRoundIndex + 1);
+      if (roundClearBar) roundClearBar.style.display = 'none';
+      currentRoundIndex++;
+      loadRound(currentRoundIndex);
+    }
+
+    function showFinalResult(isSuccess) {
+      isRoundRunning = false;
+      cancelAnimationFrame(animFrame);
+
+      const modal = document.getElementById('result-modal');
+      const icon = document.getElementById('result-icon');
+      const title = document.getElementById('result-title');
+      const desc = document.getElementById('result-desc');
+      const container = document.getElementById('review-container');
+      const list = document.getElementById('review-list');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      modal.style.display = 'flex';
+
+      if (isSuccess) {
+        icon.textContent = "🏆";
+        title.textContent = "작전 대성공! 공사장 임시소방시설 헌팅 마스터!";
+        title.style.color = "#3fb950";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>모든 라운드를 완벽하게 클리어하셨습니다!`;
+        if (nextBtn) nextBtn.style.display = 'flex';
       } else {
-        showGameClear();
+        icon.textContent = "💥";
+        title.textContent = "작전 실패!";
+        title.style.color = "#f85149";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>오답을 복습하고 다시 도전하세요!`;
+        if (nextBtn) nextBtn.style.display = 'none';
       }
-    }
 
-    function showGameClear() {
-      isGameOver = true;
-      document.getElementById("result-icon").textContent = "🏆";
-      document.getElementById("result-title").textContent = "플로팅 헌팅 올클리어!";
-      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#58a6ff; font-size:1.2rem;">${score}점</b><br>연소이론 및 위험물 전 문항을 완벽하게 마스터하셨습니다!`;
-      setupReviewUI();
-      document.getElementById("result-modal").style.display = "flex";
-    }
-
-    function showGameOver() {
-      isGameOver = true;
-      document.getElementById("result-icon").textContent = "💥";
-      document.getElementById("result-title").textContent = "작전 실패!";
-      document.getElementById("result-desc").innerHTML = `최종 점수: <b style="color:#ff7b72; font-size:1.2rem;">${score}점</b><br>함정에 걸려 하트가 모두 소진되었습니다.`;
-      setupReviewUI();
-      document.getElementById("result-modal").style.display = "flex";
-    }
-
-    function setupReviewUI() {
-      const container = document.getElementById("review-container");
-      const list = document.getElementById("review-list");
       if (wrongHistory.length > 0) {
         container.style.display = "block";
         let html = "";
         wrongHistory.forEach(w => {
-          let match = w.roundTitle.match(/\[(.*?)\]/);
-          let targetCategory = match ? match[1] : "정답";
-          let count = w.targets.length;
           let targetsHtml = w.targets.map(t => `<li>${t.text}</li>`).join("");
-
           html += `
             <div class="review-item">
               <div class="review-q">${w.roundTitle}</div>
               <div class="review-a">❌ <b>잘못 누른 함정:</b> ${w.clicked}</div>
               <div class="review-tip">💡 <b>족집게 해설:</b> ${w.tip}</div>
               <div class="review-targets">
-                <div class="review-targets-title">🎯 <b>반드시 외워야 할 [${targetCategory}] 핵심 ${count}총사:</b></div>
-                <ul class="review-targets-list">
-                  ${targetsHtml}
-                </ul>
+                <div class="review-targets-title">🎯 <b>반드시 외워야 할 핵심 정답:</b></div>
+                <ul class="review-targets-list">${targetsHtml}</ul>
               </div>
             </div>
           `;
@@ -753,11 +559,6 @@
       } else {
         container.style.display = "none";
       }
-    }
-
-    function restartAll() {
-      document.getElementById("result-modal").style.display = "none";
-      startGame();
     }
   </script>
 </body>
