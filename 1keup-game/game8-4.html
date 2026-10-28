@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[제 8-4탄 A] 위험물 & 연료가스 요격전</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; display: inline-block; transition: transform 0.2s ease; }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.5s ease-in-out;
+    }
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-a { background: #238636; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .streak-badge { font-size: 0.82rem; font-weight: 800; color: #e3b341; min-width: 75px; text-align: right; }
+
+    #game-zone {
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
+      overflow: hidden;
+    }
+    .danger-line {
+      position: absolute; bottom: 8px; left: 0; width: 100%; height: 2px;
+      background: repeating-linear-gradient(90deg, #f85149, #f85149 10px, transparent 10px, transparent 20px);
+      opacity: 0.7; z-index: 10;
+    }
+    .falling-target {
+      position: absolute; width: 180px; padding: 10px;
+      background: #21262d; border: 2px solid #58a6ff; border-radius: 10px;
+      text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 20;
+    }
+    .falling-target .target-title { font-size: 0.95rem; font-weight: 800; color: #ffffff; margin-bottom: 2px; }
+    .falling-target .target-desc { font-size: 0.75rem; color: #8b949e; }
+
+    footer.control-deck {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+      padding: 8px 12px 14px; background: #161b22; border-top: 1px solid #30363d; z-index: 50;
+    }
+    .deck-btn {
+      padding: 10px 4px; background: #21262d; border: 1.5px solid #30363d;
+      border-radius: 8px; color: #c9d1d9; cursor: pointer; text-align: center;
+      transition: all 0.1s ease;
+    }
+    .deck-btn:active { transform: translateY(2px); }
+    .deck-btn .btn-badge { display: block; font-size: 0.7rem; font-weight: 800; margin-bottom: 2px; }
+    .deck-btn .btn-title { display: block; font-size: 0.82rem; font-weight: 800; color: #ffffff; }
+    .deck-btn .btn-sub { display: block; font-size: 0.68rem; color: #8b949e; margin-top: 2px; }
+
+    .btn-cat-1 { border-color: #e3b341; } .btn-cat-1 .btn-badge { color: #e3b341; }
+    .btn-cat-2 { border-color: #f87171; } .btn-cat-2 .btn-badge { color: #f87171; }
+    .btn-cat-3 { border-color: #fb923c; } .btn-cat-3 .btn-badge { color: #fb923c; }
+    .btn-cat-4 { border-color: #a371f7; } .btn-cat-4 .btn-badge { color: #a371f7; }
+    .btn-cat-5 { border-color: #38bdf8; } .btn-cat-5 .btn-badge { color: #38bdf8; }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+      padding: 24px; max-width: 440px; width: 100%; text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+    .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #58a6ff; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 20px; }
+    .action-btn {
+      width: 100%; padding: 12px; background: #238636; border: 1px solid #2ea043;
+      color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 6px; cursor: pointer; margin-bottom: 8px;
+    }
+    .action-btn:hover { background: #2ea043; }
+    .action-btn.btn-alt { background: #8957e5; border-color: #a371f7; }
+    .sub-action-btn {
+      display: block; width: 100%; padding: 9px; background: #21262d; border: 1px solid #30363d;
+      color: #c9d1d9; font-size: 0.85rem; font-weight: 600; border-radius: 6px; text-decoration: none;
+    }
+    .modal-dual-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game"><span>◀ 게임 목록</span></a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️🖤🖤</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <a href="./game8-1.html" class="type-btn active-a">🎯 A 요격형</a>
+        <a href="./game8-1-b.html" class="type-btn">🛸 B 플로팅형</a>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn" onclick="setSpeed(0.3, this)">0.3x</button>
+      <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
+      <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
+      <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+    </div>
+    <div class="streak-badge" id="streak-val">🔥 0 COMBO</div>
+  </header>
+
+  <main id="game-zone">
+    <div class="danger-line"></div>
+  </main>
+
+  <footer class="control-deck">
+    <button class="deck-btn btn-cat-1" onclick="fireShot('화재원인')">
+      <span class="btn-badge">4대 원인</span>
+      <span class="btn-title">전기화재 원인</span>
+      <span class="btn-sub">단락/과부하/누전/접촉불량</span>
+    </button>
+    <button class="deck-btn btn-cat-2" onclick="fireShot('정전기')">
+      <span class="btn-badge">3대 대책</span>
+      <span class="btn-title">정전기 방지</span>
+      <span class="btn-sub">접지/습도70%↑/이온화</span>
+    </button>
+    <button class="deck-btn btn-cat-3" onclick="fireShot('전기장치')">
+      <span class="btn-badge">ZCT·ELB</span>
+      <span class="btn-title">전기 안전장치</span>
+      <span class="btn-sub">영상변류기/누전차단/경보</span>
+    </button>
+    <button class="deck-btn btn-cat-4" onclick="fireShot('가스장치')">
+      <span class="btn-badge">3요소·퓨즈콕</span>
+      <span class="btn-title">가스 안전장치</span>
+      <span class="btn-sub">검지·제어·차단/과류차단</span>
+    </button>
+    <button class="deck-btn btn-cat-5" onclick="fireShot('용기보관')">
+      <span class="btn-badge">40℃ 이하</span>
+      <span class="btn-title">가스용기 보관</span>
+      <span class="btn-sub">옥외통풍/차광/체인결속</span>
+    </button>
+  </footer>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">🛢️</div>
+      <h2 class="modal-title">[제 8-4탄 A] 위험물 & 연료가스 요격전</h2>
+      <p class="modal-desc">
+        하늘에서 떨어지는 위험물 지정수량·성질, 연료가스 특성을 보고<br>
+        하단의 <b>5대 카테고리 버튼</b>을 눌러 정확히 요격하세요!<br><br>
+        • 제4류 지정수량 (특수50L, 1석200/400L, 알400L 등)<br>
+        • 산화성(1·6류), 가연·금수성(2·3류), 자기반응성(5류)<br>
+        • 연료가스(LPG 프로판·부탄 vs LNG 메탄) & 경보기 위치
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🎯 A타입 시작</button>
+        <a href="./game8-1-b.html" class="action-btn btn-alt">🛸 B타입 전환</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 게임 오버 모달 -->
+  <div class="overlay-modal" id="gameover-modal" style="display:none;">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">💥</div>
+      <h2 class="modal-title" style="color:#f85149;">작전 실패!</h2>
+      <p class="modal-desc" id="gameover-desc">최종 점수: 0점</p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 A타입 재도전</button>
+        <a href="./game8-1-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const TARGETS_DATA = [
+      // 1. 전기화재 원인
+      { title: "단락 (합선)", desc: "피복 손상 등으로 두 도선 직접 접촉 ➔ 순간 대전류 아크 발열", cat: "화재원인" },
+      { title: "과부하 (과전류)", desc: "문어발식 배선 및 허용전류 초과 ➔ 줄열 축적으로 전선 과열", cat: "화재원인" },
+      { title: "누전 (지락)", desc: "절연 불량으로 전류가 건물 구조체로 누설 ➔ 스파크 및 국부 발열", cat: "화재원인" },
+      { title: "접촉불량 (접촉저항 증가)", desc: "단자 접속 나사 풀림 ➔ 접촉저항 증가로 국부 고열 발생", cat: "화재원인" },
+      { title: "전기 스파크 & 아크", desc: "스위치 개폐 및 도선 파단 시 발생하는 고온의 방전 불꽃", cat: "화재원인" },
+
+      // 2. 정전기 방지 대책
+      { title: "접지 (Earth, 어스)", desc: "발생한 정전하를 대지로 방출하여 전하 축적 방지", cat: "정전기" },
+      { title: "상대습도 70% 이상 유지", desc: "공기 중 수증기를 통해 정전하를 자연 방전시키는 핵심 대책", cat: "정전기" },
+      { title: "공기 이온화 (제전기)", desc: "이오나이저를 통해 (+)와 (-) 이온으로 전하를 중화", cat: "정전기" },
+      { title: "도전성(전도성) 재료 착용", desc: "대전되기 쉬운 절연체 대신 전도성 고무 신발 및 바닥재 사용", cat: "정전기" },
+      { title: "유속 제한 (유동 마찰 방지)", desc: "배관 내 위험물 액체 이송 시 유속을 낮추어 마찰 정전기 억제", cat: "정전기" },
+
+      // 3. 전기 안전장치
+      { title: "영상변류기 (ZCT)", desc: "누전경보기의 핵심 센서로 미세한 지락(누설) 전류 검출", cat: "전기장치" },
+      { title: "누전차단기 (ELB)", desc: "누전 및 과전류 발생 시 0.03초 이내 전로를 자동 차단", cat: "전기장치" },
+      { title: "누전경보기 (ELD)", desc: "지락전류 검출 시 수신부에서 음향 및 표시등 경보 발령", cat: "전기장치" },
+      { title: "정격감도전류 30mA 이하", desc: "인체 감전 보호용 누전차단기 정격 감도 전류 규격", cat: "전기장치" },
+
+      // 4. 가스 안전장치
+      { title: "가스차단장치 3요소", desc: "검지부(탐지) + 제어부(경보·지시) + 차단부(밸브폐쇄)", cat: "가스장치" },
+      { title: "검지부 (가스 감지)", desc: "LPG는 바닥 30cm 이내, LNG는 천장 30cm 이내 설치", cat: "가스장치" },
+      { title: "제어부 (수신 및 제어)", desc: "검지부 신호를 받아 경보를 울리고 차단부에 밸브 폐쇄 명령", cat: "가스장치" },
+      { title: "차단부 (메인 밸브)", desc: "가스 배관 메인 유로를 물리적으로 긴급 차단하는 밸브", cat: "가스장치" },
+      { title: "퓨즈콕 (과류차단 밸브)", desc: "호스 파손 시 급격한 유량에 의해 내부 볼이 밀려 유로 차단", cat: "가스장치" },
+
+      // 5. 가스용기 보관 기준
+      { title: "가스용기 보관온도 40℃ 이하", desc: "내부 압력 상승 및 폭발을 막기 위해 항상 40℃ 이하 유지", cat: "용기보관" },
+      { title: "옥외 통풍 양호 장소 보관", desc: "누출 가스 체류 방지를 위해 자연 통풍이 원활한 옥외 보관", cat: "용기보관" },
+      { title: "직사광선 차광막 설치", desc: "태양 복사열에 의한 용기 과열을 막기 위해 차광막 설치", cat: "용기보관" },
+      { title: "전도(쓰러짐) 방지 체인 결속", desc: "지진 및 충격으로 용기가 쓰러지지 않도록 체인으로 결속", cat: "용기보관" },
+      { title: "가연성물질 이격 2m 이상", desc: "화기 및 가연성 물질로부터 최소 2m 이상 안전거리 유지", cat: "용기보관" }
+    ];
+
+    const MAX_LIVES = 5;
+    let score = 0;
+    let lives = 3;
+    let streak = 0;
+    let speedMult = 0.5;
+    let activeTargets = [];
+    let isGameRunning = false;
+    let spawnTimer = null;
+    let animFrame = null;
+
+    const gameZone = document.getElementById('game-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const streakVal = document.getElementById('streak-val');
+
+    function setSpeed(spd, btn) {
+      speedMult = spd;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function triggerHeartHealAnim() {
+      livesVal.classList.remove("heart-heal-bounce");
+      void livesVal.offsetWidth;
+      livesVal.classList.add("heart-heal-bounce");
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
+      streakVal.textContent = streak > 0 ? `🔥 ${streak} COMBO` : '🔥 0 COMBO';
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('gameover-modal').style.display = 'none';
+      gameZone.querySelectorAll('.falling-target').forEach(el => el.remove());
+      activeTargets = [];
+      score = 0;
+      lives = 3;
+      streak = 0;
+      isGameRunning = true;
+      updateHUD();
+
+      clearInterval(spawnTimer);
+      spawnTimer = setInterval(spawnTarget, 2200);
+      spawnTarget();
+
+      if (animFrame) cancelAnimationFrame(animFrame);
+      gameLoop();
+    }
+
+    function spawnTarget() {
+      if (!isGameRunning) return;
+      const zoneW = gameZone.clientWidth || window.innerWidth || 800;
+      const tData = TARGETS_DATA[Math.floor(Math.random() * TARGETS_DATA.length)];
+
+      const el = document.createElement('div');
+      el.className = 'falling-target';
+      el.innerHTML = `
+        <div class="target-title">${tData.title}</div>
+        <div class="target-desc">${tData.desc}</div>
+      `;
+      gameZone.appendChild(el);
+
+      const targetW = el.offsetWidth || 180;
+      const maxX = Math.max(20, zoneW - targetW - 20);
+      const posX = Math.floor(Math.random() * maxX) + 10;
+
+      el.style.left = `${posX}px`;
+      el.style.top = '-80px';
+
+      activeTargets.push({
+        el: el,
+        data: tData,
+        y: -80,
+        x: posX,
+        speed: (1.2 + Math.random() * 0.6) * speedMult
+      });
+    }
+
+    function gameLoop() {
+      if (!isGameRunning) return;
+      const zoneH = gameZone.clientHeight || (window.innerHeight - 150) || 600;
+      const dangerY = zoneH - 70;
+
+      for (let i = activeTargets.length - 1; i >= 0; i--) {
+        const t = activeTargets[i];
+        t.y += t.speed;
+        t.el.style.top = `${t.y}px`;
+
+        if (t.y >= dangerY) {
+          lives--;
+          streak = 0;
+          updateHUD();
+
+          t.el.remove();
+          activeTargets.splice(i, 1);
+
+          if (lives <= 0) {
+            endGame();
+            return;
+          }
+        }
+      }
+
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function fireShot(selectedCat) {
+      if (!isGameRunning || activeTargets.length === 0) return;
+
+      let lowestIdx = 0;
+      let maxY = -999;
+      for (let i = 0; i < activeTargets.length; i++) {
+        if (activeTargets[i].y > maxY) {
+          maxY = activeTargets[i].y;
+          lowestIdx = i;
+        }
+      }
+
+      const target = activeTargets[lowestIdx];
+
+      if (target.data.cat === selectedCat) {
+        streak++;
+        score += 100 + (streak * 10);
+
+        let healed = false;
+        if (lives < MAX_LIVES) {
+          lives++;
+          healed = true;
+          triggerHeartHealAnim();
+        }
+
+        updateHUD();
+
+        target.el.style.borderColor = '#3fb950';
+        target.el.style.background = 'rgba(63, 185, 80, 0.4)';
+        if (healed) {
+          const healText = document.createElement('div');
+          healText.textContent = '❤️ +1';
+          healText.style.position = 'absolute';
+          healText.style.top = '-25px';
+          healText.style.right = '10px';
+          healText.style.color = '#7ee787';
+          healText.style.fontWeight = 'bold';
+          healText.style.fontSize = '1.1rem';
+          healText.style.textShadow = '0 0 5px rgba(0,0,0,0.8)';
+          healText.style.pointerEvents = 'none';
+          target.el.appendChild(healText);
+        }
+        setTimeout(() => target.el.remove(), 140);
+        activeTargets.splice(lowestIdx, 1);
+      } else {
+        lives--;
+        streak = 0;
+        updateHUD();
+
+        target.el.style.borderColor = '#f85149';
+        target.el.style.background = 'rgba(248, 81, 73, 0.4)';
+
+        if (lives <= 0) {
+          endGame();
+        }
+      }
+    }
+
+    function endGame() {
+      isGameRunning = false;
+      clearInterval(spawnTimer);
+      cancelAnimationFrame(animFrame);
+      document.getElementById('gameover-desc').innerHTML = `최종 점수: <strong>${score}점</strong><br>제4류 지정수량과 연료가스 특성을 다시 점검하세요!`;
+      document.getElementById('gameover-modal').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>

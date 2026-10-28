@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[제 8-4탄 B] 위험물 & 연료가스 플로팅 헌팅</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; display: inline-block; transition: transform 0.2s ease; }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.5s ease-in-out;
+    }
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-b { background: #8957e5; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .round-tag {
+      font-size: 0.85rem; font-weight: 800; color: #a371f7;
+      background: rgba(163, 113, 247, 0.15); border: 1px solid rgba(163, 113, 247, 0.3);
+      padding: 2px 8px; border-radius: 12px;
+    }
+    .streak-badge { font-size: 0.82rem; font-weight: 800; color: #e3b341; min-width: 75px; text-align: right; }
+
+    .mission-banner {
+      background: linear-gradient(180deg, rgba(33, 38, 45, 0.95) 0%, rgba(22, 27, 34, 0.95) 100%);
+      border-bottom: 1px solid #30363d; padding: 8px 16px; text-align: center; z-index: 40;
+    }
+    .mission-title { font-size: 0.98rem; font-weight: 800; color: #58a6ff; margin-bottom: 2px; }
+    .mission-desc { font-size: 0.8rem; color: #8b949e; }
+    .mission-counter { font-size: 0.82rem; font-weight: 700; color: #3fb950; margin-top: 2px; }
+
+    #floating-zone {
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 40%, #161b22 0%, #0d1117 80%);
+      overflow: hidden;
+    }
+    .float-item {
+      position: absolute; padding: 12px 18px; background: #21262d; border: 2px solid #30363d;
+      border-radius: 30px; color: #f0f6fc; font-size: 0.92rem; font-weight: 800;
+      cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      transition: transform 0.1s ease, border-color 0.15s, background 0.15s;
+      white-space: nowrap; will-change: transform, left, top; z-index: 10;
+    }
+    .float-item:hover { border-color: #a371f7; transform: scale(1.05); }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 12px;
+      padding: 24px; max-width: 480px; width: 100%; text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); max-height: 85vh; overflow-y: auto;
+    }
+    .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #a371f7; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 20px; }
+    .action-btn {
+      width: 100%; padding: 12px; background: #8957e5; border: 1px solid #a371f7;
+      color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 6px; cursor: pointer; margin-bottom: 8px;
+    }
+    .action-btn:hover { background: #9e6cf4; }
+    .action-btn.btn-alt { background: #238636; border-color: #2ea043; }
+    .sub-action-btn {
+      display: block; width: 100%; padding: 9px; background: #21262d; border: 1px solid #30363d;
+      color: #c9d1d9; font-size: 0.85rem; font-weight: 600; border-radius: 6px; text-decoration: none;
+    }
+    .modal-dual-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+
+    .review-item {
+      background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      padding: 12px; margin-bottom: 12px; text-align: left;
+    }
+    .review-q { font-size: 0.88rem; font-weight: 800; color: #f0f6fc; margin-bottom: 4px; }
+    .review-a { font-size: 0.82rem; color: #f85149; margin-bottom: 4px; }
+    .review-tip { font-size: 0.82rem; color: #e3b341; margin-bottom: 8px; }
+    .review-targets {
+      background: rgba(46, 160, 67, 0.12); border: 1px solid rgba(46, 160, 67, 0.4);
+      border-radius: 6px; padding: 8px 10px;
+    }
+    .review-targets-title { font-size: 0.8rem; font-weight: 800; color: #3fb950; margin-bottom: 4px; }
+    .review-targets-list { font-size: 0.78rem; color: #c9d1d9; padding-left: 18px; margin: 0; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game"><span>◀ 게임 목록</span></a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️🖤🖤</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <a href="./game8-1.html" class="type-btn">🎯 A 요격형</a>
+        <a href="./game8-1-b.html" class="type-btn active-b">🛸 B 플로팅형</a>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn" onclick="setSpeed(0.3, this)">0.3x</button>
+      <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
+      <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
+      <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+    </div>
+    <div class="hud-right">
+      <span class="round-tag" id="round-val">ROUND 1/4</span>
+      <div class="streak-badge" id="streak-val">🔥 0 COMBO</div>
+    </div>
+  </header>
+
+  <div class="mission-banner">
+    <div class="mission-title" id="mission-title">미션 제목 로딩 중...</div>
+    <div class="mission-desc" id="mission-desc">미션 설명</div>
+    <div class="mission-counter">남은 목표 타겟: <strong id="remain-count" style="color:#e3b341;">0</strong>개</div>
+  </div>
+
+  <!-- 라운드 클리어 안내 및 다음 라운드 진행 바 (계속 읽기 지원) -->
+  <div id="round-clear-bar" style="display:none; margin: 8px 16px; padding: 10px 16px; background: rgba(35, 134, 54, 0.25); border: 1px solid #3fb950; border-radius: 8px; text-align: center; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+    <span style="color:#7ee787; font-weight:700; font-size:0.95rem;">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
+    <button id="btn-next-round" onclick="proceedNextRound()" style="padding: 6px 18px; background: #238636; border: 1px solid #3fb950; color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.9rem; transition: background 0.2s;">다음 라운드 ▶</button>
+  </div>
+
+  <main id="floating-zone"></main>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">🛸</div>
+      <h2 class="modal-title">[제 8-4탄 B] 위험물 & 연료가스 헌팅</h2>
+      <p class="modal-desc">
+        화면에 떠다니는 위험물 & 가스 정보 버블 중<br>
+        상단 <b>미션 목표</b>에 해당하는 정답만 사냥하세요!<br><br>
+        • 제4류 인화성액체 지정수량 & 품명 (특수50/1석200·400 등)<br>
+        • 위험물 1~6류 유별 성질 & 소화방법<br>
+        • 연료가스(LPG vs LNG) 주성분·비중·폭발범위 & 경보기 위치
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🛸 B타입 시작</button>
+        <a href="./game8-1.html" class="action-btn btn-alt">🎯 A타입 전환</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">작전 성공!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
+        <div class="review-list" id="review-list"></div>
+      </div>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 B타입 재도전</button>
+        <a href="./game8-1.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const ROUND_DATA = [
+      {
+        round: 1,
+        title: "⚡ [전기화재 4대 원인 & 메커니즘] 올바른 것만 사냥하세요!",
+        desc: "단락(합선), 과부하(줄열), 누전(지락), 접촉불량(접촉저항 증가)",
+        targets: [
+          { text: "단락 (피복 손상 대전류 아크)", tip: "두 도선의 직접 접촉으로 순간적인 대전류 스파크 발생!" },
+          { text: "과부하 (허용전류 초과 줄열)", tip: "문어발식 배선 등으로 허용전류를 초과하여 줄열 축적 발화!" },
+          { text: "누전 (절연 불량 지락전류)", tip: "절연 파괴로 건물 구조체 등으로 전류가 흘러 스파크 발열!" },
+          { text: "접촉불량 (접촉저항 증가)", tip: "나사 풀림 등으로 접촉저항이 증가하여 국부 고열 발생!" },
+          { text: "전기 불꽃 & 개폐기 아크", tip: "스위치 개폐 시 방전 불꽃이 가연성 가스나 분진에 착화!" }
+        ],
+        traps: [
+          { text: "접촉불량 = 접촉저항 감소", tip: "접촉불량은 저항이 '감소'하는 것이 아니라 '증가'하여 열이 납니다!" },
+          { text: "과부하 = 정격용량 미달 사용", tip: "과부하는 정격용량을 '초과'하여 무리하게 쓸 때 발생합니다!" },
+          { text: "단락 = 절연 저항 무한대", tip: "단락은 절연이 파괴되어 저항이 거의 0에 가까워지는 현상입니다!" },
+          { text: "누전 = 대지로 방전 안전상태", tip: "누전은 위험한 누설 전류가 흘러 화재와 감전을 유발합니다!" }
+        ]
+      },
+      {
+        round: 2,
+        title: "🛡️ [정전기 화재 방지 3대 조치] 올바른 대책만 사냥하세요!",
+        desc: "접지(어스), 상대습도 70% 이상, 공기 이온화, 전도성 재료",
+        targets: [
+          { text: "접지 (Earth, 어스) 시설", tip: "발생한 정전하를 대지로 안전하게 방출하여 축적 방지!" },
+          { text: "상대습도 70% 이상 유지", tip: "공기 중 수증기를 통해 정전하를 자연 방전시키는 핵심 대책!" },
+          { text: "공기 이온화 (제전기 가동)", tip: "이오나이저로 (+)와 (-) 이온을 생성하여 전하를 중화!" },
+          { text: "도전성(전도성) 고무 신발 착용", tip: "인체에 대전된 정전기를 바닥으로 방출하는 도전성 보호구!" },
+          { text: "배관 내 위험물 유속 제한", tip: "유동 마찰에 의한 정전기 발생을 줄이기 위해 유속을 제한!" }
+        ],
+        traps: [
+          { text: "상대습도 50% 이하 유지", tip: "습도가 낮으면 정전기가 더 잘 생깁니다! 70% 이상 유지해야 함!" },
+          { text: "절연성 비닐 바닥재 시공", tip: "절연체는 전하가 축적되므로 도전성 바닥재를 써야 합니다!" },
+          { text: "위험물 유속 초고속 이송", tip: "유속이 빠르면 마찰 정전기가 급증하여 폭발 위험이 커집니다!" },
+          { text: "공기 중 산소 농도 극대화", tip: "산소 농도가 높으면 정전기 스파크에 즉시 폭발합니다!" }
+        ]
+      },
+      {
+        round: 3,
+        title: "📟 [누전경보기 & 가스누출차단기 구성요소]만 사냥하세요!",
+        desc: "영상변류기(ZCT), 검지부, 제어부, 차단부, 퓨즈콕",
+        targets: [
+          { text: "영상변류기 (ZCT 지락감지)", tip: "누전경보기의 핵심 변류기로 미세한 지락(누설)전류 검출!" },
+          { text: "가스누출차단기: 검지부", tip: "누출된 가스를 탐지하여 전기신호로 발신하는 감지 장치!" },
+          { text: "가스누출차단기: 제어부", tip: "검지부 신호를 받아 경보를 울리고 차단부에 밸브 폐쇄 명령!" },
+          { text: "가스누출차단기: 차단부", tip: "가스 배관 메인 밸브를 물리적으로 긴급 차단하는 장치!" },
+          { text: "퓨즈콕 (과류차단 밸브)", tip: "호스 파손 시 비정상 과류에 의해 내부 볼이 밀려 유로 차단!" }
+        ],
+        traps: [
+          { text: "영상변류기 = 단락전류 차단", tip: "영상변류기(ZCT)는 차단기가 아니라 '지락(누설)전류 검출'용!" },
+          { text: "가스차단장치 = 분무부", tip: "가스차단장치 3요소는 검지부, 제어부, 차단부입니다!" },
+          { text: "퓨즈콕 = 가스 가열 승온장치", tip: "퓨즈콕은 과류 시 가스를 차단하는 안전밸브입니다!" },
+          { text: "누전차단기 = 정격감도 100A", tip: "인체 감전 보호용 누전차단기 정격감도는 30mA 이하입니다!" }
+        ]
+      },
+      {
+        round: 4,
+        title: "🛢️ [가스용기 보관 기준 & 법정 수치] 올바른 것만 사냥하세요!",
+        desc: "온도 40℃ 이하, 옥외 통풍장소, 직사광선 차단, 전도방지",
+        targets: [
+          { text: "가스용기 보관온도 = 40℃ 이하", tip: "내부 압력 상승 및 폭발 방지를 위해 항상 40℃ 이하 유지!" },
+          { text: "옥외 통풍 양호 장소 보관", tip: "누출 시 가스 체류를 막기 위해 자연 통풍이 원활한 옥외 보관!" },
+          { text: "직사광선 차단 (차광막 설치)", tip: "태양 복사열로 용기가 가열되지 않도록 차광막 설치!" },
+          { text: "전도(쓰러짐) 방지 체인 결속", tip: "지진 및 충격으로 용기가 쓰러지지 않도록 체인으로 결속!" },
+          { text: "가연성 물질 이격 = 2m 이상", tip: "화기 및 가연성 물질로부터 최소 2m 이상 이격 거리 유지!" }
+        ],
+        traps: [
+          { text: "가스용기 보관온도 = 60℃ 이하", tip: "보관 온도는 60℃가 아니라 '40℃ 이하'여야 합니다!" },
+          { text: "밀폐된 지하 지하실 보관", tip: "가스가 체류하여 폭발 위험이 커지므로 지하실 보관은 절대 금지!" },
+          { text: "체인 결속 없이 단독 적재", tip: "전도 시 밸브가 파손되어 로켓처럼 날아가므로 체인 결속 필수!" },
+          { text: "직사광선에 전면 노출 보관", tip: "직사광선에 노출되면 용기 내부 압력이 급상승하므로 차광 필수!" }
+        ]
+      }
+    ];
+
+    const zone = document.getElementById('floating-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const streakVal = document.getElementById('streak-val');
+    const roundVal = document.getElementById('round-val');
+    const missionTitle = document.getElementById('mission-title');
+    const missionDesc = document.getElementById('mission-desc');
+    const remainCount = document.getElementById('remain-count');
+    const roundClearBar = document.getElementById('round-clear-bar');
+    const btnNextRound = document.getElementById('btn-next-round');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function triggerHeartHealAnim() {
+      livesVal.classList.remove("heart-heal-bounce");
+      void livesVal.offsetWidth;
+      livesVal.classList.add("heart-heal-bounce");
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
+      streakVal.textContent = streak > 0 ? `🔥 ${streak} COMBO` : '🔥 0 COMBO';
+      roundVal.textContent = `ROUND ${currentRoundIndex + 1}/${ROUND_DATA.length}`;
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
+      currentRoundIndex = 0;
+      score = 0;
+      lives = 3;
+      streak = 0;
+      wrongHistory = [];
+      updateHUD();
+      loadRound(0);
+    }
+
+    function loadRound(rIndex) {
+      if (rIndex >= ROUND_DATA.length) {
+        showFinalResult(true);
+        return;
+      }
+
+      if (roundClearBar) roundClearBar.style.display = 'none';
+      zone.innerHTML = '';
+      items = [];
+      const data = ROUND_DATA[rIndex];
+      missionTitle.textContent = data.title;
+      missionDesc.textContent = data.desc;
+      remainTargetCount = data.targets.length;
+      remainCount.textContent = remainTargetCount;
+      isRoundRunning = true;
+      updateHUD();
+
+      const allList = [
+        ...data.targets.map(t => ({ ...t, isTarget: true })),
+        ...data.traps.map(t => ({ ...t, isTarget: false }))
+      ].sort(() => Math.random() - 0.5);
+
+      const zoneW = zone.clientWidth || window.innerWidth || 800;
+      const zoneH = zone.clientHeight || (window.innerHeight - 150) || 600;
+
+      allList.forEach(dataItem => {
+        const el = document.createElement('div');
+        el.className = 'float-item';
+        el.textContent = dataItem.text;
+        zone.appendChild(el);
+
+        const elW = el.offsetWidth || 150;
+        const elH = el.offsetHeight || 44;
+        const maxRangeX = Math.max(20, zoneW - elW - 20);
+        const maxRangeY = Math.max(20, zoneH - elH - 20);
+
+        const x = Math.floor(Math.random() * maxRangeX) + 10;
+        const y = Math.floor(Math.random() * maxRangeY) + 10;
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (0.8 + Math.random() * 0.6) * speedMult;
+        const vx = Math.cos(angle) * speed;
+        const vy = Math.sin(angle) * speed;
+
+        const itemObj = {
+          el: el, data: dataItem,
+          x: x, y: y, w: elW, h: elH,
+          vx: vx, vy: vy
+        };
+
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+
+        el.addEventListener('click', () => onItemClick(itemObj));
+        items.push(itemObj);
+      });
+
+      isRoundRunning = true;
+      if (animFrame) cancelAnimationFrame(animFrame);
+      runPhysics();
+    }
+
+        function clampAllItemsInsideZone() {
+      const zoneRect = zone.getBoundingClientRect();
+      const zoneW = zoneRect.width || zone.clientWidth || window.innerWidth;
+      const zoneH = zoneRect.height || zone.clientHeight || (window.innerHeight - 150);
+      const MARGIN = 15;
+      if (!zoneW || !zoneH) return;
+
+      items.forEach(item => {
+        const w = item.el.offsetWidth || item.w || 150;
+        const h = item.el.offsetHeight || item.h || 44;
+        item.w = w;
+        item.h = h;
+
+        if (item.x + w > zoneW - MARGIN) {
+          item.x = Math.max(MARGIN, zoneW - w - MARGIN);
+        }
+        if (item.x < MARGIN) item.x = MARGIN;
+
+        if (item.y + h > zoneH - MARGIN) {
+          item.y = Math.max(MARGIN, zoneH - h - MARGIN);
+        }
+        if (item.y < MARGIN) item.y = MARGIN;
+
+        item.el.style.left = `${item.x}px`;
+        item.el.style.top = `${item.y}px`;
+      });
+    }
+
+    window.addEventListener('resize', clampAllItemsInsideZone);
+
+    function runPhysics() {
+      if (!isRoundRunning) return;
+
+      const zoneRect = zone.getBoundingClientRect();
+      const zoneW = zoneRect.width || zone.clientWidth || window.innerWidth;
+      const zoneH = zoneRect.height || zone.clientHeight || (window.innerHeight - 150);
+      const MARGIN = 15;
+
+      items.forEach(item => {
+        item.x += item.vx * speedMult;
+        item.y += item.vy * speedMult;
+
+        const w = item.el.offsetWidth || item.w || 150;
+        const h = item.el.offsetHeight || item.h || 44;
+        item.w = w;
+        item.h = h;
+
+        if (item.x <= MARGIN) {
+          item.x = MARGIN;
+          item.vx = Math.abs(item.vx);
+        } else if (item.x + w >= zoneW - MARGIN) {
+          item.x = Math.max(MARGIN, zoneW - w - MARGIN);
+          item.vx = -Math.abs(item.vx);
+        }
+
+        if (item.y <= MARGIN) {
+          item.y = MARGIN;
+          item.vy = Math.abs(item.vy);
+        } else if (item.y + h >= zoneH - MARGIN) {
+          item.y = Math.max(MARGIN, zoneH - h - MARGIN);
+          item.vy = -Math.abs(item.vy);
+        }
+
+        item.el.style.left = `${item.x}px`;
+        item.el.style.top = `${item.y}px`;
+      });
+
+      animFrame = requestAnimationFrame(runPhysics);
+    }
+
+    function onItemClick(item) {
+      if (!isRoundRunning) return;
+      if (item.isSolved) return; // 이미 맞힌 카드는 재클릭 무시
+
+      if (item.data.isTarget) {
+        item.isSolved = true;
+        streak++;
+        score += 150 + (streak * 15);
+        remainTargetCount--;
+        remainCount.textContent = remainTargetCount;
+
+        let healed = false;
+        if (lives < MAX_LIVES) {
+          lives++;
+          healed = true;
+          triggerHeartHealAnim();
+        }
+
+        // 맞으면 초록색으로 표시되고 사라지지 않고 화면에 남아 계속 읽을 수 있음!
+        item.el.style.borderColor = '#3fb950';
+        item.el.style.background = 'rgba(63, 185, 80, 0.45)';
+        item.el.style.boxShadow = '0 0 12px rgba(63, 185, 80, 0.6)';
+        item.el.style.cursor = 'default';
+        item.el.innerHTML = `<span style="color:#7ee787; font-weight:800; margin-right:4px;">✅</span>` + item.data.text;
+
+        if (healed) {
+          const healText = document.createElement('div');
+          healText.textContent = '❤️ +1';
+          healText.style.position = 'absolute';
+          healText.style.top = '-20px';
+          healText.style.right = '5px';
+          healText.style.color = '#7ee787';
+          healText.style.fontWeight = 'bold';
+          healText.style.fontSize = '1.1rem';
+          healText.style.textShadow = '0 0 5px rgba(0,0,0,0.8)';
+          healText.style.pointerEvents = 'none';
+          item.el.appendChild(healText);
+        }
+
+        updateHUD();
+
+        if (remainTargetCount <= 0) {
+          // 라운드 정답을 모두 찾았을 때: 유영 정지 & 안전 구역 자동 견인 & 배너 표시
+          isRoundRunning = false;
+          clampAllItemsInsideZone();
+          setTimeout(clampAllItemsInsideZone, 60);
+          if (roundClearBar && btnNextRound) {
+            btnNextRound.textContent = (currentRoundIndex + 1 >= ROUND_DATA.length) ? '최종 결과 보기 🏆' : '다음 라운드 ▶';
+            roundClearBar.style.display = 'flex';
+          }
+        }
+      } else {
+        if (item.isFailed) return; // 이미 틀린 카드는 재클릭 감점 방지
+        item.isFailed = true;
+
+        lives--;
+        streak = 0;
+        updateHUD();
+
+        wrongHistory.push({
+          roundTitle: ROUND_DATA[currentRoundIndex].title,
+          targets: ROUND_DATA[currentRoundIndex].targets,
+          clicked: item.data.text,
+          tip: item.data.tip
+        });
+
+        // 틀리면 빨강으로 표시되고 화면에 남아있음 (해설 팁 포함)
+        item.el.style.borderColor = '#f85149';
+        item.el.style.background = 'rgba(248, 81, 73, 0.45)';
+        item.el.style.boxShadow = '0 0 10px rgba(248, 81, 73, 0.6)';
+        item.el.innerHTML = `<span style="color:#f85149; font-weight:800; margin-right:4px;">❌</span>` + item.data.text +
+          (item.data.tip ? `<div style="font-size:0.75rem; color:#ffa657; margin-top:4px; font-weight:normal;">💡 ${item.data.tip}</div>` : '');
+
+        if (lives <= 0) {
+          isRoundRunning = false;
+          showFinalResult(false);
+        }
+      }
+    }
+
+    function proceedNextRound() {
+      if (roundClearBar) roundClearBar.style.display = 'none';
+      currentRoundIndex++;
+      loadRound(currentRoundIndex);
+    }
+
+    function showFinalResult(isSuccess) {
+      isRoundRunning = false;
+      cancelAnimationFrame(animFrame);
+
+      const modal = document.getElementById('result-modal');
+      const icon = document.getElementById('result-icon');
+      const title = document.getElementById('result-title');
+      const desc = document.getElementById('result-desc');
+      const container = document.getElementById('review-container');
+      const list = document.getElementById('review-list');
+
+      modal.style.display = 'flex';
+
+      if (isSuccess) {
+        icon.textContent = "🏆";
+        title.textContent = "작전 대성공! 위험물 & 가스안전 마스터!";
+        title.style.color = "#3fb950";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>제4류 지정수량, 1~6류 성질, LPG/LNG 특성을 완벽히 정복하셨습니다!`;
+      } else {
+        icon.textContent = "💥";
+        title.textContent = "작전 실패!";
+        title.style.color = "#f85149";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>함정에 걸린 지문을 확인하고 다시 도전하세요!`;
+      }
+
+      if (wrongHistory.length > 0) {
+        container.style.display = "block";
+        let html = "";
+        wrongHistory.forEach(w => {
+          let targetsHtml = w.targets.map(t => `<li>${t.text}</li>`).join("");
+          html += `
+            <div class="review-item">
+              <div class="review-q">${w.roundTitle}</div>
+              <div class="review-a">❌ <b>잘못 누른 함정:</b> ${w.clicked}</div>
+              <div class="review-tip">💡 <b>족집게 해설:</b> ${w.tip}</div>
+              <div class="review-targets">
+                <div class="review-targets-title">🎯 <b>반드시 외워야 할 핵심 정답:</b></div>
+                <ul class="review-targets-list">${targetsHtml}</ul>
+              </div>
+            </div>
+          `;
+        });
+        list.innerHTML = html;
+      } else {
+        container.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
