@@ -621,7 +621,8 @@
           { id: "2-1-1", legacyId: "2-1-1", label: "2-1 소화기구 구조·점검", icon: "🧯" },
           { id: "2-1-2", legacyId: "2-1-2", label: "2-2 옥내소화전 구조·점검", icon: "💧" },
           { id: "2-1-3", legacyId: "2-1-3", label: "2-3 스프링클러설비", icon: "💦" },
-          { id: "2-1-4", legacyId: "2-1-4", label: "2-4 가스계·물분무등", icon: "⚡" }
+          { id: "2-1-4", legacyId: "2-1-4", label: "2-4 가스계·물분무등", icon: "⚡" },
+          { id: "2-1-5", legacyId: "2-1-5", label: "2-5 옥외소화전설비", icon: "🚒" }
         ]
       }
     ];
@@ -653,7 +654,8 @@
       '2-1-1': "소화기구 능력단위(소형 1단위↑/대형 A10·B20), 용도별 기준면적(위락 30/집회·의료 50/근생·숙박 100/기타 200), 보행거리(소형 20m/대형 30m), 높이 1.5m, 지시압력계(0.7~0.98MPa), 내용연수 10년",
       '2-1-2': "옥내소화전 방수압력(0.17~0.7MPa)·방수량(130L/min), 피토게이지(D/2), 수원저수량(N×2.6㎥, 고층 N×5.2㎥, 옥상 1/3), 펌프 성능시험 3단계(체절 140%/정격 100%/최대 65%), 압력챔버 Range(정지점)·Diff(기동점)",
       '2-1-3': "스프링클러 4대방식(습식·건식·준비작동식·일제살수식), 헤드방수압(0.1~1.2MPa)·방수량(80L/min), 폐쇄형 헤드 표시온도(39미만 79미만, 39~64 79~121), 기준개수 N(아파트 10개, 11층↑ 30개), 수원저수량(N×1.6㎥, 고층 3.2㎥), 말단시험배관",
-      '2-1-4': "가스계 소화설비(CO₂·할론·할로겐화합물 및 불활성기체), 솔레노이드 밸브 격발 점검 & 복구 5단계 실무 순서, 교차회로·기동용기·선택밸브·저장용기 계통도, 방출지연타이머(20~30초), 방출표시등, 과압배출구"
+      '2-1-4': "가스계 소화설비(CO₂·할론·할로겐화합물 및 불활성기체), 솔레노이드 밸브 격발 점검 & 복구 5단계 실무 순서, 교차회로·기동용기·선택밸브·저장용기 계통도, 방출지연타이머(20~30초), 방출표시등, 과압배출구",
+      '2-1-5': "옥외소화전 방수압력(0.25~0.7MPa)·방수량(350L/min), 호스 65mm, 수평거리 40m, 수원저수량(N×7.0㎥, 최대 N=2개, 옥상수조 제외), 소화전함 설치기준(5m 이내, 10개이하/11~30개/31개이상), 옥내vs옥외 1:1 비교"
     };
 
     // 레거시 파라미터 매핑 (구버전 단일 숫자 1~8 지원)
@@ -1757,6 +1759,57 @@
               "• <b>방출표시등</b>: 방호구역 <span class='highlight-badge'>출입문 외부 상단</span>에 설치, 약제 방출 시 적색 점등하여 외부인 진입 차단",
               "• <b>과압배출구 (플랩 댐퍼)</b>: 약제 방출 시 실내 압력 급상승으로 인한 <span class='highlight-badge'>벽체·창문·도어 파손 방지</span>",
               "• <b>공기호흡기 비치</b>: 이산화탄소 소화설비 방호구역 출입구 부근에 <span class='highlight-badge'>2개 이상</span> 의무 비치 (방독면 대체 불가)"
+            ]
+          }
+        ]
+      }
+,
+      '2-1-5': {
+        title: "🚒 [2권 제 1-5탄] 옥외소화전설비 구조·점검 & 옥내 1:1 비교 1분 족집게",
+        playUrl: "./1keup-game/game2-1-5.html",
+        playUrlB: "./1keup-game/game2-1-5-b.html",
+        cards: [
+          {
+            title: "1. 옥외소화전 기본 규격 & 방수 성능 (방수압·방수량·구경)",
+            items: [
+              "<b>노즐 선단 방수압력 & 분당 방수량</b>:",
+              "• <b>노즐 방수압력</b>: <span class='highlight-badge'>0.25 MPa 이상 ~ 0.7 MPa 이하</span> (0.7 MPa 초과 시 감압장치 의무 설치)",
+              "• <b>분당 방수량</b>: <span class='highlight-badge'>350 L/min 이상</span> (\(Q = 2.086 \cdot d^2 \cdot \sqrt{P}\))",
+              "• <b>피토게이지 동압 측정</b>: 노즐 구경(\(D\))의 <span class='highlight-badge'>1/2 지점(\(D/2\))</span> 유심선상에서 측정",
+              "<b>소방호스 및 배관 구경 & 배치 기준</b>:",
+              "• <b>소방호스 구경</b>: <span class='highlight-badge'>65 mm</span> 규격의 호스 및 결합금속구 적용",
+              "• <b>급수배관 구경</b>: 주배관 최소 <span class='highlight-badge'>65 mm 이상</span> 확보",
+              "• <b>수평거리</b>: 특정소방대상물의 각 부분으로부터 <span class='highlight-badge'>40 m 이하</span>가 되도록 배치"
+            ]
+          },
+          {
+            title: "2. 수원 저수량 계산 & 고층 가산 & 옥상수조 제외 기준",
+            items: [
+              "<b>옥외소화전 수원 유효저수량 산출 공식</b>:",
+              "• <span class='highlight-badge'>\(Q = N \times 7.0\,\text{㎥}\)</span> (350 L/min × 20분 = 7,000 L = 7.0 ㎥)",
+              "• <b>기준개수 (N)</b>: 설치된 옥외소화전 개수 중 <span class='highlight-red'>최대 2개까지만 적용!</span> (최대 필요 저수량 = \(2 \times 7 = \mathbf{14\,\text{㎥}}\))",
+              "<b>★옥상수조 설치 제외 (단골 함정)</b>:",
+              "• 옥외소화전은 지상 전용 옥외 소화설비이므로, <span class='highlight-red'>옥상수조(유효수량 1/3) 가산 의무가 없음!</span>",
+              "<b>고층 건축물 가산 시간 (30층 이상)</b>:",
+              "• <b>30층 ~ 49층 (40분 방수)</b>: <span class='highlight-badge'>\(N \times 14\,\text{㎥}\)</span> (최대 28 ㎥)",
+              "• <b>50층 이상 초고층 (60분 방수)</b>: <span class='highlight-badge'>\(N \times 21\,\text{㎥}\)</span> (최대 42 ㎥)"
+            ]
+          },
+          {
+            title: "3. 소화전함 설치 기준 & 옥내 vs 옥외 1:1 비교 총정리",
+            items: [
+              "<b>옥외소화전함(호스함) 설치 거리 및 수량 기준</b>:",
+              "• <b>설치 거리</b>: 옥외소화전마다 그로부터 <span class='highlight-badge'>5 m 이내</span>의 장소에 설치",
+              "• <b>10개 이하 설치 시</b>: 옥외소화전마다 5m 이내에 <span class='highlight-badge'>각각 1개 이상</span> 설치",
+              "• <b>11개 ~ 30개 설치 시</b>: 각각 분산하여 <span class='highlight-badge'>11개 이상</span>의 소화전함을 설치",
+              "• <b>31개 이상 설치 시</b>: 옥외소화전 <span class='highlight-badge'>3개마다 1개 이상</span>의 비율로 분산 설치",
+              "<b>★옥내소화전 vs 옥외소화전 1:1 비교 족집게 요약</b>:",
+              "• <b>방수압력</b>: 옥내 <span class='highlight-badge'>0.17~0.7 MPa</span> vs 옥외 <span class='highlight-badge'>0.25~0.7 MPa</span>",
+              "• <b>분당 방수량</b>: 옥내 <span class='highlight-badge'>130 L/min</span> vs 옥외 <span class='highlight-badge'>350 L/min</span> (약 2.7배)",
+              "• <b>호스 구경</b>: 옥내 <span class='highlight-badge'>40 mm</span> vs 옥외 <span class='highlight-badge'>65 mm</span>",
+              "• <b>수평거리</b>: 옥내 <span class='highlight-badge'>25 m 이하</span> vs 옥외 <span class='highlight-badge'>40 m 이하</span>",
+              "• <b>수원 계수</b>: 옥내 <span class='highlight-badge'>\(N \times 2.6\,\text{㎥}\)</span> vs 옥외 <span class='highlight-badge'>\(N \times 7.0\,\text{㎥}\)</span> (둘 다 N 최대 2개)",
+              "• <b>옥상수원</b>: 옥내 <span class='highlight-badge'>1/3 가산 의무</span> vs 옥외 <span class='highlight-red'>옥상수조 제외</span>"
             ]
           }
         ]
