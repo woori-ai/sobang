@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[2권 제 2-5탄 A] 소화활동설비 (제연·연결송수관·비상콘센트) 요격전</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; display: inline-block; transition: transform 0.2s ease; }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.5s ease-in-out;
+    }
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-a { background: #238636; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .streak-badge { font-size: 0.82rem; font-weight: 800; color: #e3b341; min-width: 75px; text-align: right; }
+
+    #game-zone {
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
+      overflow: hidden;
+    }
+    .danger-line {
+      position: absolute; bottom: 8px; left: 0; width: 100%; height: 2px;
+      background: repeating-linear-gradient(90deg, #f85149, #f85149 10px, transparent 10px, transparent 20px);
+      opacity: 0.7; z-index: 10;
+    }
+    .falling-target {
+      position: absolute; width: 195px; padding: 10px;
+      background: #21262d; border: 2px solid #58a6ff; border-radius: 10px;
+      text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 20;
+    }
+    .falling-target .target-title { font-size: 0.92rem; font-weight: 800; color: #ffffff; margin-bottom: 2px; }
+    .falling-target .target-desc { font-size: 0.73rem; color: #8b949e; }
+
+    footer.control-deck {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+      padding: 8px 12px 14px; background: #161b22; border-top: 1px solid #30363d; z-index: 50;
+    }
+    .deck-btn {
+      padding: 10px 4px; background: #21262d; border: 1.5px solid #30363d;
+      border-radius: 8px; color: #c9d1d9; cursor: pointer; text-align: center;
+      transition: all 0.1s ease;
+    }
+    .deck-btn:active { transform: scale(0.96); background: #30363d; }
+    .deck-btn.btn-match-active {
+      background: #238636 !important; border-color: #3fb950 !important; color: #ffffff !important;
+      transform: scale(0.96); box-shadow: 0 0 12px rgba(46, 160, 67, 0.6);
+    }
+    .deck-btn-num { font-size: 0.75rem; color: #8b949e; margin-bottom: 2px; font-weight: 700; }
+    .deck-btn-name { font-size: 0.8rem; font-weight: 700; line-height: 1.2; word-break: keep-all; }
+
+    .laser-beam {
+      position: absolute; width: 4px; background: #58a6ff;
+      box-shadow: 0 0 8px #58a6ff, 0 0 16px #58a6ff;
+      transform-origin: bottom center; z-index: 30; pointer-events: none;
+    }
+
+    .hit-spark {
+      position: absolute; width: 14px; height: 14px; border-radius: 50%;
+      background: #ffffff; box-shadow: 0 0 16px #388bfd, 0 0 32px #58a6ff;
+      pointer-events: none; z-index: 35; animation: sparkFade 0.25s forwards;
+    }
+    @keyframes sparkFade {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(3.5); opacity: 0; }
+    }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.9); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 16px;
+      max-width: 440px; width: 100%; padding: 26px 22px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6); max-height: 90vh; overflow-y: auto;
+    }
+    .modal-title { font-size: 1.35rem; font-weight: 800; color: #f0f6fc; margin-bottom: 10px; }
+    .modal-desc { font-size: 0.86rem; color: #8b949e; line-height: 1.6; margin-bottom: 20px; }
+    .modal-dual-actions { display: flex; gap: 8px; margin-bottom: 10px; }
+    .action-btn {
+      flex: 1; padding: 12px; background: #238636; border: none; color: #ffffff;
+      font-size: 0.95rem; font-weight: 800; border-radius: 8px; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .action-btn.btn-alt { background: #8957e5; }
+    .sub-action-btn { display: block; font-size: 0.82rem; color: #8b949e; margin-top: 10px; text-decoration: underline; cursor: pointer; }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 10px; cursor: pointer; text-align: center; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 12px; box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4);
+      animation: pulseBtn 1.8s infinite;
+    }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4); }
+      50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(46, 160, 67, 0.65); }
+    }
+
+    @media (max-width: 600px) {
+      .falling-target { width: 165px; padding: 8px; }
+      .falling-target .target-title { font-size: 0.82rem; }
+      .falling-target .target-desc { font-size: 0.68rem; }
+      .deck-btn-name { font-size: 0.72rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">◀ 나가기</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <span class="type-btn active-a">A 낙하요격</span>
+        <a href="./game2-2-5-b.html" class="type-btn">B 버블헌팅</a>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn active" onclick="setSpeed(1.0, this)">1.0x</button>
+      <button class="speed-btn" onclick="setSpeed(1.3, this)">1.3x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+      <button class="speed-btn" onclick="setSpeed(2.0, this)">2.0x</button>
+    </div>
+    <div class="streak-badge" id="streak-val">0 COMBO 🔥</div>
+  </header>
+
+  <main id="game-zone">
+    <div class="danger-line"></div>
+  </main>
+
+  <footer class="control-deck">
+    <button class="deck-btn" onclick="fireCannon('제연구역·차압', this)">
+      <div class="deck-btn-num">[1]</div>
+      <div class="deck-btn-name">제연구역·차압</div>
+    </button>
+    <button class="deck-btn" onclick="fireCannon('방연풍속·댐퍼', this)">
+      <div class="deck-btn-num">[2]</div>
+      <div class="deck-btn-name">방연풍속·댐퍼</div>
+    </button>
+    <button class="deck-btn" onclick="fireCannon('연결송수관설비', this)">
+      <div class="deck-btn-num">[3]</div>
+      <div class="deck-btn-name">연결송수관설비</div>
+    </button>
+    <button class="deck-btn" onclick="fireCannon('비상콘센트설비', this)">
+      <div class="deck-btn-num">[4]</div>
+      <div class="deck-btn-name">비상콘센트설비</div>
+    </button>
+    <button class="deck-btn" onclick="fireCannon('소화활동5총사', this)">
+      <div class="deck-btn-num">[5]</div>
+      <div class="deck-btn-name">소화활동5총사</div>
+    </button>
+  </footer>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">💨</div>
+      <h2 class="modal-title">[2권 제 2-5탄 A] 소화활동설비 요격전</h2>
+      <p class="modal-desc">
+        하늘에서 떨어지는 제연·연결송수관·비상콘센트 기준을 확인하고 하단 <b>5대 카테고리 버튼</b>으로 신속히 요격하세요!<br><br>
+        • <b>제연·차압</b>: 거실 400㎡/60m, 차압 40Pa 이상 (스프링클러 12.5Pa), 출입문 개방력 110N 이하<br>
+        • <b>방연풍속</b>: 부속실 0.7m/s 이상, 계단실 동시 0.5m/s 이상, 과압 플랩댐퍼<br>
+        • <b>연결송수관</b>: 송수구 0.5~1m 쌍구형, 방수구 50m(11층↑ 쌍구형), 주배관 100mm, 31층↑ 펌프<br>
+        • <b>비상콘센트</b>: 높이 0.8~1.5m, 수평 50m, 단상 220V 1.5kVA 이상, 비상전원 20분<br>
+        • <b>소화활동 5총사</b>: 제연, 연결송수관, 연결살수, 비상콘센트, 무선통신보조설비
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🎯 A타입 시작</button>
+        <a href="./game2-2-5-b.html" class="action-btn btn-alt">🛸 B타입 전환</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 게임 오버 모달 -->
+  <div class="overlay-modal" id="gameover-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="gameover-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="gameover-title" style="color:#f85149;">작전 실패!</h2>
+      <p class="modal-desc" id="gameover-desc">최종 점수: 0점</p>
+      <a href="../study.html?round=2-2-5" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>📖 [2권 제 2-5탄] 요약 학습노트 확인하기 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 A타입 재도전</button>
+        <a href="./game2-2-5-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const TARGETS_DATA = [
+      {
+        title: "제연구역 구획 면적: 400 ㎡ 이내",
+        desc: "거실 제연구역은 하나의 구역 바닥면적을 400㎡ 이내로 구획하는 것이 원칙",
+        cat: "제연구역·차압"
+      },
+      {
+        title: "제연구역 반경: 직경 60 m 이내",
+        desc: "거실 제연구역 한 구역의 최대 범위는 직경 60m 원형 내에 들어가도록 설정",
+        cat: "제연구역·차압"
+      },
+      {
+        title: "부속실 차압 기준: 40 Pa 이상 유지",
+        desc: "제연구역과 옥내 사이의 차압은 40파스칼 이상(스프링클러 설치 시 12.5Pa 이상)",
+        cat: "제연구역·차압"
+      },
+      {
+        title: "출입문 개방력: 최대 110 N 이하",
+        desc: "차압으로 인해 피난자가 문을 열지 못하는 사고를 막기 위해 개방력 110뉴턴 이하 유지",
+        cat: "제연구역·차압"
+      },
+      {
+        title: "방연풍속 기준: 부속실 0.7 m/s 이상",
+        desc: "출입문이 열렸을 때 연기가 부속실로 침투하지 못하도록 0.7m/s 이상 풍속 확보",
+        cat: "방연풍속·댐퍼"
+      },
+      {
+        title: "계단실·부속실 동시: 0.5 m/s 이상",
+        desc: "계단실과 부속실을 동시에 가압 제연하는 경우 출입문 방연풍속은 0.5m/s 이상",
+        cat: "방연풍속·댐퍼"
+      },
+      {
+        title: "과압방지장치: 플랩댐퍼 설치",
+        desc: "설계 차압을 초과하여 문이 열리지 않는 것을 막기 위해 과압배출 플랩댐퍼 적용",
+        cat: "방연풍속·댐퍼"
+      },
+      {
+        title: "자동차압·과압조절형 급기댐퍼",
+        desc: "차압 센서와 연동하여 급기 날개 각도를 자동 조절해 적정 차압을 유지하는 댐퍼",
+        cat: "방연풍속·댐퍼"
+      },
+      {
+        title: "송수구 설치높이: 지면 0.5m ~ 1m 이하",
+        desc: "소방차가 쉽게 소방호스를 연결할 수 있도록 지면으로부터 0.5m 이상 1m 이하에 설치",
+        cat: "연결송수관설비"
+      },
+      {
+        title: "방수구 수평거리: 각 부분 50 m 이하",
+        desc: "특정소방대상물의 각 부분으로부터 연결송수관 방수구까지의 수평거리는 50m 이하",
+        cat: "연결송수관설비"
+      },
+      {
+        title: "주배관 구경: 구경 100 mm 이상",
+        desc: "소방대 대유량 방수를 위해 연결송수관 주배관은 최소 100mm 이상의 강관 사용",
+        cat: "연결송수관설비"
+      },
+      {
+        title: "가압송수장치 의무: 31층 이상 / 70m 이상",
+        desc: "소방차 압력 한계를 극복하기 위해 높이 70m 또는 지상 31층 이상 대상물 펌프 설치",
+        cat: "연결송수관설비"
+      },
+      {
+        title: "비상콘센트 설치높이: 바닥 0.8m ~ 1.5m",
+        desc: "소방관이 플러그를 신속히 꽂을 수 있도록 바닥으로부터 0.8m 이상 1.5m 이하에 설치",
+        cat: "비상콘센트설비"
+      },
+      {
+        title: "비상콘센트 수평거리: 각 부분 50 m 이하",
+        desc: "전원 코드 릴 연결 한계를 고려하여 보행 수평거리 50m 이하마다 배치 (지하 25m)",
+        cat: "비상콘센트설비"
+      },
+      {
+        title: "전원 및 용량: 단상 AC 220V, 1.5 kVA 이상",
+        desc: "단상 교류 220V 전압으로 공급용량은 콘센트 1개당 1.5kVA 이상 확보",
+        cat: "비상콘센트설비"
+      },
+      {
+        title: "비상전원 작동시간: 20분 이상 유지",
+        desc: "자가발전설비 또는 축전지설비에 의해 20분 이상 유효하게 전원을 공급해야 함",
+        cat: "비상콘센트설비"
+      },
+      {
+        title: "소화활동설비: 소방대 전용 활동 설비",
+        desc: "화재 시 소방관이 진압 및 인명구조 활동을 원활히 수행하기 위해 사용하는 설비군",
+        cat: "소화활동5총사"
+      },
+      {
+        title: "소화활동설비 5대 종류 완벽 암기",
+        desc: "제연설비, 연결송수관, 연결살수, 비상콘센트, 무선통신보조설비의 5대 설비",
+        cat: "소화활동5총사"
+      },
+      {
+        title: "무선통신보조: 누설동축케이블(LCX)",
+        desc: "지하층 및 터널 등 전파 음영 구역에서 소방 무전기 통신을 중계하는 설비",
+        cat: "소화활동5총사"
+      },
+      {
+        title: "연결살수설비: 지하층 헤드 일제 살수",
+        desc: "소방차가 외부 송수구로 가압 송수한 물을 지하층 전용 헤드로 분사하는 소화활동설비",
+        cat: "소화활동5총사"
+      }
+    ];
+
+    let currentTargets = [];
+    let score = 0;
+    let lives = 3;
+    let combo = 0;
+    let speedMult = 1.0;
+    let spawnTimer = null;
+    let animFrame = null;
+    let lastTime = 0;
+    let wrongHistories = [];
+
+    const gameZone = document.getElementById('game-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const streakVal = document.getElementById('streak-val');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSfx(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'hit') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+        osc.start(now); osc.stop(now + 0.12);
+      } else if (type === 'miss') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.linearRampToValueAtTime(80, now + 0.2);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+      } else if (type === 'heal') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.08);
+        osc.frequency.setValueAtTime(783.99, now + 0.16);
+        osc.frequency.setValueAtTime(1046.50, now + 0.24);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now); osc.stop(now + 0.35);
+      }
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('gameover-modal').style.display = 'none';
+      gameZone.querySelectorAll('.falling-target').forEach(el => el.remove());
+      currentTargets = [];
+      score = 0;
+      lives = 3;
+      combo = 0;
+      wrongHistories = [];
+      updateHUD();
+
+      lastTime = performance.now();
+      if (spawnTimer) clearInterval(spawnTimer);
+      spawnTimer = setInterval(spawnTarget, 2200 / speedMult);
+      if (animFrame) cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(gameLoop);
+      spawnTarget();
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, 3 - lives));
+      streakVal.textContent = combo > 0 ? `${combo} COMBO 🔥` : '0 COMBO';
+    }
+
+    function triggerHealEffect() {
+      playSfx('heal');
+      livesVal.classList.remove('heart-heal-bounce');
+      void livesVal.offsetWidth;
+      livesVal.classList.add('heart-heal-bounce');
+    }
+
+    function spawnTarget() {
+      if (currentTargets.length >= 4) return;
+      const data = TARGETS_DATA[Math.floor(Math.random() * TARGETS_DATA.length)];
+      const el = document.createElement('div');
+      el.className = 'falling-target';
+      el.innerHTML = `
+        <div class="target-title">${data.title}</div>
+        <div class="target-desc">${data.desc}</div>
+      `;
+
+      const zoneW = gameZone.clientWidth || 360;
+      const cardW = 195;
+      const posX = Math.max(10, Math.min(zoneW - cardW - 10, Math.random() * (zoneW - cardW)));
+      el.style.left = `${posX}px`;
+      el.style.top = '-80px';
+      gameZone.appendChild(el);
+
+      currentTargets.push({
+        el,
+        data,
+        y: -80,
+        x: posX,
+        speed: (45 + Math.random() * 20) * speedMult
+      });
+    }
+
+    function gameLoop(now) {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      const zoneH = gameZone.clientHeight;
+      for (let i = currentTargets.length - 1; i >= 0; i--) {
+        const t = currentTargets[i];
+        t.y += t.speed * dt;
+        t.el.style.top = `${t.y}px`;
+
+        if (t.y + t.el.offsetHeight >= zoneH - 12) {
+          onTargetMiss(t, i);
+        }
+      }
+
+      if (lives > 0) {
+        animFrame = requestAnimationFrame(gameLoop);
+      }
+    }
+
+    function onTargetMiss(target, idx) {
+      playSfx('miss');
+      lives--;
+      combo = 0;
+      target.el.style.borderColor = '#f85149';
+      target.el.style.backgroundColor = 'rgba(248, 81, 73, 0.3)';
+
+      const rec = `[미스] ${target.data.title} ➡️ 정답 포대: [${target.data.cat}]`;
+      if (!wrongHistories.includes(rec)) wrongHistories.push(rec);
+
+      setTimeout(() => {
+        if (target.el.parentNode) target.el.remove();
+      }, 250);
+      currentTargets.splice(idx, 1);
+      updateHUD();
+
+      if (lives <= 0) gameOver();
+    }
+
+    function fireCannon(category, btnEl) {
+      if (lives <= 0 || currentTargets.length === 0) return;
+
+      if (btnEl) {
+        btnEl.classList.remove('deck-btn-match-active');
+        void btnEl.offsetWidth;
+        btnEl.classList.add('deck-btn-match-active');
+        setTimeout(() => btnEl.classList.remove('deck-btn-match-active'), 180);
+      }
+
+      let bestTargetIdx = -1;
+      let maxY = -999;
+      for (let i = 0; i < currentTargets.length; i++) {
+        if (currentTargets[i].y > maxY) {
+          maxY = currentTargets[i].y;
+          bestTargetIdx = i;
+        }
+      }
+
+      if (bestTargetIdx === -1) return;
+      const target = currentTargets[bestTargetIdx];
+
+      if (target.data.cat === category) {
+        playSfx('hit');
+        score += 100 + combo * 10;
+        combo++;
+
+        if (combo % 5 === 0 && lives < 3) {
+          lives++;
+          triggerHealEffect();
+        }
+
+        createLaserAndSpark(btnEl, target);
+        target.el.remove();
+        currentTargets.splice(bestTargetIdx, 1);
+        updateHUD();
+      } else {
+        playSfx('miss');
+        lives--;
+        combo = 0;
+        target.el.style.borderColor = '#f85149';
+
+        const rec = `[오답 요격] ${target.data.title} ➡️ 정답: [${target.data.cat}] (선택: ${category})`;
+        if (!wrongHistories.includes(rec)) wrongHistories.push(rec);
+
+        updateHUD();
+        if (lives <= 0) gameOver();
+      }
+    }
+
+    function createLaserAndSpark(btnEl, target) {
+      const bRect = btnEl ? btnEl.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight - 50, width: 0 };
+      const tRect = target.el.getBoundingClientRect();
+      const zRect = gameZone.getBoundingClientRect();
+
+      const startX = bRect.left + bRect.width / 2 - zRect.left;
+      const startY = zRect.height;
+      const endX = tRect.left + tRect.width / 2 - zRect.left;
+      const endY = tRect.top + tRect.height / 2 - zRect.top;
+
+      const beam = document.createElement('div');
+      beam.className = 'laser-beam';
+      const dx = endX - startX;
+      const dy = endY - startY;
+      const dist = Math.hypot(dx, dy);
+      const angle = Math.atan2(dy, dx) + Math.PI / 2;
+
+      beam.style.height = `${dist}px`;
+      beam.style.left = `${startX}px`;
+      beam.style.top = `${startY - dist}px`;
+      beam.style.transform = `rotate(${angle}rad)`;
+      gameZone.appendChild(beam);
+      setTimeout(() => beam.remove(), 120);
+
+      const spark = document.createElement('div');
+      spark.className = 'hit-spark';
+      spark.style.left = `${endX - 7}px`;
+      spark.style.top = `${endY - 7}px`;
+      gameZone.appendChild(spark);
+      setTimeout(() => spark.remove(), 250);
+    }
+
+    function gameOver() {
+      if (spawnTimer) clearInterval(spawnTimer);
+      if (animFrame) cancelAnimationFrame(animFrame);
+      const modal = document.getElementById('gameover-modal');
+      const icon = document.getElementById('gameover-icon');
+      const title = document.getElementById('gameover-title');
+      const desc = document.getElementById('gameover-desc');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      modal.style.display = 'flex';
+      nextBtn.style.display = 'inline-flex';
+      if (score >= 1000) {
+        icon.textContent = '🏆';
+        title.textContent = '작전 성공 (우수 합격권)';
+        title.style.color = '#58a6ff';
+        desc.textContent = `축하합니다! 소화활동설비 핵심 기준을 완벽하게 요격했습니다! 최종 점수: ${score}점`;
+      } else {
+        icon.textContent = '💥';
+        title.textContent = '작전 실패 (하트 소진)';
+        title.style.color = '#f85149';
+        desc.textContent = `하트가 소진되었습니다. 다시 도전해 보세요! 최종 점수: ${score}점`;
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      const keyMap = {
+        '1': '제연구역·차압',
+        '2': '방연풍속·댐퍼',
+        '3': '연결송수관설비',
+        '4': '비상콘센트설비',
+        '5': '소화활동5총사'
+      };
+      if (keyMap[e.key]) {
+        const btns = document.querySelectorAll('.deck-btn');
+        const idx = parseInt(e.key) - 1;
+        fireCannon(keyMap[e.key], btns[idx]);
+      }
+    });
+  </script>
+</body>
+</html>

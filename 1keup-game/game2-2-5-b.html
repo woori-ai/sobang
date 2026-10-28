@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[2권 제 2-5탄 B] 소화활동설비·제연·연결송수관 버블 헌팅</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #090d13; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(13, 17, 23, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; }
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-b { background: #8957e5; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .round-pill {
+      font-size: 0.8rem; font-weight: 800; background: #1f242c;
+      padding: 4px 10px; border-radius: 12px; border: 1px solid #388bfd; color: #58a6ff;
+    }
+
+    .mission-banner {
+      background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 16px;
+      text-align: center; z-index: 40;
+    }
+    .mission-title { font-size: 1rem; font-weight: 800; color: #58a6ff; margin-bottom: 2px; }
+    .mission-desc { font-size: 0.78rem; color: #8b949e; }
+    .mission-progress-bar {
+      width: 100%; max-width: 320px; height: 6px; background: #21262d;
+      border-radius: 3px; margin: 6px auto 0; overflow: hidden;
+    }
+    .mission-progress-fill {
+      height: 100%; background: linear-gradient(90deg, #388bfd, #58a6ff);
+      width: 0%; transition: width 0.3s ease;
+    }
+
+    #round-clear-bar {
+      display: none; background: rgba(35, 134, 54, 0.95); padding: 12px 18px;
+      color: #ffffff; text-align: center; z-index: 60; border-bottom: 2px solid #3fb950;
+      animation: slideDown 0.3s ease-out;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
+    }
+    .round-clear-text { font-size: 0.92rem; font-weight: 800; display: block; margin-bottom: 6px; }
+    .btn-next-round {
+      padding: 6px 18px; background: #ffffff; color: #238636; border: none;
+      border-radius: 6px; font-weight: 800; font-size: 0.85rem; cursor: pointer;
+    }
+
+    main.space-zone {
+      flex: 1; position: relative; width: 100%; overflow: hidden;
+      background: radial-gradient(circle at 50% 50%, #161b22 0%, #090d13 100%);
+    }
+
+    .bubble {
+      position: absolute; border-radius: 14px; padding: 12px 14px;
+      max-width: 220px; cursor: pointer; transition: transform 0.15s ease, border-color 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4); text-align: center;
+      background: rgba(33, 38, 45, 0.92); border: 2px solid #30363d;
+    }
+    .bubble:hover { transform: scale(1.05); }
+    .bubble:active { transform: scale(0.96); }
+    .bubble.target { border-color: #58a6ff; }
+    .bubble.trap { border-color: #f85149; }
+    .bubble-text { font-size: 0.84rem; font-weight: 700; color: #f0f6fc; line-height: 1.35; }
+    .bubble-tip { font-size: 0.7rem; color: #8b949e; margin-top: 4px; display: none; }
+    .bubble.revealed .bubble-tip { display: block; }
+
+    /* 정답 맞춘 버블: 절대 사라지지 않고 초록색 체크 상태로 영구 보존 */
+    .bubble.solved {
+      background: rgba(46, 160, 67, 0.45) !important;
+      border-color: #3fb950 !important;
+      color: #7ee787 !important;
+      box-shadow: 0 0 16px rgba(63, 185, 80, 0.7);
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.9); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 16px;
+      max-width: 440px; width: 100%; padding: 26px 22px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6); max-height: 90vh; overflow-y: auto;
+    }
+    .modal-title { font-size: 1.35rem; font-weight: 800; color: #f0f6fc; margin-bottom: 10px; }
+    .modal-desc { font-size: 0.86rem; color: #8b949e; line-height: 1.6; margin-bottom: 20px; }
+    .modal-dual-actions { display: flex; gap: 8px; margin-bottom: 10px; }
+    .action-btn {
+      flex: 1; padding: 12px; background: #8957e5; border: none; color: #ffffff;
+      font-size: 0.95rem; font-weight: 800; border-radius: 8px; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .action-btn.btn-alt { background: #238636; }
+    .sub-action-btn { display: block; font-size: 0.82rem; color: #8b949e; margin-top: 10px; text-decoration: underline; cursor: pointer; }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 10px; cursor: pointer; text-align: center; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 12px; box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4);
+      animation: pulseBtn 1.8s infinite;
+    }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4); }
+      50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(46, 160, 67, 0.65); }
+    }
+    .review-list {
+      text-align: left; background: #0d1117; border: 1px solid #30363d;
+      border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 0.78rem;
+    }
+    .review-item { padding: 4px 0; border-bottom: 1px solid #21262d; color: #f85149; }
+    .review-item:last-child { border-bottom: none; }
+
+    @media (max-width: 600px) {
+      .bubble { max-width: 180px; padding: 10px 12px; }
+      .bubble-text { font-size: 0.76rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">◀ 나가기</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <a href="./game2-2-5.html" class="type-btn">A 낙하요격</a>
+        <span class="type-btn active-b">B 버블헌팅</span>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
+      <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
+      <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+    </div>
+    <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
+  </header>
+
+  <section class="mission-banner">
+    <div class="mission-title" id="mission-title">로딩 중...</div>
+    <div class="mission-desc" id="mission-desc">미션 설명</div>
+    <div class="mission-progress-bar">
+      <div class="mission-progress-fill" id="progress-fill"></div>
+    </div>
+  </section>
+
+  <!-- 라운드 클리어 안내 바 -->
+  <div id="round-clear-bar">
+    <span class="round-clear-text">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
+    <button class="btn-next-round" onclick="proceedNextRound()">다음 라운드 ▶</button>
+  </div>
+
+  <main class="space-zone" id="space-zone"></main>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">💨</div>
+      <h2 class="modal-title">[2권 제 2-5탄 B] 소화활동설비 버블 헌팅</h2>
+      <p class="modal-desc">
+        화면에 떠다니는 소화활동설비 기준 버블 중<br>상단 <b>미션 목표</b>에 해당하는 정답만 사냥하세요!<br><br>
+        • 맞힌 정답은 사라지지 않고 <b>초록색(✅)</b>으로 화면에 남아 끝까지 학습할 수 있습니다.<br>
+        • <b>제연구역</b>: 바닥면적 400㎡ 이내, 직경 60m 이내 원<br>
+        • <b>차압 및 개방력</b>: 차압 40 Pa 이상 (스프링클러 12.5 Pa 이상), 출입문 개방력 110 N 이하<br>
+        • <b>방연풍속</b>: 부속실 단독 0.7 m/s 이상, 계단실·부속실 동시 0.5 m/s 이상, 과압 플랩댐퍼<br>
+        • <b>연결송수관</b>: 송수구 0.5~1.0m 쌍구형, 방수구 수평 50m, 주배관 100mm, 31층↑(70m↑) 펌프<br>
+        • <b>비상콘센트</b>: 바닥 0.8~1.5m, 수평 50m, 단상 220V 1.5kVA 이상, 비상전원 20분 이상<br>
+        • <b>소화활동 5총사</b>: 제연, 연결송수관, 연결살수, 비상콘센트, 무선통신보조설비
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🛸 B타입 시작</button>
+        <a href="./game2-2-5.html" class="action-btn btn-alt">🎯 A타입 전환</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">작전 성공!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
+        <div class="review-list" id="review-list"></div>
+      </div>
+      <a href="../study.html?round=2-2-5" class="btn-next-stage" id="next-stage-btn">
+        <span>📖 [2권 제 2-5탄] 요약 학습노트 확인하기 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 B타입 재도전</button>
+        <a href="./game2-2-5.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const ROUND_DATA = [
+      {
+        round: 1,
+        title: "💨 [제연구역 구획 및 차압·개방력 기준]만 모두 사냥하세요!",
+        desc: "면적 400㎡ 이내, 직경 60m 원내, 차압 40Pa(SP 12.5Pa), 출입문 개방력 110N 이하",
+        targets: [
+          {
+            text: "제연구역 바닥면적: 1개 제연구역의 바닥면적은 400㎡ 이내로 구획",
+            tip: "제연구역 1개의 바닥면적은 최대 400㎡ 이내로 엄격히 제한!"
+          },
+          {
+            text: "제연구역 반경 기준: 거실 제연구역은 직경 60m 원내에 들어가도록 구획",
+            tip: "거실 제연구역은 직경 60m 이내의 원에 수용되도록 구획!"
+          },
+          {
+            text: "부속실 최소 차압: 제연구역과 옥내 기준 차압 40 Pa 이상 (스프링클러 설치 시 12.5 Pa)",
+            tip: "연기 유입 방지를 위해 40 Pa 이상 (스프링클러 구역은 12.5 Pa 이상) 차압 형성!"
+          },
+          {
+            text: "출입문 최대 개방력: 제연구역 출입문의 개방력은 110 N 이하 유지",
+            tip: "노약자와 피난자가 쉽게 문을 열 수 있도록 최대 110N 이하로 제한!"
+          }
+        ],
+        traps: [
+          {
+            text: "제연구역 면적 한도: 1개 제연구역의 면적은 1,000㎡까지 완화 허용",
+            tip: "[오답] 제연구역 바닥면적 한도는 '400㎡ 이내'입니다!"
+          },
+          {
+            text: "출입문 개방력 기준: 차압 밀폐를 위해 출입문 개방력 250N 이상 확보",
+            tip: "[오답] 개방력이 너무 크면 피난자가 문을 못 엽니다! '110N 이하'여야 합니다!"
+          },
+          {
+            text: "거실 구획 직경: 거실 제연구역은 직경 100m 원내에 구획",
+            tip: "[오답] 거실 제연구역은 '직경 60m 이내 원'에 들어가야 합니다!"
+          },
+          {
+            text: "부속실 차압 규격: 스프링클러 미설치 시 기본 차압 80 Pa 이상 요구",
+            tip: "[오답] 기본 차압은 '40 Pa 이상'입니다!"
+          }
+        ]
+      },
+      {
+        round: 2,
+        title: "🌪️ [부속실 제연 방연풍속 및 급기·배출 댐퍼 기준]만 모두 사냥하세요!",
+        desc: "부속실 단독 0.7m/s, 계단실 동시 0.5m/s, 과압방지 플랩댐퍼, 천장 상부 배출",
+        targets: [
+          {
+            text: "부속실 단독 방연풍속: 부속실만 단독 제연 시 방연풍속 0.7 m/s 이상",
+            tip: "문 개방 시 연기가 들어오지 않도록 0.7 m/s 이상의 풍속을 유지!"
+          },
+          {
+            text: "계단실·부속실 동시 방연풍속: 계단실과 부속실을 함께 제연 시 0.5 m/s 이상",
+            tip: "계단실과 부속실 동시 가압 제연 시에는 0.5 m/s 이상!"
+          },
+          {
+            text: "과압방지장치(플랩댐퍼): 과압 발생 시 자동 개방되어 과압을 배출하는 플랩댐퍼 설치",
+            tip: "과압으로 출입문이 안 열리는 것을 막기 위해 플랩댐퍼 등 과압방지장치 설치!"
+          },
+          {
+            text: "자동차압·과압조절형 댐퍼: 감지된 차압에 따라 개구율을 제어하는 급기 댐퍼",
+            tip: "정밀한 풍량 제어로 차압과 방연풍속을 안정적으로 유지!"
+          }
+        ],
+        traps: [
+          {
+            text: "부속실 단독 방연풍속: 부속실 단독 제연 시 방연풍속 0.2 m/s 이상이면 적합",
+            tip: "[오답] 부속실 단독 제연 방연풍속은 '0.7 m/s 이상'이어야 합니다!"
+          },
+          {
+            text: "계단실 동시 방연풍속: 계단실과 부속실 동시 제연 시 1.5 m/s 이상 강제 배풍",
+            tip: "[오답] 계단실 및 부속실 동시 제연 시 방연풍속은 '0.5 m/s 이상'입니다!"
+          },
+          {
+            text: "과압 방지 방식: 플랩댐퍼 설치를 금지하고 오직 수동 레버로만 조절",
+            tip: "[오답] 과압 발생 시 자동으로 작동하는 플랩댐퍼 또는 자동차압조절 댐퍼가 필수입니다!"
+          },
+          {
+            text: "배출구 설치 위치: 바닥으로부터 0.5m 이하의 낮은 걸레받이 부분에 설치",
+            tip: "[오답] 연기는 상부로 뜨므로 배출구는 '천장 또는 천장 인접 벽 상부'에 설치합니다!"
+          }
+        ]
+      },
+      {
+        round: 3,
+        title: "🚒 [연결송수관설비 송수구·방수구·배관 규격]만 모두 사냥하세요!",
+        desc: "송수구 지면 0.5~1.0m 쌍구형, 방수구 수평거리 50m 이하, 주배관 100mm, 31층↑(70m↑) 펌프",
+        targets: [
+          {
+            text: "송수구 설치 규격: 지면으로부터 0.5m 이상 1.0m 이하에 쌍구형으로 설치",
+            tip: "소방차가 즉시 결합할 수 있도록 지면 0.5~1.0m 높이에 쌍구형 설치!"
+          },
+          {
+            text: "방수구 수평거리: 소방대상물의 각 부분으로부터 수평거리 50m 이하마다 설치",
+            tip: "소방호스 전개를 고려하여 각 부분에서 수평거리 50m 이하마다 배치!"
+          },
+          {
+            text: "주배관 구경 기준: 연결송수관설비의 주배관 구경은 100mm 이상 사용",
+            tip: "대구경 방수량을 확보하기 위해 주배관은 최소 100mm 이상!"
+          },
+          {
+            text: "가압송수장치(펌프) 의무 설치: 31층 이상 또는 높이 70m 이상인 건축물",
+            tip: "초고층은 소방차 수압만으로 송수 불가하므로 전용 펌프 설치 의무화!"
+          }
+        ],
+        traps: [
+          {
+            text: "송수구 설치 높이: 소방대원의 안전을 위해 지면 2.0m 이상 높은 곳에 설치",
+            tip: "[오답] 송수구는 신속한 호스 연결을 위해 '지면 0.5m 이상 1.0m 이하'에 설치합니다!"
+          },
+          {
+            text: "방수구 수평거리: 건축물 각 부분으로부터 수평거리 100m 이하마다 여유 있게 설치",
+            tip: "[오답] 연결송수관설비 방수구는 '수평거리 50m 이하'입니다!"
+          },
+          {
+            text: "연결송수관 주배관 구경: 배관비 절감을 위해 주배관은 50mm 구경 사용 가능",
+            tip: "[오답] 연결송수관 주배관은 반드시 '100mm 이상'이어야 합니다!"
+          },
+          {
+            text: "펌프 의무 설치 층수: 5층 이상 일반 건축물부터 연결송수관 전용 펌프 필수",
+            tip: "[오답] 가압송수장치(펌프) 의무 설치 대상은 '31층 이상 또는 높이 70m 이상'입니다!"
+          }
+        ]
+      },
+      {
+        round: 4,
+        title: "⚡ [비상콘센트설비 및 소화활동설비 5총사]만 모두 사냥하세요!",
+        desc: "비상콘센트 바닥 0.8~1.5m, 수평 50m, 단상 220V 1.5kVA, 20분 비상전원, 소화활동 5종류",
+        targets: [
+          {
+            text: "비상콘센트 설치 높이: 바닥으로부터 0.8m 이상 1.5m 이하에 설치",
+            tip: "소방관이 손쉽게 플러그를 꽂을 수 있도록 바닥 0.8~1.5m 높이에 설치!"
+          },
+          {
+            text: "비상콘센트 전원 규격: 단상 교류 220V 전원에 접지형 콘센트, 용량 1.5 kVA 이상",
+            tip: "소방용 장비 가동을 위해 단상 220V, 공급용량 1.5kVA 이상 공급!"
+          },
+          {
+            text: "비상전원 유효 시간: 자가발전설비 또는 축전지설비로 20분 이상 유효 작동",
+            tip: "정전 상태에서도 소화장비를 쓸 수 있도록 20분 이상 비상전원 지속!"
+          },
+          {
+            text: "소화활동설비 5총사: 제연, 연결송수관, 연결살수, 비상콘센트, 무선통신보조설비",
+            tip: "소방대원이 화재 진압 및 구조 활동에 사용하는 5대 필수 소화활동설비!"
+          }
+        ],
+        traps: [
+          {
+            text: "비상콘센트 설치 높이: 침수 예방을 위해 바닥으로부터 2.5m 이상 높이에 설치",
+            tip: "[오답] 비상콘센트의 법정 설치 높이는 '바닥으로부터 0.8m 이상 1.5m 이하'입니다!"
+          },
+          {
+            text: "비상콘센트 공급 용량: 일반 가정용 규격인 0.5 kVA 이하 소용량 전원 구성",
+            tip: "[오답] 비상콘센트 공급용량은 '1.5 kVA 이상'이어야 합니다!"
+          },
+          {
+            text: "비상전원 지속 시간: 비상콘센트용 비상전원은 3분간만 작동하면 적합",
+            tip: "[오답] 비상전원은 최소 '20분 이상' 유효하게 작동해야 합니다!"
+          },
+          {
+            text: "소화설비와 소화활동설비 혼동: 옥내소화전설비와 스프링클러설비는 소화활동설비에 해당",
+            tip: "[오답] 옥내소화전과 스프링클러는 '소화설비'이며, 소화활동설비가 아닙니다!"
+          }
+        ]
+      }
+    ];
+
+    let currentRoundIdx = 0;
+    let score = 0;
+    let lives = 3;
+    let speedMult = 0.5;
+    let foundTargetsInRound = 0;
+    let totalTargetsInRound = 0;
+    let activeBubbles = [];
+    let animFrame = null;
+    let lastTime = 0;
+    let wrongReviews = [];
+
+    const spaceZone = document.getElementById('space-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const roundIndicator = document.getElementById('round-indicator');
+    const missionTitle = document.getElementById('mission-title');
+    const missionDesc = document.getElementById('mission-desc');
+    const progressFill = document.getElementById('progress-fill');
+    const roundClearBar = document.getElementById('round-clear-bar');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSfx(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'pop') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(450, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now); osc.stop(now + 0.1);
+      } else if (type === 'miss') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.linearRampToValueAtTime(70, now + 0.2);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+      } else if (type === 'clear') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(783.99, now + 0.2);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now); osc.stop(now + 0.35);
+      }
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
+      score = 0;
+      lives = 3;
+      wrongReviews = [];
+      updateHUD();
+      loadRound(0);
+      lastTime = performance.now();
+      if (animFrame) cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, 3 - lives));
+      roundIndicator.textContent = `ROUND ${currentRoundIdx + 1} / ${ROUND_DATA.length}`;
+    }
+
+    function updateProgress() {
+      const pct = (foundTargetsInRound / totalTargetsInRound) * 100;
+      progressFill.style.width = `${pct}%`;
+    }
+
+    function loadRound(idx) {
+      currentRoundIdx = idx;
+      roundClearBar.style.display = 'none';
+      spaceZone.innerHTML = '';
+      activeBubbles = [];
+
+      const rData = ROUND_DATA[idx];
+      missionTitle.textContent = rData.title;
+      missionDesc.textContent = rData.desc;
+      foundTargetsInRound = 0;
+      totalTargetsInRound = rData.targets.length;
+      updateProgress();
+      updateHUD();
+
+      const allItems = [
+        ...rData.targets.map(t => ({ ...t, isTarget: true })),
+        ...rData.traps.map(t => ({ ...t, isTarget: false }))
+      ];
+      allItems.sort(() => Math.random() - 0.5);
+
+      const zoneW = spaceZone.clientWidth || 360;
+      const zoneH = spaceZone.clientHeight || 420;
+
+      allItems.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = `bubble ${item.isTarget ? 'target' : 'trap'}`;
+        el.innerHTML = `
+          <div class="bubble-text">${item.text}</div>
+          <div class="bubble-tip">${item.tip}</div>
+        `;
+        const bx = Math.max(10, Math.random() * (zoneW - 200));
+        const by = Math.max(10, Math.random() * (zoneH - 120));
+        el.style.left = `${bx}px`;
+        el.style.top = `${by}px`;
+        spaceZone.appendChild(el);
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (25 + Math.random() * 20) * speedMult;
+        activeBubbles.push({
+          el,
+          item,
+          x: bx,
+          y: by,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          isSolved: false
+        });
+      });
+
+      activeBubbles.forEach(b => {
+        b.el.onclick = () => onBubbleClick(b);
+      });
+    }
+
+    function onBubbleClick(bubble) {
+      if (bubble.isSolved) return;
+
+      if (bubble.item.isTarget) {
+        playSfx('pop');
+        bubble.isSolved = true;
+        // 버블이 사라지지 않고 초록색 체크 상태로 화면에 계속 남아 학습 내용을 보존
+        bubble.el.classList.add('solved');
+        const textEl = bubble.el.querySelector('.bubble-text');
+        if (textEl) {
+          textEl.innerHTML = '<span style="color:#7ee787; font-weight:800; margin-right:4px;">✅</span>' + bubble.item.text;
+        }
+        score += 150;
+        foundTargetsInRound++;
+        updateHUD();
+        updateProgress();
+
+        if (foundTargetsInRound >= totalTargetsInRound) {
+          onRoundSuccess();
+        }
+      } else {
+        playSfx('miss');
+        lives--;
+        score = Math.max(0, score - 80);
+        bubble.el.classList.add('revealed');
+        bubble.el.style.borderColor = '#f85149';
+        bubble.el.style.background = 'rgba(248, 81, 73, 0.25)';
+
+        if (!wrongReviews.includes(bubble.item.text)) {
+          wrongReviews.push(`${bubble.item.text} ➡️ ${bubble.item.tip}`);
+        }
+        updateHUD();
+
+        if (lives <= 0) {
+          gameOver(false);
+        }
+      }
+    }
+
+    function onRoundSuccess() {
+      playSfx('clear');
+      roundClearBar.style.display = 'block';
+
+      // 라운드 내 모든 트랩 버블도 정답 및 해설을 공개하여 학습 유도
+      activeBubbles.forEach(b => {
+        if (!b.item.isTarget) {
+          b.el.classList.add('revealed');
+          b.el.style.borderColor = '#f85149';
+        }
+      });
+    }
+
+    function proceedNextRound() {
+      roundClearBar.style.display = 'none';
+      if (currentRoundIdx + 1 < ROUND_DATA.length) {
+        loadRound(currentRoundIdx + 1);
+      } else {
+        gameOver(true);
+      }
+    }
+
+    function gameLoop(now) {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      const zoneW = spaceZone.clientWidth;
+      const zoneH = spaceZone.clientHeight;
+
+      activeBubbles.forEach(b => {
+        b.x += b.vx * dt * speedMult;
+        b.y += b.vy * dt * speedMult;
+
+        const w = b.el.offsetWidth || 180;
+        const h = b.el.offsetHeight || 60;
+
+        if (b.x <= 0) { b.x = 0; b.vx *= -1; }
+        else if (b.x + w >= zoneW) { b.x = zoneW - w; b.vx *= -1; }
+
+        if (b.y <= 0) { b.y = 0; b.vy *= -1; }
+        else if (b.y + h >= zoneH) { b.y = zoneH - h; b.vy *= -1; }
+
+        b.el.style.left = `${b.x}px`;
+        b.el.style.top = `${b.y}px`;
+      });
+
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function gameOver(isWin) {
+      if (animFrame) cancelAnimationFrame(animFrame);
+      const resModal = document.getElementById('result-modal');
+      const rIcon = document.getElementById('result-icon');
+      const rTitle = document.getElementById('result-title');
+      const rDesc = document.getElementById('result-desc');
+      const reviewContainer = document.getElementById('review-container');
+      const reviewList = document.getElementById('review-list');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      resModal.style.display = 'flex';
+      if (isWin) {
+        rIcon.textContent = '🏆';
+        rTitle.textContent = '전 라운드 올 클리어!';
+        rTitle.style.color = '#58a6ff';
+        rDesc.textContent = `축하합니다! 소화활동설비(제연·연결송수관·비상콘센트) 기준을 완벽하게 마스터했습니다! 최종 점수: ${score}점`;
+        nextBtn.style.display = 'inline-flex';
+      } else {
+        rIcon.textContent = '💥';
+        rTitle.textContent = '작전 실패 (하트 소진)';
+        rTitle.style.color = '#f85149';
+        rDesc.textContent = `함정 버블에 걸려 하트가 모두 소진되었습니다. 다시 도전해보세요! 최종 점수: ${score}점`;
+        nextBtn.style.display = 'none';
+      }
+
+      if (wrongReviews.length > 0) {
+        reviewContainer.style.display = 'block';
+        reviewList.innerHTML = wrongReviews.map(r => `<div class="review-item">${r}</div>`).join('');
+      } else {
+        reviewContainer.style.display = 'none';
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      const zoneW = spaceZone.clientWidth;
+      const zoneH = spaceZone.clientHeight;
+      activeBubbles.forEach(b => {
+        const w = b.el.offsetWidth || 180;
+        const h = b.el.offsetHeight || 60;
+        if (b.x + w > zoneW) b.x = Math.max(0, zoneW - w);
+        if (b.y + h > zoneH) b.y = Math.max(0, zoneH - h);
+      });
+    });
+  </script>
+</body>
+</html>
