@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[제 6-2탄 B] 용접 화기취급 & 화재감시자 헌팅</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #a371f7; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; }
+
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-b { background: #8957e5; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #8957e5; color: #ffffff; border-color: #a371f7; }
+    .round-pill { font-size: 0.82rem; font-weight: 800; color: #a371f7; background: rgba(137, 87, 229, 0.15); padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(163, 113, 247, 0.3); }
+
+    section.mission-banner {
+      background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 16px;
+      text-align: center; z-index: 15;
+    }
+    .mission-title { font-size: 1.05rem; font-weight: 800; color: #f0f6fc; margin-bottom: 2px; }
+    .mission-desc { font-size: 0.8rem; color: #8b949e; }
+    .mission-progress-bar { width: 100%; max-width: 320px; height: 6px; background: #21262d; border-radius: 3px; margin: 6px auto 0; overflow: hidden; }
+    .mission-progress-fill { width: 0%; height: 100%; background: #a371f7; transition: width 0.3s ease; }
+
+    #round-clear-bar {
+      display: none; margin: 8px 16px; padding: 10px 16px;
+      background: rgba(35, 134, 54, 0.25); border: 1px solid #3fb950; border-radius: 8px;
+      text-align: center; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; z-index: 30;
+    }
+    .round-clear-text { color: #7ee787; font-weight: 700; font-size: 0.95rem; }
+    .btn-next-round {
+      padding: 6px 18px; background: #238636; border: 1px solid #3fb950;
+      color: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.9rem;
+    }
+
+    main.space-zone {
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
+      overflow: hidden;
+    }
+    .float-item {
+      position: absolute; padding: 10px 14px; background: #21262d;
+      border: 1.5px solid #30363d; border-radius: 20px; color: #f0f6fc;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4); transition: transform 0.15s ease, border-color 0.15s ease;
+      z-index: 20;
+    }
+    .float-item:hover { border-color: #a371f7; transform: scale(1.05); }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 14px;
+      padding: 24px 20px; max-width: 480px; width: 100%; text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8); max-height: 88vh;
+      overflow-y: auto; position: relative;
+    }
+    .modal-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .modal-box::-webkit-scrollbar-thumb {
+      background: #30363d; border-radius: 4px;
+    }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 8px; cursor: pointer; margin-top: 14px; margin-bottom: 8px; text-decoration: none;
+      display: none; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 12px rgba(46, 160, 67, 0.35); transition: all 0.2s ease;
+    }
+    .btn-next-stage:hover {
+      background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+      transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46, 160, 67, 0.5);
+    }
+    .btn-close-modal {
+      position: absolute; top: 12px; right: 12px; background: transparent; border: none;
+      color: #8b949e; font-size: 1.3rem; cursor: pointer; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center; border-radius: 6px;
+    }
+    .btn-close-modal:hover { color: #f0f6fc; background: #21262d; }
+    .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #a371f7; }
+    .modal-desc { font-size: 0.88rem; color: #8b949e; line-height: 1.5; margin-bottom: 20px; }
+    .action-btn {
+      width: 100%; padding: 12px; background: #8957e5; border: 1px solid #a371f7;
+      color: #ffffff; font-size: 0.95rem; font-weight: 700; border-radius: 6px; cursor: pointer; margin-bottom: 8px;
+    }
+    .action-btn:hover { background: #9e6cf4; }
+    .action-btn.btn-alt { background: #238636; border-color: #2ea043; }
+    .sub-action-btn {
+      display: block; width: 100%; padding: 9px; background: #21262d; border: 1px solid #30363d;
+      color: #c9d1d9; font-size: 0.85rem; font-weight: 600; border-radius: 6px; text-decoration: none;
+    }
+    .modal-dual-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+
+    .review-item {
+      background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+      padding: 12px; margin-bottom: 12px; text-align: left;
+    }
+    .review-q { font-size: 0.88rem; font-weight: 800; color: #f0f6fc; margin-bottom: 4px; }
+    .review-a { font-size: 0.82rem; color: #f85149; margin-bottom: 4px; }
+    .review-tip { font-size: 0.82rem; color: #e3b341; margin-bottom: 8px; }
+    .review-targets { background: rgba(56, 139, 253, 0.08); border: 1px solid rgba(56, 139, 253, 0.25); border-radius: 6px; padding: 8px 10px; }
+    .review-targets-title { font-size: 0.78rem; font-weight: 800; color: #58a6ff; margin-bottom: 4px; }
+    .review-targets-list { list-style: disc; padding-left: 18px; font-size: 0.78rem; color: #c9d1d9; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game"><span>◀ 게임 목록</span></a>
+      <div class="score-badge">SCORE: <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <a href="./game6-2.html" class="type-btn">A 낙하요격</a>
+        <span class="type-btn active-b">B 버블헌팅</span>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
+      <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
+      <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+    </div>
+    <div class="round-pill" id="round-indicator">ROUND 1 / 4</div>
+  </header>
+
+  <section class="mission-banner">
+    <div class="mission-title" id="mission-title">로딩 중...</div>
+    <div class="mission-desc" id="mission-desc">미션 설명</div>
+    <div class="mission-progress-bar">
+      <div class="mission-progress-fill" id="progress-fill"></div>
+    </div>
+  </section>
+
+  <!-- 라운드 클리어 안내 바 -->
+  <div id="round-clear-bar">
+    <span class="round-clear-text">🎉 모든 정답을 찾았습니다! 화면의 정보를 충분히 읽어보신 후 아래 버튼을 눌러주세요.</span>
+    <button class="btn-next-round" onclick="proceedNextRound()">다음 라운드 ▶</button>
+  </div>
+
+  <main class="space-zone" id="space-zone"></main>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">🔥</div>
+      <h2 class="modal-title">[제 6-2탄 B] 용접 화기취급 & 화재감시자 헌팅</h2>
+      <p class="modal-desc">
+        화면에 떠다니는 용접·화기취급 안전 정보 버블 중<br>상단 <b>미션 목표</b>에 해당하는 정답만 사냥하세요!<br><br>• 황금 거리: 소화기 5m / 가연물 10m / 감시배치 11m<br>• 작업 후 1시간 이상 잔류 불씨 및 훈소 감시<br>• 화재감시자 겸직 금지 & 화재위험작업 중단 요구권
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🛸 B타입 시작</button>
+        <a href="./game6-2.html" class="action-btn btn-alt">🎯 A타입 전환</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">작전 성공!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <div id="review-container" style="display:none;">
+        <h4 style="font-size:0.9rem; color:#f85149; margin-bottom:8px; text-align:left;">📝 함정에 걸린 오답 복습</h4>
+        <div class="review-list" id="review-list"></div>
+      </div>
+      <a href="./game6-3-b.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>🚀 [제 6-3탄 B] 특수가연물 기준수량 도전 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 B타입 재도전</button>
+        <a href="./game6-2.html" class="action-btn btn-alt">🎯 A타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const ROUND_DATA = [
+      {
+            "round": 1,
+            "title": "📏 [용접·화기취급 작업 안전거리 황금 수치]만 모두 사냥하세요!",
+            "desc": "소화기 5m / 가연물 10m / 감시자배치 11m / 불티 1,000~3,000℃",
+            "targets": [
+                  {
+                        "text": "소화기 비치 반경 5m 이내",
+                        "tip": "소화기는 화기작업장 반경 5m 이내에 배치!"
+                  },
+                  {
+                        "text": "가연물 제거 반경 10m 이내",
+                        "tip": "불티 착화 방지를 위해 반경 10m 이내 가연물 제거!"
+                  },
+                  {
+                        "text": "가연물 노출 감시자 배치 반경 11m",
+                        "tip": "가연물이 11m 이내 노출된 경우 화재감시자 배치!"
+                  },
+                  {
+                        "text": "불티 최대 비산거리 11m 이상",
+                        "tip": "용접 불티는 바람에 날려 최대 11m 이상 날아갑니다!"
+                  },
+                  {
+                        "text": "용접 불티 온도 1,000~3,000℃",
+                        "tip": "불티는 순간 1,000~3,000℃ 고온으로 가연물에 착화!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "소화기 비치 반경 15m 이내",
+                        "tip": "소화기는 15m가 아니라 5m 이내입니다!"
+                  },
+                  {
+                        "text": "가연물 제거 반경 3m 이내",
+                        "tip": "가연물 제거는 3m가 아니라 10m 이내입니다!"
+                  },
+                  {
+                        "text": "불티 최대 비산거리 3m 이하",
+                        "tip": "불티는 최대 11m 이상 비산합니다!"
+                  },
+                  {
+                        "text": "불티 온도 상온 100℃ 이하",
+                        "tip": "용접 불티는 1,000℃가 넘는 고온체입니다!"
+                  }
+            ]
+      },
+      {
+            "round": 2,
+            "title": "⏱️ [작업 후 잔류 불씨 감시 & 훈소 화재 특성]만 모두 사냥하세요!",
+            "desc": "작업 종료 후 최소 1시간 이상 감시 / 우레탄폼 훈소(무염연소) / 지연 발화",
+            "targets": [
+                  {
+                        "text": "작업 종료 후 최소 1시간 이상 감시",
+                        "tip": "용접 작업 종료 후 최소 1시간 이상 현장 상주 감시!"
+                  },
+                  {
+                        "text": "단열재 내부 훈소(무염연소) 감시",
+                        "tip": "우레탄폼 내부에 불꽃 없이 연소되는 훈소 감시!"
+                  },
+                  {
+                        "text": "수 시간 후 지연 발화 방지 상주",
+                        "tip": "잔류 불씨가 수 시간 후 발화하므로 현장 상주 확인!"
+                  },
+                  {
+                        "text": "퇴근 전 잔류 불씨 최종 확인",
+                        "tip": "화재감시자는 퇴근 전 최종 안전을 확인해야 함!"
+                  },
+                  {
+                        "text": "열화상 카메라로 내부 잠열 확인",
+                        "tip": "벽체 속 숨은 불씨는 열화상 카메라로 탐지!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "용접 작업 종료 즉시 퇴근 가능",
+                        "tip": "즉시 퇴근하면 지연 발화로 대형 화재 발생! 1시간 이상 감시!"
+                  },
+                  {
+                        "text": "작업 종료 10분 후 철수",
+                        "tip": "10분은 부족하며 법적으로 최소 1시간 이상이어야 합니다!"
+                  },
+                  {
+                        "text": "불티는 즉시 꺼지므로 감시 불필요",
+                        "tip": "불티는 단열재 속에서 훈소 상태로 몇 시간 동안 살아있습니다!"
+                  },
+                  {
+                        "text": "다음 날 아침에 현장 불씨 확인",
+                        "tip": "다음 날 아침에는 이미 화재가 발생한 뒤입니다!"
+                  }
+            ]
+      },
+      {
+            "round": 3,
+            "title": "🧑‍🚒 [화재감시자 배치 대상 & 법정 전담 의무]만 모두 사냥하세요!",
+            "desc": "가연물 11m 노출 시 배치 / 겸직 절대 금지 / 근로자 대피 유도 / 작업 중단권",
+            "targets": [
+                  {
+                        "text": "반경 11m 이내 가연물 노출 시 배치",
+                        "tip": "용접 장소 11m 이내 가연물 존재 시 감시자 배치 의무!"
+                  },
+                  {
+                        "text": "다른 업무와 겸직 절대 금지",
+                        "tip": "화재감시자는 용접 보조나 청소 등 겸직 불가!"
+                  },
+                  {
+                        "text": "화재 발생 시 근로자 긴급 대피 유도",
+                        "tip": "근로자 전원에게 피난 경로를 안내하고 대피 유도!"
+                  },
+                  {
+                        "text": "화재위험작업 중단 및 시정요구권",
+                        "tip": "안전수칙 위반 시 작업을 즉각 중단시킬 권한 부여!"
+                  },
+                  {
+                        "text": "119 소방관서 즉시 통보",
+                        "tip": "화재 발생 즉시 119 및 현장사무소 긴급 연락!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "용접 보조 및 자재 나르기 겸직",
+                        "tip": "화재감시자는 타 업무 겸직이 절대 금지됩니다!"
+                  },
+                  {
+                        "text": "작업 중 휴식 및 현장 이탈 허용",
+                        "tip": "작업 중에는 한시도 현장을 비워서는 안 됩니다!"
+                  },
+                  {
+                        "text": "화재위험작업 중단 권한 없음",
+                        "tip": "화재감시자는 위험 시 작업을 중단시킬 법적 권한이 있습니다!"
+                  },
+                  {
+                        "text": "단순 노무자 임의 지정 가능",
+                        "tip": "소방안전 교육을 이수한 자를 화재감시자로 지정해야 합니다!"
+                  }
+            ]
+      },
+      {
+            "round": 4,
+            "title": "⚠️ [화기취급 작업장 필수 방호조치 & 수칙]만 모두 사냥하세요!",
+            "desc": "바닥 틈새 방화포 밀폐 / 유증기 환기 / KS인증 내열 방화포 / 배관 압력 방출",
+            "targets": [
+                  {
+                        "text": "바닥 개구부 및 관통부 방화포 밀폐",
+                        "tip": "불티가 아래층으로 떨어지지 않게 틈새 완전 차단!"
+                  },
+                  {
+                        "text": "인화성 유증기 사전 배출 환기",
+                        "tip": "밀폐 공간 내 유기용제 증기는 환기 후 작업!"
+                  },
+                  {
+                        "text": "KS 규격 인증 내열 방화포 사용",
+                        "tip": "가연물 방호 시 KS 인증 방화포 필수 사용!"
+                  },
+                  {
+                        "text": "가연물 이동 불가 시 방화포 피복",
+                        "tip": "치울 수 없는 고정 가연물은 방화포로 감싸기!"
+                  },
+                  {
+                        "text": "위험물 배관 내 압력 및 잔류가스 방출",
+                        "tip": "배관 용접 전 잔류 가스를 완전히 배출·세척!"
+                  }
+            ],
+            "traps": [
+                  {
+                        "text": "일반 비닐 포장재로 가연물 덮기",
+                        "tip": "비닐은 불이 더 잘 붙으므로 절대 금지!"
+                  },
+                  {
+                        "text": "환기 없이 밀폐공간 용접 강행",
+                        "tip": "유증기 폭발 위험이 있으므로 환기 필수!"
+                  },
+                  {
+                        "text": "가연성 가스 충전 상태에서 용접",
+                        "tip": "배관 내 가스를 비우지 않고 용접하면 폭발합니다!"
+                  },
+                  {
+                        "text": "물에 젖은 장갑으로 아크용접",
+                        "tip": "감전 위험이 매우 큽니다!"
+                  }
+            ]
+      }
+];
+
+    const MAX_LIVES = 3;
+    let score = 0;
+    let lives = 3;
+    let speedMult = 0.5;
+    let currentRoundIndex = 0;
+    let currentRoundTargets = [];
+    let currentRoundTraps = [];
+    let remainingTargetsCount = 0;
+    let totalTargetsInRound = 0;
+    let floatingElements = [];
+    let isRoundRunning = false;
+    let animFrame = null;
+    let wrongHistory = [];
+
+    const spaceZone = document.getElementById('space-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const roundIndicator = document.getElementById('round-indicator');
+    const missionTitle = document.getElementById('mission-title');
+    const missionDesc = document.getElementById('mission-desc');
+    const progressFill = document.getElementById('progress-fill');
+    const roundClearBar = document.getElementById('round-clear-bar');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, MAX_LIVES - lives));
+    }
+
+    function updateProgressBar() {
+      if (totalTargetsInRound === 0) return;
+      const found = totalTargetsInRound - remainingTargetsCount;
+      const pct = Math.floor((found / totalTargetsInRound) * 100);
+      progressFill.style.width = `${pct}%`;
+    }
+
+    function startGame() {
+      score = 0;
+      lives = 3;
+      currentRoundIndex = 0;
+      wrongHistory = [];
+      updateHUD();
+
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
+      if (roundClearBar) roundClearBar.style.display = 'none';
+
+      loadRound(currentRoundIndex);
+    }
+
+    function loadRound(idx) {
+      if (idx >= ROUND_DATA.length) {
+        showFinalResult(true);
+        return;
+      }
+
+      const rData = ROUND_DATA[idx];
+      roundIndicator.textContent = `ROUND ${idx + 1} / ${ROUND_DATA.length}`;
+      missionTitle.textContent = rData.title;
+      missionDesc.textContent = rData.desc;
+
+      spaceZone.innerHTML = '';
+      floatingElements = [];
+
+      currentRoundTargets = [...rData.targets];
+      currentRoundTraps = [...rData.traps];
+      remainingTargetsCount = currentRoundTargets.length;
+      totalTargetsInRound = currentRoundTargets.length;
+      updateProgressBar();
+
+      const allItems = [
+        ...currentRoundTargets.map(t => ({ text: t.text, isTarget: true, tip: t.tip })),
+        ...currentRoundTraps.map(t => ({ text: t.text, isTarget: false, tip: t.tip }))
+      ];
+
+      allItems.sort(() => Math.random() - 0.5);
+
+      const zoneW = spaceZone.clientWidth || (window.innerWidth - 30) || 600;
+      const zoneH = spaceZone.clientHeight || (window.innerHeight - 150) || 500;
+
+      allItems.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'float-item';
+        el.textContent = item.text;
+        spaceZone.appendChild(el);
+
+        const elW = el.offsetWidth || 140;
+        const elH = el.offsetHeight || 40;
+
+        const posX = Math.random() * Math.max(10, zoneW - elW - 20) + 10;
+        const posY = Math.random() * Math.max(10, zoneH - elH - 20) + 10;
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (0.7 + Math.random() * 0.6) * speedMult;
+
+        el.style.left = `${posX}px`;
+        el.style.top = `${posY}px`;
+
+        const fObj = {
+          el: el,
+          item: item,
+          x: posX,
+          y: posY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          w: elW,
+          h: elH,
+          active: true
+        };
+
+        el.addEventListener('click', () => onItemClick(fObj));
+        floatingElements.push(fObj);
+      });
+
+      isRoundRunning = true;
+      cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(updatePhysics);
+    }
+
+    function updatePhysics() {
+      if (!isRoundRunning) return;
+
+      const zoneW = spaceZone.clientWidth || (window.innerWidth - 30) || 600;
+      const zoneH = spaceZone.clientHeight || (window.innerHeight - 150) || 500;
+
+      floatingElements.forEach(f => {
+        if (!f.active) return;
+        f.x += f.vx;
+        f.y += f.vy;
+
+        if (f.x <= 5) { f.x = 5; f.vx *= -1; }
+        if (f.x + f.w >= zoneW - 5) { f.x = zoneW - f.w - 5; f.vx *= -1; }
+        if (f.y <= 5) { f.y = 5; f.vy *= -1; }
+        if (f.y + f.h >= zoneH - 5) { f.y = zoneH - f.h - 5; f.vy *= -1; }
+
+        f.el.style.left = `${f.x}px`;
+        f.el.style.top = `${f.y}px`;
+      });
+
+      animFrame = requestAnimationFrame(updatePhysics);
+    }
+
+    function onItemClick(fObj) {
+      if (!fObj.active) return;
+
+      if (fObj.item.isTarget) {
+        fObj.active = false;
+        fObj.el.style.background = 'rgba(46, 160, 67, 0.4)';
+        fObj.el.style.borderColor = '#3fb950';
+        fObj.el.style.color = '#7ee787';
+        fObj.el.style.transform = 'scale(1.1)';
+        fObj.el.style.pointerEvents = 'none';
+
+        score += 100;
+        remainingTargetsCount--;
+        updateHUD();
+        updateProgressBar();
+
+        if (remainingTargetsCount <= 0) {
+          isRoundRunning = false;
+          if (roundClearBar) roundClearBar.style.display = 'flex';
+        }
+      } else {
+        lives--;
+        updateHUD();
+
+        fObj.el.style.background = 'rgba(248, 81, 73, 0.4)';
+        fObj.el.style.borderColor = '#f85149';
+        fObj.el.style.color = '#ff7b72';
+
+        wrongHistory.push({
+          roundTitle: ROUND_DATA[currentRoundIndex].title,
+          clicked: fObj.item.text,
+          tip: fObj.item.tip,
+          targets: ROUND_DATA[currentRoundIndex].targets
+        });
+
+        setTimeout(() => {
+          if (fObj.el) {
+            fObj.el.style.background = '#21262d';
+            fObj.el.style.borderColor = '#30363d';
+            fObj.el.style.color = '#f0f6fc';
+          }
+        }, 400);
+
+        if (lives <= 0) {
+          isRoundRunning = false;
+          showFinalResult(false);
+        }
+      }
+    }
+
+    function proceedNextRound() {
+      if (roundClearBar) roundClearBar.style.display = 'none';
+      currentRoundIndex++;
+      loadRound(currentRoundIndex);
+    }
+
+    function showFinalResult(isSuccess) {
+      isRoundRunning = false;
+      cancelAnimationFrame(animFrame);
+
+      const modal = document.getElementById('result-modal');
+      const icon = document.getElementById('result-icon');
+      const title = document.getElementById('result-title');
+      const desc = document.getElementById('result-desc');
+      const container = document.getElementById('review-container');
+      const list = document.getElementById('review-list');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      modal.style.display = 'flex';
+
+      if (isSuccess) {
+        icon.textContent = "🏆";
+        title.textContent = "작전 대성공! 용접 화기취급 & 화재감시자 헌팅 마스터!";
+        title.style.color = "#3fb950";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>모든 라운드를 완벽하게 클리어하셨습니다!`;
+        if (nextBtn) nextBtn.style.display = 'flex';
+      } else {
+        icon.textContent = "💥";
+        title.textContent = "작전 실패!";
+        title.style.color = "#f85149";
+        desc.innerHTML = `최종 점수: <strong>${score}점</strong><br>오답을 복습하고 다시 도전하세요!`;
+        if (nextBtn) nextBtn.style.display = 'none';
+      }
+
+      if (wrongHistory.length > 0) {
+        container.style.display = "block";
+        let html = "";
+        wrongHistory.forEach(w => {
+          let targetsHtml = w.targets.map(t => `<li>${t.text}</li>`).join("");
+          html += `
+            <div class="review-item">
+              <div class="review-q">${w.roundTitle}</div>
+              <div class="review-a">❌ <b>잘못 누른 함정:</b> ${w.clicked}</div>
+              <div class="review-tip">💡 <b>족집게 해설:</b> ${w.tip}</div>
+              <div class="review-targets">
+                <div class="review-targets-title">🎯 <b>반드시 외워야 할 핵심 정답:</b></div>
+                <ul class="review-targets-list">${targetsHtml}</ul>
+              </div>
+            </div>
+          `;
+        });
+        list.innerHTML = html;
+      } else {
+        container.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
