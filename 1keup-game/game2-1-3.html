@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[2권 제 1-3탄 A] 스프링클러설비 구조·점검 요격전</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; display: inline-block; transition: transform 0.2s ease; }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.5s ease-in-out;
+    }
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-a { background: #238636; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .streak-badge { font-size: 0.82rem; font-weight: 800; color: #e3b341; min-width: 75px; text-align: right; }
+
+    #game-zone {
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
+      overflow: hidden;
+    }
+    .danger-line {
+      position: absolute; bottom: 8px; left: 0; width: 100%; height: 2px;
+      background: repeating-linear-gradient(90deg, #f85149, #f85149 10px, transparent 10px, transparent 20px);
+      opacity: 0.7; z-index: 10;
+    }
+    .falling-target {
+      position: absolute; width: 195px; padding: 10px;
+      background: #21262d; border: 2px solid #58a6ff; border-radius: 10px;
+      text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 20;
+    }
+    .falling-target .target-title { font-size: 0.92rem; font-weight: 800; color: #ffffff; margin-bottom: 2px; }
+    .falling-target .target-desc { font-size: 0.73rem; color: #8b949e; }
+
+    footer.control-deck {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+      padding: 8px 12px 14px; background: #161b22; border-top: 1px solid #30363d; z-index: 50;
+    }
+    .deck-btn {
+      padding: 10px 4px; background: #21262d; border: 1.5px solid #30363d;
+      border-radius: 8px; color: #c9d1d9; cursor: pointer; text-align: center;
+      transition: all 0.1s ease;
+    }
+    .deck-btn:active { transform: translateY(2px); }
+    .deck-btn .btn-badge { display: block; font-size: 0.7rem; font-weight: 800; margin-bottom: 2px; }
+    .deck-btn .btn-title { display: block; font-size: 0.82rem; font-weight: 800; color: #ffffff; }
+    .deck-btn .btn-sub { display: block; font-size: 0.68rem; color: #8b949e; margin-top: 2px; }
+
+    .btn-cat-1 { border-color: #38bdf8; } .btn-cat-1 .btn-badge { color: #38bdf8; }
+    .btn-cat-2 { border-color: #a78bfa; } .btn-cat-2 .btn-badge { color: #a78bfa; }
+    .btn-cat-3 { border-color: #facc15; } .btn-cat-3 .btn-badge { color: #facc15; }
+    .btn-cat-4 { border-color: #34d399; } .btn-cat-4 .btn-badge { color: #34d399; }
+    .btn-cat-5 { border-color: #fb923c; } .btn-cat-5 .btn-badge { color: #fb923c; }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.88); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 10px; cursor: pointer; text-align: center; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 12px; box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4);
+      animation: pulseBtn 1.8s infinite; transition: transform 0.15s ease;
+    }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4); }
+      50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(46, 160, 67, 0.65); }
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 16px;
+      max-width: 440px; width: 100%; padding: 26px 22px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    .modal-title { font-size: 1.35rem; font-weight: 800; color: #f0f6fc; margin-bottom: 10px; }
+    .modal-desc { font-size: 0.86rem; color: #8b949e; line-height: 1.6; margin-bottom: 22px; }
+    .modal-dual-actions { display: flex; gap: 8px; margin-bottom: 10px; }
+    .action-btn {
+      flex: 1; padding: 12px; background: #238636; border: none; color: #ffffff;
+      font-size: 0.95rem; font-weight: 800; border-radius: 8px; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .action-btn.btn-alt { background: #8957e5; }
+    .sub-action-btn { display: block; font-size: 0.82rem; color: #8b949e; margin-top: 10px; text-decoration: underline; cursor: pointer; }
+
+    @media (max-width: 600px) {
+      .falling-target { width: 165px; padding: 8px; }
+      .falling-target .target-title { font-size: 0.84rem; }
+      .falling-target .target-desc { font-size: 0.68rem; }
+      footer.control-deck { gap: 4px; padding: 6px 8px 10px; }
+      .deck-btn { padding: 8px 2px; }
+      .deck-btn .btn-badge { font-size: 0.62rem; }
+      .deck-btn .btn-title { font-size: 0.72rem; }
+      .deck-btn .btn-sub { font-size: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">◀ 나가기</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <span class="type-btn active-a">A 낙하요격</span>
+        <a href="./game2-1-3-b.html" class="type-btn">B 버블헌팅</a>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn active" onclick="setSpeed(0.5, this)">0.5x</button>
+      <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x</button>
+      <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+    </div>
+    <div class="streak-badge" id="streak-val">0 COMBO</div>
+  </header>
+
+  <main id="game-zone">
+    <div class="danger-line"></div>
+  </main>
+
+  <footer class="control-deck">
+    <button class="deck-btn btn-cat-1" onclick="fireShot('습식·건식')">
+      <span class="btn-badge">가압수/압축공기</span>
+      <span class="btn-title">습식 · 건식</span>
+      <span class="btn-sub">알람밸브/급속개방</span>
+    </button>
+    <button class="deck-btn btn-cat-2" onclick="fireShot('준비작동·일제')">
+      <span class="btn-badge">교차회로/개방헤드</span>
+      <span class="btn-title">준비작동·일제</span>
+      <span class="btn-sub">솔레노이드/무대부</span>
+    </button>
+    <button class="deck-btn btn-cat-3" onclick="fireShot('헤드규격·온도')">
+      <span class="btn-badge">0.1~1.2MPa/80L</span>
+      <span class="btn-title">헤드규격·온도</span>
+      <span class="btn-sub">표시온도/수평거리</span>
+    </button>
+    <button class="deck-btn btn-cat-4" onclick="fireShot('기준개수·수원')">
+      <span class="btn-badge">N×1.6㎥/30·20·10</span>
+      <span class="btn-title">기준개수·수원</span>
+      <span class="btn-sub">아파트10/고층3.2</span>
+    </button>
+    <button class="deck-btn btn-cat-5" onclick="fireShot('말단시험배관')">
+      <span class="btn-badge">배관말단/오리피스</span>
+      <span class="btn-title">말단 시험배관</span>
+      <span class="btn-sub">헤드동등/클래퍼개방</span>
+    </button>
+  </footer>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">💦</div>
+      <h2 class="modal-title">[2권 제 1-3탄 A] 스프링클러설비 요격전</h2>
+      <p class="modal-desc">
+        하늘에서 떨어지는 스프링클러설비 4대 방식(습식·건식·준비작동·일제) 및 규격·수치를 보고 하단 <b>5대 카테고리 버튼</b>으로 요격하세요!<br><br>
+        • 습식: 1·2차 가압수 / 건식: 2차 압축공기(액셀러레이터)<br>
+        • 준비작동식: 교차회로 A·B 감지기 동시 동작 시 프리액션밸브 개방<br>
+        • 일제살수식: 개방형 헤드 전구역 일제 방수 (무대부, 특수가연물)<br>
+        • 헤드: 0.1~1.2MPa, 80L/min / 수원: N×1.6㎥ (아파트 10개, 11층↑ 30개)
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🎯 A타입 시작</button>
+        <a href="./game2-1-3-b.html" class="action-btn btn-alt">🛸 B타입 전환</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 게임 오버 모달 -->
+  <div class="overlay-modal" id="gameover-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="gameover-icon" style="font-size:2.8rem; margin-bottom:8px;">💥</div>
+      <h2 class="modal-title" id="gameover-title" style="color:#f85149;">작전 실패!</h2>
+      <p class="modal-desc" id="gameover-desc">최종 점수: 0점</p>
+      <a href="./game2-1-4.html" class="btn-next-stage" id="next-stage-btn" style="display:none;">
+        <span>🚀 [2권 제 1-4탄 A] 가스계 소화설비 구조·점검 도전 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 A타입 재도전</button>
+        <a href="./game2-1-3-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const TARGETS_DATA = [
+      {
+        title: "습식: 1차 가압수, 2차 가압수",
+        desc: "알람밸브 사용, 신속 방수, 동파 우려 없는 보온 장소에 설치",
+        cat: "습식·건식"
+      },
+      {
+        title: "리타딩 챔버: 일시적 수격 오보 방지",
+        desc: "습식 알람밸브 부속품으로 압력 변동 시 오보를 완충 방지",
+        cat: "습식·건식"
+      },
+      {
+        title: "건식: 1차 가압수, 2차 압축공기",
+        desc: "건식밸브(Dry Pipe Valve) 사용, 동파 우려 장소, 폐쇄형 상향식 헤드",
+        cat: "습식·건식"
+      },
+      {
+        title: "액셀러레이터 & 익조스터",
+        desc: "건식설비 2차측 공기를 빠르게 배출하는 급속개방장치(소화수 지연 단축)",
+        cat: "습식·건식"
+      },
+      {
+        title: "준비작동식: 1차 가압수, 2차 대기압",
+        desc: "프리액션밸브 사용, 동파 방지 및 오동작 누수 방지(지하주차장, 전산실)",
+        cat: "준비작동·일제"
+      },
+      {
+        title: "교차회로 방식 감지기 (A and B)",
+        desc: "준비작동식 오동작 방지를 위해 2개 회로 감지기가 동시 동작 시 밸브 개방",
+        cat: "준비작동·일제"
+      },
+      {
+        title: "솔레노이드 밸브 (전자구동)",
+        desc: "감지기 화재 신호 또는 수동조작함(SVP) 신호로 중간챔버를 감압시켜 밸브 개방",
+        cat: "준비작동·일제"
+      },
+      {
+        title: "일제살수식: 개방형 헤드 전면 방수",
+        desc: "델류지밸브 사용, 감지기 연동 시 방호구역 내 모든 헤드에서 일제 방출",
+        cat: "준비작동·일제"
+      },
+      {
+        title: "무대부 & 특수가연물 저장소",
+        desc: "화재 연소 확대가 급격하여 개방형 헤드 일제살수식을 적용하는 대상",
+        cat: "준비작동·일제"
+      },
+      {
+        title: "헤드 방수압: 0.1~1.2 MPa",
+        desc: "스프링클러 헤드 선단 법정 방수압력 기준 (0.1 MPa 이상 1.2 MPa 이하)",
+        cat: "헤드규격·온도"
+      },
+      {
+        title: "분당 방수량: 80 L/min 이상",
+        desc: "헤드 선단 분당 최소 방수량 기준 (K=80 기준)",
+        cat: "헤드규격·온도"
+      },
+      {
+        title: "주위온도 39℃ 미만: 표시 79℃ 미만",
+        desc: "최고 주위온도가 39℃ 미만인 일반 실내 헤드 표시온도 기준",
+        cat: "헤드규격·온도"
+      },
+      {
+        title: "주위온도 39~64℃: 표시 79~121℃",
+        desc: "주위온도 39℃ 이상 64℃ 미만 장소의 폐쇄형 헤드 표시온도",
+        cat: "헤드규격·온도"
+      },
+      {
+        title: "헤드 수평거리: 아파트 2.6m 이하",
+        desc: "스프링클러 헤드 배치 수평거리: 아파트는 2.6m 이하 (내화구조 2.3m)",
+        cat: "헤드규격·온도"
+      },
+      {
+        title: "스프링클러 수원식: Q = N × 1.6 ㎥",
+        desc: "헤드 기준개수 N × 1.6 ㎥ (분당 80L × 20분 방수 기준)",
+        cat: "기준개수·수원"
+      },
+      {
+        title: "아파트 헤드 기준개수: 무조건 10개",
+        desc: "아파트 스프링클러 기준개수 N은 10개 ➡️ 수원 저수량 16 ㎥",
+        cat: "기준개수·수원"
+      },
+      {
+        title: "11층 이상·지하가·판매: 기준개수 30개",
+        desc: "지하층 제외 11층 이상, 지하역사, 판매시설 등 기준개수 N은 30개",
+        cat: "기준개수·수원"
+      },
+      {
+        title: "근생·운수·높이 8m이상: 기준개수 20개",
+        desc: "근린생활시설, 운수시설, 부착높이 8m 이상 시설은 N=20개",
+        cat: "기준개수·수원"
+      },
+      {
+        title: "고층(30층↑) 수원: Q = N × 3.2 ㎥",
+        desc: "30층 이상 고층 대상물은 40분 방수 기준 적용 (초고층 50층↑은 4.8 ㎥)",
+        cat: "기준개수·수원"
+      },
+      {
+        title: "말단 시험배관: 헤드 동일 오리피스",
+        desc: "배관 말단에서 80 L/min 방출로 클래퍼 개방 및 압력스위치 경보 점검",
+        cat: "말단시험배관"
+      }
+    ];
+
+    const MAX_LIVES = 5;
+    let score = 0;
+    let lives = 3;
+    let streak = 0;
+    let speedMult = 0.5;
+    let isGameRunning = false;
+    let activeTargets = [];
+    let spawnTimer = null;
+    let animFrame = null;
+
+    const gameZone = document.getElementById('game-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const streakVal = document.getElementById('streak-val');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function triggerHeartHealAnim() {
+      livesVal.classList.remove('heart-heal-bounce');
+      void livesVal.offsetWidth;
+      livesVal.classList.add('heart-heal-bounce');
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      streakVal.textContent = streak > 1 ? `${streak} COMBO 🔥` : `${streak} COMBO`;
+      livesVal.textContent = "❤️".repeat(Math.max(0, lives));
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSfx(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'hit') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(540, now);
+        osc.frequency.exponentialRampToValueAtTime(920, now + 0.12);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+        osc.start(now); osc.stop(now + 0.12);
+      } else if (type === 'miss') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.linearRampToValueAtTime(80, now + 0.22);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.22);
+        osc.start(now); osc.stop(now + 0.22);
+      } else if (type === 'heal') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.25);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now); osc.stop(now + 0.25);
+      }
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('gameover-modal').style.display = 'none';
+      activeTargets.forEach(t => t.el.remove());
+      activeTargets = [];
+      score = 0; lives = 3; streak = 0;
+      isGameRunning = true;
+      updateHUD();
+      scheduleSpawn();
+      lastTimestamp = performance.now();
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function scheduleSpawn() {
+      if (!isGameRunning) return;
+      spawnTarget();
+      const delay = Math.max(1200, 2600 - score * 1.5) / speedMult;
+      spawnTimer = setTimeout(scheduleSpawn, delay);
+    }
+
+    function spawnTarget() {
+      const data = TARGETS_DATA[Math.floor(Math.random() * TARGETS_DATA.length)];
+      const el = document.createElement('div');
+      el.className = 'falling-target';
+      el.innerHTML = `
+        <div class="target-title">${data.title}</div>
+        <div class="target-desc">${data.desc}</div>
+      `;
+      const zoneW = gameZone.clientWidth || 360;
+      const targetW = 195;
+      const x = Math.max(10, Math.random() * (zoneW - targetW - 20));
+      el.style.left = `${x}px`;
+      el.style.top = `-80px`;
+      gameZone.appendChild(el);
+
+      activeTargets.push({
+        el,
+        data,
+        y: -80,
+        speed: (60 + Math.random() * 25 + Math.min(score * 0.1, 40)) * speedMult
+      });
+    }
+
+    let lastTimestamp = performance.now();
+    function gameLoop(now) {
+      if (!isGameRunning) return;
+      const dt = (now - lastTimestamp) / 1000;
+      lastTimestamp = now;
+
+      const zoneH = gameZone.clientHeight || 450;
+      for (let i = activeTargets.length - 1; i >= 0; i--) {
+        const t = activeTargets[i];
+        t.y += t.speed * dt;
+        t.el.style.top = `${t.y}px`;
+
+        if (t.y > zoneH - 70) {
+          playSfx('miss');
+          t.el.remove();
+          activeTargets.splice(i, 1);
+          lives--;
+          streak = 0;
+          updateHUD();
+          if (lives <= 0) {
+            endGame(false);
+            return;
+          }
+        }
+      }
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function fireShot(selectedCat) {
+      if (!isGameRunning || activeTargets.length === 0) return;
+      let lowestIdx = 0;
+      let lowestY = activeTargets[0].y;
+      for (let i = 1; i < activeTargets.length; i++) {
+        if (activeTargets[i].y > lowestY) {
+          lowestY = activeTargets[i].y;
+          lowestIdx = i;
+        }
+      }
+
+      const target = activeTargets[lowestIdx];
+      if (target.data.cat === selectedCat) {
+        playSfx('hit');
+        score += 100 + streak * 10;
+        streak++;
+        if (streak > 0 && streak % 10 === 0 && lives < MAX_LIVES) {
+          lives++;
+          playSfx('heal');
+          triggerHeartHealAnim();
+        }
+        target.el.style.transform = 'scale(1.2)';
+        target.el.style.opacity = '0';
+        target.el.style.transition = 'all 0.18s ease-out';
+        setTimeout(() => target.el.remove(), 180);
+        activeTargets.splice(lowestIdx, 1);
+        updateHUD();
+
+        if (score >= 1200) {
+          endGame(true);
+        }
+      } else {
+        playSfx('miss');
+        lives--;
+        streak = 0;
+        updateHUD();
+        target.el.style.borderColor = '#f85149';
+        setTimeout(() => { if (target.el) target.el.style.borderColor = '#58a6ff'; }, 300);
+        if (lives <= 0) {
+          endGame(false);
+        }
+      }
+    }
+
+    function endGame(isWin) {
+      isGameRunning = false;
+      clearTimeout(spawnTimer);
+      cancelAnimationFrame(animFrame);
+
+      const modal = document.getElementById('gameover-modal');
+      const icon = document.getElementById('gameover-icon');
+      const title = document.getElementById('gameover-title');
+      const desc = document.getElementById('gameover-desc');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      modal.style.display = 'flex';
+      if (isWin) {
+        icon.textContent = '🏆';
+        title.textContent = '작전 성공! 스프링클러 마스터';
+        title.style.color = '#3fb950';
+        desc.innerHTML = `최종 점수: <b style="color:#58a6ff;">${score}점</b><br>스프링클러 4대 방식, 헤드 규격, 기준개수 N 및 수원 저수량을 완벽하게 마스터하셨습니다!`;
+        nextBtn.style.display = 'inline-flex';
+      } else {
+        icon.textContent = '💥';
+        title.textContent = '작전 실패!';
+        title.style.color = '#f85149';
+        desc.innerHTML = `최종 점수: <b style="color:#58a6ff;">${score}점</b><br>습식/건식/준비작동식/일제살수식 구분과 기준개수 N(아파트 10개, 11층↑ 30개)을 다시 복습해 보세요.`;
+        nextBtn.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

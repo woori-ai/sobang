@@ -619,7 +619,8 @@
         icon: "🧯",
         rounds: [
           { id: "2-1-1", legacyId: "2-1-1", label: "2-1 소화기구 구조·점검", icon: "🧯" },
-          { id: "2-1-2", legacyId: "2-1-2", label: "2-2 옥내소화전 구조·점검", icon: "💧" }
+          { id: "2-1-2", legacyId: "2-1-2", label: "2-2 옥내소화전 구조·점검", icon: "💧" },
+          { id: "2-1-3", legacyId: "2-1-3", label: "2-3 스프링클러설비", icon: "💦" }
         ]
       }
     ];
@@ -649,7 +650,8 @@
       '8-2': "심폐소생술(CPR) C-A-B 순서, 흉골 아래 1/2, 분당 100~120회, 깊이 5cm, 30:2 비율, 2분(5주기) 교대, ★인공호흡 곤란 시 가슴압박만 지속(가슴압박소생술)",
       '8-3': "자동심장충격기(AED) 4단계 & 패드위치(우측쇄골/좌측옆구리), 제세동 접촉금지 및 즉시 CPR 재개, 하임리히법(복부밀어올리기), 지혈대 5~7cm, 화상수포 보호",
       '2-1-1': "소화기구 능력단위(소형 1단위↑/대형 A10·B20), 용도별 기준면적(위락 30/집회·의료 50/근생·숙박 100/기타 200), 보행거리(소형 20m/대형 30m), 높이 1.5m, 지시압력계(0.7~0.98MPa), 내용연수 10년",
-      '2-1-2': "옥내소화전 방수압력(0.17~0.7MPa)·방수량(130L/min), 피토게이지(D/2), 수원저수량(N×2.6㎥, 고층 N×5.2㎥, 옥상 1/3), 펌프 성능시험 3단계(체절 140%/정격 100%/최대 65%), 압력챔버 Range(정지점)·Diff(기동점)"
+      '2-1-2': "옥내소화전 방수압력(0.17~0.7MPa)·방수량(130L/min), 피토게이지(D/2), 수원저수량(N×2.6㎥, 고층 N×5.2㎥, 옥상 1/3), 펌프 성능시험 3단계(체절 140%/정격 100%/최대 65%), 압력챔버 Range(정지점)·Diff(기동점)",
+      '2-1-3': "스프링클러 4대방식(습식·건식·준비작동식·일제살수식), 헤드방수압(0.1~1.2MPa)·방수량(80L/min), 폐쇄형 헤드 표시온도(39미만 79미만, 39~64 79~121), 기준개수 N(아파트 10개, 11층↑ 30개), 수원저수량(N×1.6㎥, 고층 3.2㎥), 말단시험배관"
     };
 
     // 레거시 파라미터 매핑 (구버전 단일 숫자 1~8 지원)
@@ -1635,6 +1637,65 @@
               "<b>제어반 운용 기준 (감시제어반 & 동력제어반 MCC)</b>:",
               "• 주펌프 및 충압펌프 선택스위치는 평상시 반드시 <span class='highlight-badge'>자동(AUTO)</span> 위치 유지",
               "• 현장 동력제어반(MCC)이 '수동' 또는 '정지' 상태이면 감시제어반에서 기동 신호를 주어도 펌프 기동 불가"
+            ]
+          }
+        ]
+      },
+      '2-1-3': {
+        title: "💦 [2권 제 1-3탄] 스프링클러설비 구조·점검 & 유수검지장치 1분 족집게",
+        playUrl: "./1keup-game/game2-1-3.html",
+        playUrlB: "./1keup-game/game2-1-3-b.html",
+        cards: [
+          {
+            title: "1. 스프링클러설비 4대 방식 비교 (유수검지장치)",
+            items: [
+              "<b>습식 (Wet Pipe System)</b>:",
+              "• <b>배관 충수</b>: 1차측 <span class='highlight-badge'>가압수</span>, 2차측 <span class='highlight-badge'>가압수</span> (폐쇄형 헤드)",
+              "• <b>밸브 구성</b>: 알람밸브 + <span class='highlight-badge'>리타딩 챔버</span> (압력 변동 시 일시적 수격 오보 방지) + 압력스위치",
+              "• <b>특징</b>: 구조 간단, 신속 방수, <span class='highlight-red'>동파 우려가 없는 보온 장소</span>에만 설치",
+              "<b>건식 (Dry Pipe System)</b>:",
+              "• <b>배관 충수</b>: 1차측 가압수, 2차측 <span class='highlight-badge'>압축공기 또는 질소가스</span>",
+              "• <b>밸브 구성</b>: 건식밸브 + 급속개방장치(<span class='highlight-badge'>액셀러레이터 / 익조스터</span>)",
+              "• <b>헤드 설치</b>: 잔류수 동파 방지를 위해 <span class='highlight-badge'>폐쇄형 상향식 헤드</span> 설치가 법정 원칙",
+              "• <b>특징</b>: 동파 우려 장소에 적합하나 방수 지연시간(Trip Time) 발생",
+              "<b>준비작동식 (Pre-Action System)</b>:",
+              "• <b>배관 충수</b>: 1차측 가압수, 2차측 <span class='highlight-badge'>대기압(무압) 공기</span> (폐쇄형 헤드)",
+              "• <b>작동 원리</b>: 오동작 방지 <span class='highlight-red'>교차회로 방식 감지기(A and B)</span> 동시 감지 시 솔레노이드 밸브 개방 ➡️ 2차측 배관 충수 후 열로 헤드 개방 시 방수",
+              "• <b>특징</b>: <span class='highlight-badge'>동파 방지 + 오동작 누수 방지</span> (지하주차장, 전산실 등에 최적)",
+              "<b>일제살수식 (Deluge System)</b>:",
+              "• <b>배관 충수</b>: 1차측 가압수, 2차측 대기압 공기, <span class='highlight-red'>개방형 헤드 (Open Head)</span>",
+              "• <b>특징</b>: 감지기 동작 시 델류지밸브 개방 ➡️ 구역 내 모든 헤드 일제 방수 (<span class='highlight-badge'>무대부, 특수가연물 저장소</span>)"
+            ]
+          },
+          {
+            title: "2. 헤드 규격 & 최고주위온도별 표시온도 & 방수 성능",
+            items: [
+              "<b>헤드 선단 법정 방수압력 & 분당 방수량</b>:",
+              "• <b>방수압력</b>: <span class='highlight-badge'>0.1 MPa 이상 ~ 1.2 MPa 이하</span>",
+              "• <b>분당 방수량</b>: <span class='highlight-badge'>80 L/min 이상</span> (\(Q = K \cdot \sqrt{10P}\), K=80 기준)",
+              "<b>폐쇄형 헤드 최고주위온도별 표시온도 (단골 출제)</b>:",
+              "• <b>39℃ 미만</b>: 표시온도 <span class='highlight-badge'>79℃ 미만</span> (일반 실내)",
+              "• <b>39℃ 이상 ~ 64℃ 미만</b>: 표시온도 <span class='highlight-badge'>79℃ 이상 ~ 121℃ 미만</span>",
+              "• <b>64℃ 이상 ~ 106℃ 미만</b>: 표시온도 <span class='highlight-badge'>121℃ 이상 ~ 162℃ 미만</span> (보일러실 등)",
+              "• <b>106℃ 이상</b>: 표시온도 <span class='highlight-badge'>162℃ 이상</span>",
+              "<b>헤드 수평거리 (R 기준)</b>:",
+              "• <b>아파트</b>: <span class='highlight-badge'>2.6m 이하</span> &nbsp;• <b>일반 내화구조</b>: <span class='highlight-badge'>2.3m 이하</span> &nbsp;• <b>무대부</b>: <span class='highlight-badge'>1.7m 이하</span>"
+            ]
+          },
+          {
+            title: "3. 헤드 기준개수(N) & 수원 저수량 계산 & 말단 시험배관",
+            items: [
+              "<b>스프링클러 수원 유효저수량 산정식</b>:",
+              "• <span class='highlight-badge'>\(Q = N 	imes 1.6\,	ext{㎥}\)</span> (헤드 1개당 80 L/min × 20분 = 1,600L)",
+              "<b>헤드 기준개수 (N) 족집게 기준</b>:",
+              "• <span class='highlight-red'>아파트: 무조건 10개!</span> ➡️ 필요 수원: \(10 	imes 1.6 = \mathbf{16\,	ext{㎥}}\)",
+              "• <b>30개 적용</b>: 지하층 제외 <span class='highlight-badge'>11층 이상</span> 건축물, 지하가, 지하역사, 10층 이하 중 판매시설·복합건축물·특수가연물 공장 ➡️ \(30 	imes 1.6 = \mathbf{48\,	ext{㎥}}\)",
+              "• <b>20개 적용</b>: 근린생활시설, 운수시설, 그 밖의 대상물 중 부착높이 8m 이상 ➡️ \(20 	imes 1.6 = \mathbf{32\,	ext{㎥}}\)",
+              "• <b>고층 대상물 시간 가산</b>: 30층 이상(40분) ➡️ <span class='highlight-badge'>\(N 	imes 3.2\,	ext{㎥}\)</span>, 50층 이상(60분) ➡️ \(N 	imes 4.8\,	ext{㎥}\)",
+              "• <b>옥상수원</b>: 산출된 유효수량의 <span class='highlight-badge'>1/3 이상</span>을 옥상수조에 별도 확보 의무",
+              "<b>말단 시험배관 (시험밸브함) 점검 기준</b>:",
+              "• <b>설치 위치</b>: 배관의 가장 먼 <span class='highlight-badge'>말단</span>에 설치",
+              "• <b>점검 목적</b>: 헤드와 동일한 구경의 오리피스로 <span class='highlight-badge'>80 L/min 방출</span> ➡️ 유수검지장치 클래퍼 개방, 압력스위치 작동, 경보음향 발생, 펌프 자동기동 여부 종합 확인"
             ]
           }
         ]
