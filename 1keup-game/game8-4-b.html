@@ -272,6 +272,18 @@
       }
     ];
 
+    const MAX_LIVES = 5;
+    let currentRoundIndex = 0;
+    let score = 0;
+    let lives = 3;
+    let streak = 0;
+    let speedMult = 0.5;
+    let remainTargetCount = 0;
+    let items = [];
+    let isRoundRunning = false;
+    let animFrame = null;
+    let wrongHistory = [];
+
     const zone = document.getElementById('floating-zone');
     const scoreVal = document.getElementById('score-val');
     const livesVal = document.getElementById('lives-val');
