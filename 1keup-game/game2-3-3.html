@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>[2권 제 3-3탄 A] 화재대응·피난약자 보조·업무기록 요격전</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      background: #0d1117; color: #e6edf3; overflow: hidden; height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 60px; padding: 10px 16px; background: rgba(22, 27, 34, 0.95);
+      border-bottom: 1px solid #30363d; display: flex; align-items: center; justify-content: space-between; z-index: 50;
+    }
+    .hud-left { display: flex; align-items: center; gap: 14px; }
+    .btn-exit-game {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px;
+      background: #21262d; border: 1px solid #30363d; color: #8b949e; text-decoration: none;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .btn-exit-game:hover { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
+    .score-badge { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+    .lives { font-size: 1.2rem; letter-spacing: 2px; display: inline-block; transition: transform 0.2s ease; }
+    @keyframes heartHeal {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); filter: drop-shadow(0 0 8px #7ee787); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+    .heart-heal-bounce {
+      animation: heartHeal 0.5s ease-in-out;
+    }
+    .hud-center {
+      display: flex; align-items: center; gap: 6px; background: #161b22;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid #30363d;
+    }
+    .type-switcher { display: flex; gap: 4px; }
+    .type-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      text-decoration: none; color: #8b949e; transition: all 0.15s ease;
+    }
+    .type-btn.active-a { background: #238636; color: #ffffff; }
+    .type-btn:hover { color: #f0f6fc; }
+    .speed-tag { font-size: 0.75rem; color: #8b949e; font-weight: 600; margin-left: 6px; }
+    .speed-btn {
+      background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.72rem;
+      padding: 2px 7px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .speed-btn.active { background: #1f6feb; color: #ffffff; border-color: #388bfd; }
+    .streak-badge { font-size: 0.82rem; font-weight: 800; color: #e3b341; min-width: 75px; text-align: right; }
+
+    #game-zone {
+      position: relative; flex: 1; width: 100%;
+      background: radial-gradient(circle at 50% 30%, #161b22 0%, #0d1117 80%);
+      overflow: hidden;
+    }
+    .danger-line {
+      position: absolute; bottom: 8px; left: 0; width: 100%; height: 2px;
+      background: repeating-linear-gradient(90deg, #f85149, #f85149 10px, transparent 10px, transparent 20px);
+      opacity: 0.7; z-index: 10;
+    }
+    .falling-target {
+      position: absolute; width: 195px; padding: 10px;
+      background: #21262d; border: 2px solid #58a6ff; border-radius: 10px;
+      text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 20;
+    }
+    .falling-target .target-title { font-size: 0.92rem; font-weight: 800; color: #ffffff; margin-bottom: 2px; }
+    .falling-target .target-desc { font-size: 0.73rem; color: #8b949e; }
+
+    footer.control-deck {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+      padding: 8px 12px 14px; background: #161b22; border-top: 1px solid #30363d; z-index: 50;
+    }
+    .deck-btn {
+      padding: 10px 4px; background: #21262d; border: 1.5px solid #30363d;
+      border-radius: 8px; color: #c9d1d9; cursor: pointer; text-align: center;
+      transition: all 0.1s ease;
+    }
+    .deck-btn:active { transform: scale(0.96); background: #30363d; }
+    .deck-btn.btn-match-active {
+      background: #238636 !important; border-color: #3fb950 !important; color: #ffffff !important;
+      transform: scale(0.96); box-shadow: 0 0 12px rgba(46, 160, 67, 0.6);
+    }
+    .deck-btn-num { font-size: 0.75rem; color: #8b949e; margin-bottom: 2px; font-weight: 700; }
+    .deck-btn-name { font-size: 0.8rem; font-weight: 700; line-height: 1.2; word-break: keep-all; }
+
+    .laser-beam {
+      position: absolute; width: 4px; background: #58a6ff;
+      box-shadow: 0 0 8px #58a6ff, 0 0 16px #58a6ff;
+      transform-origin: bottom center; z-index: 30; pointer-events: none;
+    }
+
+    .hit-spark {
+      position: absolute; width: 14px; height: 14px; border-radius: 50%;
+      background: #ffffff; box-shadow: 0 0 16px #388bfd, 0 0 32px #58a6ff;
+      pointer-events: none; z-index: 35; animation: sparkFade 0.25s forwards;
+    }
+    @keyframes sparkFade {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(3.5); opacity: 0; }
+    }
+
+    .overlay-modal {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 17, 23, 0.9); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    }
+    .modal-box {
+      background: #161b22; border: 1px solid #30363d; border-radius: 16px;
+      max-width: 440px; width: 100%; padding: 26px 22px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6); max-height: 90vh; overflow-y: auto;
+    }
+    .modal-title { font-size: 1.35rem; font-weight: 800; color: #f0f6fc; margin-bottom: 10px; }
+    .modal-desc { font-size: 0.86rem; color: #8b949e; line-height: 1.6; margin-bottom: 20px; }
+    .modal-dual-actions { display: flex; gap: 8px; margin-bottom: 10px; }
+    .action-btn {
+      flex: 1; padding: 12px; background: #238636; border: none; color: #ffffff;
+      font-size: 0.95rem; font-weight: 800; border-radius: 8px; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .action-btn.btn-alt { background: #8957e5; }
+    .sub-action-btn { display: block; font-size: 0.82rem; color: #8b949e; margin-top: 10px; text-decoration: underline; cursor: pointer; }
+    .btn-next-stage {
+      width: 100%; padding: 13px; background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+      border: 1px solid #3fb950; color: #ffffff; font-size: 1.05rem; font-weight: 800;
+      border-radius: 10px; cursor: pointer; text-align: center; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 12px; box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4);
+      animation: pulseBtn 1.8s infinite;
+    }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 16px rgba(46, 160, 67, 0.4); }
+      50% { transform: scale(1.02); box-shadow: 0 6px 20px rgba(46, 160, 67, 0.65); }
+    }
+
+    @media (max-width: 600px) {
+      .falling-target { width: 165px; padding: 8px; }
+      .falling-target .target-title { font-size: 0.82rem; }
+      .falling-target .target-desc { font-size: 0.68rem; }
+      .deck-btn-name { font-size: 0.72rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hud-left">
+      <a href="../games.html" class="btn-exit-game">◀ 나가기</a>
+      <div class="score-badge">SCORE <span id="score-val">0</span></div>
+      <div class="lives" id="lives-val">❤️❤️❤️</div>
+    </div>
+    <div class="hud-center">
+      <div class="type-switcher">
+        <span class="type-btn active-a">A 낙하요격</span>
+        <a href="./game2-3-3-b.html" class="type-btn">B 버블헌팅</a>
+      </div>
+      <span class="speed-tag">속도:</span>
+      <button class="speed-btn active" onclick="setSpeed(1.0, this)">1.0x</button>
+      <button class="speed-btn" onclick="setSpeed(1.3, this)">1.3x</button>
+      <button class="speed-btn" onclick="setSpeed(1.6, this)">1.6x</button>
+    </div>
+    <div class="streak-badge" id="streak-val">0 COMBO</div>
+  </header>
+
+  <main id="game-zone">
+    <div class="danger-line"></div>
+  </main>
+
+  <footer class="control-deck">
+    <button class="deck-btn" onclick="onDeckClick(0)">
+      <div class="deck-btn-num">[1]</div>
+      <div class="deck-btn-name">화재대응·일반피난</div>
+    </button>
+    <button class="deck-btn" onclick="onDeckClick(1)">
+      <div class="deck-btn-num">[2]</div>
+      <div class="deck-btn-name">시각장애인 보조</div>
+    </button>
+    <button class="deck-btn" onclick="onDeckClick(2)">
+      <div class="deck-btn-num">[3]</div>
+      <div class="deck-btn-name">청각장애인 보조</div>
+    </button>
+    <button class="deck-btn" onclick="onDeckClick(3)">
+      <div class="deck-btn-num">[4]</div>
+      <div class="deck-btn-name">지체·지적장애 보조</div>
+    </button>
+    <button class="deck-btn" onclick="onDeckClick(4)">
+      <div class="deck-btn-num">[5]</div>
+      <div class="deck-btn-name">업무기록(월1회/2년)</div>
+    </button>
+  </footer>
+
+  <!-- 시작 모달 -->
+  <div class="overlay-modal" id="start-modal">
+    <div class="modal-box">
+      <div style="font-size:2.8rem; margin-bottom:8px;">🤝</div>
+      <h2 class="modal-title">[2권 제 3-3탄 A] 피난약자 보조 & 업무수행기록 요격전</h2>
+      <p class="modal-desc">
+        위에서 떨어지는 화재대응·피난약자 보조 및 업무기록 기준을 확인하고<br>하단 <b>5대 카테고리 버튼(1~5키)</b>을 눌러 정확히 요격하세요!<br><br>
+        • <b>일반 피난</b>: 엘리베이터 절대 금지, 아래층 우선 대피, 손등 도어노브 확인, 방화문 닫기<br>
+        • <b>시각장애인</b>: 팔꿈치를 잡게 유도, 반 보 앞서 걷기, 계단 시작·끝 명확한 음성 안내<br>
+        • <b>청각장애인</b>: 시각경보, 손전등/전등 점멸 신호, 메모·필담 대화, 짧은 문장<br>
+        • <b>지체장애인</b>: 휠체어 휠(바퀴) 고정, 2인 이상 보조하여 계단 이동<br>
+        • <b>지적장애인</b>: 차분하고 쉬운 말, 손잡고 동행 유도, 친근한 관계자 1:1 보조<br>
+        • <b>업무수행기록표</b>: 소방안전관리자 <b>월 1회 이상 작성</b>, <b>2년간 보관 의무</b> (위반 시 300만원 과태료)
+      </p>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🚀 작전 개시</button>
+        <a href="./game2-3-3-b.html" class="action-btn btn-alt">🛸 B타입 도전</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="overlay-modal" id="result-modal" style="display:none;">
+    <div class="modal-box">
+      <div id="result-icon" style="font-size:2.8rem; margin-bottom:8px;">🏆</div>
+      <h2 class="modal-title" id="result-title">작전 성공!</h2>
+      <p class="modal-desc" id="result-desc">최종 점수: 0점</p>
+      <a href="../study.html?round=2-3-3" class="btn-next-stage" id="next-stage-btn">
+        <span>📖 [2권 제 3-3탄] 요약 학습노트 확인하기 ▶</span>
+      </a>
+      <div class="modal-dual-actions">
+        <button class="action-btn" onclick="startGame()">🔄 다시 도전</button>
+        <a href="./game2-3-3-b.html" class="action-btn btn-alt">🛸 B타입 플레이</a>
+      </div>
+      <a href="../games.html" class="sub-action-btn">소방 게임 센터로 가기</a>
+    </div>
+  </div>
+
+  <script>
+    const CATEGORIES = [
+      { id: 0, name: "화재대응·일반피난", hint: "엘리베이터 금지, 아래층 우선, 손등 도어노브 확인, 젖은 수건, 방화문 닫기" },
+      { id: 1, name: "시각장애인 보조", hint: "팔꿈치 잡게 유도, 반 보 앞서 걷기, 계단 시작·끝 음성 안내, 보폭 맞추기" },
+      { id: 2, name: "청각장애인 보조", hint: "시각경보, 손전등/전등 점멸, 메모·필담 대화, 짧은 문장, 몸짓 활용" },
+      { id: 3, name: "지체·지적장애 보조", hint: "지체: 휠체어 휠 고정·2인이상 보조 / 지적: 차분한 말·손잡고 동행·1:1 유도" },
+      { id: 4, name: "업무기록(월1회/2년)", hint: "소방안전관리자 월 1회 이상 작성, 2년간 보관 의무, 위반 시 300만원 과태료" }
+    ];
+
+    const TARGET_POOL = [
+      // 0: 화재대응·일반피난
+      { cat: 0, title: "엘리베이터 이용 금지", desc: "승강로는 굴뚝 효과로 연기가 급상승하고 정전 갇힘 위험이 있으므로 절대 금지" },
+      { cat: 0, title: "아래층으로 우선 대피", desc: "지상 방향 아래층으로 우선 대피하며, 불가능한 경우에만 옥상으로 대피" },
+      { cat: 0, title: "손등으로 도어노브 확인", desc: "문을 열기 전 손등으로 손잡이 온도를 감지하여 뜨거우면 문을 열지 않음" },
+      { cat: 0, title: "방화문 닫고 대피", desc: "실내 연기 및 화염이 복도나 계단실로 확산되지 않도록 출입문은 반드시 닫음" },
+
+      // 1: 시각장애인 보조
+      { cat: 1, title: "팔꿈치 잡게 유도", desc: "보조자의 팔꿈치를 가볍게 잡게 하고 반 보 앞에서 보폭을 맞추어 유도" },
+      { cat: 1, title: "계단 시작·끝 음성 안내", desc: "'계단이 시작됩니다', '내리막입니다' 등 지형 변화를 명확한 말로 사전 설명" },
+      { cat: 1, title: "맹인안내견 동반 대피", desc: "안내견이 있는 경우 안내견을 떼어놓지 않고 동반하여 안전하게 대피 유도" },
+      { cat: 1, title: "밀거나 당기지 않기", desc: "시각장애인을 뒤에서 밀거나 억지로 끌지 않고 보조자의 움직임을 느끼게 보조" },
+
+      // 2: 청각장애인 보조
+      { cat: 2, title: "손전등·전등 점멸 신호", desc: "경보음을 듣지 못하므로 손전등이나 실내 전등을 껐다 켜서 위험 상황 전파" },
+      { cat: 2, title: "메모 및 필담 대화", desc: "시각적 정보 전달을 위해 메모지나 스마트폰 화면에 글을 써서 명확히 소통" },
+      { cat: 2, title: "짧고 명확한 문장", desc: "글씨를 크고 짧게 작성하고 명확한 표정과 손짓(제스처)을 결합하여 전달" },
+      { cat: 2, title: "시각경보장치 확인", desc: "비상시 번쩍이는 스트로브 시각경보기를 보고 즉시 대피할 수 있도록 유도" },
+
+      // 3: 지체·지적장애 보조
+      { cat: 3, title: "휠체어 휠(바퀴) 고정", desc: "지체장애인 이동 보조 시 바퀴를 단단히 잠그고 계단은 최소 2인 이상 협력" },
+      { cat: 3, title: "차분하고 부드러운 말투", desc: "지적·자폐성 장애인은 패닉에 빠지기 쉬우므로 다그치지 않고 차분히 대화" },
+      { cat: 3, title: "손을 잡고 1:1 동행", desc: "불안감을 줄이기 위해 친근한 관계자가 1:1로 손을 잡고 안전지대까지 동행" },
+      { cat: 3, title: "들것 및 피난기구 활용", desc: "보행 불가 환자는 들것이나 피난용 의자(Evac Chair)를 이용해 신속 운반" },
+
+      // 4: 업무기록(월1회/2년)
+      { cat: 4, title: "월 1회 이상 작성", desc: "소방안전관리자는 법정 업무수행 기록표를 최소 월 1회 이상 성실히 작성" },
+      { cat: 4, title: "2년간 의무 보관", desc: "작성된 소방안전관리 업무수행 기록표는 작성일로부터 2년간 의무 보존" },
+      { cat: 4, title: "300만원 이하 과태료", desc: "업무수행 기록표를 작성하지 않거나 거짓 작성·미보관 시 300만원 과태료" },
+      { cat: 4, title: "화기감독 및 피난관리", desc: "소방시설 점검뿐 아니라 화기취급 감독 및 피난시설 유지 현황을 전수 기록" }
+    ];
+
+    let score = 0;
+    let lives = 3;
+    let combo = 0;
+    let speedMult = 1.0;
+    let isGameOver = false;
+    let activeTargets = [];
+    let spawnTimer = null;
+    let animFrame = null;
+    let lastTime = 0;
+
+    const gameZone = document.getElementById('game-zone');
+    const scoreVal = document.getElementById('score-val');
+    const livesVal = document.getElementById('lives-val');
+    const streakVal = document.getElementById('streak-val');
+
+    function setSpeed(mult, btn) {
+      speedMult = mult;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSfx(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'laser') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(150, now + 0.12);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+        osc.start(now); osc.stop(now + 0.12);
+      } else if (type === 'hit') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(240, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.18);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
+        osc.start(now); osc.stop(now + 0.18);
+      } else if (type === 'heal') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(350, now);
+        osc.frequency.setValueAtTime(500, now + 0.08);
+        osc.frequency.setValueAtTime(700, now + 0.16);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.28);
+        osc.start(now); osc.stop(now + 0.28);
+      } else if (type === 'miss') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.linearRampToValueAtTime(60, now + 0.2);
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+      }
+    }
+
+    function startGame() {
+      document.getElementById('start-modal').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
+      score = 0;
+      lives = 3;
+      combo = 0;
+      isGameOver = false;
+      activeTargets.forEach(t => t.el.remove());
+      activeTargets = [];
+
+      updateHUD();
+      lastTime = performance.now();
+      if (spawnTimer) clearInterval(spawnTimer);
+      spawnTimer = setInterval(spawnTarget, 2200 / speedMult);
+
+      if (animFrame) cancelAnimationFrame(animFrame);
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function updateHUD() {
+      scoreVal.textContent = score;
+      livesVal.textContent = '❤️'.repeat(Math.max(0, lives)) + '🖤'.repeat(Math.max(0, 3 - lives));
+      streakVal.textContent = `${combo} COMBO`;
+    }
+
+    function spawnTarget() {
+      if (isGameOver) return;
+      const data = TARGET_POOL[Math.floor(Math.random() * TARGET_POOL.length)];
+      const el = document.createElement('div');
+      el.className = 'falling-target';
+      el.innerHTML = `
+        <div class="target-title">${data.title}</div>
+        <div class="target-desc">${data.desc}</div>
+      `;
+
+      const zoneW = gameZone.clientWidth || 360;
+      const targetW = 195;
+      const maxX = Math.max(10, zoneW - targetW - 10);
+      const posX = 10 + Math.random() * (maxX - 10);
+
+      el.style.left = `${posX}px`;
+      el.style.top = '-80px';
+      gameZone.appendChild(el);
+
+      activeTargets.push({
+        el,
+        data,
+        x: posX,
+        y: -80,
+        speed: (45 + Math.random() * 25) * speedMult
+      });
+    }
+
+    function onDeckClick(catId) {
+      if (isGameOver) return;
+      playSfx('laser');
+
+      const deckBtns = document.querySelectorAll('.deck-btn');
+      if (deckBtns[catId]) {
+        deckBtns[catId].classList.add('btn-match-active');
+        setTimeout(() => deckBtns[catId].classList.remove('btn-match-active'), 150);
+      }
+
+      let bestTarget = null;
+      let maxY = -9999;
+      activeTargets.forEach(t => {
+        if (t.data.cat === catId && t.y > maxY) {
+          maxY = t.y;
+          bestTarget = t;
+        }
+      });
+
+      if (bestTarget) {
+        destroyTarget(bestTarget, true);
+      } else {
+        playSfx('miss');
+        combo = 0;
+        score = Math.max(0, score - 30);
+        updateHUD();
+      }
+    }
+
+    function destroyTarget(target, isHit) {
+      const idx = activeTargets.indexOf(target);
+      if (idx !== -1) activeTargets.splice(idx, 1);
+
+      if (isHit) {
+        playSfx('hit');
+        score += 100 + combo * 10;
+        combo++;
+
+        if (combo % 5 === 0 && lives < 3) {
+          lives++;
+          playSfx('heal');
+          livesVal.classList.remove('heart-heal-bounce');
+          void livesVal.offsetWidth;
+          livesVal.classList.add('heart-heal-bounce');
+        }
+
+        const spark = document.createElement('div');
+        spark.className = 'hit-spark';
+        spark.style.left = `${target.x + 90}px`;
+        spark.style.top = `${target.y + 25}px`;
+        gameZone.appendChild(spark);
+        setTimeout(() => spark.remove(), 250);
+
+        if (score >= 2500) {
+          endGame(true);
+        }
+      } else {
+        playSfx('miss');
+        lives--;
+        combo = 0;
+        if (lives <= 0) {
+          endGame(false);
+        }
+      }
+
+      target.el.remove();
+      updateHUD();
+    }
+
+    function gameLoop(now) {
+      if (isGameOver) return;
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      const zoneH = gameZone.clientHeight;
+      const dangerY = zoneH - 50;
+
+      for (let i = activeTargets.length - 1; i >= 0; i--) {
+        const t = activeTargets[i];
+        t.y += t.speed * dt;
+        t.el.style.top = `${t.y}px`;
+
+        if (t.y >= dangerY) {
+          destroyTarget(t, false);
+        }
+      }
+
+      animFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function endGame(isWin) {
+      isGameOver = true;
+      if (spawnTimer) clearInterval(spawnTimer);
+      if (animFrame) cancelAnimationFrame(animFrame);
+
+      const resModal = document.getElementById('result-modal');
+      const rIcon = document.getElementById('result-icon');
+      const rTitle = document.getElementById('result-title');
+      const rDesc = document.getElementById('result-desc');
+      const nextBtn = document.getElementById('next-stage-btn');
+
+      resModal.style.display = 'flex';
+      if (isWin) {
+        rIcon.textContent = '🏆';
+        rTitle.textContent = '작전 성공! 전원 안전 대피';
+        rTitle.style.color = '#58a6ff';
+        rDesc.textContent = `축하합니다! 피난약자 보조 요령과 소방안전관리 업무기록 기준을 완벽히 마스터했습니다! 최종 점수: ${score}점`;
+        nextBtn.style.display = 'inline-flex';
+      } else {
+        rIcon.textContent = '💥';
+        rTitle.textContent = '작전 실패 (방어선 함락)';
+        rTitle.style.color = '#f85149';
+        rDesc.textContent = `피난 지원이 지연되었습니다. 다시 도전해보세요! 최종 점수: ${score}점`;
+        nextBtn.style.display = 'none';
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (['1', '2', '3', '4', '5'].includes(e.key)) {
+        onDeckClick(parseInt(e.key, 10) - 1);
+      }
+    });
+  </script>
+</body>
+</html>
