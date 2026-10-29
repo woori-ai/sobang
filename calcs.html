@@ -8,8 +8,12 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20width=%22100%22%20height=%22100%22><text y=%22.9em%22 font-size=%2290%22>🚒</text></svg>">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     :root {
       --calc-border: #30363d;
       --calc-card-bg: #161b22;
@@ -23,10 +27,15 @@
     body {
       background-color: #0d1117;
       color: #c9d1d9;
-      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
       margin: 0;
       padding: 0;
-      line-height: 1.5;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
     }
 
     /* 링크 기본 리셋 */
@@ -53,9 +62,9 @@
     }
     .header-inner {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 0 16px;
+      padding: 0 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -119,9 +128,12 @@
     }
 
     .calcs-container {
-      max-width: 1200px;
+      width: 100%;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 20px 16px 80px 16px;
+      padding: 24px 24px 80px 24px;
+      box-sizing: border-box;
+      flex: 1;
     }
 
     /* 1. 상단 히어로 영역 */
