@@ -1373,54 +1373,307 @@
       </div>
     </div>
 
-    <!-- C05: 펌프 성능시험 판정 계산 -->
+        <!-- C05: 펌프 성능시험 판정 계산 -->
     <div class="calc-card" data-cat="fire" id="calc-c05">
       <div class="calc-card-header">
         <div class="calc-title-group">
           <span class="calc-id-badge">C-05</span>
           <h2 class="calc-card-title">가압송수장치 펌프 성능시험 합격 판정 기준</h2>
-          <span class="calc-card-sub">체절운전(140%) 및 과부하운전(150% 유량에 65%) 계산</span>
+          <span class="calc-card-sub">체절점(140% 이하) · 정격점(100% 이상) · 최대운전점(65% 이상) · 유량계(175% 이상)</span>
         </div>
         <a href="./index.html?round=2-1-2" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
           <span>📝 관련 기출 16문항 풀기 ▶</span>
         </a>
       </div>
       <div class="calc-card-body">
+        <!-- 1. 핵심 공식 및 3대 운전점 기준표 -->
         <div class="formula-box">
-          <div class="formula-title">📌 핵심 산출 공식</div>
-          <div class="formula-content">
-            • <strong>체절운전 (유량 0%)</strong>: 체절압력 ≤ <strong>정격토출압력 × <span class="blur-calc">140% (1.4배)</span> 이하</strong><br>
-            • <strong>정격부하운전 (유량 100%)</strong>: 토출압력 ≥ <strong>정격토출압력 × <span class="blur-calc">100% (1.0배)</span> 이상</strong><br>
-            • <strong>최대(과부하)운전 (유량 150%)</strong>: 토출압력 ≥ <strong>정격토출압력 × <span class="blur-calc">65% (0.65배)</span> 이상</strong>
+          <div class="formula-title">📌 펌프 성능시험 3대 운전점 & 유량계 법정 기준표</div>
+          <div style="overflow-x: auto; margin: 10px 0 14px 0;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.92rem; background:#161b22; border-radius:8px; overflow:hidden; border:1px solid #30363d;">
+              <thead>
+                <tr style="background:#21262d; color:#f0f6fc; text-align:left; border-bottom:1px solid #30363d;">
+                  <th style="padding:10px 14px; width:24%;">운전점 구분</th>
+                  <th style="padding:10px 14px; width:26%;">토출 유량</th>
+                  <th style="padding:10px 14px;">법정 압력 기준 (합격 판정)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #21262d;">
+                  <td style="padding:10px 14px; font-weight:700; color:#ff7b72;">체절점 (체절운전)</td>
+                  <td style="padding:10px 14px; color:#c9d1d9;"><strong>0 %</strong> (토출 밸브 완전 차단)</td>
+                  <td style="padding:10px 14px; color:#e6edf3;">정격토출압력의 <strong><span class="blur-calc">140% 이하</span></strong> (압력 상한선)</td>
+                </tr>
+                <tr style="border-bottom:1px solid #21262d;">
+                  <td style="padding:10px 14px; font-weight:700; color:#79c0ff;">정격점 (정격부하)</td>
+                  <td style="padding:10px 14px; color:#c9d1d9;"><strong>100 %</strong> (정격토출량)</td>
+                  <td style="padding:10px 14px; color:#e6edf3;">정격토출압력 <strong><span class="blur-calc">100% 이상</span></strong></td>
+                </tr>
+                <tr style="border-bottom:1px solid #21262d;">
+                  <td style="padding:10px 14px; font-weight:700; color:#d2a8ff;">최대운전점 (과부하)</td>
+                  <td style="padding:10px 14px; color:#c9d1d9;"><strong>150 %</strong> (정격토출량의 1.5배)</td>
+                  <td style="padding:10px 14px; color:#e6edf3;">정격토출압력의 <strong><span class="blur-calc">65% 이상</span></strong> (압력 하한선)</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 14px; font-weight:700; color:#7ee787;">유량측정장치 (유량계)</td>
+                  <td colspan="2" style="padding:10px 14px; color:#e6edf3;">
+                    펌프 정격토출량의 <strong><span class="blur-calc">175% 이상</span></strong>까지 측정 가능한 스케일일 것
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div class="formula-params">
-            * 체절압력 미만에서 릴리프밸브가 개방되어 순환배관으로 물을 방출해야 함 (수온상승 방지)
+            * <strong>체절압력 미만</strong>에서 순환배관의 <strong>릴리프밸브가 개방</strong>되어 물을 방출함으로써 펌프 내 수온상승을 방지해야 합니다.
           </div>
         </div>
 
+        <!-- 2. 3초 컷 꿀팁 박스 -->
         <div class="tip-box">
-          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁 (140% - 65% - 175%)</div>
           <div class="tip-content">
-            <span class="tip-rule-badge">체14 / 최15-65 공식</span>
-            시험 문제는 대부분 "정격토출압력 0.5 MPa, 정격토출량 1,000 L/min"으로 출제됩니다.<br>
-            • 체절압력 상한치: 0.5 × 1.4 = <strong>0.7 MPa</strong> 이하이어야 합격!<br>
-            • 150% 유량(1,500 L/min) 시 하한치: 0.5 × 0.65 = <strong>0.325 MPa</strong> 이상이어야 합격!<br>
-            따라서 보기에서 0.65를 곱한 값이나 1.4를 곱한 값을 찾으면 즉시 정답을 판정할 수 있습니다.
+            <span class="tip-rule-badge">핵심 숫자 3개 & '이상/이하' 함정 탈출</span>
+            시험장에서는 <strong>140%, 65%, 175%</strong> 세 숫자를 서로 바꿔치기하거나 '이상/이하'를 뒤집는 함정이 단골 출제됩니다!<br>
+            • <strong>140% (체절점)</strong>: 배관 및 펌프 파열을 막기 위한 상한선이므로 유일하게 <strong>"이하"</strong>!<br>
+            • <strong>65% (최대운전점)</strong>: 150% 과부하 시에도 펌프가 버텨야 하는 최소 성능이므로 <strong>"이상"</strong>!<br>
+            • <strong>175% (유량측정장치)</strong>: 150% 최대운전점을 충분히 측정해야 하므로 <strong>"175% 이상"</strong>!<br>
+            <br>
+            <span class="tip-rule-badge">판정 계산 3초 컷: 정격압력에 1.4와 0.65 미리 곱하기</span>
+            시험지에 정격토출압력($P$)이 주어지면 즉시 $P \times 1.4$와 $P \times 0.65$를 구해 두고 선지를 봅니다.<br>
+            • 정격압력 <strong>0.5 MPa</strong> ➔ 체절 상한: $0.5 \times 1.4 = \mathbf{0.7\,\text{MPa}}$ 이하 / 최대 하한: $0.5 \times 0.65 = \mathbf{0.325\,\text{MPa}}$ 이상<br>
+            • 정격압력 <strong>0.6 MPa</strong> ➔ 체절 상한: $0.6 \times 1.4 = \mathbf{0.84\,\text{MPa}}$ 이하 / 최대 하한: $0.6 \times 0.65 = \mathbf{0.39\,\text{MPa}}$ 이상
           </div>
         </div>
 
+        <!-- 3. 실전 예제 -->
         <div class="example-box">
           <div class="example-header">
             <span class="example-badge">실전 기출 대표 예제</span>
             <span class="decimal-tag decimal-ceil">비율 곱셈 판정</span>
           </div>
           <div class="example-question">
-            [문제] 정격토출량이 1,000 L/min, 정격토출압력이 0.5 MPa인 펌프의 최대운전(150% 유량) 시 토출압력은 최소 얼마 이상이어야 하는가?
+            [문제] 정격토출량이 1,000 L/min, 정격토출압력이 0.5 MPa인 펌프의 성능시험 결과가 다음과 같을 때, 정상(합격) 판정에 해당하는 것은?
           </div>
           <div class="example-solution">
-            기준: 정격토출압력의 65% 이상<br>
-            최소 압력 = 0.5 MPa × 0.65 = <strong>0.325 MPa</strong><br>
-            ➔ 정답: <strong>0.325 MPa 이상</strong>
+            • 체절압력 기준: $0.5 \times 1.4 = 0.7\,\text{MPa}$ <strong>이하</strong> 이어야 적합<br>
+            • 150% 유량(1,500 L/min) 시 압력 기준: $0.5 \times 0.65 = 0.325\,\text{MPa}$ <strong>이상</strong> 이어야 적합<br>
+            • 유량계 최소 측정 범위: $1,000 \times 1.75 = 1,750\,\text{L/min}$ <strong>이상</strong> 이어야 적합<br>
+            ➔ 정답 판정: <strong>체절압력이 0.68 MPa로 측정된 경우</strong> (0.7 MPa 이하이므로 적합!)
+          </div>
+        </div>
+
+        <!-- 4. 펌프 성능시험 합격 판정 집중 6문항 트레이닝 드릴 -->
+        <div class="drill-section">
+          <div class="drill-header">
+            <div class="drill-header-left">
+              <span class="drill-badge">🎯 핵심 6문항 트레이닝</span>
+              <h3 class="drill-title">가압송수장치 펌프 성능시험 실전 연습문제</h3>
+            </div>
+            <button id="btn-drill-toggle-c05" class="btn-drill-toggle-all" onclick="toggleSectionDrillExpl('calc-c05', 'btn-drill-toggle-c05')">전체 정답/해설 펼치기</button>
+          </div>
+          <div class="drill-grid">
+
+            <!-- Q1 -->
+            <div class="drill-item" id="drill-c05-q1">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q1</span>
+                <span class="drill-q-text">펌프 성능시험 중 체절운전(유량 0%) 시의 법정 압력 기준으로 옳은 것은?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q1', 1, 2)">
+                  <span>①</span> <span>정격토출압력의 140% 이상</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q1', 2, 2)">
+                  <span>②</span> <span>정격토출압력의 140% 이하</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q1', 3, 2)">
+                  <span>③</span> <span>정격토출압력의 150% 이하</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q1', 4, 2)">
+                  <span>④</span> <span>정격토출압력의 65% 이상</span>
+                </button>
+              </div>
+              <div class="drill-feedback" id="drill-fb-c05-q1">
+                💡 <strong>정답: ②</strong> | 체절압력은 배관과 설비의 파열을 막기 위한 '상한선'이므로 정격토출압력의 <strong>140% 이하</strong>이어야 합니다. (① 140% '이상'은 대표적인 함정!)
+              </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="drill-item" id="drill-c05-q2">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q2</span>
+                <span class="drill-q-text">소화펌프를 정격토출량의 150%로 과부하 운전할 때 토출압력 기준으로 옳은 것은?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q2', 1, 2)">
+                  <span>①</span> <span>정격토출압력의 65% 이하</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q2', 2, 2)">
+                  <span>②</span> <span>정격토출압력의 65% 이상</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q2', 3, 2)">
+                  <span>③</span> <span>정격토출압력의 140% 이상</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q2', 4, 2)">
+                  <span>④</span> <span>정격토출압력의 175% 이상</span>
+                </button>
+              </div>
+              <div class="drill-feedback" id="drill-fb-c05-q2">
+                💡 <strong>정답: ②</strong> | 150% 과부하 운전 시에는 압력이 떨어지더라도 최소 65% 이상은 유지되어야 하므로 정격토출압력의 <strong>65% 이상</strong>입니다.
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="drill-item" id="drill-c05-q3">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q3</span>
+                <span class="drill-q-text">펌프 성능시험 배관에 설치하는 유량측정장치(유량계)의 측정 가능 범위 기준으로 옳은 것은?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q3', 1, 4)">
+                  <span>①</span> <span>정격토출량의 140% 이상</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q3', 2, 4)">
+                  <span>②</span> <span>정격토출량의 150% 이상</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q3', 3, 4)">
+                  <span>③</span> <span>정격토출량의 165% 이상</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q3', 4, 4)">
+                  <span>④</span> <span>정격토출량의 175% 이상</span>
+                </button>
+              </div>
+              <div class="drill-feedback" id="drill-fb-c05-q3">
+                💡 <strong>정답: ④</strong> | 최대운전점인 150% 유량을 여유 있게 측정할 수 있도록 유량계는 펌프 정격토출량의 <strong>175% 이상</strong>까지 측정 가능해야 합니다.
+              </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="drill-item" id="drill-c05-q4">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q4</span>
+                <span class="drill-q-text">펌프 성능시험 기준에 대한 설명 중 옳지 않은 것은?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q4', 1, 3)">
+                  <span>①</span> <span>체절운전 시 체절압력은 정격토출압력의 140% 이하이어야 한다.</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q4', 2, 3)">
+                  <span>②</span> <span>정격부하운전(100%) 시 토출압력은 정격토출압력 이상이어야 한다.</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q4', 3, 3)">
+                  <span>③</span> <span>최대부하운전(150%) 시 토출압력은 정격토출압력의 65% 이하이어야 한다.</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q4', 4, 3)">
+                  <span>④</span> <span>유량측정장치는 펌프 정격토출량의 175% 이상까지 측정할 수 있어야 한다.</span>
+                </button>
+              </div>
+              <div class="drill-feedback" id="drill-fb-c05-q4">
+                💡 <strong>정답: ③</strong> | 최대운전(150% 유량) 시 토출압력은 정격토출압력의 65% '이하'가 아니라 <strong>'65% 이상'</strong>이어야 합격입니다!
+              </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="drill-item" id="drill-c05-q5">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q5</span>
+                <span class="drill-q-text">정격토출압력 0.5 MPa, 정격토출량 1,000 L/min인 펌프의 성능시험을 실시하였다. 다음 중 합격(정상)에 해당하는 것은?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q5', 1, 3)">
+                  <span>①</span> <span>체절운전 시 압력이 0.75 MPa로 측정되었다.</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q5', 2, 3)">
+                  <span>②</span> <span>1,500 L/min 방출 시 압력이 0.30 MPa로 측정되었다.</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q5', 3, 3)">
+                  <span>③</span> <span>체절운전 시 압력이 0.68 MPa로 측정되었다.</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q5', 4, 3)">
+                  <span>④</span> <span>유량계 최대 측정 눈금이 1,600 L/min으로 설치되어 있다.</span>
+                </button>
+              </div>
+              <div class="drill-feedback" id="drill-fb-c05-q5">
+                💡 <strong>정답: ③</strong> | • 체절 상한: 0.5 × 1.4 = 0.7 MPa 이하 (0.68 MPa은 적합! ① 0.75 MPa은 불합격)<br>• 150% 하한: 0.5 × 0.65 = 0.325 MPa 이상 (② 0.30 MPa은 불합격)<br>• 유량계: 1,000 × 1.75 = 1,750 L/min 이상 (④ 1,600 L/min은 불합격)
+              </div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="drill-item" id="drill-c05-q6">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q6</span>
+                <span class="drill-q-text">정격토출압력 0.6 MPa, 정격토출량 800 L/min인 소화펌프의 최대운전(150%) 시 합격 최소 압력과 유량계의 최소 측정 범위는?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q6', 1, 2)">
+                  <span>①</span> <span>0.39 MPa 이상, 1,200 L/min 이상</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q6', 2, 2)">
+                  <span>②</span> <span>0.39 MPa 이상, 1,400 L/min 이상</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q6', 3, 2)">
+                  <span>③</span> <span>0.84 MPa 이하, 1,400 L/min 이상</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c05-q6', 4, 2)">
+                  <span>④</span> <span>0.42 MPa 이상, 1,400 L/min 이상</span>
+                </button>
+              </div>
+              <div class="drill-feedback" id="drill-fb-c05-q6">
+                💡 <strong>정답: ②</strong> | • 최대운전 압력 하한: 0.6 MPa × 0.65 = <strong>0.39 MPa 이상</strong><br>• 유량측정장치 범위: 800 L/min × 1.75 = <strong>1,400 L/min 이상</strong>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 정답 및 해설 요약표 -->
+          <div class="drill-table-wrap">
+            <div class="drill-table-header">
+              <span>📋 펌프 성능시험 6문항 정답 & 해설 한눈에 보기</span>
+              <span style="font-size:0.8rem; color:#8b949e; font-weight:normal;">140% · 65% · 175% 마스터</span>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="drill-table">
+                <thead>
+                  <tr>
+                    <th class="col-num">번호</th>
+                    <th class="col-ans">정답</th>
+                    <th class="col-exp">핵심 해설 및 시험장 함정 탈출 포인트</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="col-num">1</td>
+                    <td class="col-ans">②</td>
+                    <td class="col-exp">체절압력은 펌프 및 배관 파열 방지를 위한 '상한선'이므로 정격압력의 <strong>140% 이하</strong> (140% 이상 오답 주의!)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-num">2</td>
+                    <td class="col-ans">②</td>
+                    <td class="col-exp">150% 과부하 운전 시 압력은 정격압력의 <strong>65% 이상</strong> (65% 이하 오답 주의!)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-num">3</td>
+                    <td class="col-ans">④</td>
+                    <td class="col-exp">유량측정장치는 150% 최대운전점을 충분히 측정할 수 있도록 정격토출량의 <strong>175% 이상</strong>까지 측정 가능해야 함</td>
+                  </tr>
+                  <tr>
+                    <td class="col-num">4</td>
+                    <td class="col-ans">③</td>
+                    <td class="col-exp">최대운전 시 토출압력은 65% '이하'가 아닌 <strong>'65% 이상'</strong>이어야 합격 (이상/이하 뒤바꿈 빈출)</td>
+                  </tr>
+                  <tr>
+                    <td class="col-num">5</td>
+                    <td class="col-ans">③</td>
+                    <td class="col-exp">정격 0.5 MPa ➔ 체절 상한 0.7 MPa 이하(0.68 적합), 150% 하한 0.325 MPa 이상, 유량계 1,750 L/min 이상</td>
+                  </tr>
+                  <tr>
+                    <td class="col-num">6</td>
+                    <td class="col-ans">②</td>
+                    <td class="col-exp">최대운전 압력 = 0.6 × 0.65 = <strong>0.39 MPa 이상</strong>, 유량계 = 800 × 1.75 = <strong>1,400 L/min 이상</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -2050,9 +2303,14 @@
       });
     }
   
-    // 4. C-01 집중 트레이닝 드릴 인터랙션
-    function selectDrill(qNum, selectedOpt, correctOpt) {
-      const item = document.getElementById('drill-q' + qNum);
+        // 4. 집중 트레이닝 드릴 인터랙션 (C-01, C-05 등 범용)
+    function selectDrill(targetId, selectedOpt, correctOpt) {
+      let item = null;
+      if (typeof targetId === 'string' && targetId.startsWith('drill-')) {
+        item = document.getElementById(targetId);
+      } else {
+        item = document.getElementById('drill-q' + targetId);
+      }
       if (!item) return;
       const btns = item.querySelectorAll('.drill-opt-btn');
       btns.forEach((btn, idx) => {
@@ -2064,23 +2322,28 @@
           btn.classList.add('wrong');
         }
       });
-      const fb = document.getElementById('drill-fb' + qNum);
+      const fb = item.querySelector('.drill-feedback');
       if (fb) fb.classList.add('show');
     }
 
     function toggleAllDrillExpl() {
-      const fbs = document.querySelectorAll('.drill-feedback');
+      toggleSectionDrillExpl('calc-c01', 'btn-drill-toggle-all');
+    }
+
+    function toggleSectionDrillExpl(containerId, btnId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const fbs = container.querySelectorAll('.drill-feedback');
       const anyHidden = Array.from(fbs).some(fb => !fb.classList.contains('show'));
       fbs.forEach(fb => {
         if (anyHidden) fb.classList.add('show');
         else fb.classList.remove('show');
       });
-      const btn = document.getElementById('btn-drill-toggle-all');
+      const btn = document.getElementById(btnId);
       if (btn) {
         btn.textContent = anyHidden ? '정답/해설 접기' : '전체 정답/해설 펼치기';
       }
     }
-
   </script>
 </body>
 </html>
