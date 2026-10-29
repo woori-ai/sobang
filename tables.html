@@ -30,6 +30,109 @@
       line-height: 1.5;
     }
 
+    /* 링크 기본 색상 및 밑줄 리셋 */
+    a {
+      color: inherit;
+      text-decoration: none !important;
+    }
+    a:visited {
+      color: inherit;
+    }
+
+    /* 최상단 글로벌 내비게이션 바 */
+    .app-header {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+    .header-inner {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none !important;
+      color: inherit;
+    }
+    .brand:hover {
+      text-decoration: none !important;
+    }
+    .brand-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f0f6fc !important;
+      line-height: 1.25;
+      text-decoration: none !important;
+    }
+    .brand-sub {
+      font-size: 0.76rem;
+      color: #58a6ff !important;
+      font-weight: 600;
+      line-height: 1.2;
+      text-decoration: none !important;
+    }
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #f0f6fc !important;
+      text-decoration: none !important;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-back-home:hover {
+      background: #30363d;
+      color: #58a6ff !important;
+      border-color: #58a6ff;
+      transform: translateY(-1px);
+      text-decoration: none !important;
+    }
+    .btn-back-home:visited {
+      color: #f0f6fc !important;
+    }
+    .btn-back-home.btn-quiz-primary {
+      background: #238636 !important;
+      border-color: #2ea043 !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(35, 134, 54, 0.4);
+    }
+    .btn-back-home.btn-quiz-primary:hover {
+      background: #2ea043 !important;
+      border-color: #3fb950 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(46, 160, 67, 0.5);
+    }
+
     .tables-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -371,6 +474,23 @@
     }
 
     /* 모바일 반응형 */
+    @media (max-width: 600px) {
+      .header-inner {
+        padding: 0 10px;
+      }
+      .brand-sub {
+        display: none;
+      }
+      .btn-back-home {
+        padding: 5px 8px;
+        font-size: 0.78rem;
+        gap: 4px;
+      }
+      .brand-icon {
+        font-size: 1.35rem;
+      }
+    }
+
     @media (max-width: 768px) {
       .hero-title {
         font-size: 1.35rem;
@@ -410,13 +530,13 @@
         </a>
       </div>
       <div style="display:flex; align-items:center; gap:8px;">
-        <a href="./study.html" class="btn-back-home" title="1분 족집게 합격 요약노트">
+        <a href="./study.html" class="btn-back-home" title="1분 족집게 합격 요약노트" style="background: rgba(46, 160, 67, 0.15); border-color: rgba(46, 160, 67, 0.4); color: #7ee787 !important;">
           <span>📖 요약노트</span>
         </a>
-        <a href="./games.html" class="btn-back-home" title="소방 게임 아케이드 센터">
+        <a href="./games.html" class="btn-back-home" title="소방 게임 아케이드 센터" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #d2a8ff !important;">
           <span>🎮 게임센터</span>
         </a>
-        <a href="./index.html" class="btn-back-home" title="메인 문제풀이 화면으로 이동" style="background:#238636; border-color:#2ea043; color:#fff;">
+        <a href="./index.html" class="btn-back-home btn-quiz-primary" title="메인 문제풀이 화면으로 이동">
           <span>📝 문제 풀기로</span>
         </a>
       </div>
