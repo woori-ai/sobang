@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>소방안전관리자 1급 | 빈출 계산 공식 & 3초 컷 풀이 비법 15선</title>
+  <meta name="description" content="1급 소방안전관리자 시험 과락 탈출을 위한 빈출 계산 공식 15선 및 3초 컷 풀이 꿀팁 집대성. 거실 제연량, 노즐 방수량, 수원량, 감지기, 유도등, 수용인원, 방화구획, 위험물 배수 완벽 정리">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20width=%22100%22%20height=%22100%22><text y=%22.9em%22 font-size=%2290%22>🚒</text></svg>">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    :root {
+      --calc-border: #30363d;
+      --calc-card-bg: #161b22;
+      --tip-bg: rgba(210, 153, 34, 0.12);
+      --tip-border: rgba(210, 153, 34, 0.45);
+      --tip-text: #e3b341;
+      --formula-bg: rgba(56, 189, 248, 0.08);
+      --formula-border: rgba(56, 189, 248, 0.35);
+    }
+
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+
+    /* 링크 기본 리셋 */
+    a {
+      color: inherit;
+      text-decoration: none !important;
+    }
+    a:visited {
+      color: inherit;
+    }
+
+    /* 최상단 글로벌 내비게이션 바 */
+    .app-header {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+    .header-inner {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f0f6fc !important;
+      line-height: 1.25;
+    }
+    .brand-sub {
+      font-size: 0.76rem;
+      color: #58a6ff !important;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .btn-nav-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #f0f6fc !important;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-nav-chip:hover {
+      background: #30363d;
+      color: #58a6ff !important;
+      border-color: #58a6ff;
+      transform: translateY(-1px);
+    }
+    .btn-nav-chip.btn-quiz-primary {
+      background: #238636 !important;
+      border-color: #2ea043 !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(35, 134, 54, 0.4);
+    }
+    .btn-nav-chip.btn-quiz-primary:hover {
+      background: #2ea043 !important;
+      border-color: #3fb950 !important;
+    }
+
+    .calcs-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 16px 80px 16px;
+    }
+
+    /* 1. 상단 히어로 영역 */
+    .calcs-hero {
+      background: linear-gradient(135deg, rgba(210, 153, 34, 0.12), rgba(56, 189, 248, 0.15));
+      border: 1px solid rgba(210, 153, 34, 0.4);
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .hero-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .hero-badge {
+      background: #d29922;
+      color: #0d1117;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    .hero-badge-sub {
+      color: #79c0ff;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .hero-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.5px;
+    }
+    .hero-desc {
+      font-size: 0.95rem;
+      color: #8b949e;
+      margin: 0 0 18px 0;
+      line-height: 1.5;
+    }
+
+    /* 툴바 */
+    .hero-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(13, 17, 23, 0.7);
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+    .search-box-wrap {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 9px 12px 9px 36px;
+      color: #f0f6fc;
+      font-size: 0.9rem;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      color: #8b949e;
+      pointer-events: none;
+    }
+    .btn-mask-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(210, 153, 34, 0.15);
+      border: 1px solid rgba(210, 153, 34, 0.5);
+      color: #e3b341;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .btn-mask-toggle:hover {
+      background: rgba(210, 153, 34, 0.28);
+      color: #ffffff;
+    }
+    .btn-mask-toggle.active {
+      background: #d29922;
+      color: #0d1117;
+      border-color: #e3b341;
+      box-shadow: 0 0 14px rgba(210, 153, 34, 0.4);
+    }
+
+    /* 2. 대분류 탭 필터 */
+    .category-tabs-wrap {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+      scrollbar-width: thin;
+    }
+    .cat-tab-btn {
+      flex-shrink: 0;
+      background: #161b22;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cat-tab-btn:hover {
+      background: #21262d;
+      color: #f0f6fc;
+      border-color: #8b949e;
+    }
+    .cat-tab-btn.active {
+      background: #238636;
+      border-color: #2ea043;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(35, 134, 54, 0.35);
+    }
+    .cat-tab-btn .badge-count {
+      background: rgba(255, 255, 255, 0.2);
+      font-size: 0.72rem;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    /* 3. 계산 카드 스타일 */
+    .calc-card {
+      background: var(--calc-card-bg);
+      border: 1px solid var(--calc-border);
+      border-radius: 14px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      transition: border-color 0.2s ease;
+    }
+    .calc-card:hover {
+      border-color: rgba(210, 153, 34, 0.6);
+    }
+
+    .calc-card-header {
+      background: #1c2128;
+      border-bottom: 1px solid #30363d;
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .calc-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .calc-id-badge {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #e3b341;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .calc-card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin: 0;
+    }
+    .calc-card-sub {
+      font-size: 0.82rem;
+      color: #8b949e;
+      margin-left: 6px;
+    }
+
+    .btn-calc-quiz {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(35, 134, 54, 0.18);
+      border: 1px solid rgba(46, 160, 67, 0.5);
+      color: #7ee787;
+      font-size: 0.82rem;
+      font-weight: 800;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-calc-quiz:hover {
+      background: #238636;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .calc-card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 공식 박스 */
+    .formula-box {
+      background: var(--formula-bg);
+      border: 1px solid var(--formula-border);
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+    .formula-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #58a6ff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .formula-content {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      line-height: 1.4;
+      font-family: 'Pretendard', sans-serif;
+    }
+    .formula-params {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #8b949e;
+      line-height: 1.5;
+    }
+
+    /* 3초 컷 꿀팁 박스 */
+    .tip-box {
+      background: var(--tip-bg);
+      border: 1px solid var(--tip-border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      position: relative;
+    }
+    .tip-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--tip-text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .tip-content {
+      font-size: 0.92rem;
+      color: #f0f6fc;
+      line-height: 1.55;
+    }
+    .tip-content strong {
+      color: #e3b341;
+      font-weight: 800;
+    }
+    .tip-rule-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      margin-right: 4px;
+    }
+
+    /* 소수점 규칙 뱃지 */
+    .decimal-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+    .decimal-ceil {
+      background: rgba(35, 134, 54, 0.2);
+      border: 1px solid rgba(46, 160, 67, 0.5);
+      color: #7ee787;
+    }
+    .decimal-round {
+      background: rgba(210, 153, 34, 0.2);
+      border: 1px solid rgba(210, 153, 34, 0.5);
+      color: #e3b341;
+    }
+    .decimal-floor {
+      background: rgba(248, 81, 73, 0.2);
+      border: 1px solid rgba(248, 81, 73, 0.5);
+      color: #ff7b72;
+    }
+
+    /* 실전 예제 박스 */
+    .example-box {
+      background: #11151c;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+    .example-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .example-badge {
+      background: #21262d;
+      color: #79c0ff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .example-question {
+      font-size: 0.93rem;
+      font-weight: 700;
+      color: #f0f6fc;
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+    .example-solution {
+      font-size: 0.88rem;
+      color: #c9d1d9;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border-left: 3px solid #58a6ff;
+      line-height: 1.5;
+    }
+    .example-solution strong {
+      color: #7ee787;
+      font-weight: 800;
+    }
+
+    /* 블러 가림막 */
+    .blur-calc {
+      display: inline;
+      border-radius: 4px;
+      padding: 1px 3px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.mask-calc-on .blur-calc {
+      filter: blur(5px);
+      background: rgba(210, 153, 34, 0.35);
+      color: transparent !important;
+      user-select: none;
+      cursor: pointer;
+    }
+    body.mask-calc-on .blur-calc:hover,
+    body.mask-calc-on .blur-calc.revealed {
+      filter: none !important;
+      background: rgba(35, 134, 54, 0.35) !important;
+      color: #7ee787 !important;
+    }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        padding: 0 10px;
+      }
+      .brand-sub {
+        display: none;
+      }
+      .btn-nav-chip {
+        padding: 5px 8px;
+        font-size: 0.78rem;
+        gap: 4px;
+      }
+      .hero-title {
+        font-size: 1.35rem;
+      }
+      .calcs-container {
+        padding: 12px 10px 60px 10px;
+      }
+      .formula-content {
+        font-size: 1.05rem;
+      }
+      .tip-content {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 메인 내비게이션 헤더 -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="./index.html" class="brand" title="메인 문제풀이 화면으로 이동">
+          <span class="brand-icon">🚒</span>
+          <div>
+            <div class="brand-title">소방안전관리자 1급</div>
+            <div class="brand-sub">빈출 계산 공식 & 3초 풀이 팁 15선</div>
+          </div>
+        </a>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="./study.html" class="btn-nav-chip" title="1분 족집게 합격 요약노트" style="background: rgba(46, 160, 67, 0.15); border-color: rgba(46, 160, 67, 0.4); color: #7ee787 !important;">
+          <span>📖 요약노트</span>
+        </a>
+        <a href="./tables.html" class="btn-nav-chip" title="핵심 비교 암기표 19선 (Cheat Sheet)" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #58a6ff !important;">
+          <span>📊 비교표</span>
+        </a>
+        <a href="./games.html" class="btn-nav-chip" title="소방 게임 아케이드 센터" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #d2a8ff !important;">
+          <span>🎮 게임센터</span>
+        </a>
+        <a href="./index.html" class="btn-nav-chip btn-quiz-primary" title="메인 문제풀이 화면으로 이동">
+          <span>📝 문제 풀기로</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. 본문 컨테이너 -->
+  <div class="calcs-container">
+
+    <!-- 히어로 배너 -->
+    <div class="calcs-hero">
+      <div class="hero-badge-row">
+        <span class="hero-badge">★계산문제 빈출 전수 집대성</span>
+        <span class="hero-badge-sub">과락 탈출 & 초고속 3초 컷 풀이 공식 15선</span>
+      </div>
+      <h1 class="hero-title">🔢 1급 소방안전관리자 빈출 계산 공식 & 3초 풀이 비법</h1>
+      <p class="hero-desc">
+        거실 제연량, 노즐 방수량, 수원 저수량, 감지기 개수, 수용인원, 방화구획, 위험물 배수 등 시험에 단골 출제되는 <strong>15개 핵심 계산 공식과 소수점 처리 원칙, 그리고 시험장 3초 컷 단축 풀이 비법</strong>을 완벽 정리했습니다.
+      </p>
+
+      <!-- 툴바 (검색창 + 공식 가림막 모드) -->
+      <div class="hero-toolbar">
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="calc-search" class="search-input" placeholder="공식이나 키워드 검색 (예: 제연량, 방수량, 83.3, 수원, 감지기, 유도등, 방화구획...)" autocomplete="off">
+        </div>
+        <button id="btn-mask-toggle" class="btn-mask-toggle" onclick="toggleCalcMask()" title="공식과 핵심 수치를 가려 스스로 계산 연습을 할 수 있습니다">
+          <span id="mask-icon">👁️</span>
+          <span id="mask-text">공식·수치 가림막 ON (테스트 모드)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 대분류 카테고리 탭 (스크롤 칩) -->
+    <div class="category-tabs-wrap">
+      <button class="cat-tab-btn active" data-cat="all" onclick="filterCategory('all')">
+        <span>전체보기</span>
+        <span class="badge-count">15</span>
+      </button>
+      <button class="cat-tab-btn" data-cat="fire" onclick="filterCategory('fire')">
+        <span>🚒 소화설비 & 수원</span>
+        <span class="badge-count">5</span>
+      </button>
+      <button class="cat-tab-btn" data-cat="alarm" onclick="filterCategory('alarm')">
+        <span>🚨 경보 & 피난설비</span>
+        <span class="badge-count">4</span>
+      </button>
+      <button class="cat-tab-btn" data-cat="law" onclick="filterCategory('law')">
+        <span>⚖️ 법령 & 건축기준</span>
+        <span class="badge-count">4</span>
+      </button>
+      <button class="cat-tab-btn" data-cat="haz" onclick="filterCategory('haz')">
+        <span>🛢️ 위험물 & 가스이론</span>
+        <span class="badge-count">2</span>
+      </button>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PART 1. 🚒 소화설비 & 수원 계산 (C01 ~ C05) -->
+    <!-- ======================================================== -->
+
+    <!-- C01: 거실 제연설비 배출량 산정 -->
+    <div class="calc-card" data-cat="fire" id="calc-c01">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-01</span>
+          <h2 class="calc-card-title">거실 제연설비 법정 배출량 산정 (NFTC 501)</h2>
+          <span class="calc-card-sub">소규모(400㎡ 미만) vs 대규모(400㎡ 이상)</span>
+        </div>
+        <a href="./index.html?round=2-2-5" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 6문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <!-- 1. 공식 박스 -->
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • <span class="blur-calc">400 ㎡ 미만</span> 소규모 거실: <strong>배출량 = max( 바닥면적 × 60, <span class="blur-calc">5,000</span> ) ㎥/h</strong><br>
+            • 경유거실 적용 시: <strong>위 기준의 1.5배</strong> ➔ <strong>max( 바닥면적 × 90, <span class="blur-calc">7,500</span> ) ㎥/h</strong><br>
+            • <span class="blur-calc">400 ㎡ 이상</span> 대규모 거실: 직경 40m 원 내 ➔ <strong><span class="blur-calc">40,000</span> ㎥/h</strong> / 직경 40m 초과 ➔ <strong><span class="blur-calc">45,000</span> ㎥/h</strong>
+          </div>
+          <div class="formula-params">
+            * 바닥면적 1㎡당 최소 1 ㎥/min 이상 배출 규정(60을 곱해 시간당 ㎥/h로 환산) + 법정 최저 하한선 5,000 ㎥/h 적용
+          </div>
+        </div>
+
+        <!-- 2. 3초 컷 꿀팁 박스 -->
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">황금 면적 83.3㎡의 법칙</span>
+            5,000 ÷ 60 = <strong>약 83.3 ㎡</strong>입니다. 따라서 문제에서 거실 바닥면적이 <strong>83.3 ㎡ 이하로 주어지면 계산할 필요도 없이 무조건 답은 5,000 ㎥/h</strong>입니다! (경유거실이면 무조건 <strong>7,500 ㎥/h</strong>)<br>
+            또한 400㎡ 이상 대규모 거실 문제는 면적 계산식이 전혀 아니며, <strong>"40m 원 안에 들어가면 40,000, 원을 넘어가면 45,000"</strong> 딱 2개 숫자 중 하나만 고르면 끝납니다!
+          </div>
+        </div>
+
+        <!-- 3. 실전 예제 -->
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">계산값 그대로 적용</span>
+          </div>
+          <div class="example-question">
+            [문제] 바닥면적이 60 ㎡인 거실에 설치해야 하는 거실 제연설비의 시간당 법정 최소 배출량(㎥/h)은?
+          </div>
+          <div class="example-solution">
+            1단계(면적 계산): 60 ㎡ × 60 = 3,600 ㎥/h<br>
+            2단계(최저 기준 비교): 3,600 ㎥/h &lt; 5,000 ㎥/h (83.3㎡ 이하이므로 최저 기준에 걸림)<br>
+            ➔ 정답: <strong>5,000 ㎥/h</strong> (보기 3,600은 전형적인 함정!)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C02: 옥내소화전 노즐 방수량 산정 -->
+    <div class="calc-card" data-cat="fire" id="calc-c02">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-02</span>
+          <h2 class="calc-card-title">소화전 노즐 방수량(Q) 산정 공식</h2>
+          <span class="calc-card-sub">피토게이지 측정 및 분당 방수량(L/min) 산출</span>
+        </div>
+        <a href="./index.html?round=2-1-2" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 16문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            <strong>Q = <span class="blur-calc">2.086</span> × d² × √P &nbsp;&nbsp;(L/min)</strong>
+          </div>
+          <div class="formula-params">
+            • Q : 분당 방수량 (L/min)<br>
+            • d : 노즐 구경 (mm) (옥내소화전 13mm, 옥외소화전 19mm)<br>
+            • P : 노즐 선단 방수압력 (MPa) (옥내 0.17~0.7, 옥외 0.25~0.7)
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">옥내소화전 353 약산식</span>
+            옥내소화전 노즐 구경은 항상 <strong>13mm</strong>로 고정 출제됩니다. $2.086 \times 13^2 = 2.086 \times 169 \approx \mathbf{352.5}$<br>
+            따라서 <strong>옥내소화전 방수량 Q ≈ 353 × √P</strong> 로 외우면 3초 만에 풀립니다!<br>
+            • 압력이 0.25 MPa이면? √0.25 = 0.5 ➔ <strong>353 × 0.5 = 약 176 L/min!</strong><br>
+            • 압력이 0.36 MPa이면? √0.36 = 0.6 ➔ <strong>353 × 0.6 = 약 212 L/min!</strong> (루트가 바로 벗겨지는 제곱수로 나옵니다)
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-round">소수점 첫째자리 반올림</span>
+          </div>
+          <div class="example-question">
+            [문제] 옥내소화전 노즐 구경이 13mm이고 방수압력이 0.25 MPa일 때 분당 방수량(L/min)은 약 얼마인가?
+          </div>
+          <div class="example-solution">
+            Q = 2.086 × 13² × √0.25 = 2.086 × 169 × 0.5 = 352.534 × 0.5 = <strong>176.27 L/min</strong><br>
+            ➔ 정답: <strong>약 176 L/min</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C03: 소화설비 수원 저수량 산정 -->
+    <div class="calc-card" data-cat="fire" id="calc-c03">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-03</span>
+          <h2 class="calc-card-title">소화설비 유효 수원 저수량 계산 (Q = N × 저수량)</h2>
+          <span class="calc-card-sub">옥내, 옥외, 스프링클러 및 옥상수조 1/3 산정</span>
+        </div>
+        <a href="./index.html?round=2-1-2" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 16문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • 옥내소화전: <strong>Q = N × <span class="blur-calc">2.6</span> ㎥</strong> (최대 <span class="blur-calc">N = 2</span>개) (30층 이상 고층은 N × 5.2 ㎥)<br>
+            • 옥외소화전: <strong>Q = N × <span class="blur-calc">7.0</span> ㎥</strong> (최대 <span class="blur-calc">N = 2</span>개)<br>
+            • 스프링클러: <strong>Q = N × <span class="blur-calc">1.6</span> ㎥</strong> (아파트 10개, 10층이하 20개, 11층이상/지하가 30개)<br>
+            • 옥상수조 저수량: <strong>유효수량의 1/3 이상</strong> (옥내/스프링클러 적용, 옥외는 제외)
+          </div>
+          <div class="formula-params">
+            * N은 가장 많이 설치된 층의 소화전 개수 (단, 옥내와 옥외 모두 2개를 초과하면 2개만 적용!)
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">최대 2개 함정 킬러</span>
+            건물 전체에 소화전이 50개가 있든, 한 층에 5개가 있든 <strong>N의 최댓값은 무조건 2</strong>입니다!<br>
+            • 옥내소화전 수원은 1개면 <strong>2.6 ㎥</strong>, 2개 이상이면 <strong>무조건 5.2 ㎥</strong>입니다.<br>
+            • 옥외소화전 수원은 1개면 <strong>7.0 ㎥</strong>, 2개 이상이면 <strong>무조건 14.0 ㎥</strong>입니다.<br>
+            (옥상수조를 물어보면 옥내 기준 5.2의 1/3인 <strong>1.74 ㎥</strong>를 찾으면 1초 컷!)
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">기준개수 N 한도 적용</span>
+          </div>
+          <div class="example-question">
+            [문제] 지상 5층 건물에서 옥내소화전이 1층 2개, 2층 3개, 3층 4개, 4층 1개, 5층 1개 설치되어 있다. 필요한 수원의 최소 유효 저수량은?
+          </div>
+          <div class="example-solution">
+            가장 많이 설치된 층(3층)의 개수는 4개이지만 법정 최댓값 N = 2개를 적용!<br>
+            Q = 2 × 2.6 ㎥ = <strong>5.2 ㎥</strong><br>
+            ➔ 정답: <strong>5.2 ㎥</strong> (4 × 2.6 = 10.4 ㎥는 오답 함정!)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C04: 압력챔버 기동점/정지점 계산 -->
+    <div class="calc-card" data-cat="fire" id="calc-c04">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-04</span>
+          <h2 class="calc-card-title">압력챔버 압력스위치 기동압력(ON) 및 정지압력(OFF) 세팅</h2>
+          <span class="calc-card-sub">Range와 Diff 눈금 읽기 및 세팅값 계산</span>
+        </div>
+        <a href="./index.html?round=2-1-2" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 16문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • <strong>정지압력 (펌프 OFF) = <span class="blur-calc">Range</span></strong><br>
+            • <strong>기동압력 (펌프 ON) = <span class="blur-calc">Range − Diff</span></strong>
+          </div>
+          <div class="formula-params">
+            • Range: 펌프가 정지하는 상한 압력 눈금 (MPa)<br>
+            • Diff: 정지압력과 기동압력 간의 압력 차이 눈금 (MPa)
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">정지는 Range, 기동은 뺄셈(-)</span>
+            글자 그대로 외우세요! <strong>"정지점은 Range 숫자 그대로 적고, 기동점은 Range에서 Diff를 뺀다!"</strong><br>
+            예를 들어 문제에 <strong>Range 0.8 MPa, Diff 0.3 MPa</strong>가 나오면:<br>
+            • 정지압력 = <strong>0.8 MPa</strong> (Range값 그대로!)<br>
+            • 기동압력 = 0.8 − 0.3 = <strong>0.5 MPa</strong>! 더 이상 복잡하게 생각할 필요가 없습니다.
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">단순 뺄셈 규칙</span>
+          </div>
+          <div class="example-question">
+            [문제] 주펌프 압력챔버 압력스위치의 Range가 0.8 MPa, Diff가 0.3 MPa로 설정되어 있을 때 펌프의 기동압력과 정지압력은 각각 얼마인가?
+          </div>
+          <div class="example-solution">
+            정지압력 = Range = 0.8 MPa<br>
+            기동압력 = Range − Diff = 0.8 − 0.3 = 0.5 MPa<br>
+            ➔ 정답: <strong>기동압력 0.5 MPa, 정지압력 0.8 MPa</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C05: 펌프 성능시험 판정 계산 -->
+    <div class="calc-card" data-cat="fire" id="calc-c05">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-05</span>
+          <h2 class="calc-card-title">가압송수장치 펌프 성능시험 합격 판정 기준</h2>
+          <span class="calc-card-sub">체절운전(140%) 및 과부하운전(150% 유량에 65%) 계산</span>
+        </div>
+        <a href="./index.html?round=2-1-2" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 16문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • <strong>체절운전 (유량 0%)</strong>: 체절압력 ≤ <strong>정격토출압력 × <span class="blur-calc">140% (1.4배)</span> 이하</strong><br>
+            • <strong>정격부하운전 (유량 100%)</strong>: 토출압력 ≥ <strong>정격토출압력 × <span class="blur-calc">100% (1.0배)</span> 이상</strong><br>
+            • <strong>최대(과부하)운전 (유량 150%)</strong>: 토출압력 ≥ <strong>정격토출압력 × <span class="blur-calc">65% (0.65배)</span> 이상</strong>
+          </div>
+          <div class="formula-params">
+            * 체절압력 미만에서 릴리프밸브가 개방되어 순환배관으로 물을 방출해야 함 (수온상승 방지)
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">체14 / 최15-65 공식</span>
+            시험 문제는 대부분 "정격토출압력 0.5 MPa, 정격토출량 1,000 L/min"으로 출제됩니다.<br>
+            • 체절압력 상한치: 0.5 × 1.4 = <strong>0.7 MPa</strong> 이하이어야 합격!<br>
+            • 150% 유량(1,500 L/min) 시 하한치: 0.5 × 0.65 = <strong>0.325 MPa</strong> 이상이어야 합격!<br>
+            따라서 보기에서 0.65를 곱한 값이나 1.4를 곱한 값을 찾으면 즉시 정답을 판정할 수 있습니다.
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">비율 곱셈 판정</span>
+          </div>
+          <div class="example-question">
+            [문제] 정격토출량이 1,000 L/min, 정격토출압력이 0.5 MPa인 펌프의 최대운전(150% 유량) 시 토출압력은 최소 얼마 이상이어야 하는가?
+          </div>
+          <div class="example-solution">
+            기준: 정격토출압력의 65% 이상<br>
+            최소 압력 = 0.5 MPa × 0.65 = <strong>0.325 MPa</strong><br>
+            ➔ 정답: <strong>0.325 MPa 이상</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PART 2. 🚨 경보 & 피난설비 계산 (C06 ~ C09) -->
+    <!-- ======================================================== -->
+
+    <!-- C06: 감지기 개수 산정 -->
+    <div class="calc-card" data-cat="alarm" id="calc-c06">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-06</span>
+          <h2 class="calc-card-title">화재감지기 적정 설치 개수 산정 (바닥면적 ÷ 기준면적)</h2>
+          <span class="calc-card-sub">차동식·정온식·연기감지기 내화/기타 및 높이별 기준</span>
+        </div>
+        <a href="./index.html?round=2-1-3" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 14문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            <strong>설치 개수 = 바닥면적(㎡) ÷ 기준면적(㎡) &nbsp;&nbsp;(※ 소수점 발생 시 <span class="blur-calc">무조건 올림</span>)</strong>
+          </div>
+          <div class="formula-params">
+            • 차동식 2종 (4m 미만): 내화구조 <span class="blur-calc">70 ㎡</span> / 기타구조 <span class="blur-calc">40 ㎡</span><br>
+            • 차동식 2종 (4m~8m 미만): 내화구조 <span class="blur-calc">35 ㎡</span> / 기타구조 <span class="blur-calc">25 ㎡</span><br>
+            • 차동식 1종 (4m 미만): 내화구조 <span class="blur-calc">90 ㎡</span> / 기타구조 <span class="blur-calc">50 ㎡</span><br>
+            • 연기감지기 (1·2종): 4m 미만 <span class="blur-calc">150 ㎡</span> / 4m~8m 미만 <span class="blur-calc">75 ㎡</span> (계단은 수직 15m마다 1개)
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">내화 70 / 기타 40 + 무조건 올림</span>
+            시험 출제의 80%는 <strong>'차동식 스포트형 2종, 4m 미만'</strong>입니다. 무조건 면적을 <strong>내화면 70, 기타면 40</strong>으로 나누세요!<br>
+            4m 이상~8m 미만이면 기준면적이 딱 <strong>절반(70 ➔ 35)</strong>으로 줄어듭니다.<br>
+            🚨 <strong>가장 중요한 실수 방지:</strong> 계산 결과가 2.1개든 2.01개든 <strong>소수점이 0.01이라도 나오면 무조건 올림(+1)</strong>해야 합니다! (2.1개 ➔ <strong>3개</strong>)
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">🟢 무조건 올림</span>
+          </div>
+          <div class="example-question">
+            [문제] 주요구조부가 내화구조이고 부착높이 3.5m(4m 미만)인 15m × 10m 실에 차동식 스포트형 2종 감지기를 설치할 때 필요한 최소 개수는?
+          </div>
+          <div class="example-solution">
+            1) 바닥면적: 15m × 10m = 150 ㎡<br>
+            2) 기준면적: 내화구조 4m 미만 차동식 2종 = 70 ㎡<br>
+            3) 개수 계산: 150 ÷ 70 = 2.14 ➔ 올림하여 <strong>3개</strong>!<br>
+            ➔ 정답: <strong>3개</strong> (2개로 반올림하면 오답)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C07: 경계구역 수 산정 -->
+    <div class="calc-card" data-cat="alarm" id="calc-c07">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-07</span>
+          <h2 class="calc-card-title">자동화재탐지설비 경계구역 수 산정</h2>
+          <span class="calc-card-sub">수평 경계구역(600㎡, 50m) 및 수직 경계구역(계단 45m)</span>
+        </div>
+        <a href="./index.html?round=2-2-2" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 6문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • <strong>수평 경계구역</strong>: 1개 구역 바닥면적 ≤ <strong><span class="blur-calc">600 ㎡</span></strong> (한 변의 길이 ≤ <strong><span class="blur-calc">50 m</span></strong>)<br>
+            • <strong>주된 출입구 투시 가능 시</strong>: 1개 구역 바닥면적 ≤ <strong><span class="blur-calc">1,000 ㎡</span></strong><br>
+            • <strong>수직 경계구역 (계단·엘리베이터)</strong>: 높이 <strong><span class="blur-calc">45 m</span> 이하</strong>마다 1구역 (지하 계단은 별도 독립 구역)
+          </div>
+          <div class="formula-params">
+            * 2개 이상의 층에 미치지 아니할 것 (단, 2개 층 면적 합이 500㎡ 이하이면 1개 경계구역 가능)
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">층별 분할 계산의 법칙</span>
+            전체 건물 연면적을 600으로 한 번에 나누면 <strong>100% 함정에 빠집니다!</strong> 경계구역은 2개 층에 걸칠 수 없으므로 <strong>각 층별로 600으로 나눈 뒤 각각 올림하고 층수만큼 곱해야 합니다.</strong><br>
+            예: 한 층 바닥면적 1,500㎡인 지상 5층 건물은?<br>
+            한 층당: 1,500 ÷ 600 = 2.5 ➔ 올림 3구역! ➔ 5개 층이므로 3 × 5 = <strong>15구역</strong>!
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">🟢 층별 독립 올림 후 합산</span>
+          </div>
+          <div class="example-question">
+            [문제] 한 층 바닥면적이 1,500 ㎡(50m × 30m)인 지상 5층 건물의 수평 경계구역 최소 수는? (단, 계단 등 수직 경계구역 제외)
+          </div>
+          <div class="example-solution">
+            한 층당 면적: 1,500 ㎡ ÷ 600 ㎡ = 2.5 ➔ 올림 3구역 (한 변 50m 이하 충족)<br>
+            총 경계구역 수: 3구역 × 5개 층 = <strong>15구역</strong><br>
+            ➔ 정답: <strong>15개</strong> (연면적 7,500 ÷ 600 = 12.5 ➔ 13개로 계산하면 오답!)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C08: 객석유도등 설치 개수 산정 -->
+    <div class="calc-card" data-cat="alarm" id="calc-c08">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-08</span>
+          <h2 class="calc-card-title">객석유도등 설치 개수 산정 공식</h2>
+          <span class="calc-card-sub">통로 직선거리(L) 기준 4m 간격 배치 공식</span>
+        </div>
+        <a href="./index.html?round=2-2-4" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 6문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            <strong>설치 개수 = ( 통로 직선거리 L ÷ <span class="blur-calc">4</span> ) − <span class="blur-calc">1</span></strong>
+          </div>
+          <div class="formula-params">
+            * L ÷ 4 계산 결과에 소수점이 발생하면 <strong>소수점을 무조건 올림한 후 1을 차감</strong>합니다.
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">4로 나누고 올린 뒤 -1</span>
+            계산 순서를 절대 잊지 마세요!<br>
+            <strong>1) 길이를 4로 나눈다 ➔ 2) 소수점이 있으면 무조건 올린다 ➔ 3) 마지막에 1을 뺀다!</strong><br>
+            • 통로 길이 58m: 58 ÷ 4 = 14.5 ➔ 올림 15 ➔ 15 − 1 = <strong>14개!</strong><br>
+            • 통로 길이 30m: 30 ÷ 4 = 7.5 ➔ 올림 8 ➔ 8 − 1 = <strong>7개!</strong><br>
+            • 통로 길이 20m: 20 ÷ 4 = 5 (정수) ➔ 5 − 1 = <strong>4개!</strong>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">🟢 올림 후 1 차감</span>
+          </div>
+          <div class="example-question">
+            [문제] 영화상영관 객석 통로의 직선부분 길이가 58 m일 때 설치해야 할 객석유도등의 최소 개수는?
+          </div>
+          <div class="example-solution">
+            1) 58 ÷ 4 = 14.5<br>
+            2) 소수점 올림 ➔ 15<br>
+            3) 1 차감: 15 − 1 = <strong>14개</strong><br>
+            ➔ 정답: <strong>14개</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C09: 소화기 능력단위 및 개수 산정 -->
+    <div class="calc-card" data-cat="alarm" id="calc-c09">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-09</span>
+          <h2 class="calc-card-title">소화기구 능력단위 및 최소 설치 개수 산정</h2>
+          <span class="calc-card-sub">용도별 기준면적 및 주요구조부 내화구조 2배 완화</span>
+        </div>
+        <a href="./index.html?round=2-1-1" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 10문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • <strong>필요 능력단위 = 바닥면적(㎡) ÷ 기준면적(㎡) &nbsp;&nbsp;(※ 소수점 <span class="blur-calc">무조건 올림</span>)</strong><br>
+            • <strong>소화기 개수 = 필요 능력단위 ÷ 비치 소화기 1개당 능력단위 &nbsp;&nbsp;(※ 소수점 <span class="blur-calc">올림</span>)</strong>
+          </div>
+          <div class="formula-params">
+            • 위락시설: <span class="blur-calc">30 ㎡</span><br>
+            • 공연장·집회장·관람장·문화재·장례시설·의료시설: <span class="blur-calc">50 ㎡</span><br>
+            • 근린생활시설·숙박·노유자·업무·전시·공동주택·공장·창고: <span class="blur-calc">100 ㎡</span><br>
+            • 그 밖의 기타 대상물: <span class="blur-calc">200 ㎡</span><br>
+            • <strong>내화구조 완화</strong>: 주요구조부가 내화구조이고 벽·반자가 불연/난연재료인 경우 <strong>기준면적의 2배 완화 (× 2)</strong>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">내화구조 2배 완화 매직</span>
+            문제에 <strong>"주요구조부가 내화구조이고..."</strong> 문구가 나오면 기준면적에 <strong>무조건 2를 곱해서</strong> 나누세요!<br>
+            • 위락시설: 30 × 2 = <strong>60 ㎡</strong><br>
+            • 공연·집회·의료: 50 × 2 = <strong>100 ㎡</strong><br>
+            • 근생·숙박·업무: 100 × 2 = <strong>200 ㎡</strong> (가장 흔함!)<br>
+            또한 각 층마다 보행거리 20m 이내로 배치하고, <strong>33㎡ 이상으로 구획된 실</strong>이 있으면 그 방마다 1개씩 추가하는 것도 잊지 마세요!
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">🟢 무조건 올림</span>
+          </div>
+          <div class="example-question">
+            [문제] 주요구조부가 내화구조이고 실내면이 난연재료로 마감된 업무시설(바닥면적 2,000 ㎡)의 층에 3단위 소화기를 설치할 때 필요한 최소 개수는?
+          </div>
+          <div class="example-solution">
+            1) 기준면적: 업무시설 100 ㎡ × 내화구조 2배 = 200 ㎡<br>
+            2) 필요 능력단위: 2,000 ÷ 200 = 10 단위<br>
+            3) 3단위 소화기 개수: 10 ÷ 3 = 3.33 ➔ 올림 <strong>4개</strong>!<br>
+            ➔ 정답: <strong>4개</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PART 3. ⚖️ 법령 & 건축기준 계산 (C10 ~ C13) -->
+    <!-- ======================================================== -->
+
+    <!-- C10: 수용인원 산정 공식 -->
+    <div class="calc-card" data-cat="law" id="calc-c10">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-10</span>
+          <h2 class="calc-card-title">특정소방대상물 수용인원 산정 공식</h2>
+          <span class="calc-card-sub">숙박시설(침대 유/무), 강의실, 강당 및 반올림 원칙</span>
+        </div>
+        <a href="./index.html?round=1-3" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 2문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • <strong>침대 있는 숙박시설</strong>: 수용인원 = <strong>종사자 수 ＋ 침대 수</strong> (2인용 침대는 2개로 계산)<br>
+            • <strong>침대 없는 숙박시설</strong>: 수용인원 = <strong>종사자 수 ＋ ( 바닥면적의 합계 ÷ <span class="blur-calc">3 ㎡</span> )</strong><br>
+            • <strong>강의실·교무실·실습실</strong>: 바닥면적 ÷ <strong><span class="blur-calc">1.9 ㎡</span></strong><br>
+            • <strong>강당·공연장·집회장 (고정의자 없음)</strong>: 바닥면적 ÷ <strong><span class="blur-calc">4.6 ㎡</span></strong> (종교시설은 <span class="blur-calc">4.6 ㎡</span>)
+          </div>
+          <div class="formula-params">
+            * 수용인원 계산 결과 발생하는 소수점 이하는 <strong>반올림(0.5 이상 올림, 미만 버림)</strong>합니다. (복도, 계단, 화장실 면적 제외)
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">수용인원은 유일하게 반올림</span>
+            소방설비 개수는 모자라면 사람이 죽으므로 무조건 올림하지만, <strong>수용인원은 통계 예측 인원이므로 유일하게 '반올림'</strong>합니다!<br>
+            • 침대 있는 숙박시설은 면적 계산할 필요 없이 <strong>종사자수 + 침대수 단순 덧셈</strong>!<br>
+            • 침대 없는 숙박시설은 <strong>3으로 나누고 반올림한 뒤 종사자 수 덧셈</strong>!<br>
+            • 강의실은 <strong>1.9</strong>, 강당은 <strong>4.6</strong>으로 나눕니다.
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-round">🟡 소수점 반올림 적용</span>
+          </div>
+          <div class="example-question">
+            [문제] 종사자 수가 5명이고, 객실 바닥면적 합계가 158 ㎡인 침대 없는 숙박시설의 수용인원은?
+          </div>
+          <div class="example-solution">
+            1) 객실 인원: 158 ÷ 3 = 52.66 ➔ 반올림하여 53명<br>
+            2) 총 수용인원 = 종사자 5명 + 53명 = <strong>58명</strong><br>
+            ➔ 정답: <strong>58명</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C11: 소방안전관리보조자 인원 산정 -->
+    <div class="calc-card" data-cat="law" id="calc-c11">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-11</span>
+          <h2 class="calc-card-title">소방안전관리보조자 최소 선임 인원 산정</h2>
+          <span class="calc-card-sub">아파트(300세대) 및 일반건축물(15,000㎡) 기준</span>
+        </div>
+        <a href="./index.html?round=1-3" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 2문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • <strong>아파트</strong>: 기본 1명(300세대 이상) ＋ <strong>초과 300세대마다 1명 추가</strong> (소수점 <span class="blur-calc">올림</span>)<br>
+            • <strong>일반 특정소방대상물</strong>: 기본 1명(15,000㎡ 이상) ＋ <strong>초과 15,000㎡마다 1명 추가</strong> (소수점 <span class="blur-calc">올림</span>)
+          </div>
+          <div class="formula-params">
+            * 특정용도(기숙사, 의료시설, 노유자시설, 수련시설, 숙박시설): 연면적 1,500㎡ 이상이면 기본 1명 선임 (야간·휴일 근무)
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">단순 나눗셈 후 올림의 마법</span>
+            복잡하게 빼고 더할 필요 없이, <strong>전체 세대수를 300으로 나누고 올림</strong>하면 한 번에 답이 나옵니다!<br>
+            • 1,600세대 아파트? ➔ 1,600 ÷ 300 = 5.33 ➔ <strong>올림 6명!</strong><br>
+            (법적 검증: 기본 300세대 1명 + 초과 1,300세대 ÷ 300 = 4.33 ➔ 올림 5명 ➔ 1 + 5 = 6명!)<br>
+            • 일반 연면적 37,000㎡? ➔ 37,000 ÷ 15,000 = 2.47 ➔ <strong>올림 3명!</strong> (15초 컷!)
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">🟢 무조건 올림</span>
+          </div>
+          <div class="example-question">
+            [문제] 세대수가 1,600세대인 아파트에 선임해야 하는 소방안전관리보조자의 최소 인원은?
+          </div>
+          <div class="example-solution">
+            단축 풀이: 1,600 ÷ 300 = 5.33 ➔ 소수점 무조건 올림하여 <strong>6명</strong><br>
+            ➔ 정답: <strong>6명</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C12: 방화구획 개수 산정 -->
+    <div class="calc-card" data-cat="law" id="calc-c12">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-12</span>
+          <h2 class="calc-card-title">건축물 방화구획 최소 개수 산정 공식</h2>
+          <span class="calc-card-sub">10층 이하(1천㎡) / 11층 이상(200㎡, 500㎡) & 스프링클러 3배</span>
+        </div>
+        <a href="./index.html?round=1-3" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 2문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • <strong>10층 이하</strong>: 바닥면적 ÷ <strong><span class="blur-calc">1,000 ㎡</span></strong> (SP 설치 시 <span class="blur-calc">3,000 ㎡</span>)<br>
+            • <strong>11층 이상 (일반)</strong>: 바닥면적 ÷ <strong><span class="blur-calc">200 ㎡</span></strong> (SP 설치 시 <span class="blur-calc">600 ㎡</span>)<br>
+            • <strong>11층 이상 (불연마감)</strong>: 바닥면적 ÷ <strong><span class="blur-calc">500 ㎡</span></strong> (SP 설치 시 <span class="blur-calc">1,500 ㎡</span>)
+          </div>
+          <div class="formula-params">
+            * 방화구획 개수 계산 시 발생하는 소수점은 <strong>무조건 올림</strong>합니다.
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">스프링클러 3배 완화 곱셈</span>
+            문제에 <strong>"스프링클러가 설치된..."</strong> 조건이 나오면 나누는 기준면적에 <strong>무조건 3을 곱하세요!</strong><br>
+            • 10층 이하는 1,000 × 3 = <strong>3,000 ㎡</strong><br>
+            • 11층 이상 일반은 200 × 3 = <strong>600 ㎡</strong><br>
+            • 11층 이상 불연마감은 500 × 3 = <strong>1,500 ㎡</strong><br>
+            나눈 결과 1.1개가 나오면 1개가 아니라 무조건 <strong>2개</strong>로 올림합니다!
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">🟢 무조건 올림</span>
+          </div>
+          <div class="example-question">
+            [문제] 바닥면적이 15,000 ㎡인 12층(스프링클러 설치, 내장재는 불연재료 아님)의 최소 방화구획 수는?
+          </div>
+          <div class="example-solution">
+            1) 11층 이상 층 기준: 200 ㎡<br>
+            2) 스프링클러 3배 완화: 200 × 3 = 600 ㎡<br>
+            3) 구획 수: 15,000 ÷ 600 = <strong>25개</strong><br>
+            ➔ 정답: <strong>25개</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C13: 건폐율 & 용적률 산정 -->
+    <div class="calc-card" data-cat="law" id="calc-c13">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-13</span>
+          <h2 class="calc-card-title">건축법 건폐율 및 용적률 산정 공식</h2>
+          <span class="calc-card-sub">대지면적, 건축면적 및 용적률 산정 시 연면적 제외 4총사</span>
+        </div>
+        <a href="./index.html?round=3-1" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 10문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            • <strong>건폐율 (%) = ( 건축면적 ÷ 대지면적 ) × 100</strong><br>
+            • <strong>용적률 (%) = ( 용적률 산정용 연면적 ÷ 대지면적 ) × 100</strong>
+          </div>
+          <div class="formula-params">
+            • <strong>용적률 산정용 연면적 제외 4가지</strong>: 1) <span class="blur-calc">지하층 면적</span>, 2) 지상층 <span class="blur-calc">부설주차장 면적</span>, 3) <span class="blur-calc">피난안전구역 면적</span>, 4) 아파트 옥상 <span class="blur-calc">대피공간 면적</span>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">지하층 삭제의 법칙</span>
+            일반 연면적(총면적)에는 지하층이 당연히 포함되지만, <strong>용적률 계산할 때는 지하층 면적을 무조건 빼버려야 합니다!</strong><br>
+            문제에 "연면적 3,000㎡(지하층 1,000㎡ 포함), 대지면적 1,000㎡"로 주어지면 용적률 분자에는 3,000이 아니라 지하를 뺀 <strong>2,000㎡</strong>를 넣어야 정답입니다! (용적률 = 2,000 ÷ 1,000 × 100 = 200%)
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">지하층 제외 연면적 분자 적용</span>
+          </div>
+          <div class="example-question">
+            [문제] 대지면적 2,500 ㎡, 건축면적 1,000 ㎡, 연면적 2,500 ㎡(지하층 없음)인 건축물의 건폐율과 용적률은?
+          </div>
+          <div class="example-solution">
+            1) 건폐율 = (1,000 ÷ 2,500) × 100 = <strong>40%</strong><br>
+            2) 용적률 = (2,500 ÷ 2,500) × 100 = <strong>100%</strong><br>
+            ➔ 정답: <strong>건폐율 40%, 용적률 100%</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PART 4. 🛢️ 위험물 & 가스이론 계산 (C14 ~ C15) -->
+    <!-- ======================================================== -->
+
+    <!-- C14: 위험물 지정수량 배수 계산 -->
+    <div class="calc-card" data-cat="haz" id="calc-c14">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-14</span>
+          <h2 class="calc-card-title">위험물 저장·취급 지정수량 배수 산출 공식</h2>
+          <span class="calc-card-sub">동일 장소 복수 위험물 저장 시 배수 합산 판정</span>
+        </div>
+        <a href="./index.html?round=1-2" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 3문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            <strong>지정수량 배수의 합 = ( A 저장량 ÷ A 지정수량 ) ＋ ( B 저장량 ÷ B 지정수량 ) ＋ …</strong>
+          </div>
+          <div class="formula-params">
+            * 지정수량 배수의 합계가 <strong><span class="blur-calc">1 이상</span></strong>이면 위험물안전관리법령의 전면 적용(허가, 시설기준)을 받습니다.
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">지정수량 분모 암기 짝꿍</span>
+            위험물 지정수량 분모만 정확히 대입하면 단순 분수 덧셈입니다!<br>
+            • 휘발유(비수용성 1석): <strong>200 L</strong><br>
+            • 아세톤(수용성 1석): <strong>400 L</strong><br>
+            • 에탄올·메탄올(알코올): <strong>400 L</strong><br>
+            • 등유·경유(비수용성 2석): <strong>1,000 L</strong><br>
+            • 중유(비수용성 3석): <strong>2,000 L</strong><br>
+            각각 나누어 소수로 바꾼 뒤(예: 0.5 + 0.6 + 1.0) 더하면 10초 만에 끝납니다!
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">합산 1 이상 판정</span>
+          </div>
+          <div class="example-question">
+            [문제] 어느 제조소에서 휘발유 300 L, 에탄올 600 L, 등유 2,000 L를 동시에 저장·취급할 때 지정수량의 총 배수는?
+          </div>
+          <div class="example-solution">
+            1) 휘발유: 300 ÷ 200 = 1.5배<br>
+            2) 에탄올: 600 ÷ 400 = 1.5배<br>
+            3) 등유: 2,000 ÷ 1,000 = 2.0배<br>
+            ➔ 총 배수 = 1.5 + 1.5 + 2.0 = <strong>5.0배</strong> (정답)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C15: 가스 폭발 위험도 산정 -->
+    <div class="calc-card" data-cat="haz" id="calc-c15">
+      <div class="calc-card-header">
+        <div class="calc-title-group">
+          <span class="calc-id-badge">C-15</span>
+          <h2 class="calc-card-title">가연성 가스 연소범위 및 폭발 위험도(H) 산출 공식</h2>
+          <span class="calc-card-sub">상한계(U)와 하한계(L)에 따른 위험도 지수 산출</span>
+        </div>
+        <a href="./index.html?round=1-3" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 2문항 풀기 ▶</span>
+        </a>
+      </div>
+      <div class="calc-card-body">
+        <div class="formula-box">
+          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-content">
+            <strong>위험도 (H) = ( U − L ) ÷ L = ( 상한계 − 하한계 ) ÷ 하한계</strong>
+          </div>
+          <div class="formula-params">
+            • U : 가연성 가스의 연소 상한계 (%)<br>
+            • L : 가연성 가스의 연소 하한계 (%)
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
+          <div class="tip-content">
+            <span class="tip-rule-badge">분자는 폭, 분모는 하한(L)</span>
+            분자는 '상한 - 하한'(연소범위의 폭)이고, <strong>분모는 항상 '하한계(L)'</strong>입니다!<br>
+            특히 시험 1위 아세틸렌과 2위 수소는 수치 자체를 외워버리세요!<br>
+            • <strong>아세틸렌 (2.5 ~ 81%)</strong>: (81 − 2.5) ÷ 2.5 = 78.5 ÷ 2.5 = <strong>31.4 (위험도 1위)</strong><br>
+            • <strong>수소 (4 ~ 75%)</strong>: (75 − 4) ÷ 4 = 71 ÷ 4 = <strong>17.75 (위험도 2위)</strong><br>
+            위험도가 가장 큰 물질을 묻는 문제가 나오면 계산할 것도 없이 무조건 '아세틸렌'입니다!
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="example-header">
+            <span class="example-badge">실전 기출 대표 예제</span>
+            <span class="decimal-tag decimal-ceil">단순 나눗셈 산출</span>
+          </div>
+          <div class="example-question">
+            [문제] 프로판 가스의 연소범위가 2.1 % ~ 9.5 %일 때 프로판의 폭발 위험도(H)는 약 얼마인가?
+          </div>
+          <div class="example-solution">
+            H = (9.5 − 2.1) ÷ 2.1 = 7.4 ÷ 2.1 = <strong>약 3.52</strong><br>
+            ➔ 정답: <strong>약 3.52</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 푸터 -->
+  <footer style="text-align: center; padding: 30px 16px; border-top: 1px solid #21262d; color: #8b949e; font-size: 0.85rem;">
+    <p>© 2026 소방안전관리자 1급 초단기 합격 서포터. 빈출 계산 공식 & 3초 컷 풀이 비법 집대성.</p>
+  </footer>
+
+  <script>
+    // 1. 계산 공식·수치 가림막 모드 토글
+    function toggleCalcMask() {
+      const body = document.body;
+      const btn = document.getElementById('btn-mask-toggle');
+      const icon = document.getElementById('mask-icon');
+      const text = document.getElementById('mask-text');
+
+      const isMaskOn = body.classList.toggle('mask-calc-on');
+      btn.classList.toggle('active', isMaskOn);
+
+      if (isMaskOn) {
+        icon.textContent = '🙈';
+        text.textContent = '공식·수치 가림막 OFF (정답 보기)';
+      } else {
+        icon.textContent = '👁️';
+        text.textContent = '공식·수치 가림막 ON (테스트 모드)';
+        document.querySelectorAll('.blur-calc.revealed').forEach(el => el.classList.remove('revealed'));
+      }
+    }
+
+    // 개별 블러 요소 클릭 시 공개/가리기 토글
+    document.addEventListener('click', function(e) {
+      if (document.body.classList.contains('mask-calc-on')) {
+        const blurEl = e.target.closest('.blur-calc');
+        if (blurEl) {
+          blurEl.classList.toggle('revealed');
+        }
+      }
+    });
+
+    // 2. 카테고리 탭 필터링
+    function filterCategory(cat) {
+      document.querySelectorAll('.cat-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cat === cat);
+      });
+
+      const cards = document.querySelectorAll('.calc-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // 3. 실시간 키워드 검색
+    const searchInput = document.getElementById('calc-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        const cards = document.querySelectorAll('.calc-card');
+
+        if (!query) {
+          const activeCat = document.querySelector('.cat-tab-btn.active').dataset.cat;
+          filterCategory(activeCat);
+          return;
+        }
+
+        cards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          if (text.includes(query)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>
