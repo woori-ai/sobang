@@ -19,6 +19,7 @@
     currentIndex: 0,
     filters: {
       chapter: 'all',
+      round: 'all',
       difficulty: 'all',
       bookmarkOnly: false,
       incorrectOnly: false,
@@ -71,6 +72,7 @@
     quizCard: document.getElementById('quiz-card'),
     emptyState: document.getElementById('empty-state'),
     resetFilterBtn: document.getElementById('reset-filter-btn'),
+    roundFilterBanner: document.getElementById('round-filter-banner'),
 
     cardChapter: document.getElementById('card-chapter'),
     cardDiff: document.getElementById('card-diff'),
@@ -179,6 +181,7 @@
       populateChapterFilter();
       applyFilters();
       updateGlobalStats();
+      handleUrlParams();
     } catch (err) {
       console.error('데이터 로딩 에러:', err);
       dom.loadingSpinner.innerHTML = `
@@ -223,6 +226,12 @@
 
       // 그림 문제 전용 또는 그림문제 필터
       if ((tab === 'pic' || state.filters.imageOnly) && !item.image) return false;
+
+      // 요약노트 라운드 딥링크 필터
+      if (state.filters.round && state.filters.round !== 'all') {
+        const itemRound = getStudyRound(item).round;
+        if (itemRound !== state.filters.round) return false;
+      }
 
       // 과목/단원 필터
       if (state.filters.chapter !== 'all') {
@@ -748,6 +757,72 @@
     saveStorage();
   }
 
+  // 13.5 URL 딥링크 처리 (?round=3-1 또는 ?id=96 또는 ?tab=mcq)
+  function handleUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const roundParam = params.get('round');
+    const idParam = params.get('id') || params.get('q');
+    const tabParam = params.get('tab');
+
+    // 1) 탭 파라미터
+    if (tabParam && state.data[tabParam]) {
+      state.activeTab = tabParam;
+      dom.tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabParam));
+      populateChapterFilter();
+    }
+
+    // 2) 라운드 파라미터 (단원 기출 모아 풀기)
+    if (roundParam) {
+      state.filters.round = roundParam;
+      applyFilters();
+      updateRoundBannerUI(roundParam);
+    }
+
+    // 3) 특정 문제 ID 딥링크 (단일 문제 바로가기)
+    if (idParam) {
+      const idx = state.filteredList.findIndex(it => getItemId(it) === String(idParam));
+      if (idx !== -1) {
+        state.currentIndex = idx;
+        renderCurrentQuestion();
+        updateNavigation();
+      }
+    }
+  }
+
+  function updateRoundBannerUI(roundKey) {
+    if (!dom.roundFilterBanner) return;
+    if (roundKey && roundKey !== 'all') {
+      const info = STUDY_ROUNDS[roundKey] || { label: `제 ${roundKey}탄` };
+      const count = state.filteredList.length;
+      dom.roundFilterBanner.style.display = 'flex';
+      dom.roundFilterBanner.innerHTML = `
+        <div class="round-filter-banner-text">
+          <span>🎯</span>
+          <span><strong>[${info.label}]</strong> 관련 기출문제 <span class="round-filter-banner-badge">${count}문항</span> 집중 훈련 모드</span>
+        </div>
+        <button class="btn-clear-round-filter" id="btn-clear-round-filter" title="전체 문제 보기로 복귀">
+          ✕ 전체 문제 보기
+        </button>
+      `;
+      const clearBtn = document.getElementById('btn-clear-round-filter');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', clearRoundFilter);
+      }
+    } else {
+      dom.roundFilterBanner.style.display = 'none';
+      dom.roundFilterBanner.innerHTML = '';
+    }
+  }
+
+  function clearRoundFilter() {
+    state.filters.round = 'all';
+    updateRoundBannerUI('all');
+    applyFilters();
+    const url = new URL(window.location);
+    url.searchParams.delete('round');
+    window.history.replaceState({}, '', url);
+  }
+
   // 14. 이벤트 리스너 등록
   function bindEvents() {
     // 탭 전환
@@ -816,6 +891,7 @@
     });
 
     dom.resetFilterBtn.addEventListener('click', () => {
+      clearRoundFilter();
       state.filters.chapter = 'all';
       state.filters.difficulty = 'all';
       state.filters.bookmarkOnly = false;

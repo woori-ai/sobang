@@ -448,6 +448,89 @@
       }
     }
 
+    /* 단원 기출문제 연동 하단 CTA 배너 */
+    .study-quiz-cta-box {
+      margin-top: 36px;
+      margin-bottom: 20px;
+      padding: 22px 24px;
+      background: linear-gradient(135deg, rgba(35, 134, 54, 0.16), rgba(56, 189, 248, 0.14));
+      border: 1px solid rgba(46, 160, 67, 0.5);
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    .quiz-cta-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .quiz-cta-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+    .quiz-cta-icon {
+      font-size: 2.2rem;
+      flex-shrink: 0;
+    }
+    .quiz-cta-text {
+      min-width: 0;
+    }
+    .quiz-cta-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #7ee787;
+      margin: 0 0 4px 0;
+    }
+    .quiz-cta-desc {
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin: 0;
+    }
+    .btn-quiz-cta {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #238636;
+      border: 1px solid #2ea043;
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(35, 134, 54, 0.35);
+    }
+    .btn-quiz-cta:hover {
+      background: #2ea043;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(46, 160, 67, 0.5);
+    }
+    .btn-play-action.btn-quiz-link {
+      background: rgba(35, 134, 54, 0.22);
+      border-color: rgba(46, 160, 67, 0.5);
+      color: #7ee787;
+    }
+    .btn-play-action.btn-quiz-link:hover {
+      background: #238636;
+      border-color: #2ea043;
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      .quiz-cta-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .btn-quiz-cta {
+        width: 100%;
+      }
+    }
+
     @media (max-width: 600px) {
       .header-inner {
         padding: 0 10px;
@@ -708,6 +791,22 @@
       '2-3-2': "자위소방대 조직 편성(대장-대표자/총괄, 부대장-소방안전관리자, 지휘본부), 4대 핵심 활동팀(초·통·피·응: 초기소화팀-소화기·옥내소화전, 통보연락팀-119·비상방송, 피난유도팀-피난계단·구역, 응급구조팀-CPR·이송), 초기대응체계(수신반 상시 1인 이상 상주, 야간·휴일 비상상주자-경비·당직), 교육·훈련 결과 기록 2년간 보관 의무",
       '2-3-3': "화재 시 일반 피난 원칙(엘리베이터 금지, 아래층 우선, 손등 도어노브 확인, 방화문 닫기), 피난약자 유형별 피난보조 요령(시각장애인-팔꿈치 유도·음성안내·보폭, 청각장애인-손전등점멸·메모필담·짧은문장, 지체장애인-휠체어 휠고정·2인보조, 지적장애인-차분한말·손잡고 1:1동행), 소방안전관리자 업무수행 기록표 작성 및 유지(월 1회 이상 작성, 2년간 보관 의무, 위반 시 300만원 과태료)",
       '2-4-1': "소방안전교육·훈련 7대 실시원칙(학습자중심, 동기부여, 목적, 현실성, 실습, 경험, 관련성), 훈련 조직 역할분담(방호안전팀-중요문서 및 물품반출·반출물품 경비보호), 훈련 방식(무각본 훈련-사전시나리오 탈피 자율판단, 도상훈련-도면토의, 부분훈련, 종합훈련), 법정 주기(연 1회 이상), 훈련 결과 기록 2년간 보관 의무, 특급·1급 훈련 종료 후 30일 이내 소방서 제출"    
+    };
+
+    // 각 라운드별 관련 기출문제 문항 수 매핑 테이블
+    const ROUND_MCQ_COUNTS = {
+      '1-1': 37, '1-2': 3, '1-3': 2,
+      '2-1': 12, '2-2': 5,
+      '3-1': 10,
+      '4-1': 7, '4-2': 2, '4-3': 3,
+      '5-1': 14, '5-2': 4, '5-3': 3, '5-4': 3,
+      '6-1': 3, '6-2': 1, '6-3': 1,
+      '7-1': 2, '7-2': 1, '7-3': 2,
+      '8-1': 2, '8-2': 2, '8-3': 1,
+      '2-1-1': 10, '2-1-2': 16, '2-1-3': 14, '2-1-4': 6, '2-1-5': 3,
+      '2-2-1': 3, '2-2-2': 6, '2-2-3': 1, '2-2-4': 3, '2-2-5': 6,
+      '2-3-1': 2, '2-3-2': 2, '2-3-3': 4,
+      '2-4-1': 1
     };
 
     // 레거시 파라미터 매핑 (구버전 단일 숫자 1~8 지원)
@@ -2439,11 +2538,16 @@
       });
       grid.innerHTML = html;
 
-      // 상단 히어로 게임 액션 버튼 갱신
+      // 상단 히어로 게임 & 실전 기출 액션 버튼 갱신
+      const qCount = ROUND_MCQ_COUNTS[currentRound] || 0;
+      const qCountText = qCount > 0 ? ` (${qCount}문항)` : '';
+      const quizUrl = `./index.html?round=${currentRound}`;
+
       const btnContainer = document.getElementById('hero-play-buttons');
       if (btnContainer) {
+        let btnsHtml = '';
         if (data.playUrlB) {
-          btnContainer.innerHTML = `
+          btnsHtml = `
             <a href="${data.playUrl}" class="btn-play-action">
               <span>🎯 A 실전 요격형 ▶</span>
             </a>
@@ -2452,12 +2556,35 @@
             </a>
           `;
         } else {
-          btnContainer.innerHTML = `
-            <a href="${data.playUrl}" class="btn-play-action" style="max-width:380px;">
-              <span>🎮 [제 ${currentRound}탄] 실전 게임 도전하기 ▶</span>
+          btnsHtml = `
+            <a href="${data.playUrl}" class="btn-play-action">
+              <span>🎮 A 실전 요격형 ▶</span>
             </a>
           `;
         }
+
+        // 실전 기출 풀기 버튼 (방식 A 연동)
+        btnsHtml += `
+          <a href="${quizUrl}" target="_blank" rel="noopener noreferrer" class="btn-play-action btn-quiz-link" title="메인 문제풀이 화면에서 이 단원 기출문제 집중 풀기">
+            <span>📝 실전 기출${qCountText} 풀기 ▶</span>
+          </a>
+        `;
+        btnContainer.innerHTML = btnsHtml;
+      }
+
+      // 하단 기출문제 풀기 CTA 배너 갱신
+      const ctaTitle = document.getElementById('quiz-cta-title');
+      const btnQuizCta = document.getElementById('btn-quiz-cta');
+      const btnQuizCtaText = document.getElementById('btn-quiz-cta-text');
+
+      if (ctaTitle) {
+        ctaTitle.textContent = `🎯 [제 ${currentRound}탄] 관련 실전 기출문제${qCountText} 집중 풀기`;
+      }
+      if (btnQuizCta) {
+        btnQuizCta.href = quizUrl;
+      }
+      if (btnQuizCtaText) {
+        btnQuizCtaText.textContent = `📝 실전 기출${qCountText} 풀러 가기 ▶`;
       }
 
       // 본문 맨 위로 스크롤
