@@ -154,10 +154,10 @@
   async function initData() {
     try {
       const [mcqRes, boxRes, cardsRes, calcRes] = await Promise.all([
-        fetch('questions_mcq.json').then(r => r.json()),
-        fetch('questions_box.json').then(r => r.json()),
-        fetch('cards_75.json').then(r => r.json()),
-        fetch('calc_37.json').then(r => r.json())
+        fetch('questions_mcq.json?v=20261029_v2').then(r => r.json()),
+        fetch('questions_box.json?v=20261029_v2').then(r => r.json()),
+        fetch('cards_75.json?v=20261029_v2').then(r => r.json()),
+        fetch('calc_37.json?v=20261029_v2').then(r => r.json())
       ]);
 
       state.data.mcq = Array.isArray(mcqRes) ? mcqRes : [];
