@@ -154,10 +154,10 @@
   async function initData() {
     try {
       const [mcqRes, boxRes, cardsRes, calcRes] = await Promise.all([
-        fetch('questions_mcq.json?v=20261029_v3').then(r => r.json()),
-        fetch('questions_box.json?v=20261029_v3').then(r => r.json()),
-        fetch('cards_75.json?v=20261029_v3').then(r => r.json()),
-        fetch('calc_37.json?v=20261029_v3').then(r => r.json())
+        fetch('questions_mcq.json?v=20261029_v4').then(r => r.json()),
+        fetch('questions_box.json?v=20261029_v4').then(r => r.json()),
+        fetch('cards_75.json?v=20261029_v4').then(r => r.json()),
+        fetch('calc_37.json?v=20261029_v4').then(r => r.json())
       ]);
 
       state.data.mcq = Array.isArray(mcqRes) ? mcqRes : [];
@@ -270,7 +270,7 @@
     '1-1': { round: '1-1', label: '1-1 대상물 선임 기준' },
     '1-2': { round: '1-2', label: '1-2 선임 자격 & 경력' },
     '1-3': { round: '1-3', label: '1-3 소방보조자 선임' },
-    '2-1': { round: '2-1', label: '2-1 소방시설 5대 분류' },
+    '2-1': { round: '2-1', label: '2-1 소방시설 & 건축허가동의' },
     '2-2': { round: '2-2', label: '2-2 벌칙·과태료 금액순' },
     '3-1': { round: '3-1', label: '3-1 건축관계법령' },
     '4-1': { round: '4-1', label: '4-1 연소이론 & 위험물' },
@@ -379,6 +379,11 @@
 
     if (/벌칙|과태료|5년|3년|1년|500만원|300만원|200만원|100만원/.test(text)) {
       return STUDY_ROUNDS['2-2'];
+    }
+
+    if (/건축허가|동의|회신기한|동의대상|동의\s*제외|소방시설법/.test(text)) {
+      if (/벌칙|과태료/.test(text)) return STUDY_ROUNDS['2-2'];
+      return STUDY_ROUNDS['2-1'];
     }
 
     if (/소방시설 5대|소화설비|경보설비|피난구조설비|소화용수|소화활동/.test(text)) {
