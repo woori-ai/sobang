@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>소방안전관리자 1급 | 한눈에 끝내는 핵심 비교 암기표 19선</title>
+  <meta name="description" content="1급 소방안전관리자 공식 교재 전 범위 핵심 수치 및 기준 비교 암기장. 기한, 거리, 높이, 압력, 선임자격, 벌칙, 방화구획, 제4류 위험물 총정리">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20width=%22100%22%20height=%22100%22><text y=%22.9em%22 font-size=%2290%22>🚒</text></svg>">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    /* 비교표 전용 추가 스타일링 */
+    :root {
+      --table-border: #30363d;
+      --table-header-bg: #1f242c;
+      --table-row-alt: rgba(255, 255, 255, 0.02);
+      --highlight-num: #f0883e;
+      --highlight-badge: #7ee787;
+      --highlight-blue: #58a6ff;
+      --highlight-purple: #bc8cff;
+    }
+
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+
+    .tables-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 16px 80px 16px;
+    }
+
+    /* 1. 상단 헤더 영역 */
+    .tables-hero {
+      background: linear-gradient(135deg, rgba(88, 166, 255, 0.12), rgba(188, 140, 255, 0.15));
+      border: 1px solid rgba(88, 166, 255, 0.35);
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+    .hero-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .hero-badge {
+      background: #8957e5;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hero-badge-sub {
+      color: #58a6ff;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .hero-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.5px;
+    }
+    .hero-desc {
+      font-size: 0.95rem;
+      color: #8b949e;
+      margin: 0 0 18px 0;
+      line-height: 1.5;
+    }
+
+    /* 컨트롤 툴바 (검색창 + 가림막 모드 토글) */
+    .hero-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(13, 17, 23, 0.7);
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+    .search-box-wrap {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 9px 12px 9px 36px;
+      color: #f0f6fc;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      color: #8b949e;
+      pointer-events: none;
+    }
+
+    /* 암기 가림막 토글 버튼 */
+    .btn-mask-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(188, 140, 255, 0.15);
+      border: 1px solid rgba(188, 140, 255, 0.5);
+      color: #d2a8ff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .btn-mask-toggle:hover {
+      background: rgba(188, 140, 255, 0.28);
+      border-color: #bc8cff;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .btn-mask-toggle.active {
+      background: #8957e5;
+      border-color: #a371f7;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(137, 87, 229, 0.45);
+    }
+
+    /* 2. 대분류 탭 필터 (스크롤 칩) */
+    .category-tabs-wrap {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+      scrollbar-width: thin;
+    }
+    .cat-tab-btn {
+      flex-shrink: 0;
+      background: #161b22;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cat-tab-btn:hover {
+      background: #21262d;
+      color: #f0f6fc;
+      border-color: #8b949e;
+    }
+    .cat-tab-btn.active {
+      background: #238636;
+      border-color: #2ea043;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(35, 134, 54, 0.35);
+    }
+    .cat-tab-btn .badge-count {
+      background: rgba(255, 255, 255, 0.2);
+      font-size: 0.72rem;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    /* 3. 개별 표 카드 스타일 */
+    .table-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      transition: border-color 0.2s ease;
+    }
+    .table-card:hover {
+      border-color: rgba(88, 166, 255, 0.5);
+    }
+
+    .table-card-header {
+      background: #1c2128;
+      border-bottom: 1px solid #30363d;
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .table-card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .table-id-badge {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #58a6ff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .table-card-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin: 0;
+    }
+    .table-card-sub {
+      font-size: 0.8rem;
+      color: #8b949e;
+      margin-left: 6px;
+    }
+
+    /* 카드 우측 실전문풀 바로가기 링크 */
+    .btn-table-quiz {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(35, 134, 54, 0.15);
+      border: 1px solid rgba(46, 160, 67, 0.5);
+      color: #7ee787;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 800;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-table-quiz:hover {
+      background: #238636;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* 4. 테이블 본문 및 스크롤 반응형 */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .cheat-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+      white-space: normal;
+    }
+    .cheat-table th {
+      background: var(--table-header-bg);
+      color: #f0f6fc;
+      font-weight: 700;
+      padding: 12px 14px;
+      border-bottom: 2px solid #30363d;
+      border-right: 1px solid #21262d;
+      font-size: 0.85rem;
+      letter-spacing: 0.2px;
+    }
+    .cheat-table th:last-child {
+      border-right: none;
+    }
+    .cheat-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #21262d;
+      border-right: 1px solid #21262d;
+      color: #c9d1d9;
+      vertical-align: middle;
+      line-height: 1.45;
+    }
+    .cheat-table td:last-child {
+      border-right: none;
+    }
+    .cheat-table tr:nth-child(even) td {
+      background: var(--table-row-alt);
+    }
+    .cheat-table tr:hover td {
+      background: rgba(88, 166, 255, 0.05);
+    }
+
+    /* 핵심 숫자 및 강조 뱃지 */
+    .num-val {
+      color: #ff7b72;
+      font-weight: 800;
+    }
+    .badge-green {
+      color: #7ee787;
+      font-weight: 800;
+    }
+    .badge-blue {
+      color: #58a6ff;
+      font-weight: 800;
+    }
+    .badge-yellow {
+      color: #e3b341;
+      font-weight: 800;
+    }
+    .text-dim {
+      font-size: 0.8rem;
+      color: #8b949e;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* 5. 암기 가림막 모드 (블러 스포일러) */
+    .blur-val {
+      display: inline;
+      border-radius: 4px;
+      padding: 1px 3px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.mask-mode-on .blur-val {
+      filter: blur(5px);
+      background: rgba(188, 140, 255, 0.25);
+      color: transparent !important;
+      user-select: none;
+      cursor: pointer;
+    }
+    body.mask-mode-on .blur-val:hover,
+    body.mask-mode-on .blur-val.revealed {
+      filter: none !important;
+      background: rgba(35, 134, 54, 0.35) !important;
+      color: #7ee787 !important;
+    }
+
+    /* 테이블 하단 노트 */
+    .table-card-footer {
+      background: #11151c;
+      padding: 10px 18px;
+      font-size: 0.8rem;
+      color: #8b949e;
+      border-top: 1px solid #21262d;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 모바일 반응형 */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 1.35rem;
+      }
+      .tables-container {
+        padding: 12px 10px 60px 10px;
+      }
+      .hero-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-mask-toggle {
+        justify-content: center;
+      }
+      .cheat-table th, .cheat-table td {
+        padding: 9px 10px;
+        font-size: 0.82rem;
+      }
+      .table-card-header {
+        padding: 12px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 메인 내비게이션 헤더 -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="./index.html" class="brand" title="메인 문제풀이 화면으로 이동">
+          <span class="brand-icon">🚒</span>
+          <div>
+            <div class="brand-title">소방안전관리자 1급</div>
+            <div class="brand-sub">핵심 비교 암기표 19선 (Cheat Sheet)</div>
+          </div>
+        </a>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="./study.html" class="btn-back-home" title="1분 족집게 합격 요약노트">
+          <span>📖 요약노트</span>
+        </a>
+        <a href="./games.html" class="btn-back-home" title="소방 게임 아케이드 센터">
+          <span>🎮 게임센터</span>
+        </a>
+        <a href="./index.html" class="btn-back-home" title="메인 문제풀이 화면으로 이동" style="background:#238636; border-color:#2ea043; color:#fff;">
+          <span>📝 문제 풀기로</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. 본문 컨테이너 -->
+  <div class="tables-container">
+
+    <!-- 히어로 배너 -->
+    <div class="tables-hero">
+      <div class="hero-badge-row">
+        <span class="hero-badge">1급 FINAL 암기장</span>
+        <span class="hero-badge-sub">시험 직전 점수 직결 핵심 데이터 19선</span>
+      </div>
+      <h1 class="hero-title">📊 1급 소방안전관리자 핵심 비교 암기표</h1>
+      <p class="hero-desc">
+        교재 전 권에 흩어져 시험장에서 수험생을 헷갈리게 만드는 <strong>기한, 거리, 높이, 압력, 벌칙, 방화구획, 제4류 위험물</strong>을 가로축 비교표로 완벽 정리했습니다.
+      </p>
+
+      <!-- 툴바 (검색창 + 암기 가림막 모드) -->
+      <div class="hero-toolbar">
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="table-search" class="search-input" placeholder="수치나 키워드 검색 (예: 30일, 0.17, 1.5m, 방염, 지정수량, 벌금...)" autocomplete="off">
+        </div>
+        <button id="btn-mask-toggle" class="btn-mask-toggle" onclick="toggleMaskMode()" title="숫자를 가려 스스로 백지 테스트할 수 있습니다">
+          <span id="mask-icon">👁️</span>
+          <span id="mask-text">암기 가림막 ON (빈칸 테스트)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 대분류 카테고리 탭 (스크롤 칩) -->
+    <div class="category-tabs-wrap">
+      <button class="cat-tab-btn active" data-cat="all" onclick="filterCategory('all')">
+        <span>전체보기</span>
+        <span class="badge-count">19</span>
+      </button>
+      <button class="cat-tab-btn" data-cat="unit" onclick="filterCategory('unit')">
+        <span>🕒 단위별 혼동수치</span>
+        <span class="badge-count">4</span>
+      </button>
+      <button class="cat-tab-btn" data-cat="law" onclick="filterCategory('law')">
+        <span>⚖️ 법령 및 제도</span>
+        <span class="badge-count">6</span>
+      </button>
+      <button class="cat-tab-btn" data-cat="build" onclick="filterCategory('build')">
+        <span>🏗️ 건축·위험물·이론</span>
+        <span class="badge-count">5</span>
+      </button>
+      <button class="cat-tab-btn" data-cat="fac" onclick="filterCategory('fac')">
+        <span>🚒 소방시설 & 실무</span>
+        <span class="badge-count">4</span>
+      </button>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PART 1. 🕒 단위별 혼동 수치 완전정복 (T01 ~ T04) -->
+    <!-- ======================================================== -->
+
+    <!-- T01: 기한 총정리 -->
+    <div class="table-card" data-cat="unit" id="table-t01">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-01</span>
+          <h2 class="table-card-title">🕒 법정 기한 총정리 (○일 이내 / ○일 전)</h2>
+          <span class="table-card-sub">선임·신고·보고·공고 법정 시한 일괄 대조</span>
+        </div>
+        <a href="./index.html?round=1-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 37문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">구분</th>
+              <th style="width: 18%;">법정 기한</th>
+              <th style="width: 35%;">해당 법정 절차 및 행위</th>
+              <th style="width: 25%;">기준 시점 / 비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>선임 및 지정</strong></td>
+              <td><span class="blur-val num-val">30일 이내</span></td>
+              <td>소방안전관리자 선임, 보조자 선임, 총괄재난관리자 지정</td>
+              <td>해임·퇴직 등 사유 발생일로부터</td>
+            </tr>
+            <tr>
+              <td><strong>선임 신고</strong></td>
+              <td><span class="blur-val num-val">14일 이내</span></td>
+              <td>소방안전관리자(보조자) 선임 신고 (소방서장 제출)</td>
+              <td>선임한 날부터</td>
+            </tr>
+            <tr>
+              <td><strong>자체점검 보고</strong></td>
+              <td><span class="blur-val num-val">15일 이내</span></td>
+              <td>소방시설 작동·종합점검 결과 소방관서 제출 (관계인)</td>
+              <td>점검 완료일로부터 (관리업자는 관계인에게 <span class="blur-val num-val">10일 이내</span>)</td>
+            </tr>
+            <tr>
+              <td><strong>소방훈련 결과 제출</strong></td>
+              <td><span class="blur-val num-val">30일 이내</span></td>
+              <td>특급 및 1급 대상물 소방훈련·교육 실시 결과 소방서 제출</td>
+              <td>훈련 실시 완료일로부터</td>
+            </tr>
+            <tr>
+              <td><strong>불시 소방훈련 통지</strong></td>
+              <td><span class="blur-val num-val">10일 전까지</span></td>
+              <td>소방관서장이 불시 소방훈련 실시를 관계인에게 서면 통지</td>
+              <td>훈련 실시 예정일로부터</td>
+            </tr>
+            <tr>
+              <td><strong>건축허가등의 동의 회신</strong></td>
+              <td><span class="blur-val num-val">7일 이내</span></td>
+              <td>소방본부장·서장이 건축허가청에 동의 여부 회신</td>
+              <td>특급(연면적 5만㎡ 이상)은 <span class="blur-val num-val">10일 이내</span> (보완 시 <span class="blur-val num-val">4일 이내</span>)</td>
+            </tr>
+            <tr>
+              <td><strong>건축허가 취소 통보</strong></td>
+              <td><span class="blur-val num-val">7일 이내</span></td>
+              <td>건축허가청이 소방본부장·서장에게 허가 취소 통보</td>
+              <td>취소한 날부터</td>
+            </tr>
+            <tr>
+              <td><strong>실무교육 공고</strong></td>
+              <td><span class="blur-val num-val">30일 전까지</span></td>
+              <td>한국소방안전원장이 실무교육 계획을 인터넷 등에 공고</td>
+              <td>교육 실시 예정일로부터</td>
+            </tr>
+            <tr>
+              <td><strong>강습교육 공고</strong></td>
+              <td><span class="blur-val num-val">20일 전까지</span></td>
+              <td>한국소방안전원장이 강습교육 계획을 인터넷 등에 공고</td>
+              <td>교육 실시 예정일로부터</td>
+            </tr>
+            <tr>
+              <td><strong>실무교육 이수</strong></td>
+              <td><span class="blur-val num-val">6개월 이내</span></td>
+              <td>선임된 소방안전관리자의 최초 실무교육 이수 기한</td>
+              <td>선임된 날부터 (이후 매 <span class="blur-val num-val">2년마다 1회</span>)</td>
+            </tr>
+            <tr>
+              <td><strong>위험물 임시저장</strong></td>
+              <td><span class="blur-val num-val">90일 이내</span></td>
+              <td>관할 소방서장 승인을 받아 지정수량 이상 임시 저장·취급</td>
+              <td>공사장, 임시 행사장 등</td>
+            </tr>
+            <tr>
+              <td><strong>위험물 지위승계 신고</strong></td>
+              <td><span class="blur-val num-val">30일 이내</span></td>
+              <td>제조소등의 양수인, 상속인 지위승계 신고</td>
+              <td>취득·상속한 날부터</td>
+            </tr>
+            <tr>
+              <td><strong>위험물 용도폐지 신고</strong></td>
+              <td><span class="blur-val num-val">14일 이내</span></td>
+              <td>제조소등의 용도를 폐지한 때 시·도지사 신고</td>
+              <td>폐지한 날부터</td>
+            </tr>
+            <tr>
+              <td><strong>위험물 품명변경 신고</strong></td>
+              <td><span class="blur-val num-val">1일 전까지</span></td>
+              <td>저장 품명, 수량, 지정수량 배수 변경 신고</td>
+              <td>변경하려는 날의 전일까지</td>
+            </tr>
+            <tr>
+              <td><strong>신설 특정소방대상물 점검</strong></td>
+              <td><span class="blur-val num-val">60일 이내</span></td>
+              <td>건축물 신설 후 최초 자체점검(종합점검) 실시 기한</td>
+              <td>사용승인일로부터</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>핵심 암기 공식:</strong> 선임·보조자·총괄은 <strong>30일</strong> / 선임신고·폐지는 <strong>14일</strong> / 점검결과 보고는 <strong>15일</strong> / 건축허가 동의·취소는 <strong>7일</strong>
+      </div>
+    </div>
+
+    <!-- T02: 거리 총정리 -->
+    <div class="table-card" data-cat="unit" id="table-t02">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-02</span>
+          <h2 class="table-card-title">📏 거리(m) 총정리: 보행거리 vs 수평거리</h2>
+          <span class="table-card-sub">실제 걸어가는 거리 vs 도면상 반지름 직선거리</span>
+        </div>
+        <a href="./index.html?round=2-1-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 10문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 18%;">구분</th>
+              <th style="width: 16%;">거리 기준</th>
+              <th style="width: 38%;">해당 설비 및 기준</th>
+              <th style="width: 28%;">설치 세부 요건</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="5"><strong>보행거리<br>(Walking Distance)</strong><br><span class="text-dim">사람이 실제 걷는 경로</span></td>
+              <td><span class="blur-val num-val">15 m 이하</span></td>
+              <td><strong>유도표지</strong></td>
+              <td>각 층 및 복도 통로에 설치</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">20 m 이하</span></td>
+              <td><strong>소형 소화기</strong> / <strong>복도·거실 통로유도등</strong></td>
+              <td>각 층마다 설치, 바닥 33㎡ 이상 구획실</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">25 m 마다</span></td>
+              <td><strong>비상조명등 (지하상가, 지하역사)</strong></td>
+              <td>보행거리 25m마다 <span class="blur-val num-val">3개 이상</span> 연속 설치</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">30 m 이하</span></td>
+              <td><strong>대형 소화기</strong> / <strong>직통계단 피난거리</strong></td>
+              <td>내화구조는 <span class="blur-val num-val">50m 이하</span> (16층↑ 공동주택 <span class="blur-val num-val">40m</span>)</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">50 m 마다</span></td>
+              <td><strong>비상조명등 (대규모점포, 영화상영관)</strong></td>
+              <td>보행거리 50m마다 <span class="blur-val num-val">3개 이상</span> 연속 설치</td>
+            </tr>
+            <tr>
+              <td rowspan="4"><strong>수평거리<br>(Horizontal Distance)</strong><br><span class="text-dim">도면상 원의 반경(R)</span></td>
+              <td><span class="blur-val num-val">25 m 이하</span></td>
+              <td>• <strong>옥내소화전설비</strong> 방수구<br>• <strong>자동화재탐지설비</strong> 발신기 및 음향장치<br>• <strong>비상방송설비</strong> 확성기(스피커)</td>
+              <td>각 층마다 모든 부분에 유효 도달 반경</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">40 m 이하</span></td>
+              <td><strong>옥외소화전설비</strong> 호스접결구</td>
+              <td>특정소방대상물 1~2층 외벽으로부터 반경</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">50 m 이하</span></td>
+              <td><strong>비상콘센트설비</strong> 접속부<br><strong>연결송수관설비</strong> 방수구</td>
+              <td>11층 이상 층 (지하가는 수평거리 <span class="blur-val num-val">25m 이하</span>)</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">140 m 이하</span></td>
+              <td><strong>상수도소화용수설비</strong> 소화전</td>
+              <td>특정소방대상물 외벽으로부터 수평거리</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>암기 꿀팁:</strong> 수평거리 4형제는 <strong>옥내/자탐 25m → 옥외 40m → 비콘 50m → 상수도 140m</strong>로 외웁니다!
+      </div>
+    </div>
+
+    <!-- T03: 설치 높이 총정리 -->
+    <div class="table-card" data-cat="unit" id="table-t03">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-03</span>
+          <h2 class="table-card-title">📏 설치 높이(m / cm) 총정리</h2>
+          <span class="table-card-sub">바닥면/천장면 기준 조작부 및 표시장치 위치</span>
+        </div>
+        <a href="./index.html?round=2-1-2" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 16문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">높이 기준</th>
+              <th style="width: 45%;">해당 설비 및 기기 명칭</th>
+              <th style="width: 30%;">기준 위치 및 목적</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="blur-val num-val">1.5 m 이하</span><br><span class="text-dim">바닥면으로부터</span></td>
+              <td>• <strong>소화기구</strong> (소화약제 용기)<br>• <strong>옥내·옥외소화전함</strong> 개폐밸브(방수구)<br>• <strong>인명구조기구</strong> (공기호흡기 보관함)<br>• <strong>피난사다리, 완강기</strong> 보관함</td>
+              <td>위급 시 누구나 쉽게 손을 뻗어 조작 및 반출할 수 있는 상한선</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">0.8 m ~ 1.5 m</span><br><span class="text-dim">바닥면으로부터</span></td>
+              <td>• <strong>자동화재탐지설비 발신기</strong> 누름스위치<br>• <strong>가스계 소화설비 수동조작함</strong><br>• <strong>비상콘센트설비</strong> 플러그 접속부<br>• <strong>제연설비 수동기동장치</strong></td>
+              <td>서 있는 성인의 손높이에 맞춘 표준 조작 유효 범위</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">1.0 m 이하</span><br><span class="text-dim">바닥면으로부터</span></td>
+              <td>• <strong>복도통로유도등</strong><br>• <strong>계단통로유도등</strong></td>
+              <td>화재 시 연기층 아래로 자세를 낮추어 대피할 때 바닥 시야 확보</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">1.5 m 이상</span><br><span class="text-dim">바닥면으로부터</span></td>
+              <td>• <strong>피난구유도등</strong> (출입구 상부)<br>• <strong>거실통로유도등</strong> (통행 지장 없는 곳)</td>
+              <td>멀리서도 피난 출구 위치를 쉽게 식별할 수 있도록 상부에 부착</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">2.0 m ~ 2.5 m</span><br><span class="text-dim">바닥면으로부터</span></td>
+              <td>• <strong>시각경보장치 (Strobe)</strong></td>
+              <td>청각장애인을 위한 점멸 섬광 장치 (천장 2m 미만 시 0.15m 이내)</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">바닥 30cm 이내</span></td>
+              <td>• <strong>LPG 가스누설경보기</strong> 탐지부</td>
+              <td>공기보다 무거워 바닥으로 가라앉는 가스 (프로판 등)</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">천장 30cm 이내</span></td>
+              <td>• <strong>LNG 가스누설경보기</strong> 탐지부</td>
+              <td>공기보다 가벼워 천장으로 떠오르는 가스 (메탄 등)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>핵심 포인트:</strong> 누름스위치·조작함은 <strong>0.8~1.5m</strong>, 소화기·방수구는 <strong>1.5m 이하</strong>, 바닥 통로유도등은 <strong>1m 이하</strong>!
+      </div>
+    </div>
+
+    <!-- T04: 압력 숫자 총정리 -->
+    <div class="table-card" data-cat="unit" id="table-t04">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-04</span>
+          <h2 class="table-card-title">⚡ 압력(MPa) 및 펌프 성능시험 기준표</h2>
+          <span class="table-card-sub">방수압력, 축압식 게이지 및 가압송수장치 판정 기준</span>
+        </div>
+        <a href="./index.html?round=2-1-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 10문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">설비 / 시험 항목</th>
+              <th style="width: 25%;">정상 법정 압력 기준</th>
+              <th style="width: 25%;">기준 초과 시 조치</th>
+              <th style="width: 25%;">시험 시 점검 요령</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>축압식 분말소화기</strong></td>
+              <td><span class="blur-val num-val">0.7 ~ 0.98 MPa</span><br><span class="badge-green">지침 초록색 영역</span></td>
+              <td>• 좌측(빨강/노랑): 압력 부족<br>• 우측: 과압력 (재충전/교체)</td>
+              <td>지침이 녹색 범위에 위치하는지 육안 확인</td>
+            </tr>
+            <tr>
+              <td><strong>옥내소화전 방수압력</strong></td>
+              <td><span class="blur-val num-val">0.17 ~ 0.7 MPa</span><br><span class="text-dim">노즐 선단 피토게이지</span></td>
+              <td><span class="blur-val num-val">0.7 MPa 초과 시</span> 감압밸브 등 감압장치 설치 필수</td>
+              <td>최상층 노즐에서 방수하면서 압력 측정 (방수량 130 LPM 이상)</td>
+            </tr>
+            <tr>
+              <td><strong>옥외소화전 방수압력</strong></td>
+              <td><span class="blur-val num-val">0.25 ~ 0.7 MPa</span><br><span class="text-dim">노즐 선단 피토게이지</span></td>
+              <td>0.7 MPa 초과 시 감압장치 설치</td>
+              <td>노즐 구경 19mm 기준 (방수량 350 LPM 이상)</td>
+            </tr>
+            <tr>
+              <td><strong>스프링클러 헤드 방수압</strong></td>
+              <td><span class="blur-val num-val">0.1 ~ 1.2 MPa</span><br><span class="text-dim">최원단 헤드 기준</span></td>
+              <td>1.2 MPa 초과 시 감압 조치</td>
+              <td>헤드 1개당 방수량 80 LPM 이상</td>
+            </tr>
+            <tr>
+              <td><strong>체절운전 (유량 0%)</strong></td>
+              <td>정격토출압력의 <span class="blur-val num-val">140% 이하</span></td>
+              <td>체절압력 미만에서 <strong>릴리프밸브 개방</strong> (순환배관 수온상승 방지)</td>
+              <td>토출측 밸브 완전 폐쇄 후 펌프 기동 시 압력계 확인</td>
+            </tr>
+            <tr>
+              <td><strong>정격부하운전 (유량 100%)</strong></td>
+              <td>정격토출압력의 <span class="blur-val num-val">100% 이상</span></td>
+              <td>미달 시 펌프 불량 또는 배관 누출</td>
+              <td>유량조절밸브로 정격유량 맞춘 후 압력계 확인</td>
+            </tr>
+            <tr>
+              <td><strong>과부하운전 (유량 150%)</strong></td>
+              <td>정격토출압력의 <span class="blur-val num-val">65% 이상</span></td>
+              <td>미달 시 가압송수장치 불합격 판정</td>
+              <td>정격유량의 150% 방출 시 토출압력 강하율 검증</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>펌프 성능시험 암기법:</strong> 체절은 <strong>140% 이하</strong>, 과부하는 <strong>150% 유량에 65% 이상</strong>!
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PART 2. ⚖️ 법령 및 제도 비교표 (T05 ~ T10) -->
+    <!-- ======================================================== -->
+
+    <!-- T05: 선임대상물 등급 기준표 -->
+    <div class="table-card" data-cat="law" id="table-t05">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-05</span>
+          <h2 class="table-card-title">🏢 소방안전관리대상물 등급별 선임 기준표</h2>
+          <span class="table-card-sub">특급·1급·2급·3급 및 보조자 선임 건축물 규모</span>
+        </div>
+        <a href="./index.html?round=1-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 37문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 14%;">구분</th>
+              <th style="width: 22%;">아파트(공동주택)</th>
+              <th style="width: 22%;">일반 특정소방대상물</th>
+              <th style="width: 22%;">연면적 / 가연성가스</th>
+              <th style="width: 20%;">특정 설비 및 기타</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>특급</strong></td>
+              <td><span class="blur-val num-val">50층 이상</span> (지하제외)<br>또는 높이 <span class="blur-val num-val">200m 이상</span></td>
+              <td><span class="blur-val num-val">30층 이상</span> (지하포함)<br>또는 높이 <span class="blur-val num-val">120m 이상</span></td>
+              <td>연면적 <span class="blur-val num-val">100,000 ㎡ 이상</span><br>(아파트 제외)</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><strong>1급</strong></td>
+              <td><span class="blur-val num-val">30층 이상</span> (지하제외)<br>또는 높이 <span class="blur-val num-val">120m 이상</span></td>
+              <td><span class="blur-val num-val">11층 이상</span></td>
+              <td>• 연면적 <span class="blur-val num-val">15,000 ㎡ 이상</span><br>• 가연성가스 <span class="blur-val num-val">1,000톤 이상</span></td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><strong>2급</strong></td>
+              <td>-</td>
+              <td>-</td>
+              <td>가연성가스 <span class="blur-val num-val">100톤 ~ 1,000톤 미만</span></td>
+              <td>• <strong>옥내소화전, 스프링클러, 물분무등</strong> 설치 대상<br>• <strong>지하구</strong>, 목조건축물(보물·국보)<br>• 공동주택 (옥내·SP 설치)</td>
+            </tr>
+            <tr>
+              <td><strong>3급</strong></td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>• <strong>자동화재탐지설비</strong> 설치 대상<br>• <strong>간이스프링클러</strong> (주택용 제외)</td>
+            </tr>
+            <tr>
+              <td><strong>보조자<br>선임대상</strong></td>
+              <td><span class="blur-val num-val">300세대 이상</span><br>(초과 300세대마다 1명 추가)</td>
+              <td>-</td>
+              <td>연면적 <span class="blur-val num-val">15,000 ㎡ 이상</span><br>(초과 15,000㎡마다 1명 추가)</td>
+              <td><strong>기, 의, 노, 수, 숙</strong> 연면적 <span class="blur-val num-val">1,500 ㎡ 이상</span><br>(기숙사, 의료, 노유자, 수련, 숙박)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>함정 주의:</strong> 아파트는 층수 계산 시 <strong>지하층 제외</strong>, 일반건축물 특급은 <strong>지하층 포함</strong>입니다!
+      </div>
+    </div>
+
+    <!-- T06: 선임자격 기준표 -->
+    <div class="table-card" data-cat="law" id="table-t06">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-06</span>
+          <h2 class="table-card-title">🎓 소방안전관리자 급수별 선임 자격 요건표</h2>
+          <span class="table-card-sub">자격증, 실무경력 연수 및 소방공무원 경력 기준</span>
+        </div>
+        <a href="./index.html?round=1-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 37문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 14%;">급수</th>
+              <th style="width: 28%;">국가기술자격 소지자</th>
+              <th style="width: 30%;">자격증 + 실무경력</th>
+              <th style="width: 16%;">소방공무원 경력</th>
+              <th style="width: 12%;">시험 합격자</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>특급</strong></td>
+              <td>• <strong>소방기술사</strong><br>• <strong>소방시설관리사</strong></td>
+              <td>• 소방설비기사 + 1급 경력 <span class="blur-val num-val">5년 이상</span><br>• 소방설비산업기사 + 1급 경력 <span class="blur-val num-val">7년 이상</span></td>
+              <td><span class="blur-val num-val">20년 이상</span></td>
+              <td>특급 시험 합격</td>
+            </tr>
+            <tr>
+              <td><strong>1급</strong></td>
+              <td>• <strong>소방설비기사</strong><br>• <strong>소방설비산업기사</strong></td>
+              <td>• 산업안전(기사 3년, 산업기사 5년)<br>• 2급 선임경력 <span class="blur-val num-val">5년</span> / 3급 <span class="blur-val num-val">7년</span></td>
+              <td><span class="blur-val num-val">7년 이상</span></td>
+              <td>1급 시험 합격</td>
+            </tr>
+            <tr>
+              <td><strong>2급</strong></td>
+              <td>• <strong>위험물기능장</strong><br>• <strong>위험물산업기사</strong><br>• <strong>위험물기능사</strong></td>
+              <td>• 건축·전기·가스 등 기술자격자<br>• 3급 선임경력 <span class="blur-val num-val">2년 이상</span></td>
+              <td><span class="blur-val num-val">3년 이상</span></td>
+              <td>2급 시험 합격</td>
+            </tr>
+            <tr>
+              <td><strong>3급</strong></td>
+              <td>-</td>
+              <td>-</td>
+              <td><span class="blur-val num-val">1년 이상</span></td>
+              <td>3급 시험 합격</td>
+            </tr>
+            <tr>
+              <td><strong>보조자</strong></td>
+              <td>특급~3급 자격자 전체, 기타 국가기술자격</td>
+              <td>소방안전 관련 업무 실무경력 <span class="blur-val num-val">2년 이상</span></td>
+              <td>-</td>
+              <td>강습교육 수료자</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>소방공무원 경력 암기:</strong> <strong>특급 20년 → 1급 7년 → 2급 3년 → 3급 1년</strong> (20-7-3-1 리듬으로 외우기)
+      </div>
+    </div>
+
+    <!-- T07: 벌칙 및 과태료 크기 비교 -->
+    <div class="table-card" data-cat="law" id="table-t07">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-07</span>
+          <h2 class="table-card-title">⚖️ 법정 벌칙 및 과태료 크기 비교표</h2>
+          <span class="table-card-sub">형벌(징역/벌금) 및 행정질서벌(과태료) 위반유형 총정리</span>
+        </div>
+        <a href="./index.html?round=1-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 37문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">벌칙 및 과태료</th>
+              <th style="width: 55%;">해당 위반 행위</th>
+              <th style="width: 20%;">법적 성격</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="blur-val num-val">5년 이하 징역<br>5,000만원 이하 벌금</span></td>
+              <td>• 소방대의 인명구조, 화재진압, 구급활동 방해<br>• 소방대 출동을 고의로 방해하는 행위<br>• 소방용수시설 효용을 해치거나 사용을 방해한 때</td>
+              <td><span class="badge-green">소방기본법 최고형</span></td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">3년 이하 징역<br>3,000만원 이하 벌금</span></td>
+              <td>• 소방시설을 폐쇄·차단하여 <strong>사람을 상해에 이르게 한 때</strong> (사망 시 10년/1억원)<br>• 강제처분 명령을 위반하거나 방해한 자</td>
+              <td>인명피해 발생</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">1년 이하 징역<br>1,000만원 이하 벌금</span></td>
+              <td>• <strong>소방안전관리자를 선임하지 아니한 자</strong><br>• 소방시설 자체점검(작동·종합)을 실시하지 않은 자<br>• 소방시설관리업자 명의대여, 등록 결격사유 미달<br>• 소방안전관리자 업무 태만으로 화재 위험 초래</td>
+              <td>의무 미이행 핵심</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">300만원 이하 벌금</span></td>
+              <td>• 화재예방조치명령 위반<br>• <strong>소방안전관리자 선임 신고 태만</strong> (14일 이내 미신고)<br>• 화재안전조사 결과에 따른 조치명령 위반</td>
+              <td>명령 및 절차 위반</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">과태료 500만원 이하</span></td>
+              <td>• 소방시설을 폐쇄·차단·잠금하는 행위 (1차 100만 / 2차 200만 / 3차 300만)<br>• 피난시설·방화구획 훼손 및 장애물 적치 (1차 100만 / 2차 200만 / 3차 300만)</td>
+              <td>행정질서벌 최고액</td>
+            </tr>
+            <tr>
+              <td><span class="blur-val num-val">과태료 200만원 이하</span></td>
+              <td>• 소방안전관리자 선임 지연 (사유발생 30일 경과 선임)<br>• <strong>소방훈련 및 교육을 실시하지 아니한 자</strong><br>• 피난안내도를 부착하지 않은 다중이용업주</td>
+              <td>교육·훈련 의무</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>시험 단골:</strong> 안전관리자 <strong>미선임은 1년/1천만 원</strong> 벌금, 선임하고 <strong>신고 안 한 것은 300만 원 이하 벌금</strong>입니다!
+      </div>
+    </div>
+
+    <!-- T08: 자체점검 비교표 -->
+    <div class="table-card" data-cat="law" id="table-t08">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-08</span>
+          <h2 class="table-card-title">🔍 소방시설 자체점검 비교: 작동점검 vs 종합점검</h2>
+          <span class="table-card-sub">점검 대상, 주기, 점검자 자격 및 보고 절차</span>
+        </div>
+        <a href="./index.html?round=1-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 37문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;">구분</th>
+              <th style="width: 40%;">작동점검</th>
+              <th style="width: 40%;">종합점검</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>점검 목적</strong></td>
+              <td>소방시설이 정상 작동하는지 기기별 기능 점검</td>
+              <td>법정 화재안전기준 및 건축법령 적합 여부 종합 진단</td>
+            </tr>
+            <tr>
+              <td><strong>점검 대상</strong></td>
+              <td>특정소방대상물 전체 (특급 ~ 3급 대상)</td>
+              <td>• <strong>특급 대상물 전체</strong><br>• <strong>1급 중 연면적 10,000 ㎡ 이상</strong><br>• <strong>스프링클러설비</strong> 또는 물분무등소화설비 설치 대상<br>• 다중이용업소 (연면적 2,000㎡ 이상)</td>
+            </tr>
+            <tr>
+              <td><strong>실시 주기</strong></td>
+              <td><span class="blur-val num-val">연 1회 이상</span></td>
+              <td>• 일반: <span class="blur-val num-val">연 1회 이상</span><br>• <strong>특급 대상물: 반기별 1회 이상</strong> (연 2회)</td>
+            </tr>
+            <tr>
+              <td><strong>실시 시기</strong></td>
+              <td>건축물 사용승인일이 속하는 달(월)</td>
+              <td>건축물 사용승인일이 속하는 달(월)</td>
+            </tr>
+            <tr>
+              <td><strong>점검자 자격</strong></td>
+              <td>관계인, 소방안전관리자, 소방시설관리업자</td>
+              <td><strong>소방시설관리업자</strong> (소방시설관리사 필수 참여)<br>또는 소방안전관리자로 선임된 관리사·기술사</td>
+            </tr>
+            <tr>
+              <td><strong>결과 보고 기한</strong></td>
+              <td>점검 완료일로부터 <span class="blur-val num-val">15일 이내</span> 관할 소방서 제출</td>
+              <td>점검 완료일로부터 <span class="blur-val num-val">15일 이내</span> 관할 소방서 제출</td>
+            </tr>
+            <tr>
+              <td><strong>자체 보관</strong></td>
+              <td>점검 결과 보고서 <span class="blur-val num-val">2년간 자체 보관</span></td>
+              <td>점검 결과 보고서 <span class="blur-val num-val">2년간 자체 보관</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>신설 건물 특례:</strong> 신축 후 최초 자체점검은 사용승인일로부터 <strong>60일 이내에 종합점검</strong>을 실시해야 합니다.
+      </div>
+    </div>
+
+    <!-- T09: 교육 주기·시기 -->
+    <div class="table-card" data-cat="law" id="table-t09">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-09</span>
+          <h2 class="table-card-title">📚 법정 소방교육 및 훈련 주기·공고 기준표</h2>
+          <span class="table-card-sub">강습교육, 실무교육, 자위소방대 훈련 주기 총정리</span>
+        </div>
+        <a href="./index.html?round=1-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 37문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">교육·훈련 종류</th>
+              <th style="width: 25%;">실시 주기 및 이수 기한</th>
+              <th style="width: 25%;">사전 공고 / 통지 기한</th>
+              <th style="width: 25%;">비고 및 결과 보고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>소방안전관리자 실무교육</strong></td>
+              <td>선임된 날부터 <span class="blur-val num-val">6개월 이내</span><br>(이후 매 <span class="blur-val num-val">2년마다 1회</span>)</td>
+              <td>교육 실시 <span class="blur-val num-val">30일 전까지</span> 공고</td>
+              <td>한국소방안전원 주관 (미이수 시 과태료 처분)</td>
+            </tr>
+            <tr>
+              <td><strong>소방안전관리자 강습교육</strong></td>
+              <td>자격시험 응시 전 수료</td>
+              <td>교육 실시 <span class="blur-val num-val">20일 전까지</span> 공고</td>
+              <td>급수별 법정 교육시간 이수</td>
+            </tr>
+            <tr>
+              <td><strong>소방훈련 및 교육</strong><br>(자위소방대 훈련)</td>
+              <td><span class="blur-val num-val">연 1회 이상</span> 실시<br>(소방서장이 필요 인정 시 연 2회 범위)</td>
+              <td>불시훈련 시 <span class="blur-val num-val">10일 전까지</span> 서면 통지</td>
+              <td>특급·1급은 훈련 후 <span class="blur-val num-val">30일 이내</span> 결과 제출<br>(기록부 <span class="blur-val num-val">2년간 보관</span>)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>공고 기한 혼동 주의:</strong> 실무교육은 <strong>30일 전</strong>, 강습교육은 <strong>20일 전</strong>, 불시훈련 통지는 <strong>10일 전</strong>입니다!
+      </div>
+    </div>
+
+    <!-- T10: 위험물·초고층 행정절차 -->
+    <div class="table-card" data-cat="law" id="table-t10">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-10</span>
+          <h2 class="table-card-title">🛢️ 위험물 및 초고층 건축물 행정절차 기한표</h2>
+          <span class="table-card-sub">제조소등 신고 절차 및 총괄재난관리자 법정 시한</span>
+        </div>
+        <a href="./index.html?round=1-2" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 3문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">행정 절차 항목</th>
+              <th style="width: 25%;">법정 기한</th>
+              <th style="width: 25%;">신고 및 제출처</th>
+              <th style="width: 25%;">세부 내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>위험물 임시저장·취급 승인</strong></td>
+              <td><span class="blur-val num-val">90일 이내</span></td>
+              <td>관할 소방서장</td>
+              <td>공사장, 행사장에서 지정수량 이상 저장 시</td>
+            </tr>
+            <tr>
+              <td><strong>위험물 제조소등 지위승계</strong></td>
+              <td><span class="blur-val num-val">30일 이내</span></td>
+              <td>시·도지사 (소방서장 위임)</td>
+              <td>양도, 상속으로 지위를 승계한 날부터</td>
+            </tr>
+            <tr>
+              <td><strong>위험물 제조소등 용도폐지</strong></td>
+              <td><span class="blur-val num-val">14일 이내</span></td>
+              <td>시·도지사 (소방서장 위임)</td>
+              <td>제조소등 용도를 폐지한 날부터</td>
+            </tr>
+            <tr>
+              <td><strong>위험물 품명·수량 변경</strong></td>
+              <td>변경하려는 날의 <span class="blur-val num-val">1일 전까지</span></td>
+              <td>시·도지사 (소방서장 위임)</td>
+              <td>지정수량 배수 변경 전 신고</td>
+            </tr>
+            <tr>
+              <td><strong>초고층 총괄재난관리자 지정</strong></td>
+              <td><span class="blur-val num-val">30일 이내</span> (신고 <span class="blur-val num-val">14일</span>)</td>
+              <td>시·군·구청장</td>
+              <td>초고층 및 지하연계복합건축물 관리자</td>
+            </tr>
+            <tr>
+              <td><strong>재난예방 피해경감계획 수립</strong></td>
+              <td>매년 <span class="blur-val num-val">12월 15일까지</span> 수립<br>익년 <span class="blur-val num-val">1월 10일까지</span> 제출</td>
+              <td>시·군·구청장</td>
+              <td>교육·훈련계획 포함</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>위험물 3대 기한:</strong> 지위승계 <strong>30일</strong>, 용도폐지 <strong>14일</strong>, 품명변경 <strong>1일 전</strong>!
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PART 3. 🏗️ 건축·위험물·화재이론 비교표 (T11 ~ T15) -->
+    <!-- ======================================================== -->
+
+    <!-- T11: 방화구획 기준표 -->
+    <div class="table-card" data-cat="build" id="table-t11">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-11</span>
+          <h2 class="table-card-title">🧱 건축물 방화구획 면적 기준 및 완화 기준표</h2>
+          <span class="table-card-sub">층수, 실내마감재 및 자동소화설비 설치 시 3배 완화</span>
+        </div>
+        <a href="./index.html?round=1-3" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 2문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">건축물 층수 구분</th>
+              <th style="width: 35%;">기본 방화구획 기준 면적</th>
+              <th style="width: 40%;">스프링클러 등 자동소화설비 설치 시 (3배)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>10층 이하인 층</strong></td>
+              <td>바닥면적 <span class="blur-val num-val">1,000 ㎡ 이내</span>마다 구획</td>
+              <td>바닥면적 <span class="blur-val num-val">3,000 ㎡ 이내</span>마다 구획 (3배 완화)</td>
+            </tr>
+            <tr>
+              <td><strong>11층 이상 (일반마감)</strong></td>
+              <td>바닥면적 <span class="blur-val num-val">200 ㎡ 이내</span>마다 구획</td>
+              <td>바닥면적 <span class="blur-val num-val">600 ㎡ 이내</span>마다 구획 (3배 완화)</td>
+            </tr>
+            <tr>
+              <td><strong>11층 이상 (불연마감)</strong><br><span class="text-dim">실내마감이 불연재료</span></td>
+              <td>바닥면적 <span class="blur-val num-val">500 ㎡ 이내</span>마다 구획</td>
+              <td>바닥면적 <span class="blur-val num-val">1,500 ㎡ 이내</span>마다 구획 (3배 완화)</td>
+            </tr>
+            <tr>
+              <td><strong>층별 구획 의무</strong></td>
+              <td><span class="blur-val num-val">3층 이상인 층</span> 및 <strong>지하층</strong></td>
+              <td>매 층마다 바닥 슬래브로 구획 (개구부는 방화문/방화셔터)</td>
+            </tr>
+            <tr>
+              <td><strong>필로티 주차장</strong></td>
+              <td>주차장과 건축물의 다른 부분</td>
+              <td>벽체 및 출입문(방화문)으로 방화구획 분리 의무</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>방화구획 면적 암기:</strong> 10층 이하는 <strong>1,000</strong> / 11층 이상은 <strong>200</strong> (불연재는 <strong>500</strong>) → SP 설치 시 모두 <strong>3배</strong>!
+      </div>
+    </div>
+
+    <!-- T12: 방염성능기준 수치표 -->
+    <div class="table-card" data-cat="build" id="table-t12">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-12</span>
+          <h2 class="table-card-title">🔥 방염 성능기준 법정 수치표</h2>
+          <span class="table-card-sub">잔염시간, 잔신시간, 탄화면적, 탄화길이, 연기밀도</span>
+        </div>
+        <a href="./index.html?round=1-3" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 2문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">방염 시험 항목</th>
+              <th style="width: 30%;">합격 법정 기준 수치</th>
+              <th style="width: 45%;">정의 및 측정 방법</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>잔염시간 (버너 제거 후)</strong></td>
+              <td><span class="blur-val num-val">20초 이내</span></td>
+              <td>버너의 불꽃을 제거한 때부터 불꽃을 올리며 연소하는 시간</td>
+            </tr>
+            <tr>
+              <td><strong>잔신시간 (불꽃 꺼진 후)</strong></td>
+              <td><span class="blur-val num-val">30초 이내</span></td>
+              <td>불꽃을 올리지 아니하고 불씨가 남아 연소하는 상태가 끝날 때까지의 시간</td>
+            </tr>
+            <tr>
+              <td><strong>탄화면적</strong></td>
+              <td><span class="blur-val num-val">50 ㎠ 이내</span></td>
+              <td>시험체의 불에 타서 손상된 최대 면적</td>
+            </tr>
+            <tr>
+              <td><strong>탄화길이</strong></td>
+              <td><span class="blur-val num-val">20 cm 이내</span></td>
+              <td>시험체의 불에 타서 손상된 최대 길이</td>
+            </tr>
+            <tr>
+              <td><strong>접염횟수</strong></td>
+              <td><span class="blur-val num-val">3회 이상</span></td>
+              <td>불꽃을 접촉시켜 시험체가 녹을 때까지의 가열 횟수 (커튼 등)</td>
+            </tr>
+            <tr>
+              <td><strong>최대연기밀도</strong></td>
+              <td><span class="blur-val num-val">400 이하</span></td>
+              <td>연소 시 발생하는 연기의 농도 한계치</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>방염 수치 5형제:</strong> <strong>잔염 20초 / 잔신 30초 / 면적 50㎠ / 길이 20cm / 연기 400</strong> (시험에 무조건 나옴!)
+      </div>
+    </div>
+
+    <!-- T13: 연소범위 & 위험도 -->
+    <div class="table-card" data-cat="build" id="table-t13">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-13</span>
+          <h2 class="table-card-title">🧪 주요 가스 연소범위(폭발한계) 및 위험도 비교표</h2>
+          <span class="table-card-sub">하한계(L), 상한계(U) 및 폭발 위험도(H) 산출 공식</span>
+        </div>
+        <a href="./index.html?round=1-3" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 2문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">가연성 가스 / 물질</th>
+              <th style="width: 25%;">연소범위 (하한 ~ 상한)</th>
+              <th style="width: 23%;">위험도 (H)</th>
+              <th style="width: 30%;">특징 및 중요도</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>아세틸렌 (C₂H₂)</strong></td>
+              <td><span class="blur-val num-val">2.5 % ~ 81 %</span></td>
+              <td><span class="blur-val num-val">31.4</span> <span class="badge-green">(최대)</span></td>
+              <td>기체 중 연소범위 및 위험도가 가장 넓음 (분해폭발)</td>
+            </tr>
+            <tr>
+              <td><strong>수소 (H₂)</strong></td>
+              <td><span class="blur-val num-val">4.0 % ~ 75 %</span></td>
+              <td><span class="blur-val num-val">17.75</span></td>
+              <td>가장 가벼운 기체, 확산 속도 극히 빠름</td>
+            </tr>
+            <tr>
+              <td><strong>일산화탄소 (CO)</strong></td>
+              <td><span class="blur-val num-val">12.5 % ~ 74 %</span></td>
+              <td><span class="blur-val num-val">4.92</span></td>
+              <td>불완전연소 시 발생, 헤모글로빈 결합력 강함</td>
+            </tr>
+            <tr>
+              <td><strong>프로판 (C₃H₈)</strong></td>
+              <td><span class="blur-val num-val">2.1 % ~ 9.5 %</span></td>
+              <td><span class="blur-val num-val">3.52</span></td>
+              <td><strong>LPG 주성분</strong> (공기보다 무거움, 바닥 체류)</td>
+            </tr>
+            <tr>
+              <td><strong>메탄 (CH₄)</strong></td>
+              <td><span class="blur-val num-val">5.0 % ~ 15 %</span></td>
+              <td><span class="blur-val num-val">2.00</span></td>
+              <td><strong>LNG 주성분</strong> (공기보다 가벼움, 천장 체류)</td>
+            </tr>
+            <tr>
+              <td><strong>휘발유 (가솔린)</strong></td>
+              <td><span class="blur-val num-val">1.4 % ~ 7.6 %</span></td>
+              <td><span class="blur-val num-val">4.43</span></td>
+              <td>하한계가 매우 낮아 상온에서도 쉽게 인화</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>위험도 공식:</strong> $H = \frac{U - L}{L}$ (상한계에서 하한계를 뺀 값을 하한계로 나눔). 위험도는 <strong>아세틸렌(31.4) > 수소(17.75)</strong> 순!
+      </div>
+    </div>
+
+    <!-- T14: 제4류 위험물 지정수량 -->
+    <div class="table-card" data-cat="build" id="table-t14">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-14</span>
+          <h2 class="table-card-title">🛢️ 제4류 위험물(인화성 액체) 품명별 지정수량 및 인화점</h2>
+          <span class="table-card-sub">특수인화물부터 동식물유류까지 인화점 기준 및 수량</span>
+        </div>
+        <a href="./index.html?round=1-2" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 3문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;">품명 구분</th>
+              <th style="width: 25%;">인화점 기준</th>
+              <th style="width: 30%;">지정수량 (수용성 / 비수용성)</th>
+              <th style="width: 25%;">대표 물질 예시</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>특수인화물</strong></td>
+              <td>인화점 <span class="blur-val num-val">-20 ℃ 이하</span><br>(비점 40℃ 이하 or 발화점 100℃)</td>
+              <td><span class="blur-val num-val">50 L</span></td>
+              <td>이황화탄소, 디에틸에테르</td>
+            </tr>
+            <tr>
+              <td><strong>제1석유류</strong></td>
+              <td>인화점 <span class="blur-val num-val">21 ℃ 미만</span></td>
+              <td>• 비수용성: <span class="blur-val num-val">200 L</span><br>• 수용성: <span class="blur-val num-val">400 L</span></td>
+              <td>가솔린, 벤젠, 톨루엔 (비)<br>아세톤 (수)</td>
+            </tr>
+            <tr>
+              <td><strong>알코올류</strong></td>
+              <td>탄소 1~3개 포화1가알코올</td>
+              <td><span class="blur-val num-val">400 L</span></td>
+              <td>메틸알코올, 에틸알코올</td>
+            </tr>
+            <tr>
+              <td><strong>제2석유류</strong></td>
+              <td>인화점 <span class="blur-val num-val">21 ℃ ~ 70 ℃ 미만</span></td>
+              <td>• 비수용성: <span class="blur-val num-val">1,000 L</span><br>• 수용성: <span class="blur-val num-val">2,000 L</span></td>
+              <td>등유, 경유 (비)<br>초산, 아크릴산 (수)</td>
+            </tr>
+            <tr>
+              <td><strong>제3석유류</strong></td>
+              <td>인화점 <span class="blur-val num-val">70 ℃ ~ 200 ℃ 미만</span></td>
+              <td>• 비수용성: <span class="blur-val num-val">2,000 L</span><br>• 수용성: <span class="blur-val num-val">4,000 L</span></td>
+              <td>중유, 크레오소트유 (비)<br>글리세린, 에틸렌글리콜 (수)</td>
+            </tr>
+            <tr>
+              <td><strong>제4석유류</strong></td>
+              <td>인화점 <span class="blur-val num-val">200 ℃ ~ 250 ℃ 미만</span></td>
+              <td><span class="blur-val num-val">6,000 L</span></td>
+              <td>기계유, 실린더유</td>
+            </tr>
+            <tr>
+              <td><strong>동식물유류</strong></td>
+              <td>인화점 <span class="blur-val num-val">250 ℃ 미만</span></td>
+              <td><span class="blur-val num-val">10,000 L</span></td>
+              <td>아마인유, 참기름, 콩기름</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>지정수량 암기 노래:</strong> <strong>50(특) → 200·400(1석·알) → 1,000·2,000(2석) → 2,000·4,000(3석) → 6,000(4석) → 10,000(동식물)</strong>
+      </div>
+    </div>
+
+    <!-- T15: LPG vs LNG -->
+    <div class="table-card" data-cat="build" id="table-t15">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-15</span>
+          <h2 class="table-card-title">⛽ LPG vs LNG 가스 특성 및 경보기 설치 비교표</h2>
+          <span class="table-card-sub">주성분, 비중, 폭발범위, 누설경보기 설치 높이 총정리</span>
+        </div>
+        <a href="./index.html?round=1-2" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 3문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">비교 항목</th>
+              <th style="width: 37%;">LPG (액화석유가스)</th>
+              <th style="width: 38%;">LNG (액화천연가스)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>주성분</strong></td>
+              <td><strong>프로판 (C₃H₈)</strong>, 부탄 (C₄H₁₀)</td>
+              <td><strong>메탄 (CH₄)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>공기 대비 비중</strong></td>
+              <td><span class="blur-val num-val">약 1.5 ~ 2.0</span><br><span class="badge-green">공기보다 무거움 (가라앉음)</span></td>
+              <td><span class="blur-val num-val">약 0.6</span><br><span class="badge-blue">공기보다 가벼움 (떠오름)</span></td>
+            </tr>
+            <tr>
+              <td><strong>누설경보기 탐지부 높이</strong></td>
+              <td>바닥면으로부터 <span class="blur-val num-val">30 cm 이내</span></td>
+              <td>천장면으로부터 <span class="blur-val num-val">30 cm 이내</span></td>
+            </tr>
+            <tr>
+              <td><strong>누설 시 환기 방법</strong></td>
+              <td>비 등으로 쓸어내며 바닥 환기</td>
+              <td>창문을 열어 상부 자연 환기</td>
+            </tr>
+            <tr>
+              <td><strong>연소범위(폭발범위)</strong></td>
+              <td><span class="blur-val num-val">2.1 % ~ 9.5 %</span> (프로판 기준)</td>
+              <td><span class="blur-val num-val">5.0 % ~ 15 %</span> (메탄 기준)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>핵심 공식:</strong> 무거운 LPG는 <strong>바닥 30cm 이내</strong>, 가벼운 LNG는 <strong>천장 30cm 이내</strong>!
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- PART 4. 🚒 소방시설 제원 및 실무·응급처치 (T16 ~ T19) -->
+    <!-- ======================================================== -->
+
+    <!-- T16: 주요 소화설비 핵심 제원표 (강의 사진 1 원본) -->
+    <div class="table-card" data-cat="fac" id="table-t16">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-16</span>
+          <h2 class="table-card-title">🚒 설비별 단위·숫자 핵심 제원표 (소화설비 비교)</h2>
+          <span class="table-card-sub">방수량, 방수압력, 수원의 양, 수평거리, 배관·노즐 관경</span>
+        </div>
+        <a href="./index.html?round=2-1-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 10문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 18%;">구분</th>
+              <th style="width: 14%;">단위</th>
+              <th style="width: 17%;">옥내소화전</th>
+              <th style="width: 17%;">옥외소화전</th>
+              <th style="width: 17%;">스프링클러</th>
+              <th style="width: 17%;">상수도소화용수</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>방수량</strong></td>
+              <td>lpm (L/min)</td>
+              <td><span class="blur-val num-val">130</span></td>
+              <td><span class="blur-val num-val">350</span></td>
+              <td><span class="blur-val num-val">80</span></td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><strong>방수압력</strong></td>
+              <td>MPa</td>
+              <td><span class="blur-val num-val">0.17 ~ 0.7</span></td>
+              <td><span class="blur-val num-val">0.25 ~ 0.7</span></td>
+              <td><span class="blur-val num-val">0.1 ~ 1.2</span></td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><strong>수원의 양 (Q)</strong></td>
+              <td>㎥</td>
+              <td><span class="blur-val num-val">2.6</span> (N×2.6)</td>
+              <td><span class="blur-val num-val">7.0</span> (N×7.0)</td>
+              <td><span class="blur-val num-val">1.6</span> (N×1.6)</td>
+              <td>상수도 직결</td>
+            </tr>
+            <tr>
+              <td><strong>수평거리</strong></td>
+              <td>m</td>
+              <td><span class="blur-val num-val">25</span></td>
+              <td><span class="blur-val num-val">40</span></td>
+              <td>-</td>
+              <td><span class="blur-val num-val">140</span></td>
+            </tr>
+            <tr>
+              <td><strong>호스 구경</strong></td>
+              <td>mm</td>
+              <td><span class="blur-val num-val">40</span></td>
+              <td><span class="blur-val num-val">65</span></td>
+              <td>-</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><strong>노즐 관경</strong></td>
+              <td>mm</td>
+              <td><span class="blur-val num-val">13</span></td>
+              <td><span class="blur-val num-val">19</span></td>
+              <td>-</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>상수도소화용수 접속 기준:</strong> 호칭지름 <strong>75mm 이상</strong> 수도배관에 <strong>100mm 이상</strong>의 소화전을 접속합니다.
+      </div>
+    </div>
+
+    <!-- T17: 스프링클러 4대 방식 & 헤드 -->
+    <div class="table-card" data-cat="fac" id="table-t17">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-17</span>
+          <h2 class="table-card-title">🚿 스프링클러 4대 방식 비교 및 헤드 기준개수·표시온도</h2>
+          <span class="table-card-sub">습식·건식·준비작동식·일제살수식 배관 충수 상태 및 밸브</span>
+        </div>
+        <a href="./index.html?round=2-1-2" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 16문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 18%;">구분</th>
+              <th style="width: 20%;">습식 (Wet)</th>
+              <th style="width: 20%;">건식 (Dry)</th>
+              <th style="width: 21%;">준비작동식 (Pre-action)</th>
+              <th style="width: 21%;">일제살수식 (Deluge)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1차측 배관</strong></td>
+              <td>가압수</td>
+              <td>가압수</td>
+              <td>가압수</td>
+              <td>가압수</td>
+            </tr>
+            <tr>
+              <td><strong>2차측 배관</strong></td>
+              <td><span class="blur-val num-val">가압수</span></td>
+              <td><span class="blur-val num-val">압축공기 (질소)</span></td>
+              <td><span class="blur-val num-val">대기압 (공기)</span></td>
+              <td><span class="blur-val num-val">대기압 (개방)</span></td>
+            </tr>
+            <tr>
+              <td><strong>유수검지장치(밸브)</strong></td>
+              <td>알람밸브 (습식)</td>
+              <td>건식밸브</td>
+              <td>프리액션밸브</td>
+              <td>델류지밸브 (일제개방)</td>
+            </tr>
+            <tr>
+              <td><strong>사용 헤드</strong></td>
+              <td>폐쇄형</td>
+              <td>폐쇄형</td>
+              <td>폐쇄형</td>
+              <td><span class="blur-val num-val">개방형</span></td>
+            </tr>
+            <tr>
+              <td><strong>감지기 연동</strong></td>
+              <td>불필요 (헤드 열개방)</td>
+              <td>불필요 (헤드 열개방)</td>
+              <td><span class="blur-val num-val">필수 (A·B 교차회로)</span></td>
+              <td><span class="blur-val num-val">필수 (A·B 교차회로)</span></td>
+            </tr>
+            <tr>
+              <td><strong>동파 우려 장소</strong></td>
+              <td>설치 불가 (동파 위험)</td>
+              <td><span class="badge-green">설치 가능</span></td>
+              <td><span class="badge-green">설치 가능</span></td>
+              <td><span class="badge-green">설치 가능</span></td>
+            </tr>
+            <tr>
+              <td><strong>헤드 기준개수 (N)</strong></td>
+              <td colspan="4">
+                • <strong>아파트:</strong> <span class="blur-val num-val">10개</span><br>
+                • <strong>10층 이하 일반건축물:</strong> <span class="blur-val num-val">20개</span> (공장·창고·헤드높이 8m 이상은 <span class="blur-val num-val">30개</span>)<br>
+                • <strong>11층 이상 층 / 지하가 / 복합건축물:</strong> <span class="blur-val num-val">30개</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>헤드 표시온도 팁:</strong> 주황(57℃), 빨강(68℃ - 일반실), 노랑(79℃), 녹색(93℃), 파랑(141℃ - 보일러실 주방)
+      </div>
+    </div>
+
+    <!-- T18: 감지기 기준면적 & 유도등 -->
+    <div class="table-card" data-cat="fac" id="table-t18">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-18</span>
+          <h2 class="table-card-title">🔔 화재감지기 부착높이별 기준면적 & 객석유도등 산출식</h2>
+          <span class="table-card-sub">차동식·정온식·연기감지기 내화/기타 바닥면적 기준</span>
+        </div>
+        <a href="./index.html?round=2-1-3" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 14문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">감지기 종류</th>
+              <th style="width: 35%;">부착높이 4m 미만 (내화구조 / 기타)</th>
+              <th style="width: 40%;">부착높이 4m 이상 ~ 8m 미만 (내화구조 / 기타)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>차동식 스포트형 (1종)</strong></td>
+              <td><span class="blur-val num-val">90 ㎡</span> / <span class="blur-val num-val">50 ㎡</span></td>
+              <td><span class="blur-val num-val">45 ㎡</span> / <span class="blur-val num-val">30 ㎡</span></td>
+            </tr>
+            <tr>
+              <td><strong>차동식 스포트형 (2종)</strong></td>
+              <td><span class="blur-val num-val">70 ㎡</span> / <span class="blur-val num-val">40 ㎡</span></td>
+              <td><span class="blur-val num-val">35 ㎡</span> / <span class="blur-val num-val">25 ㎡</span></td>
+            </tr>
+            <tr>
+              <td><strong>정온식 스포트형 (특종)</strong></td>
+              <td><span class="blur-val num-val">70 ㎡</span> / <span class="blur-val num-val">40 ㎡</span></td>
+              <td><span class="blur-val num-val">35 ㎡</span> / <span class="blur-val num-val">25 ㎡</span></td>
+            </tr>
+            <tr>
+              <td><strong>정온식 스포트형 (1종)</strong></td>
+              <td><span class="blur-val num-val">60 ㎡</span> / <span class="blur-val num-val">30 ㎡</span></td>
+              <td><span class="blur-val num-val">30 ㎡</span> / <span class="blur-val num-val">15 ㎡</span></td>
+            </tr>
+            <tr>
+              <td><strong>연기감지기 (1·2종)</strong></td>
+              <td><span class="blur-val num-val">150 ㎡</span> (계단 수직 <span class="blur-val num-val">15m마다</span>)</td>
+              <td><span class="blur-val num-val">75 ㎡</span></td>
+            </tr>
+            <tr>
+              <td><strong>객석유도등 설치 개수</strong></td>
+              <td colspan="2">
+                <strong>공식:</strong> $\frac{\text{통로 직선거리 (m)}}{4} - 1$ &nbsp;&nbsp;(계산값에 소수점이 나오면 올림 후 1을 뺌)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>계산 꿀팁:</strong> 가장 흔한 <strong>차동식 2종 내화구조</strong>는 <strong>70㎡</strong>마다 1개, 4~8m는 절반인 <strong>35㎡</strong>입니다!
+      </div>
+    </div>
+
+    <!-- T19: 자위소방대 & 응급처치(CPR) -->
+    <div class="table-card" data-cat="fac" id="table-t19">
+      <div class="table-card-header">
+        <div class="table-card-title-group">
+          <span class="table-id-badge">T-19</span>
+          <h2 class="table-card-title">🩹 자위소방대 편성(TYPE Ⅰ·Ⅱ·Ⅲ) & 심폐소생술(CPR) 핵심 수치</h2>
+          <span class="table-card-sub">자위소방대 규모별 조직 구성 및 CPR·AED 프로토콜</span>
+        </div>
+        <a href="./index.html?round=2-3-1" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 2문항 ▶</span>
+        </a>
+      </div>
+      <div class="table-wrapper">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">실무 항목</th>
+              <th style="width: 35%;">핵심 기준 및 수치</th>
+              <th style="width: 40%;">세부 구성 및 절차</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>자위소방대 TYPE Ⅰ</strong></td>
+              <td><strong>특급 및 1급 대상물</strong></td>
+              <td>대장(1) + 부대장(1) + <strong>본부혁신부(통제부)</strong> + 통보연락부 + 초기소화부 + 피난유도부 + 방호안전부 + 응급구호부</td>
+            </tr>
+            <tr>
+              <td><strong>자위소방대 TYPE Ⅱ</strong></td>
+              <td><strong>2급 대상물</strong></td>
+              <td>대장 + 부대장 + 지휘반 + 초기소화반 + 통보연락반 + 피난유도반 + 응급구호반 (반 단위 조직)</td>
+            </tr>
+            <tr>
+              <td><strong>자위소방대 TYPE Ⅲ</strong></td>
+              <td><strong>3급 대상물</strong></td>
+              <td>최소 필수 인력 편성 (초기대응 및 신고 위주)</td>
+            </tr>
+            <tr>
+              <td><strong>심폐소생술 가슴압박 속도</strong></td>
+              <td>분당 <span class="blur-val num-val">100 ~ 120 회</span></td>
+              <td>압박 중단 시간을 10초 이내로 최소화</td>
+            </tr>
+            <tr>
+              <td><strong>심폐소생술 가슴압박 깊이</strong></td>
+              <td>성인 약 <span class="blur-val num-val">5 ~ 6 cm</span></td>
+              <td>압박 후 가슴이 완전히 이완되도록 함</td>
+            </tr>
+            <tr>
+              <td><strong>압박 : 인공호흡 비율</strong></td>
+              <td><span class="blur-val num-val">30 : 2</span></td>
+              <td>가슴압박 30회 후 인공호흡 2회 (1회당 1초씩)</td>
+            </tr>
+            <tr>
+              <td><strong>AED 전극 패드 부착 위치</strong></td>
+              <td>• <strong>패드 1:</strong> 우측 쇄골(빗장뼈) 바로 아래<br>• <strong>패드 2:</strong> 좌측 젖꼭지 아래 겨드랑이선</td>
+              <td>심장을 대각선으로 관통하도록 배치</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-card-footer">
+        💡 <strong>응급처치 골든타임:</strong> 심정지 후 <strong>4분 이내</strong> 심폐소생술을 실시해야 뇌 손상을 막을 수 있습니다.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 푸터 -->
+  <footer style="text-align: center; padding: 30px 16px; border-top: 1px solid #21262d; color: #8b949e; font-size: 0.85rem;">
+    <p>© 2026 소방안전관리자 1급 초단기 합격 서포터. 한국소방안전원 공식 교재 기준 완벽 반영.</p>
+  </footer>
+
+  <script>
+    // 1. 암기 가림막 모드 토글
+    function toggleMaskMode() {
+      const body = document.body;
+      const btn = document.getElementById('btn-mask-toggle');
+      const icon = document.getElementById('mask-icon');
+      const text = document.getElementById('mask-text');
+
+      const isMaskOn = body.classList.toggle('mask-mode-on');
+      btn.classList.toggle('active', isMaskOn);
+
+      if (isMaskOn) {
+        icon.textContent = '🙈';
+        text.textContent = '암기 가림막 OFF (정답 보기)';
+      } else {
+        icon.textContent = '👁️';
+        text.textContent = '암기 가림막 ON (빈칸 테스트)';
+        // 모든 reveal 제거
+        document.querySelectorAll('.blur-val.revealed').forEach(el => el.classList.remove('revealed'));
+      }
+    }
+
+    // 개별 블러 요소 클릭 시 공개/가리기 토글
+    document.addEventListener('click', function(e) {
+      if (document.body.classList.contains('mask-mode-on')) {
+        const blurEl = e.target.closest('.blur-val');
+        if (blurEl) {
+          blurEl.classList.toggle('revealed');
+        }
+      }
+    });
+
+    // 2. 카테고리 탭 필터링
+    function filterCategory(cat) {
+      // 탭 활성화 상태 변경
+      document.querySelectorAll('.cat-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cat === cat);
+      });
+
+      // 테이블 카드 표시/숨김
+      const cards = document.querySelectorAll('.table-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // 3. 실시간 키워드 검색
+    const searchInput = document.getElementById('table-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        const cards = document.querySelectorAll('.table-card');
+
+        if (!query) {
+          // 검색어가 없으면 현재 선택된 카테고리 복원
+          const activeCat = document.querySelector('.cat-tab-btn.active').dataset.cat;
+          filterCategory(activeCat);
+          return;
+        }
+
+        cards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          if (text.includes(query)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>
