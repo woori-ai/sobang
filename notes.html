@@ -1,0 +1,4305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>📑 1급 소방안전관리자 3단계 합격 비법노트 | 설비별 카드 · 법령 4칸표 · 단원 요약</title>
+  <meta name="description" content="1급 소방안전관리자 3단계 마스터 비법노트: 1단계 설비별 한 장 카드(구조·점검), 2단계 법령 4칸표(대상·의무·기한·벌칙), 3단계 건축·소방학·위험물 핵심 요약.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* 1. 상단 글로벌 헤더 */
+    .app-header {
+      background-color: #161b22;
+      border-bottom: 1px solid #30363d;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      width: 100%;
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      height: 56px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #f0f6fc;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+    .brand-icon {
+      font-size: 1.3rem;
+    }
+    .brand-sub {
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: #8b949e;
+      margin-left: 2px;
+    }
+
+    /* 헤더 우측 바로가기 칩 */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+    }
+    .btn-nav-chip {
+      padding: 6px 11px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none !important;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      border: 1px solid #30363d;
+      background: #21262d;
+      color: #f0f6fc !important;
+      flex-shrink: 0;
+    }
+    .btn-nav-chip:hover {
+      background: #30363d;
+      border-color: #8b949e;
+    }
+    .btn-quiz-primary {
+      background: #238636 !important;
+      border-color: #2ea043 !important;
+      color: #ffffff !important;
+    }
+
+    /* 2. 본문 컨테이너 */
+    .notes-container {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px 80px 20px;
+      flex: 1;
+    }
+
+    /* 히어로 배너 */
+    .notes-hero {
+      background: linear-gradient(135deg, #161b22 0%, #1a2230 100%);
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 24px 26px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+    .hero-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .hero-badge {
+      background: rgba(234, 179, 8, 0.15);
+      color: #f6e05e;
+      border: 1px solid rgba(234, 179, 8, 0.4);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+    .hero-badge-sub {
+      color: #8b949e;
+      font-size: 0.82rem;
+    }
+    .hero-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .hero-desc {
+      font-size: 0.93rem;
+      color: #8b949e;
+      line-height: 1.6;
+      max-width: 1050px;
+    }
+
+    /* 툴바 (검색창 + GitHub 링크) */
+    .hero-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+    .search-box-wrap {
+      flex: 1;
+      min-width: 260px;
+      max-width: 600px;
+      position: relative;
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      color: #8b949e;
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 9px 12px 9px 36px;
+      color: #f0f6fc;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-input:focus {
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+    }
+    .btn-github-link {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-github-link:hover {
+      background: #30363d;
+      color: #f0f6fc;
+      border-color: #8b949e;
+    }
+
+    /* 3단계 메인 탭 전환 칩 */
+    .stage-tabs-wrap {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: 8px;
+      margin-bottom: 22px;
+      -webkit-overflow-scrolling: touch;
+      border-bottom: 1px solid #21262d;
+    }
+    .stage-tab-btn {
+      background: #161b22;
+      border: 1px solid #30363d;
+      color: #8b949e;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .stage-tab-btn:hover {
+      color: #f0f6fc;
+      background: #21262d;
+    }
+    .stage-tab-btn.active {
+      background: #1f6feb;
+      border-color: #388bfd;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(31, 111, 235, 0.4);
+    }
+    .stage-badge {
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+
+    /* 3. 본문 탭 패널 */
+    .note-panel {
+      display: none;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 28px 32px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+    .note-panel.active {
+      display: block;
+      animation: fadeIn 0.2s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 마크다운 렌더링 스타일 */
+    .note-h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f0f6fc;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #30363d;
+      letter-spacing: -0.4px;
+    }
+    .note-h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #79c0ff;
+      margin-top: 32px;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #21262d;
+    }
+    .note-h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #7ee787;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .note-h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #d2a8ff;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    .note-p {
+      margin-bottom: 12px;
+      line-height: 1.65;
+      font-size: 0.94rem;
+      color: #c9d1d9;
+    }
+    .note-ul, .note-ol {
+      margin-bottom: 14px;
+      padding-left: 24px;
+      font-size: 0.94rem;
+      line-height: 1.65;
+    }
+    .note-ul li, .note-ol li {
+      margin-bottom: 4px;
+    }
+    .note-quote {
+      background: rgba(56, 139, 253, 0.08);
+      border-left: 3px solid #388bfd;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 18px;
+      font-size: 0.9rem;
+      color: #8b949e;
+    }
+    .note-quote p {
+      margin-bottom: 4px;
+    }
+    .note-quote strong {
+      color: #f0f6fc;
+    }
+    .note-hr {
+      border: none;
+      height: 1px;
+      background: #21262d;
+      margin: 28px 0;
+    }
+    code {
+      background: #21262d;
+      color: #ff7b72;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.86rem;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    }
+    .note-code-block {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+    .note-code-block code {
+      background: transparent;
+      padding: 0;
+      color: #e6edf3;
+    }
+    .note-link {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+    .note-link:hover {
+      text-decoration: underline;
+    }
+
+    /* 테이블 스타일 */
+    .note-table-wrap {
+      overflow-x: auto;
+      margin: 14px 0 20px 0;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      background: #0d1117;
+    }
+    .note-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .note-table th, .note-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #21262d;
+      text-align: left;
+      line-height: 1.5;
+    }
+    .note-table th {
+      background: #161b22;
+      color: #f0f6fc;
+      font-weight: 700;
+      white-space: nowrap;
+      border-bottom: 1px solid #30363d;
+    }
+    .note-table tr:last-child td {
+      border-bottom: none;
+    }
+    .note-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .note-table strong {
+      color: #7ee787;
+    }
+
+    /* 플로팅 TOP 버튼 */
+    .btn-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #f0f6fc;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      transition: all 0.2s;
+      z-index: 100;
+      opacity: 0.8;
+    }
+    .btn-top:hover {
+      opacity: 1;
+      background: #30363d;
+      border-color: #58a6ff;
+    }
+
+    /* 모바일 반응형 */
+    @media (max-width: 768px) {
+      .header-inner {
+        padding: 0 10px;
+      }
+      .brand-sub {
+        display: none;
+      }
+      .notes-container {
+        padding: 14px 10px 60px 10px;
+      }
+      .notes-hero {
+        padding: 16px 14px;
+        margin-bottom: 14px;
+      }
+      .hero-title {
+        font-size: 1.35rem;
+      }
+      .hero-desc {
+        font-size: 0.85rem;
+      }
+      .note-panel {
+        padding: 16px 14px;
+      }
+      .stage-tab-btn {
+        padding: 8px 12px;
+        font-size: 0.82rem;
+      }
+      .note-h1 {
+        font-size: 1.3rem;
+      }
+      .note-h2 {
+        font-size: 1.1rem;
+      }
+      .note-h3 {
+        font-size: 0.96rem;
+      }
+      .note-table th, .note-table td {
+        padding: 8px 10px;
+        font-size: 0.82rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 메인 내비게이션 헤더 -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="./index.html" class="brand" title="메인 문제풀이 화면으로 이동">
+          <span class="brand-icon">🚒</span>
+          <div>
+            <span>소방안전관리자 1급</span>
+            <span class="brand-sub">합격 비법노트</span>
+          </div>
+        </a>
+      </div>
+      <div class="header-right">
+        <a href="./study.html" class="btn-nav-chip" title="1분 족집게 합격 요약노트" style="background: rgba(46, 160, 67, 0.15); border-color: rgba(46, 160, 67, 0.4); color: #7ee787 !important;">
+          <span>📖 요약노트</span>
+        </a>
+        <a href="./tables.html" class="btn-nav-chip" title="핵심 비교 암기표 19선 (Cheat Sheet)" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #58a6ff !important;">
+          <span>📊 비교표</span>
+        </a>
+        <a href="./calcs.html" class="btn-nav-chip" title="빈출 계산 공식 & 3초 컷 풀이 비법 15선" style="background: rgba(210, 153, 34, 0.15); border-color: rgba(210, 153, 34, 0.4); color: #e3b341 !important;">
+          <span>🔢 계산공식</span>
+        </a>
+        <a href="./games.html" class="btn-nav-chip" title="소방 게임 아케이드 센터" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #d2a8ff !important;">
+          <span>🎮 게임센터</span>
+        </a>
+        <a href="./index.html" class="btn-nav-chip btn-quiz-primary" title="메인 문제풀이 화면으로 이동">
+          <span>📝 문제 풀기로</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. 본문 컨테이너 -->
+  <div class="notes-container">
+
+    <!-- 히어로 배너 -->
+    <div class="notes-hero">
+      <div class="hero-badge-row">
+        <span class="hero-badge">★ 3단계 마스터 합격 비법노트</span>
+        <span class="hero-badge-sub">한국소방안전원 1급 공식 교재 1·2권 전수 통합 압축</span>
+      </div>
+      <h1 class="hero-title">📑 1급 소방안전관리자 3단계 합격 비법노트</h1>
+      <p class="hero-desc">
+        1과목 구조와 2과목 점검을 통합한 <strong>[1단계 설비별 한 장 카드]</strong>, 복잡한 법령을 일목요연하게 꿰뚫는 <strong>[2단계 법령 4칸표(대상·의무·기한·벌칙)]</strong>, 그리고 단골 출제 숫자와 용어를 집대성한 <strong>[3단계 건축·소방학·위험물 요약]</strong>까지 단 3단계로 완벽하게 마스터하세요!
+      </p>
+
+      <!-- 툴바 (검색창 + GitHub 링크) -->
+      <div class="hero-toolbar">
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="notes-search" class="search-input" placeholder="비법노트 키워드 검색 (예: 옥내소화전, 릴리프, 선임, 벌칙, 방화구획, 지정수량...)" autocomplete="off">
+        </div>
+        <a href="https://github.com/woori-ai/sobang/tree/main/study_notes" target="_blank" rel="noopener noreferrer" class="btn-github-link" title="GitHub 저장소 원문 마크다운 파일 보기">
+          <span>📂 GitHub 원문 (study_notes/) ↗</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 3단계 메인 탭 전환 칩 -->
+    <div class="stage-tabs-wrap">
+      <button class="stage-tab-btn active" data-stage="1" onclick="switchStage(1)">
+        <span>🧯 1단계 · 설비별 카드</span>
+        <span class="stage-badge">구조+점검</span>
+      </button>
+      <button class="stage-tab-btn" data-stage="2" onclick="switchStage(2)">
+        <span>⚖️ 2단계 · 법령 4칸 표</span>
+        <span class="stage-badge">대상·의무·기한·벌칙</span>
+      </button>
+      <button class="stage-tab-btn" data-stage="3" onclick="switchStage(3)">
+        <span>🧱 3단계 · 건축 / 소방학 / 위험물</span>
+        <span class="stage-badge">핵심 압축</span>
+      </button>
+    </div>
+
+    <!-- 3. 본문 탭 패널들 -->
+    <!-- 패널 1: 01_설비별_카드 -->
+    <div class="note-panel active" id="panel-stage1">
+      <h1 class="note-h1">1단계 · 설비별 한 장 카드 (1과목 구조 + 2과목 점검 통합)</h1>
+<blockquote class="note-quote">
+<p><strong>출처</strong>: 한국소방안전원 1급 소방안전관리자 교재 <strong>2권 제1편 「소방시설의 구조·점검 및 실습」 (p.9~173)</strong></p>
+<p><strong>왜 이렇게 묶나</strong>: 1과목 &quot;소방시설 종류·구조&quot;와 2과목 &quot;소방시설 점검&quot;은 같은 교재 범위입니다. 설비 하나를 <strong>구성 → 수치 → 작동 → 점검 → 이상 원인</strong> 순서로 한 번에 외우면 구조 문제와 점검 문제가 같이 해결됩니다.</p>
+<p>쪽수(p.)는 모두 <strong>교재 2권</strong> 기준입니다. 숫자 전체 비교표는 웹앱 <code>tables.html</code>에도 있습니다.</p>
+</blockquote>
+<h2 class="note-h2" id="목차">목차</h2>
+<ol class="note-ol">
+<li><a href="#0-소방시설-분류-지도-p1112" class="note-link">소방시설 분류 지도</a></li>
+<li><a href="#1-소화기구자동소화장치-p1330" class="note-link">소화기구·자동소화장치</a></li>
+<li><a href="#2-옥내옥외소화전--펌프-p3158" class="note-link">옥내·옥외소화전 + 펌프</a></li>
+<li><a href="#3-스프링클러-p5981" class="note-link">스프링클러</a></li>
+<li><a href="#4-가스계-소화설비-p8295" class="note-link">가스계 소화설비</a></li>
+<li><a href="#5-경보설비-자탐수신기비상방송-p96128" class="note-link">경보설비 (자탐·수신기·비상방송)</a></li>
+<li><a href="#6-피난구조설비-p129154" class="note-link">피난구조설비 (피난기구·인명구조기구·조명·유도등)</a></li>
+<li><a href="#7-소화용수소화활동설비-p155169" class="note-link">소화용수·소화활동설비</a></li>
+<li><a href="#8-헷갈리는-숫자-짝-비교표" class="note-link">헷갈리는 숫자 짝 비교표</a></li>
+<li><a href="#9-교재-학습평가-14제-p170173" class="note-link">교재 학습평가 14제 (p.170~173)</a></li>
+</ol>
+<hr class="note-hr">
+<h2 class="note-h2" id="0-소방시설-분류-지도-p1112">0. 소방시설 분류 지도 (p.11~12)</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>분류</th>
+<th>포함 설비</th>
+<th>시험 포인트</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>소화설비</strong></td>
+<td>소화기구, 자동소화장치, 옥내소화전, 스프링클러설비등, 물분무등소화설비, 옥외소화전</td>
+<td>물분무등 = 물분무·미분무·포 + CO₂·할론·할로겐화합물 및 불활성기체·분말</td>
+</tr>
+<tr>
+<td><strong>경보설비</strong></td>
+<td>단독경보형감지기, 비상경보, 자동화재탐지, 시각경보기, 화재알림, 비상방송, 자동화재속보, 통합감시, 누전경보기, 가스누설경보기</td>
+<td>&quot;비상콘센트&quot;는 경보설비 <strong>아님</strong>(소화활동설비)</td>
+</tr>
+<tr>
+<td><strong>피난구조설비</strong></td>
+<td>피난기구, 인명구조기구, 유도등, 비상조명등·휴대용비상조명등</td>
+<td>&quot;완강기&quot;는 피난기구, 인명구조기구 아님</td>
+</tr>
+<tr>
+<td><strong>소화용수설비</strong></td>
+<td>상수도소화용수설비, 소화수조·저수조</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>소화활동설비</strong></td>
+<td>제연, 연결송수관, 연결살수, 비상콘센트, 무선통신보조, 연소방지</td>
+<td>소방대가 쓰는 설비</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="1-소화기구자동소화장치-p1330">1. 소화기구·자동소화장치 (p.13~30)</h2>
+<h3 class="note-h3" id="구성">구성</h3>
+<ul class="note-ul">
+<li><strong>분말소화기</strong></li>
+<li>가압식: 본체 안에 <strong>가스용기(카트리지)</strong>가 들어 있습니다. 생산이 중단됐고, 부식되면 파열 위험이 있어 <strong>축압식으로 교체</strong>해야 합니다.</li>
+<li>축압식: 약제와 질소를 함께 넣고 <strong>지시압력계</strong>로 압력을 확인합니다.</li>
+<li><strong>CO₂소화기</strong>: 혼(노즐)·레버식 구조이고 안전밸브가 있습니다. <strong>지시압력계가 없습니다.</strong></li>
+<li><strong>할론소화기</strong>: 지시압력계가 있습니다. 단, 할론1301은 자체 증기압을 쓰므로 압력계가 없습니다.</li>
+<li><strong>간이소화용구</strong>: 에어로졸식, 투척용(4개 이하 1세트), 소공간용, 마른모래 50L·팽창질석 80L(삽을 함께 비치, 0.5단위)</li>
+<li><strong>자동확산소화기</strong>: 일반용(보일러실·건조실·세탁소·대량화기 취급소), 주방용, 전기설비용</li>
+<li><strong>자동소화장치 6종</strong>: 주거용주방, 상업용주방, 캐비닛형, 가스, 분말, 고체에어로졸</li>
+</ul>
+<h3 class="note-h3" id="수치">수치</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>대형소화기</td>
+<td>능력단위 <strong>A 10 이상, B 20 이상</strong> (소형은 1단위 이상, 대형 미만)</td>
+</tr>
+<tr>
+<td>축압식 정상 압력</td>
+<td><strong>0.7~0.98 MPa (녹색)</strong>. 황색은 저압, 적색은 과압</td>
+</tr>
+<tr>
+<td>내용연수 (분말)</td>
+<td><strong>10년</strong>. 성능확인에 합격하면 10년 미만은 3년, 10년 이상은 1년 연장</td>
+</tr>
+<tr>
+<td>CO₂ 무게 판정</td>
+<td>손실량이 <strong>약제중량의 5 %를 넘으면 불량</strong> (분모는 총중량이 아니라 약제중량)</td>
+</tr>
+<tr>
+<td>보행거리</td>
+<td>소형 <strong>20 m</strong>, 대형 <strong>30 m</strong> 이내</td>
+</tr>
+<tr>
+<td>설치 높이</td>
+<td>바닥에서 <strong>1.5 m 이하</strong></td>
+</tr>
+<tr>
+<td>구획 거실</td>
+<td><strong>33 ㎡ 이상</strong>으로 구획된 거실마다 추가</td>
+</tr>
+<tr>
+<td>간이소화용구</td>
+<td>전체 능력단위의 <strong>1/2 이하</strong>만 인정 (노유자시설 제외)</td>
+</tr>
+<tr>
+<td>능력단위 1단위당 바닥면적</td>
+<td>위락 <strong>30 ㎡</strong> / 공연장·집회장·관람장·문화재·장례식장·의료시설 <strong>50 ㎡</strong> / 근생·판매·숙박·노유자·업무·공장·창고·공동주택 등 <strong>100 ㎡</strong> / 그 밖 <strong>200 ㎡</strong></td>
+</tr>
+<tr>
+<td>완화</td>
+<td>주요구조부 내화 + 실내 불연·준불연·난연 마감이면 위 면적 <strong>×2</strong></td>
+</tr>
+<tr>
+<td>부속용도 추가</td>
+<td>보일러실·건조실·세탁소·주방 등은 <strong>25 ㎡마다 1단위</strong>(주방은 <strong>K급 1개 이상</strong>). 발전실·변전실·전산실은 <strong>50 ㎡마다</strong> 적응성 소화기 1개</td>
+</tr>
+<tr>
+<td>공동주택 (NFTC 608)</td>
+<td><strong>100 ㎡마다 1단위</strong>, 각 세대와 공용부(승강장·복도)마다</td>
+</tr>
+<tr>
+<td>가스누설 탐지부</td>
+<td><strong>LNG</strong>(공기보다 가벼움)는 <strong>천장 30 cm 이하</strong>, <strong>LPG</strong>(무거움)는 <strong>바닥 30 cm 이하</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="작동-원리약제">작동 원리·약제</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>약제</th>
+<th>적응 화재</th>
+<th>소화효과</th>
+</tr></thead><tbody>
+<tr>
+<td>제1인산암모늄 (NH₄H₂PO₄)</td>
+<td><strong>ABC</strong></td>
+<td>질식·냉각·부촉매</td>
+</tr>
+<tr>
+<td>탄산수소나트륨 / 탄산수소칼륨 / 탄산수소칼륨+요소</td>
+<td>BC</td>
+<td>질식·부촉매</td>
+</tr>
+<tr>
+<td>CO₂ (순도 99.5 %)</td>
+<td>BC</td>
+<td><strong>질식·냉각</strong></td>
+</tr>
+<tr>
+<td>할론</td>
+<td>ABC (종류별)</td>
+<td><strong>억제(부촉매)</strong> + 질식</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>화재 분류: <strong>A 일반, B 유류, C 전기, D 금속, K 주방</strong></li>
+<li>C·D·K급은 능력단위를 지정하지 않습니다.</li>
+</ul>
+<h3 class="note-h3" id="점검-p2025">점검 (p.20~25)</h3>
+<ol class="note-ol">
+<li>외형: 본체 부식(가압식이면 교체), 손잡이·레버·누름쇠 변형, 호스·혼·노즐 막힘·파손</li>
+<li>지시압력계: 바늘이 <strong>녹색 범위</strong>에 있는지 확인</li>
+<li>약제: 흔들어서 굳었는지 확인</li>
+<li>안전핀 체결 상태</li>
+<li>CO₂소화기: 무게를 측정해 제원표와 비교</li>
+<li>자동확산소화기: 압력계가 녹색인지 확인</li>
+</ol>
+<h3 class="note-h3" id="이상-원인-→-조치">이상 원인 → 조치</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>증상</th>
+<th>원인</th>
+<th>조치</th>
+</tr></thead><tbody>
+<tr>
+<td>압력계 황색(저압)</td>
+<td>가스 누설</td>
+<td>재충전·교체</td>
+</tr>
+<tr>
+<td>압력계 적색(과압)</td>
+<td>과충전</td>
+<td>교체</td>
+</tr>
+<tr>
+<td>약제가 굳음</td>
+<td>습기</td>
+<td>교체</td>
+</tr>
+<tr>
+<td>가압식 본체 부식</td>
+<td>노후</td>
+<td><strong>축압식으로 교체</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="셀프-체크">셀프 체크</h3>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. CO₂소화기는 왜 무게로 점검하나?&lt;/summary&gt;</p>
+<p class="note-p">지시압력계가 없기 때문입니다. 제원표 총중량에서 측정 무게를 뺀 손실량이 약제중량의 5 %를 넘으면 불량입니다.&lt;/details&gt;</p>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 위락시설 600 ㎡, 내화구조 + 불연재 마감일 때 필요한 능력단위는?&lt;/summary&gt;</p>
+<p class="note-p">30 ㎡ × 2 = 60 ㎡당 1단위이므로 600 ÷ 60 = &lt;b&gt;10단위&lt;/b&gt;입니다.&lt;/details&gt;</p>
+<hr class="note-hr">
+<h2 class="note-h2" id="2-옥내옥외소화전-+-펌프-p3158">2. 옥내·옥외소화전 + 펌프 (p.31~58)</h2>
+<h3 class="note-h3" id="구성-물이-흐르는-순서">구성 (물이 흐르는 순서)</h3>
+<p class="note-p"><strong>수원</strong> → (풋밸브) → <strong>흡입배관</strong>(연성계·진공계) → <strong>펌프</strong> → 토출측 <strong>체크밸브</strong> → <strong>개폐표시형밸브</strong> → 배관 → <strong>소화전함</strong>(방수구·호스·관창)</p>
+<p class="note-p">펌프 주변에 붙는 장치는 다음과 같습니다.</p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>장치</th>
+<th>역할</th>
+<th>함정 포인트</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>압력챔버</strong> (기동용 수압개폐장치)</td>
+<td>압력이 떨어지면 펌프를 자동으로 기동·정지시키고, 급격한 압력 변화를 완충합니다</td>
+<td>용량 <strong>100 L 이상</strong>. 안전밸브·배수밸브·압력스위치·압력계가 붙음</td>
+</tr>
+<tr>
+<td><strong>전자식 기동용 압력스위치</strong></td>
+<td>1개로 펌프 2~3대를 제어</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>풋밸브</strong></td>
+<td>수원이 펌프보다 낮을 때 여과 + 역류 방지(체크)</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>물올림장치</strong></td>
+<td>흡입배관에 물을 채워 둠</td>
+<td><strong>수원이 펌프보다 낮을 때만</strong> 필요</td>
+</tr>
+<tr>
+<td><strong>순환배관 + 릴리프밸브</strong></td>
+<td>체절운전 중 수온 상승 방지</td>
+<td>체크밸브 <strong>이전</strong>에서 분기, <strong>20 mm 이상</strong>. 릴리프밸브는 <strong>체절압력 미만</strong>에서 개방</td>
+</tr>
+<tr>
+<td><strong>성능시험배관</strong></td>
+<td>펌프 성능 확인</td>
+<td>토출측 개폐밸브 이전에서 분기, 유량계 앞 개폐밸브·뒤 유량조절밸브</td>
+</tr>
+<tr>
+<td><strong>개폐표시형밸브</strong></td>
+<td>OS&amp;Y(스템이 올라오면 개방), 버터플라이</td>
+<td>버터플라이는 마찰손실 때문에 <strong>흡입측에 설치 불가</strong></td>
+</tr>
+<tr>
+<td><strong>체크밸브</strong></td>
+<td>스모렌스키(리프트형, 수격 방지)는 펌프 토출측·송수구에, 스윙형은 유량이 적은 곳에</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>동력제어반(MCC)</strong></td>
+<td>펌프 전원·기동 (앞면 <strong>적색</strong>)</td>
+<td>평상시 <strong>자동</strong></td>
+</tr>
+<tr>
+<td><strong>감시제어반</strong></td>
+<td>펌프·비상전원·수조 수위 감시</td>
+<td>평상시 <strong>자동(연동)</strong>. 펌프압력스위치·저수위 표시등이 <strong>꺼져 있어야</strong> 정상</td>
+</tr>
+</tbody></table></div>
+<p class="note-p">가압송수 방식: 펌프 / 고가수조(자연낙차) / 압력수조(압축공기) / 가압수조(압축공기·불연성 고압기체, <strong>전원 불필요</strong>)</p>
+<h3 class="note-h3" id="수치-—-옥내-vs-옥외">수치 — 옥내 vs 옥외</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>옥내소화전</th>
+<th>옥외소화전</th>
+</tr></thead><tbody>
+<tr>
+<td>방수량</td>
+<td><strong>130 L/min</strong></td>
+<td><strong>350 L/min</strong></td>
+</tr>
+<tr>
+<td>방수압</td>
+<td><strong>0.17~0.7 MPa</strong></td>
+<td><strong>0.25~0.7 MPa</strong></td>
+</tr>
+<tr>
+<td>동시 개수 N</td>
+<td>최대 <strong>2개</strong> (고층건축물은 5개)</td>
+<td>최대 <strong>2개</strong></td>
+</tr>
+<tr>
+<td>수원</td>
+<td>N × <strong>2.6 ㎥</strong> (130 L × 20분)</td>
+<td>N × <strong>7 ㎥</strong> (350 L × 20분)</td>
+</tr>
+<tr>
+<td>고층 수원</td>
+<td>30~49층 N × <strong>5.2 ㎥</strong>(40분), 50층 이상 N × <strong>7.8 ㎥</strong>(60분)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>거리</td>
+<td>방수구까지 <strong>수평거리 25 m</strong></td>
+<td>소화전까지 <strong>수평거리 40 m</strong></td>
+</tr>
+<tr>
+<td>방수구 높이</td>
+<td>바닥에서 <strong>1.5 m 이하</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>호스</td>
+<td><strong>40 mm</strong> (호스릴 25 mm)</td>
+<td><strong>65 mm</strong></td>
+</tr>
+<tr>
+<td>노즐 구경 (방수량 계산)</td>
+<td>13 mm</td>
+<td>19 mm</td>
+</tr>
+<tr>
+<td>소화전함</td>
+<td>함 위에 위치표시등, 표면에 &quot;소화전&quot;</td>
+<td>소화전에서 <strong>5 m 이내</strong>. 10개 이하는 소화전마다, 11~30개는 11개 이상 분산, 31개 이상은 3개마다 1개</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>고층건축물: <strong>30층 이상 또는 120 m 이상</strong></li>
+<li>방수량 공식: <strong>Q = 2.065 × D² × √P</strong> (D는 mm, P는 MPa). 피토게이지는 노즐 선단에서 <strong>D/2</strong> 떨어진 곳에 댑니다.</li>
+<li>창고 (NFTC 609): 수원 N × <strong>5.2 ㎥</strong>, 비상전원 <strong>40분</strong></li>
+</ul>
+<h3 class="note-h3" id="작동-원리">작동 원리</h3>
+<p class="note-p">방수구 개방 → 배관 압력 저하 → 압력챔버 압력스위치 작동 → <strong>충압펌프가 먼저</strong> 기동 → 계속 떨어지면 <strong>주펌프</strong> 기동 → 방수</p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>압력스위치 세팅</th>
+<th>기준 (p.79)</th>
+</tr></thead><tbody>
+<tr>
+<td>RANGE</td>
+<td><strong>정지압력</strong></td>
+</tr>
+<tr>
+<td>DIFF</td>
+<td>정지압력 − 기동압력 (<strong>기동 = RANGE − DIFF</strong>)</td>
+</tr>
+<tr>
+<td>주펌프 기동점</td>
+<td>자연낙차압 + K (옥내 <strong>0.22</strong>, SP <strong>0.15</strong> MPa)</td>
+</tr>
+<tr>
+<td>충압펌프 기동점</td>
+<td>주펌프 기동점 + <strong>0.05~0.1 MPa</strong></td>
+</tr>
+<tr>
+<td>주펌프 정지</td>
+<td>자동 정지 안 함. <strong>수동 정지</strong> (2006.12.30 이후 건축허가 대상)</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="점검-①-펌프-성능시험-p4751">점검 ① 펌프 성능시험 (p.47~51)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>단계</th>
+<th>① 토출측 개폐밸브</th>
+<th>② 성능시험배관 개폐밸브</th>
+<th>③ 유량조절밸브</th>
+<th>합격 기준</th>
+</tr></thead><tbody>
+<tr>
+<td>준비</td>
+<td><strong>폐쇄</strong></td>
+<td>폐쇄</td>
+<td>폐쇄</td>
+<td>감시제어반 <strong>정지</strong>, 동력제어반 <strong>수동</strong></td>
+</tr>
+<tr>
+<td>체절운전</td>
+<td>폐쇄</td>
+<td><strong>폐쇄</strong></td>
+<td><strong>폐쇄</strong></td>
+<td>토출량 0에서 압력이 정격의 <strong>140 % 이하</strong>. 릴리프밸브가 <strong>체절압력 미만</strong>에서 열림</td>
+</tr>
+<tr>
+<td>정격부하운전</td>
+<td>폐쇄</td>
+<td><strong>완전 개방</strong></td>
+<td>서서히 개방</td>
+<td>유량 <strong>100 %</strong>에서 정격압력 <strong>이상</strong></td>
+</tr>
+<tr>
+<td>최대운전</td>
+<td>폐쇄</td>
+<td>개방</td>
+<td><strong>더 개방</strong></td>
+<td>유량 <strong>150 %</strong>에서 정격압력의 <strong>65 % 이상</strong></td>
+</tr>
+<tr>
+<td>복구</td>
+<td><strong>개방</strong></td>
+<td>폐쇄</td>
+<td>폐쇄</td>
+<td><strong>충압펌프 → 주펌프</strong> 순서로 자동 복귀</td>
+</tr>
+</tbody></table></div>
+<p class="note-p">주의 사항</p>
+<ul class="note-ul">
+<li>유량계에 기포가 지나가면 안 됩니다. 흡입배관 공기 유입, 풋밸브와 수면이 너무 가까움, 공동현상을 의심합니다.</li>
+<li>밸브를 급하게 여닫으면 수격이 생깁니다.</li>
+<li>배수 처리를 미리 확인합니다(집수정 배수펌프 용량이 작을 수 있음).</li>
+</ul>
+<h3 class="note-h3" id="점검-②-방수압력-측정-p4344">점검 ② 방수압력 측정 (p.43~44)</h3>
+<p class="note-p">2개(1개뿐이면 1개)를 동시에 개방 → 직사형 관창으로 봉상주수 → 피토게이지를 노즐 선단에 직각으로 D/2 거리에 댐 → 0.17~0.7 MPa 확인</p>
+<h3 class="note-h3" id="이상-원인-→-조치-p58-고장원인표">이상 원인 → 조치 (p.58 고장원인표)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>증상</th>
+<th>원인</th>
+<th>조치</th>
+</tr></thead><tbody>
+<tr>
+<td>흡입배관에 물이 없음, 물올림탱크 배수가 잦음</td>
+<td><strong>풋밸브 고장</strong></td>
+<td>풋밸브 수리·교체</td>
+</tr>
+<tr>
+<td>성능시험 때 릴리프밸브가 안 열림</td>
+<td>세팅압력 불량, 기구 불량</td>
+<td>재조정·교체</td>
+</tr>
+<tr>
+<td>압력이 떨어지면 주펌프가 먼저 기동</td>
+<td><strong>압력스위치 조정 불량</strong></td>
+<td>재조정</td>
+</tr>
+<tr>
+<td>배관 압력이 수시로 떨어져 충압펌프가 자주 기동</td>
+<td><strong>체크밸브 밀림 또는 누수</strong></td>
+<td>토출측·송수구측·옥상수조 체크밸브 교체, 누수 보수</td>
+</tr>
+<tr>
+<td>방수가 안 됨</td>
+<td>펌프 기동 불량, 제어반이 자동 상태가 아님</td>
+<td>제어반 자동 전환</td>
+</tr>
+<tr>
+<td>펌프는 정상인데 방수가 안 됨</td>
+<td><strong>제수변(개폐밸브) 미개방</strong></td>
+<td>밸브 개방</td>
+</tr>
+<tr>
+<td>기동표시등이 안 켜짐</td>
+<td>기구 불량, 선로 단선</td>
+<td>교체·보수</td>
+</tr>
+<tr>
+<td>(압력스위치) 압력이 내려가지 않아 기동 불능</td>
+<td><strong>물기둥효과</strong>: 자연낙차압보다 기동점을 낮게 세팅</td>
+<td>기동점을 자연낙차압 + K로</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="셀프-체크">셀프 체크</h3>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 정격 400 L/min·80 m 펌프의 체절압력 한도와 150 % 운전 기준은?&lt;/summary&gt;</p>
+<p class="note-p">정격 0.8 MPa × 1.4 = &lt;b&gt;1.12 MPa 이하&lt;/b&gt;, 600 L/min에서 0.8 × 0.65 = &lt;b&gt;0.52 MPa 이상&lt;/b&gt;입니다.&lt;/details&gt;</p>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. RANGE 0.7, DIFF 0.2일 때 기동·정지 압력은?&lt;/summary&gt;</p>
+<p class="note-p">정지 &lt;b&gt;0.7 MPa&lt;/b&gt;, 기동 0.7 − 0.2 = &lt;b&gt;0.5 MPa&lt;/b&gt;입니다.&lt;/details&gt;</p>
+<hr class="note-hr">
+<h2 class="note-h2" id="3-스프링클러-p5981">3. 스프링클러 (p.59~81)</h2>
+<h3 class="note-h3" id="구성">구성</h3>
+<p class="note-p">헤드, 수원, 가압송수장치, 배관(<strong>가지배관</strong>·<strong>교차배관</strong>), 유수검지장치(알람밸브 등), 음향·기동장치, 송수구</p>
+<ul class="note-ul">
+<li><strong>헤드</strong>: 프레임 + 반사판(디플렉터) + 감열체(퓨즈블링크 또는 유리벌브). 폐쇄형과 개방형이 있습니다.</li>
+<li><strong>가지배관</strong>: <strong>토너먼트 방식 금지</strong>(마찰손실·수격), 한쪽 가지배관에 헤드 <strong>8개 이하</strong></li>
+<li><strong>교차배관</strong>: 가지배관과 수평이거나 그 밑에 설치. 끝에 청소구와 나사식 캡</li>
+</ul>
+<h3 class="note-h3" id="수치">수치</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>방수압 / 방수량</td>
+<td><strong>0.1~1.2 MPa / 80 L/min</strong></td>
+</tr>
+<tr>
+<td>수원 (폐쇄형)</td>
+<td>기준개수 × <strong>1.6 ㎥</strong> (30~49층 × 3.2, 50층 이상 × 4.8)</td>
+</tr>
+<tr>
+<td>기준개수 (10층 이하)</td>
+<td>공장 특수가연물 <strong>30</strong>·그 밖 <strong>20</strong> / 근생·판매·운수·복합 판매 포함 <strong>30</strong>·그 밖 <strong>20</strong> / 그 밖 높이 8 m 이상 <strong>20</strong>·미만 <strong>10</strong></td>
+</tr>
+<tr>
+<td>기준개수 (11층 이상·지하가·지하역사)</td>
+<td><strong>30</strong></td>
+</tr>
+<tr>
+<td>아파트 (NFTC 608)</td>
+<td><strong>10개</strong> × 1.6 ㎥ (주차장과 연결되면 30개)</td>
+</tr>
+<tr>
+<td>창고 (NFTC 609)</td>
+<td>라지드롭형, 최대 30개 × 3.2 ㎥ (랙식 9.6 ㎥)</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>설치장소 최고주위온도</th>
+<th>헤드 표시온도</th>
+</tr></thead><tbody>
+<tr>
+<td>39 ℃ 미만</td>
+<td>79 ℃ 미만</td>
+</tr>
+<tr>
+<td>39~64 ℃ 미만</td>
+<td>79~121 ℃ 미만</td>
+</tr>
+<tr>
+<td>64~106 ℃ 미만</td>
+<td>121~162 ℃ 미만</td>
+</tr>
+<tr>
+<td>106 ℃ 이상</td>
+<td>162 ℃ 이상</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="작동-원리-—-5방식-비교-p6472">작동 원리 — 5방식 비교 (p.64~72)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>방식</th>
+<th>1차측</th>
+<th>2차측</th>
+<th>헤드</th>
+<th>밸브</th>
+<th>작동 순서</th>
+<th>장점 / 단점</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>습식</strong></td>
+<td>가압수</td>
+<td><strong>가압수</strong></td>
+<td>폐쇄형</td>
+<td>알람밸브</td>
+<td>헤드 개방 → 2차 압력 저하 → 클래퍼 개방 → 압력스위치(사이렌·화재표시등·밸브개방표시등) → 펌프 기동</td>
+<td>구조 간단·저렴·신속 / <strong>동결 우려</strong>, 오작동 시 수손</td>
+</tr>
+<tr>
+<td><strong>건식</strong></td>
+<td>가압수</td>
+<td><strong>압축공기·질소</strong></td>
+<td>폐쇄형</td>
+<td>건식밸브 + <strong>급속개방기구(엑셀러레이터·익저스터)</strong></td>
+<td>헤드 개방 → 공기압 저하 → 클래퍼 개방 → 방수</td>
+<td>동결 지역·옥외 가능 / 살수 지연, 압축공기가 연소 촉진</td>
+</tr>
+<tr>
+<td><strong>준비작동식</strong></td>
+<td>가압수</td>
+<td><strong>대기압</strong></td>
+<td>폐쇄형</td>
+<td>프리액션밸브</td>
+<td>감지기 <strong>A and B</strong> → 전자밸브 → 중간챔버 감압 → 밸브 개방 → 2차측 급수 → 헤드 개방 → 방수</td>
+<td>동결 가능, 오작동 수손 없음 / 감지기 별도, 구조 복잡</td>
+</tr>
+<tr>
+<td><strong>부압식</strong></td>
+<td>가압수</td>
+<td><strong>부압 (진공)</strong></td>
+<td>폐쇄형</td>
+<td>준비작동식 + 진공펌프</td>
+<td>오작동하면 진공으로 물을 빨아들임</td>
+<td>배관 파손·오작동 수손 방지</td>
+</tr>
+<tr>
+<td><strong>일제살수식</strong></td>
+<td>가압수</td>
+<td><strong>대기압</strong></td>
+<td><strong>개방형</strong></td>
+<td>일제개방밸브(델류지)</td>
+<td>감지기 A and B → 전자밸브 → 밸브 개방 → <strong>구역 전체 방수</strong></td>
+<td>초기화재 신속·층고 높은 곳 / 대량 수손</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>교차회로: 감지기 <strong>A or B → 경보만</strong> 울립니다. <strong>A and B</strong>가 모두 작동해야 밸브가 열립니다.</li>
+<li>오경보 방지: 구형은 <strong>리타딩챔버</strong>, 신형은 압력스위치 내부 <strong>지연회로(4~7초)</strong></li>
+</ul>
+<h3 class="note-h3" id="점검-①-습식-p7375">점검 ① 습식 (p.73~75)</h3>
+<ol class="note-ol">
+<li>사전 통보, 수신반 경보스위치 정지(필요하면 잠시 정상)</li>
+<li><strong>시험밸브(말단시험밸브) 개방</strong> → 2차측 압력 저하 → 클래퍼 개방 → 지연 후 압력스위치 작동</li>
+<li>확인: 감시제어반 화재표시등·밸브개방표시등, 사이렌, 펌프 자동 기동</li>
+<li>복구: 시험밸브 잠금 → 클래퍼 자동 복구. 충압펌프는 자동 정지, <strong>주펌프는 수동 정지</strong></li>
+</ol>
+<h3 class="note-h3" id="점검-②-준비작동식-p7678">점검 ② 준비작동식 (p.76~78)</h3>
+<ul class="note-ul">
+<li>준비: <strong>2차측 개폐밸브 폐쇄</strong>, 배수밸브 개방 (2차측으로 물이 나가지 않게)</li>
+<li>작동 방법 5가지</li>
+</ul>
+<ol class="note-ol">
+<li>감지기 2개 회로 작동</li>
+<li>SVP(수동조작함) 수동조작스위치</li>
+<li>밸브의 수동기동밸브 개방</li>
+<li>감시제어반 수동기동스위치</li>
+<li>동작시험스위치 + 회로선택스위치(2회로)</li>
+</ol>
+<ul class="note-ul">
+<li>밸브 부품 번호(그림 문제 단골): ① 1차 개폐밸브 ② 2차 개폐밸브 ③ <strong>세팅밸브</strong> ④ 1차 압력계 ⑤ 2차 압력계 ⑥ 경보시험밸브 ⑦ <strong>압력스위치</strong> ⑧ 배수밸브 ⑨ <strong>전자밸브</strong> ⑩ 수동기동밸브</li>
+<li>복구 순서</li>
+</ul>
+<ol class="note-ol">
+<li>1차 개폐밸브 폐쇄 → 펌프 정지</li>
+<li>제어반 복구 (수동식이면 전자밸브도 복구)</li>
+<li>배수밸브 폐쇄</li>
+<li><strong>세팅밸브 개방</strong> → 중간챔버에 급수</li>
+<li>1차 압력계가 오르면 1차 개폐밸브를 서서히 개방</li>
+<li>2차 압력계가 <strong>오르지 않으면 정상</strong> (오르면 배수부터 다시)</li>
+<li>세팅밸브 폐쇄</li>
+<li>2차 개폐밸브를 서서히 개방</li>
+<li>제어반을 자동으로</li>
+</ol>
+<h3 class="note-h3" id="이상-원인-→-조치">이상 원인 → 조치</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>증상</th>
+<th>원인</th>
+<th>조치</th>
+</tr></thead><tbody>
+<tr>
+<td>비화재 시 사이렌 (습식)</td>
+<td>순간 압력 변동</td>
+<td>리타딩챔버·지연회로 확인</td>
+</tr>
+<tr>
+<td>복구 후 2차 압력계 상승 (준비작동)</td>
+<td>클래퍼가 제대로 안착하지 않음</td>
+<td>배수 후 세팅 반복</td>
+</tr>
+<tr>
+<td>동결 파손 (습식)</td>
+<td>난방 안 되는 장소</td>
+<td>건식·준비작동식 적용</td>
+</tr>
+<tr>
+<td>주방·보일러실 헤드 오작동</td>
+<td>표시온도 부적합</td>
+<td>주위온도에 맞는 표시온도로</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="셀프-체크">셀프 체크</h3>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 2차측이 &quot;대기압&quot;인 방식 두 가지는?&lt;/summary&gt;</p>
+<p class="note-p">&lt;b&gt;준비작동식&lt;/b&gt;(폐쇄형 헤드)과 &lt;b&gt;일제살수식&lt;/b&gt;(개방형 헤드)입니다.&lt;/details&gt;</p>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 준비작동식에서 A 감지기만 작동하면?&lt;/summary&gt;</p>
+<p class="note-p">화재표시등·지구표시등 점등과 경보만 울리고, &lt;b&gt;밸브는 열리지 않습니다&lt;/b&gt;.&lt;/details&gt;</p>
+<hr class="note-hr">
+<h2 class="note-h2" id="4-가스계-소화설비-p8295">4. 가스계 소화설비 (p.82~95)</h2>
+<h3 class="note-h3" id="구성">구성</h3>
+<p class="note-p"><strong>기동용기</strong>(+ <strong>솔레노이드밸브</strong>) → 동관 → <strong>저장용기</strong> → 집합관 → <strong>선택밸브</strong> → 배관 → <strong>분사헤드</strong></p>
+<ul class="note-ul">
+<li>부속: 압력스위치(선택밸브 2차측), 방출표시등(출입문 위), 수동조작함(기동스위치·<strong>방출지연스위치</strong>·전원표시등)</li>
+</ul>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>부품</th>
+<th>역할</th>
+</tr></thead><tbody>
+<tr>
+<td>솔레노이드밸브</td>
+<td>전기 신호를 받으면 파괴침이 기동용기 봉판을 뚫습니다. 수동조작버튼이 있음(안전클립 제거 후 누르면 <strong>즉시 격발</strong>)</td>
+</tr>
+<tr>
+<td>선택밸브</td>
+<td>방호구역이 2곳 이상일 때 저장용기를 함께 쓰고, 해당 구역으로 보냄</td>
+</tr>
+<tr>
+<td>압력스위치</td>
+<td>약제 <strong>방출 압력</strong>으로 작동 → 방출표시등 점등</td>
+</tr>
+<tr>
+<td>방출지연스위치</td>
+<td>자동복귀형. 누르고 있는 동안 타이머를 순간 정지</td>
+</tr>
+</tbody></table></div>
+<p class="note-p">방출방식: 전역방출(밀폐 방호구역) / 국소방출(화점에 직접) / 호스릴(이동식)</p>
+<h3 class="note-h3" id="수치약제">수치·약제</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>약제</th>
+<th>소화효과</th>
+<th>특징</th>
+</tr></thead><tbody>
+<tr>
+<td>CO₂</td>
+<td><strong>질식·냉각</strong></td>
+<td>심부화재 적합, 진화 후 깨끗, 비전도성 / <strong>질식 위험</strong>, 방사 시 동상·소음</td>
+</tr>
+<tr>
+<td>할론</td>
+<td><strong>억제(연쇄반응 차단)</strong> + 질식·냉각</td>
+<td></td>
+</tr>
+<tr>
+<td>할로겐화합물 및 불활성기체</td>
+<td>할론 대체</td>
+<td></td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>지연시간: 경보 후 약 <strong>30초</strong> (이 시간 안에 대피)</li>
+</ul>
+<h3 class="note-h3" id="작동-순서-p8788">작동 순서 (p.87~88)</h3>
+<p class="note-p">감지기 A·B 작동(자동) 또는 수동조작함 버튼(수동) → 수신기 → 경보(사이렌)·자동폐쇄장치·환기팬 정지 → <strong>지연(30초)</strong> → <strong>솔레노이드</strong> 작동 → <strong>기동용기</strong> 개방 → 기동가스가 <strong>선택밸브·저장용기</strong> 개방 → 약제 방출 → <strong>압력스위치</strong> 작동 → <strong>방출표시등</strong> 점등</p>
+<blockquote class="note-quote">
+<p>함정: 방출표시등은 약제가 <strong>실제로 방출된 뒤</strong> 켜집니다.</p>
+</blockquote>
+<h3 class="note-h3" id="점검-p8995">점검 (p.89~95)</h3>
+<p class="note-p"><strong>점검 전 안전조치 (순서 출제)</strong></p>
+<ol class="note-ol">
+<li>기동용기 → 선택밸브 <strong>조작동관 분리</strong>, 기동용기 → 저장용기 <strong>개방용 동관 분리</strong></li>
+<li>제어반의 솔레노이드 <strong>연동 정지</strong></li>
+<li><strong>안전핀 체결 → 솔레노이드 분리 → 안전핀 제거</strong> (격발 준비)</li>
+</ol>
+<p class="note-p"><strong>격발시험 4가지</strong> (모두 연동 전환 후)</p>
+<ol class="note-ol">
+<li>솔레노이드 수동조작버튼</li>
+<li>수동조작함 기동스위치</li>
+<li>교차회로 감지기 A·B 작동</li>
+<li>제어반 수동조작스위치</li>
+</ol>
+<p class="note-p"><strong>방출표시등 시험</strong>: 압력스위치 테스트 버튼을 당김 → 출입문 위 방출표시등, 수동조작함 방출등, 제어반 방출표시등 점등 확인 → 다시 눌러 복구</p>
+<p class="note-p"><strong>복구 순서</strong></p>
+<ol class="note-ol">
+<li>제어반 복구스위치</li>
+<li>솔레노이드 연동 정지</li>
+<li>격발된 솔레노이드 복구</li>
+<li>안전핀 체결 후 기동용기에 결합</li>
+<li>연동 상태를 확인한 뒤 안전핀 분리</li>
+<li>분리했던 조작동관 결합</li>
+</ol>
+<h3 class="note-h3" id="이상-원인-→-조치-co₂-질식사고-p9495">이상 원인 → 조치 (CO₂ 질식사고, p.94~95)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>원인</th>
+<th>예방</th>
+</tr></thead><tbody>
+<tr>
+<td>작업 전 점검을 확인하지 않음</td>
+<td>수동 전환(연동 정지)·솔레노이드·동관을 분리한 뒤 작업</td>
+</tr>
+<tr>
+<td>자동 상태에서 작업</td>
+<td>감독자 배치, 출입금지 표지</td>
+</tr>
+<tr>
+<td>경보를 무시하거나 스위치를 끔</td>
+<td>경보 후 <strong>30초 안에 대피</strong></td>
+</tr>
+<tr>
+<td>안전교육 미실시, 복구 전 정보전달 미흡</td>
+<td>교육, 공기호흡기 비치, <strong>환기 전 진입 금지</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="셀프-체크">셀프 체크</h3>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 솔레노이드 안전조치 3단계 순서는?&lt;/summary&gt;</p>
+<p class="note-p">&lt;b&gt;안전핀 체결 → 솔레노이드 분리 → 안전핀 제거&lt;/b&gt;입니다.&lt;/details&gt;</p>
+<hr class="note-hr">
+<h2 class="note-h2" id="5-경보설비-자탐수신기비상방송-p96128">5. 경보설비 (자탐·수신기·비상방송) (p.96~128)</h2>
+<h3 class="note-h3" id="구성">구성</h3>
+<p class="note-p"><strong>감지기·발신기</strong> → (중계기) → <strong>수신기</strong> → 음향장치(주경종·지구경종)·표시등·시각경보기 / 비상방송 연동</p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>구분</th>
+<th>P형</th>
+<th>R형</th>
+</tr></thead><tbody>
+<tr>
+<td>신호</td>
+<td>회로별 공통신호 (실선)</td>
+<td>중계기를 거친 <strong>고유신호(통신)</strong></td>
+</tr>
+<tr>
+<td>표시</td>
+<td>회로별 <strong>지구표시등</strong></td>
+<td>LCD 모니터, 그래픽 표시판</td>
+</tr>
+<tr>
+<td>용도</td>
+<td>중소형 건물</td>
+<td><strong>대형 건물</strong> (배선 수 감소)</td>
+</tr>
+<tr>
+<td>기록장치</td>
+<td>—</td>
+<td><strong>999개 이상</strong> 저장, 넘으면 오래된 것부터 자동 삭제, 임의 수정·삭제 불가</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="수치">수치</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>경계구역</td>
+<td>2개 건축물·2개 층에 걸치지 않음(500 ㎡ 이하면 2개 층 가능), <strong>600 ㎡ 이하·한 변 50 m 이하</strong> (내부가 다 보이면 1,000 ㎡ 이하)</td>
+</tr>
+<tr>
+<td>수신기 조작스위치 / 발신기 높이</td>
+<td><strong>0.8~1.5 m</strong></td>
+</tr>
+<tr>
+<td>발신기</td>
+<td>층마다, <strong>수평거리 25 m 이하</strong></td>
+</tr>
+<tr>
+<td>지구음향장치</td>
+<td>층마다 수평거리 <strong>25 m 이하</strong>, 1 m 떨어진 곳에서 <strong>90 dB 이상</strong></td>
+</tr>
+<tr>
+<td>시각경보기</td>
+<td>바닥에서 <strong>2~2.5 m</strong> (천장이 2 m 이하면 천장에서 0.15 m 이내)</td>
+</tr>
+<tr>
+<td>비상방송 스피커</td>
+<td>실내 <strong>1 W</strong> 이상, 실외·일반 <strong>3 W</strong> 이상, 수평거리 25 m 이하</td>
+</tr>
+<tr>
+<td>비상방송 개시</td>
+<td>화재 신고 후 <strong>10초 이하</strong></td>
+</tr>
+<tr>
+<td>비상방송 음량조정기</td>
+<td><strong>3선식</strong> 배선</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>경보방식 (11층 이상, 공동주택은 16층 이상 = 우선경보)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>발화층</th>
+<th>경보 범위</th>
+</tr></thead><tbody>
+<tr>
+<td>2층 이상</td>
+<td>발화층 + <strong>직상 4개 층</strong></td>
+</tr>
+<tr>
+<td>1층</td>
+<td>발화층 + 직상 4개 층 + <strong>지하층</strong></td>
+</tr>
+<tr>
+<td>지하층</td>
+<td>발화층 + 직상층 + <strong>기타 지하층</strong></td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>감지기 설치유효면적 (㎡)</strong> (p.103)</p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>부착높이·구조</th>
+<th>차동식 1종 / 2종</th>
+<th>정온식 특종 / 1종 / 2종</th>
+</tr></thead><tbody>
+<tr>
+<td>4 m 미만 · 내화</td>
+<td><strong>90 / 70</strong></td>
+<td>70 / 60 / 20</td>
+</tr>
+<tr>
+<td>4 m 미만 · 기타</td>
+<td>50 / 40</td>
+<td>40 / 30 / 15</td>
+</tr>
+<tr>
+<td>4~8 m · 내화</td>
+<td>45 / 35</td>
+<td>35 / 30 / —</td>
+</tr>
+<tr>
+<td>4~8 m · 기타</td>
+<td>30 / 25</td>
+<td>25 / 15 / —</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="작동-원리">작동 원리</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>감지기</th>
+<th>원리</th>
+<th>설치 장소</th>
+</tr></thead><tbody>
+<tr>
+<td>차동식 스포트형</td>
+<td>온도 <strong>상승률</strong>. 감열실 공기 팽창 → 다이아프램 → 접점</td>
+<td>거실, 사무실</td>
+</tr>
+<tr>
+<td>정온식 스포트형</td>
+<td>일정 <strong>온도</strong> 이상. <strong>바이메탈</strong>이 휨</td>
+<td><strong>보일러실, 주방</strong></td>
+</tr>
+<tr>
+<td>이온화식 연기</td>
+<td>이온전류 감소 (작은 입자, 불꽃화재)</td>
+<td></td>
+</tr>
+<tr>
+<td>광전식 연기</td>
+<td>광량 변화 (큰 입자, 훈소화재)</td>
+<td>계단, 복도</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>배선: <strong>송배선식</strong>(도통시험이 가능하도록). 병렬식은 불량입니다.</li>
+</ul>
+<h3 class="note-h3" id="점검-—-p형-수신기-3대-시험-p111117">점검 — P형 수신기 3대 시험 (p.111~117)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>시험</th>
+<th>목적</th>
+<th>순서 (로터리 방식)</th>
+<th>판정</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>동작시험</strong></td>
+<td>수신기가 화재신호를 정상 처리하는지</td>
+<td><strong>① 동작시험 → ② 자동복구 → ③ 회로시험 돌림</strong> / 복구: <strong>③ 회로시험 정상위치 → ① → ②</strong></td>
+<td>화재표시등·지구표시등 점등, 음향 작동. 1회선마다 복구하며 전 회선 시험 (축적형은 <strong>비축적</strong> 위치)</td>
+</tr>
+<tr>
+<td><strong>도통시험</strong></td>
+<td>감지기 회로 <strong>단선</strong> 여부</td>
+<td>도통시험스위치 → 회로시험스위치 회전 / 복구: 회로시험 정상위치 → 도통시험 복구</td>
+<td>전압계 <strong>4~8 V 정상, 0 V 단선</strong> / 확인등 녹색 정상, 적색 단선</td>
+</tr>
+<tr>
+<td><strong>예비전원시험</strong></td>
+<td>정전 시 자동 절환, 전압</td>
+<td>예비전원시험스위치를 <strong>누르고 있는 동안</strong>만</td>
+<td>전압계 <strong>19~29 V</strong>, 램프 녹색 정상. &quot;28 V 높음 / 24 V 정상 / 20 V 낮음&quot;</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>오작동방지기(축적): 점검할 때는 <strong>비축적</strong>, 평상시는 <strong>축적</strong></li>
+<li>시험 후 모든 스위치를 정상위치로 돌려 <strong>스위치주의등이 꺼졌는지</strong> 확인합니다.</li>
+</ul>
+<p class="note-p"><strong>감지기 점검</strong> (p.108~109)</p>
+<ol class="note-ol">
+<li>감지기 시험기·연기 스프레이로 작동 → LED가 켜지면 정상</li>
+<li>안 켜지면 회로 전압 측정: <strong>정격전압 80 % 이상이면 감지기 불량(교체), 0 V면 회로 단선(보수)</strong></li>
+</ol>
+<p class="note-p"><strong>발신기 점검</strong>: 작동스위치 누름 → 발신기 작동표시등·수신기 응답표시등 점등, 경종·방송 연동 확인 → 스위치 복구 → 수신기 복구</p>
+<h3 class="note-h3" id="이상-원인-→-조치">이상 원인 → 조치</h3>
+<p class="note-p"><strong>비화재보 원인 (p.123~124)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>원인</th>
+<th>대책</th>
+</tr></thead><tbody>
+<tr>
+<td>주방에 차동식 (비적응성)</td>
+<td><strong>정온식으로 교체</strong></td>
+</tr>
+<tr>
+<td>천장형 온풍기에 너무 가까움</td>
+<td>기류 방향 밖으로 이격</td>
+</tr>
+<tr>
+<td>장마철 습도</td>
+<td>복구스위치 또는 감지기 복구</td>
+</tr>
+<tr>
+<td>청소 불량 (먼지·분진)</td>
+<td>먼지 제거 후 복구 또는 교체</td>
+</tr>
+<tr>
+<td>건물 누수</td>
+<td>방수 처리 + 감지기 교체</td>
+</tr>
+<tr>
+<td>담배 연기</td>
+<td>흡연구역에 환풍기</td>
+</tr>
+<tr>
+<td>발신기 장난</td>
+<td>입주자 소방안전교육</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>비화재보 조치 7단계 (p.124~125)</strong></p>
+<ol class="note-ol">
+<li>수신기 확인 (화재표시등·지구표시등)</li>
+<li>실제 화재 여부 확인 (해당 구역으로 이동)</li>
+<li><strong>음향장치 정지</strong></li>
+<li>원인 제거 (감지기 교체 / 발신기 스위치 복구)</li>
+<li><strong>수신기 복구</strong></li>
+<li><strong>음향장치 복구</strong></li>
+<li><strong>스위치주의등 소등</strong> 확인</li>
+</ol>
+<blockquote class="note-quote">
+<p>전원을 차단하거나 경보를 정지 상태로 두는 것은 <strong>금지</strong>입니다.</p>
+</blockquote>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>기타 증상</th>
+<th>원인</th>
+</tr></thead><tbody>
+<tr>
+<td>예비전원감시등 점등</td>
+<td>결속 커넥터 분리, 예비전원 불량</td>
+</tr>
+<tr>
+<td>퓨즈 옆 적색 LED 점등</td>
+<td>퓨즈 단선 (LOCAL 기기 고장 수리 후 교체)</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="셀프-체크">셀프 체크</h3>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 도통시험에서 전압계가 0 V면?&lt;/summary&gt;</p>
+<p class="note-p">&lt;b&gt;회로 단선&lt;/b&gt;입니다. 4~8 V가 정상입니다.&lt;/details&gt;</p>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 감지기 LED가 안 켜지고 회로 전압이 정격의 90 %면?&lt;/summary&gt;</p>
+<p class="note-p">전압이 정상이므로 &lt;b&gt;감지기 불량&lt;/b&gt;입니다. 교체합니다.&lt;/details&gt;</p>
+<hr class="note-hr">
+<h2 class="note-h2" id="6-피난구조설비-p129154">6. 피난구조설비 (p.129~154)</h2>
+<h3 class="note-h3" id="구성">구성</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>분류</th>
+<th>종류</th>
+</tr></thead><tbody>
+<tr>
+<td>피난기구</td>
+<td>구조대(경사강하식·수직강하식), <strong>완강기</strong>(교대로 연속 사용), <strong>간이완강기</strong>(연속 사용 불가), 피난사다리(고정식·올림식·내림식), 공기안전매트, 미끄럼대, 피난교, 다수인피난장비, 승강식피난기</td>
+</tr>
+<tr>
+<td>인명구조기구</td>
+<td>방열복, 방화복, <strong>공기호흡기</strong>, 인공소생기</td>
+</tr>
+<tr>
+<td>조명</td>
+<td>비상조명등, 휴대용비상조명등</td>
+</tr>
+<tr>
+<td>유도</td>
+<td>피난구유도등, 통로유도등(복도·거실·계단), 객석유도등, 유도표지, 피난유도선</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="수치-—-피난기구-p131134">수치 — 피난기구 (p.131~134)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>층마다 설치</td>
+<td>숙박·노유자·의료 <strong>500 ㎡</strong>마다 / 위락·문화집회·운동·판매 <strong>800 ㎡</strong>마다 / 계단실형 아파트 <strong>각 세대</strong> / 그 밖 <strong>1,000 ㎡</strong>마다</td>
+</tr>
+<tr>
+<td>추가</td>
+<td>숙박시설 객실마다 완강기(또는 수용인원 수 이상 간이완강기), 4층 이상 장애인 노유자시설은 층마다 구조대</td>
+</tr>
+<tr>
+<td>개구부</td>
+<td>가로 <strong>0.5 m</strong> × 세로 <strong>1 m</strong> 이상, 바닥~하단 <strong>1.2 m 미만</strong>(넘으면 발판)</td>
+</tr>
+<tr>
+<td>4층 이상 피난사다리</td>
+<td><strong>금속성 고정사다리</strong> + 노대</td>
+</tr>
+<tr>
+<td>1/2 감소</td>
+<td>주요구조부 내화 + 직통계단인 (특별)피난계단 <strong>2개 이상</strong></td>
+</tr>
+<tr>
+<td>적응성</td>
+<td><strong>1층은 해당 없음</strong>. 간이완강기 = 숙박시설 3층 이상 객실, 공기안전매트 = 아파트</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>공기호흡기 (양압형, p.137~141)</strong></p>
+<ul class="note-ul">
+<li>경보기: 용기 압력 약 <strong>55 bar 이하</strong>면 경보음</li>
+<li>사용 전: 압력계 <strong>0 bar</strong> 확인 (용기밸브 잠긴 상태)</li>
+<li>착용 후: 용기밸브를 열고 <strong>270 bar 이상</strong> 확인 → 양압호흡 전환 → 비상밸브(BY-PASS) 확인</li>
+</ul>
+<p class="note-p"><strong>인명구조기구 설치 (p.136)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>대상</th>
+<th>기구</th>
+<th>수량</th>
+</tr></thead><tbody>
+<tr>
+<td>지하층 포함 <strong>7층 이상 관광호텔</strong>, <strong>5층 이상 병원</strong></td>
+<td>방열복·방화복, 공기호흡기, 인공소생기</td>
+<td>각 <strong>2개 이상</strong> (병원은 인공소생기 생략 가능)</td>
+</tr>
+<tr>
+<td>수용인원 100명 이상 영화상영관, 대규모점포, 지하역사, 지하상가</td>
+<td>공기호흡기</td>
+<td>층마다 <strong>2개 이상</strong></td>
+</tr>
+<tr>
+<td>CO₂소화설비 설치 장소</td>
+<td>공기호흡기</td>
+<td>출입구 외부 인근 <strong>1개 이상</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="수치-—-조명유도등-p142154">수치 — 조명·유도등 (p.142~154)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>비상조명등 조도</td>
+<td>바닥에서 <strong>1 lx 이상</strong></td>
+</tr>
+<tr>
+<td>비상전원 용량</td>
+<td><strong>20분</strong> (11층 이상, 지하·무창층 도매시장·소매시장·여객터미널·지하역사·지하상가는 <strong>60분</strong>)</td>
+</tr>
+<tr>
+<td>휴대용비상조명등</td>
+<td>숙박·다중이용업소 객실마다 1개 (외부는 문 손잡이 1 m 이내) / 대규모점포·영화관 보행 <strong>50 m</strong>마다 <strong>3개</strong> / 지하상가·지하역사 <strong>25 m</strong>마다 <strong>3개</strong> / 높이 <strong>0.8~1.5 m</strong></td>
+</tr>
+<tr>
+<td>피난구유도등</td>
+<td>바닥에서 <strong>1.5 m 이상</strong>, 출입구에 인접</td>
+</tr>
+<tr>
+<td>복도통로유도등</td>
+<td>모퉁이 + 보행 <strong>20 m</strong>마다, 바닥에서 <strong>1 m 이하</strong></td>
+</tr>
+<tr>
+<td>거실통로유도등</td>
+<td>모퉁이 + 보행 <strong>20 m</strong>마다, 바닥에서 <strong>1.5 m 이상</strong></td>
+</tr>
+<tr>
+<td>계단통로유도등</td>
+<td>계단참마다, 바닥에서 <strong>1 m 이하</strong></td>
+</tr>
+<tr>
+<td>객석유도등 개수</td>
+<td><strong>직선 길이(m) ÷ 4 − 1</strong> (소수점은 올림)</td>
+</tr>
+<tr>
+<td>유도표지</td>
+<td>보행 <strong>15 m</strong> 이하마다, 통로유도표지 <strong>1 m 이하</strong></td>
+</tr>
+<tr>
+<td>축광식 피난유도선</td>
+<td>바닥에서 <strong>50 cm 이하</strong>, <strong>50 cm 간격</strong> 연속</td>
+</tr>
+<tr>
+<td>광원점등식 피난유도선</td>
+<td>바닥에서 <strong>1 m 이하</strong>, 50 cm 간격(곤란하면 1 m), 제어부 0.8~1.5 m</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>대상별 유도등 (p.144)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>장소</th>
+<th>유도등</th>
+</tr></thead><tbody>
+<tr>
+<td>공연장·집회장·관람장·운동시설, 유흥주점</td>
+<td><strong>대형피난구 + 통로 + 객석</strong></td>
+</tr>
+<tr>
+<td>위락·판매·운수·관광숙박·의료·장례식장·지하상가·지하철역사 등</td>
+<td>대형피난구 + 통로</td>
+</tr>
+<tr>
+<td>숙박·오피스텔, 지하·무창층·11층 이상</td>
+<td><strong>중형</strong>피난구 + 통로</td>
+</tr>
+<tr>
+<td>근생·노유자·업무·공장·교육연구 등</td>
+<td><strong>소형</strong>피난구 + 통로</td>
+</tr>
+<tr>
+<td>그 밖</td>
+<td>피난구유도표지 + 통로유도표지</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="작동-원리-—-유도등-배선">작동 원리 — 유도등 배선</h3>
+<ul class="note-ul">
+<li><strong>2선식</strong>: 항상 켜져 있습니다. 끄면 배터리가 충전되지 않아 정전 때 안 켜집니다.</li>
+<li><strong>3선식</strong>: 평소 꺼 둘 수 있고 아래 경우 <strong>자동 점등</strong>됩니다.</li>
+</ul>
+<ol class="note-ol">
+<li>자동화재탐지설비의 감지기·발신기 작동</li>
+<li>비상경보설비의 발신기 작동</li>
+<li>상용전원 정전·전원선 단선</li>
+<li>방재실·전기실 배전반에서 수동 점등</li>
+<li><strong>자동소화설비</strong> 작동</li>
+</ol>
+<blockquote class="note-quote">
+<p>함정: &quot;옥내소화전 충압펌프 작동&quot;은 자동 점등 조건이 <strong>아닙니다</strong> (학습평가 Q6).</p>
+</blockquote>
+<h3 class="note-h3" id="점검">점검</h3>
+<ul class="note-ul">
+<li>3선식: 수신기에서 수동 점등스위치 ON → 안 켜진 유도등 찾기 / 감지기·발신기를 작동시켜 함께 켜지는지 확인</li>
+<li>2선식: 평상시 <strong>켜져 있으면 정상</strong>, 꺼져 있으면 비정상</li>
+<li>예비전원: 점검스위치를 당기거나 눌러 자동 절환·점등 확인. <strong>예비전원감시등이 꺼져 있어야 정상</strong></li>
+</ul>
+<h3 class="note-h3" id="이상-원인-→-조치">이상 원인 → 조치</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>증상</th>
+<th>원인</th>
+</tr></thead><tbody>
+<tr>
+<td>예비전원감시등 점등</td>
+<td>예비전원 불량, 충전부 불량, <strong>커넥터 접속 불량</strong>, 완전 방전, 충전 불량, 예비전원 미설치, <strong>퓨즈 단선</strong>, 장시간 정전</td>
+</tr>
+<tr>
+<td>정전 시 2선식 유도등 미점등</td>
+<td>평소 꺼 둬서 배터리 미충전</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="셀프-체크">셀프 체크</h3>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 객석 통로 직선 길이 30 m일 때 객석유도등 개수는?&lt;/summary&gt;</p>
+<p class="note-p">30 ÷ 4 − 1 = 6.5이므로 올림하여 &lt;b&gt;7개&lt;/b&gt;입니다.&lt;/details&gt;</p>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 거실통로유도등과 복도통로유도등의 높이 차이는?&lt;/summary&gt;</p>
+<p class="note-p">거실은 &lt;b&gt;1.5 m 이상&lt;/b&gt;(상부), 복도는 &lt;b&gt;1 m 이하&lt;/b&gt;(하부)입니다.&lt;/details&gt;</p>
+<hr class="note-hr">
+<h2 class="note-h2" id="7-소화용수소화활동설비-p155169">7. 소화용수·소화활동설비 (p.155~169)</h2>
+<h3 class="note-h3" id="구성">구성</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>설비</th>
+<th>구성</th>
+<th>핵심</th>
+</tr></thead><tbody>
+<tr>
+<td>상수도소화용수</td>
+<td>수도배관 + 소화전</td>
+<td>호칭지름 <strong>75 mm 이상</strong> 배관에 <strong>100 mm 이상</strong> 소화전</td>
+</tr>
+<tr>
+<td>소화수조·저수조</td>
+<td>채수구, 흡수관투입구, (가압송수장치)</td>
+<td>소방차가 쓰는 물</td>
+</tr>
+<tr>
+<td><strong>연결송수관</strong></td>
+<td>송수구, 방수구, 방수기구함, 배관</td>
+<td>고층·지하 건물, 소방관이 사용</td>
+</tr>
+<tr>
+<td><strong>연결살수</strong></td>
+<td>송수구, 배관, 살수헤드</td>
+<td>지하층·물류터미널</td>
+</tr>
+<tr>
+<td><strong>제연</strong></td>
+<td>거실제연(급·배기), 부속실 급기가압</td>
+<td>연기 차단·배출</td>
+</tr>
+<tr>
+<td><strong>비상콘센트</strong></td>
+<td>보호함, 콘센트</td>
+<td>소방대 조명·장비 전원</td>
+</tr>
+<tr>
+<td><strong>무선통신보조</strong></td>
+<td>누설동축케이블(LCX), 안테나, 분배기, 무반사 종단저항</td>
+<td>지하에서 무전</td>
+</tr>
+<tr>
+<td>연소방지</td>
+<td>송수구, 배관, 방수헤드</td>
+<td>전력·통신 지하구</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="수치">수치</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>상수도 소화전</td>
+<td>수평투영면 각 부분에서 <strong>140 m 이하</strong></td>
+</tr>
+<tr>
+<td>채수구</td>
+<td>소방차가 <strong>2 m 이내</strong>로 접근, 지면에서 <strong>0.5~1.0 m</strong></td>
+</tr>
+<tr>
+<td>가압송수장치 필요</td>
+<td>수조 깊이가 지표면에서 <strong>4.5 m 이상</strong></td>
+</tr>
+<tr>
+<td>저수량</td>
+<td>연면적 ÷ 기준면적(올림) × <strong>20 ㎥</strong>. 기준면적: 1·2층 바닥면적 합 15,000 ㎡ 이상이면 <strong>7,500 ㎡</strong>, 그 밖 <strong>12,500 ㎡</strong> (창고 5,000 ㎡)</td>
+</tr>
+<tr>
+<td>채수구 수</td>
+<td>20~40 ㎥ 미만 <strong>1개</strong> / 40~100 ㎥ 미만 <strong>2개</strong> / 100 ㎥ 이상 <strong>3개</strong></td>
+</tr>
+<tr>
+<td>흡수관투입구</td>
+<td>0.6 m 이상, 80 ㎥ 미만 1개·이상 2개</td>
+</tr>
+<tr>
+<td>연결송수관 건식 / 습식</td>
+<td><strong>31 m 미만 또는 11층 미만</strong>은 건식 가능 / <strong>31 m 이상 또는 11층 이상</strong>은 습식</td>
+</tr>
+<tr>
+<td>연결송수관 송수구</td>
+<td>지면에서 <strong>0.5~1.0 m</strong></td>
+</tr>
+<tr>
+<td>연결송수관 방수구 (아파트)</td>
+<td>계단 출입구에서 <strong>5 m 이내</strong>, 수평거리 <strong>50 m</strong> 초과 시 추가, <strong>쌍구형</strong></td>
+</tr>
+<tr>
+<td>연결살수 대상</td>
+<td>판매·운수·물류터미널 바닥면적 합 <strong>1,000 ㎡ 이상</strong>, 지하층 <strong>150 ㎡ 이상</strong></td>
+</tr>
+<tr>
+<td>제연 최소 차압</td>
+<td><strong>40 Pa 이상</strong> (스프링클러 있으면 <strong>12.5 Pa</strong>)</td>
+</tr>
+<tr>
+<td>출입문 개방력</td>
+<td><strong>110 N 이하</strong></td>
+</tr>
+<tr>
+<td>방연풍속</td>
+<td>계단실+부속실 동시 또는 계단실 단독 <strong>0.5 m/s</strong> / 부속실 단독 + 옥내가 거실 <strong>0.7 m/s</strong> / 부속실 단독 + 옥내가 방화구조 복도 <strong>0.5 m/s</strong></td>
+</tr>
+<tr>
+<td>비상콘센트</td>
+<td>높이 <strong>0.8~1.5 m</strong>, 계단 출입구에서 <strong>5 m 이내</strong>, 수평거리 <strong>50 m</strong>마다 (지하상가·지하층 3,000 ㎡ 이상은 <strong>25 m</strong>), 단상 <strong>220 V · 1.5 kVA 이상</strong>, 보호함 위 <strong>적색 표시등</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="작동-원리-—-부속실-제연-p163">작동 원리 — 부속실 제연 (p.163)</h3>
+<p class="note-p">화재 → 감지기 작동(또는 수동기동) → 화재경보 → <strong>급기댐퍼 개방</strong> → 댐퍼가 완전히 열린 뒤 <strong>송풍기 작동</strong> → 계단실·부속실로 송풍 → 설정압력을 넘으면 <strong>플랩댐퍼</strong>가 과압 배출</p>
+<ul class="note-ul">
+<li>차압은 화재 때가 아니라 <strong>평상시 개념</strong>입니다.</li>
+<li>거실제연은 <strong>수평</strong>피난, 부속실 급기가압은 <strong>수직</strong>피난을 돕습니다.</li>
+</ul>
+<h3 class="note-h3" id="점검-—-부속실-제연-p163164">점검 — 부속실 제연 (p.163~164)</h3>
+<ol class="note-ol">
+<li>옥내 감지기 작동(또는 수동기동스위치)</li>
+<li>화재경보·댐퍼 개방 확인</li>
+<li>송풍기 작동, 계단실·부속실 바람 확인</li>
+<li>문을 닫고 부속실 안에서 <strong>차압 측정 (40 Pa 이상)</strong></li>
+<li>문을 열고 풍속계로 <strong>방연풍속 측정</strong></li>
+<li>과압배출장치 작동 확인</li>
+<li>수신기 복구</li>
+</ol>
+<h3 class="note-h3" id="이상-원인">이상 원인</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>증상</th>
+<th>원인</th>
+</tr></thead><tbody>
+<tr>
+<td>출입문이 안 열림</td>
+<td>차압 과다 (개방력 110 N 초과) → 과압배출장치 확인</td>
+</tr>
+<tr>
+<td>연기가 계단으로 유입</td>
+<td>차압·방연풍속 부족, 자동폐쇄장치 불량</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="셀프-체크">셀프 체크</h3>
+<p class="note-p">&lt;details&gt;&lt;summary&gt;Q. 연면적 30,000 ㎡ (1·2층 합 10,000 ㎡) 건물의 저수량과 채수구 수는?&lt;/summary&gt;</p>
+<p class="note-p">1·2층 합이 15,000 ㎡ 미만이므로 기준면적 12,500 ㎡입니다. 30,000 ÷ 12,500 = 2.4 → 올림 3 × 20 = &lt;b&gt;60 ㎥&lt;/b&gt;, 채수구 &lt;b&gt;2개&lt;/b&gt;입니다.&lt;/details&gt;</p>
+<hr class="note-hr">
+<h2 class="note-h2" id="8-헷갈리는-숫자-짝-비교표">8. 헷갈리는 숫자 짝 비교표</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>헷갈리는 짝</th>
+<th>A</th>
+<th>B</th>
+</tr></thead><tbody>
+<tr>
+<td>방수량</td>
+<td>옥내소화전 <strong>130 L/min</strong></td>
+<td>스프링클러 <strong>80 L/min</strong> (옥외 350)</td>
+</tr>
+<tr>
+<td>최소 방수압</td>
+<td>옥내 <strong>0.17 MPa</strong></td>
+<td>SP <strong>0.1</strong> / 옥외 <strong>0.25</strong> MPa</td>
+</tr>
+<tr>
+<td>최대 방수압</td>
+<td>옥내·옥외 <strong>0.7 MPa</strong></td>
+<td>SP <strong>1.2 MPa</strong></td>
+</tr>
+<tr>
+<td>수원 단위</td>
+<td>옥내 N × <strong>2.6 ㎥</strong></td>
+<td>SP 기준개수 × <strong>1.6 ㎥</strong> (옥외 N × 7)</td>
+</tr>
+<tr>
+<td>수평거리</td>
+<td>옥내 방수구 <strong>25 m</strong></td>
+<td>옥외 소화전 <strong>40 m</strong></td>
+</tr>
+<tr>
+<td>25 m가 나오는 곳</td>
+<td>옥내 방수구, 발신기, 지구음향, 스피커</td>
+<td>휴대용조명 지하상가 <strong>보행</strong> 25 m</td>
+</tr>
+<tr>
+<td>50 m가 나오는 곳</td>
+<td>비상콘센트 수평 50 m, 연결송수관(아파트) 50 m</td>
+<td>휴대용조명 대규모점포 <strong>보행</strong> 50 m, 경계구역 한 변 50 m</td>
+</tr>
+<tr>
+<td>보행거리</td>
+<td>소화기 소형 <strong>20 m</strong> / 대형 <strong>30 m</strong></td>
+<td>통로유도등 <strong>20 m</strong> / 유도표지 <strong>15 m</strong></td>
+</tr>
+<tr>
+<td>높이 0.8~1.5 m</td>
+<td>발신기, 수신기 스위치, 비상콘센트, 휴대용조명, 방송 조작부, 피난유도선 제어부</td>
+<td>—</td>
+</tr>
+<tr>
+<td>높이 1.5 m</td>
+<td>소화기 <strong>이하</strong>, 방수구 <strong>이하</strong></td>
+<td>피난구유도등·거실통로유도등 <strong>이상</strong></td>
+</tr>
+<tr>
+<td>높이 1 m 이하</td>
+<td>복도·계단 통로유도등, 통로유도표지, 광원점등식 피난유도선</td>
+<td>축광식 피난유도선 <strong>50 cm 이하</strong></td>
+</tr>
+<tr>
+<td>높이 0.5~1.0 m</td>
+<td>연결송수관 송수구, 채수구</td>
+<td>—</td>
+</tr>
+<tr>
+<td>20분 / 60분</td>
+<td>비상조명·유도등 기본 <strong>20분</strong></td>
+<td>11층 이상·지하상가 등 <strong>60분</strong></td>
+</tr>
+<tr>
+<td>140 % / 65 %</td>
+<td>체절운전 <strong>140 % 이하</strong></td>
+<td>150 % 유량에서 <strong>65 % 이상</strong></td>
+</tr>
+<tr>
+<td>정상 전압</td>
+<td>도통시험 <strong>4~8 V</strong></td>
+<td>예비전원시험 <strong>19~29 V</strong></td>
+</tr>
+<tr>
+<td>소화기 압력</td>
+<td>축압식 <strong>0.7~0.98 MPa</strong></td>
+<td>공기호흡기 경보 <strong>55 bar</strong>, 착용 <strong>270 bar 이상</strong></td>
+</tr>
+<tr>
+<td>차압</td>
+<td>제연 <strong>40 Pa</strong></td>
+<td>SP 있으면 <strong>12.5 Pa</strong>, 개방력 <strong>110 N 이하</strong></td>
+</tr>
+<tr>
+<td>단위면적</td>
+<td>경계구역 <strong>600 ㎡</strong></td>
+<td>소화기 위락 <strong>30 ㎡</strong>·공연장 <strong>50 ㎡</strong>·일반 <strong>100 ㎡</strong></td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="9-교재-학습평가-14제-p170173">9. 교재 학습평가 14제 (p.170~173)</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>#</th>
+<th>문제</th>
+<th>정답</th>
+</tr></thead><tbody>
+<tr>
+<td>1</td>
+<td>자동소화장치 종류 3가지 이상</td>
+<td>주거용·상업용 주방, 캐비닛형, 가스, 분말, 고체에어로졸</td>
+</tr>
+<tr>
+<td>2</td>
+<td>포지 등을 사용해 자루 형태로 만든 피난기구</td>
+<td><strong>구조대</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>인명구조기구가 아닌 것</td>
+<td>③ 비상조명등</td>
+</tr>
+<tr>
+<td>4</td>
+<td>대형피난구유도등 설치대상이 아닌 것</td>
+<td>② 숙박시설 (중형)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>유도등 설치기준으로 옳은 것</td>
+<td>④ 피난구유도등: 바닥에서 1.5 m 이상, 출입구 인접</td>
+</tr>
+<tr>
+<td>6</td>
+<td>3선식 자동 점등 경우가 아닌 것</td>
+<td>① 옥내소화전 충압펌프 작동</td>
+</tr>
+<tr>
+<td>7</td>
+<td>경보설비가 아닌 것</td>
+<td>④ 비상콘센트설비</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ABC급 분말소화약제</td>
+<td>① 제1인산암모늄</td>
+</tr>
+<tr>
+<td>9</td>
+<td>옥내소화전 최다 5개 층의 저수량</td>
+<td>② 5.2 ㎥ (최대 2개 × 2.6)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>옥외소화전 방수량·방수압</td>
+<td><strong>350</strong> L/min, <strong>0.25~0.7</strong> MPa</td>
+</tr>
+<tr>
+<td>11</td>
+<td>준비작동식 작동방법</td>
+<td>감지기 2회로 / SVP 수동조작 / 수동기동밸브 / 감시제어반 수동기동 / 동작시험 + 회로선택(2회로)</td>
+</tr>
+<tr>
+<td>12</td>
+<td>솔레노이드 격발시험 방법</td>
+<td>수동조작버튼(즉시 격발) / 수동조작함 기동스위치 / 교차회로 A·B / 제어반 수동조작</td>
+</tr>
+<tr>
+<td>13</td>
+<td>인명구조기구가 아닌 것</td>
+<td>② 완강기</td>
+</tr>
+<tr>
+<td>14</td>
+<td>채수구: 소방차가 ( ) m 이내 접근</td>
+<td><strong>2</strong></td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<p class="note-p"><em>작성 기준: 교재 2권(2026년 판) 본문. 법령·기준이 개정되면 숫자가 바뀔 수 있으니 시험 직전 최신 교재로 한 번 더 확인하세요.</em></p>
+    </div>
+
+    <!-- 패널 2: 02_법령_4칸표 -->
+    <div class="note-panel" id="panel-stage2">
+      <h1 class="note-h1">2단계 · 법령 &quot;대상 → 의무 → 기한 → 벌칙&quot; 4칸 표</h1>
+<blockquote class="note-quote">
+<p><strong>출처</strong>: 교재 <strong>1권 제1편 「소방안전관리제도」 (p.9~20)</strong>, <strong>1권 제2편 「소방관계법령」 (p.21~122)</strong></p>
+<p><strong>쓰는 법</strong>: 법령 문제는 거의 다 &quot;<strong>누가(대상)</strong> · <strong>무엇을(의무)</strong> · <strong>언제까지(기한)</strong> · <strong>안 하면(벌칙)</strong>&quot; 넷 중 하나를 바꿔서 냅니다. 한 줄을 통째로 외우면 어느 칸을 물어도 풀 수 있습니다.</p>
+<p>쪽수(p.)는 모두 <strong>교재 1권</strong> 기준입니다.</p>
+</blockquote>
+<h2 class="note-h2" id="목차">목차</h2>
+<ul class="note-ul">
+<li><a href="#a-먼저-외울-것-등급별-선임-기준-p1318" class="note-link">A. 먼저 외울 것: 등급별 선임 기준</a></li>
+<li><a href="#b-화재예방법-소방안전관리자의-의무-p3654" class="note-link">B. 화재예방법 (소방안전관리자의 의무)</a></li>
+<li><a href="#c-소방시설법-설치점검-p5573" class="note-link">C. 소방시설법 (설치·점검)</a></li>
+<li><a href="#d-소방기본법-현장-활동-p2335" class="note-link">D. 소방기본법 (현장 활동)</a></li>
+<li><a href="#e-다중이용업소법-p7483" class="note-link">E. 다중이용업소법</a></li>
+<li><a href="#f-초고층지하연계-복합건축물법-p8492" class="note-link">F. 초고층·지하연계 복합건축물법</a></li>
+<li><a href="#g-위험물안전관리법-p103121" class="note-link">G. 위험물안전관리법</a></li>
+<li><a href="#h-벌칙-크기-사다리" class="note-link">H. 벌칙 크기 사다리</a></li>
+<li><a href="#i-기한-숫자로-거꾸로-찾기" class="note-link">I. 기한 숫자로 거꾸로 찾기</a></li>
+<li><a href="#j-함정-모음" class="note-link">J. 함정 모음</a></li>
+</ul>
+<hr class="note-hr">
+<h2 class="note-h2" id="a-먼저-외울-것-등급별-선임-기준-p1318">A. 먼저 외울 것: 등급별 선임 기준 (p.13~18)</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>등급</th>
+<th>대상 (아파트 기준을 따로 볼 것)</th>
+<th>1급 시험에 나오는 선임 자격 (일부)</th>
+<th>인원</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>특급</strong></td>
+<td>① <strong>50층 이상 또는 200 m 이상 아파트</strong> (지하층 제외) ② <strong>30층 이상 또는 120 m 이상</strong> 특정소방대상물 (지하층 포함, 아파트 제외) ③ 연면적 <strong>10만 ㎡ 이상</strong> (아파트 제외)</td>
+<td>소방기술사·관리사 / 소방설비기사 + 1급 실무 <strong>5년</strong> / 산업기사 + <strong>7년</strong> / 소방공무원 <strong>20년</strong> / 특급 시험 합격</td>
+<td>1명 이상</td>
+</tr>
+<tr>
+<td><strong>1급</strong></td>
+<td>① <strong>30층 이상 또는 120 m 이상 아파트</strong> (지하층 제외) ② 연면적 <strong>1만 5천 ㎡ 이상</strong> (아파트·연립주택 제외) ③ 지상 <strong>11층 이상</strong> (아파트 제외) ④ 가연성 가스 <strong>1천 톤 이상</strong></td>
+<td>소방설비기사·산업기사 / 소방공무원 <strong>7년</strong> / 1급 시험 합격 (특급 자격증 소지자도 가능)</td>
+<td>1명 이상</td>
+</tr>
+<tr>
+<td><strong>2급</strong></td>
+<td>옥내소화전·스프링클러·물분무등 설치 대상 / 가스 <strong>100톤 이상 1천 톤 미만</strong> / 지하구 / 옥내소화전·SP 있는 공동주택 / 국보·보물 목조건축물</td>
+<td>위험물기능장·산업기사·기능사 / 소방공무원 <strong>3년</strong> / 2급 시험 합격</td>
+<td>1명 이상</td>
+</tr>
+<tr>
+<td><strong>3급</strong></td>
+<td>간이스프링클러(주택전용 제외)·자동화재탐지설비 설치 대상</td>
+<td>소방공무원 <strong>1년</strong> / 3급 시험 합격</td>
+<td>1명 이상</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>특급·1급에서 빠지는 것: 동식물원, 철강 등 불연성 물품 창고, 위험물 제조소등, 지하구</li>
+</ul>
+<p class="note-p"><strong>소방안전관리보조자 (p.15~16)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>대상</th>
+<th>인원</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>300세대 이상 아파트</strong></td>
+<td>1명 + 초과 <strong>300세대마다 1명</strong> 추가</td>
+</tr>
+<tr>
+<td>연면적 <strong>1만 5천 ㎡ 이상</strong> (아파트·연립주택 제외)</td>
+<td>1명 + 초과 <strong>1만 5천 ㎡마다 1명</strong> 추가 (자위소방대 24시간 상시 근무 + 소방차 운용 시 <strong>3만 ㎡마다</strong>)</td>
+</tr>
+<tr>
+<td>그 밖: 기숙사, 의료시설, 노유자시설, 수련시설, 숙박시설(바닥면적 합 1,500 ㎡ 미만 + 24시간 상시 근무 제외)</td>
+<td>1명 (야간·휴일에 이용되지 않으면 생략 가능)</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="b-화재예방법-소방안전관리자의-의무-p3654">B. 화재예방법 (소방안전관리자의 의무) (p.36~54)</h2>
+<h3 class="note-h3" id="b-1-선임신고">B-1. 선임·신고</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상 (누가)</th>
+<th>기한</th>
+<th>벌칙</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>소방안전관리자(보조자) 선임</strong> (p.41~42)</td>
+<td>소방안전관리대상물 관계인</td>
+<td>사유 발생일부터 <strong>30일 이내</strong> (사용승인일, 등급 변경일, 권리 취득일, 해임·퇴직일 등)</td>
+<td>미선임: <strong>300만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>선임 신고</strong> (p.42)</td>
+<td>관계인 → 소방본부장·소방서장</td>
+<td>선임한 날부터 <strong>14일 이내</strong></td>
+<td>신고 안 함·성명 미게시: <strong>200만원 이하 과태료</strong> (지연 1개월 미만 50만 / 1~3개월 100만 / 3개월 이상·미신고 200만)</td>
+</tr>
+<tr>
+<td><strong>성명 등 게시</strong> (p.42)</td>
+<td>관계인</td>
+<td>선임 시 (소방안전관리자 현황표)</td>
+<td>위와 같음 (200만원 이하 과태료)</td>
+</tr>
+<tr>
+<td><strong>선임 연기 신청</strong> (p.42)</td>
+<td><strong>2급·3급</strong>·보조자 대상물 관계인 (강습교육·시험이 선임기간 안에 없을 때)</td>
+<td>소방서장이 <strong>3일 이내</strong> 선임기간을 정해 통보. 연기 중 업무는 <strong>관계인</strong>이 수행</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>겸직 금지</strong> (p.41)</td>
+<td><strong>특급·1급</strong>은 전기·가스·위험물 등 다른 안전관리자가 겸할 수 없음</td>
+<td>—</td>
+<td>겸직: <strong>300만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>업무대행 감독자 선임 후 강습</strong> (p.41)</td>
+<td>대행 관리업자를 감독하는 소방안전관리자</td>
+<td>선임된 날부터 <strong>3개월 이내</strong> 강습교육</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>건설현장 소방안전관리자 선임</strong> (p.45~46)</td>
+<td>공사시공자 / 연면적 <strong>1만 5천 ㎡ 이상</strong>, 또는 <strong>5천 ㎡ 이상</strong> + 지하 2개 층 이상·지상 11층 이상·냉동냉장창고</td>
+<td><strong>착공신고일 ~ 사용승인일</strong>까지 선임, 선임 후 <strong>14일 이내</strong> 신고</td>
+<td>업무 미수행: <strong>300만원 이하 과태료</strong> / 신고 안 함: <strong>200만원 이하 과태료</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="b-2-업무-수행">B-2. 업무 수행</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상</th>
+<th>기한·주기</th>
+<th>벌칙</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>소방안전관리 업무 9가지</strong> (p.43)</td>
+<td>소방안전관리자 (소방계획서, 자위소방대, 피난·방화시설, 소방시설, 훈련·교육, 화기취급 감독, 기록 유지, 초기대응 등)</td>
+<td>상시</td>
+<td>업무 안 함: <strong>300만원 이하 과태료</strong> (1차 100 / 2차 200 / 3차 300만)</td>
+</tr>
+<tr>
+<td><strong>업무 수행 기록</strong> (p.43)</td>
+<td>소방안전관리자 (피난·방화시설, 소방시설, 화기취급 업무)</td>
+<td><strong>월 1회 이상</strong> 작성, <strong>2년</strong> 보관</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>위반 발견 시 조치 요구</strong> (p.45)</td>
+<td>소방안전관리자 → 관계인 (안 고치면 소방서장에게 알림)</td>
+<td>지체 없이</td>
+<td>요구 안 함: <strong>300만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>불이익 처우 금지</strong> (p.45)</td>
+<td>관계인 (해임·보수 지급 거부 등 금지)</td>
+<td>—</td>
+<td>불이익 처우: <strong>300만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>업무대행</strong> (p.43~44)</td>
+<td>지상 <strong>11층 이상 1급</strong>(연면적 1만 5천 ㎡ 이상·아파트 제외), <strong>2급·3급</strong> 대상물</td>
+<td>대행 가능 업무: 피난·방화시설 관리, 소방시설 관리</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>공동소방안전관리</strong> (p.44~45)</td>
+<td>관리 권원 분리: 복합건축물(<strong>11층 이상 또는 3만 ㎡ 이상</strong>), 지하가, 도매·소매·전통시장</td>
+<td>등급은 <strong>건물 전체</strong> 기준. 공동소방안전관리협의회 구성</td>
+<td>—</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="b-3-피난계획훈련교육">B-3. 피난계획·훈련·교육</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상</th>
+<th>기한·주기</th>
+<th>벌칙</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>피난유도 안내정보 제공</strong> (p.47)</td>
+<td>관계인 → 근무자·거주자</td>
+<td><strong>연 2회</strong> 피난안내 교육 / <strong>분기별 1회 이상</strong> 피난안내방송 / 층마다 피난안내도 / 피난안내영상 (택 1)</td>
+<td>미제공: <strong>300만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>소방훈련·교육 실시</strong> (p.47~48)</td>
+<td>관계인 → 근무자 등</td>
+<td><strong>연 1회 이상</strong> (소방서장 요청 시 <strong>2회 범위</strong>에서 추가), 기록부 <strong>2년</strong> 보관</td>
+<td>미실시: <strong>300만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>훈련·교육 결과 제출</strong> (p.47)</td>
+<td><strong>특급·1급</strong>만</td>
+<td>실시한 날부터 <strong>30일 이내</strong></td>
+<td>미제출: <strong>200만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>불시 소방훈련</strong> (p.48)</td>
+<td>소방서장 → <strong>의료시설·교육연구시설·노유자시설</strong> 등</td>
+<td>실시 <strong>10일 전</strong> 계획 통지, 종료 후 <strong>10일 이내</strong> 평가 결과 통지</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>강습교육</strong> (p.48)</td>
+<td>소방청장</td>
+<td>실시 <strong>20일 전</strong> 공고. 출석 <strong>90% 이상</strong>, 결강 하루 <strong>3시간</strong> 이내</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>실무교육</strong> (p.48~49)</td>
+<td>소방안전관리자·보조자</td>
+<td>선임 후 <strong>6개월 이내</strong> (경력으로 선임된 보조자는 <strong>3개월</strong>), 그 뒤 <strong>2년마다 1회</strong>. 소방청장은 <strong>30일 전</strong> 공고. 강습·실무교육 후 <strong>1년 이내</strong> 선임되면 수료일을 실무교육일로 봄</td>
+<td>미이수: <strong>100만원 이하 과태료 (50만원)</strong> + 자격: 1차 경고, 2차 정지 <strong>3개월</strong>, 3차 정지 <strong>6개월</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="b-4-자격-정지취소-p49">B-4. 자격 정지·취소 (p.49)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>위반</th>
+<th>1차</th>
+<th>2차</th>
+<th>3차</th>
+</tr></thead><tbody>
+<tr>
+<td>거짓·부정한 방법으로 자격증 발급</td>
+<td><strong>취소</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>자격증을 <strong>빌려줌</strong></td>
+<td><strong>취소</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>업무를 게을리함</td>
+<td>경고</td>
+<td>정지 3개월</td>
+<td>정지 6개월</td>
+</tr>
+<tr>
+<td>실무교육 미이수</td>
+<td>경고</td>
+<td>정지 3개월</td>
+<td>정지 6개월</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>정지는 <strong>1년 이하</strong>. 취소되면 <strong>2년간</strong> 재발급 불가</li>
+<li>자격증 빌려주기·빌리기·알선: <strong>1년 이하 징역 또는 1천만원 이하 벌금</strong></li>
+</ul>
+<h3 class="note-h3" id="b-5-화재안전조사예방조치안전진단">B-5. 화재안전조사·예방조치·안전진단</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상</th>
+<th>기한</th>
+<th>벌칙</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>화재안전조사 사전 공개</strong> (p.38)</td>
+<td>소방관서장</td>
+<td><strong>7일 이상</strong> 공개 (사전 통지 없이 하면 현장에서 설명)</td>
+<td>조사 거부·방해: <strong>300만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>조사 결과 조치명령</strong> (p.38~39)</td>
+<td>관계인</td>
+<td>—</td>
+<td>위반: <strong>3년 이하 징역 또는 3천만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>조사 결과 공개</strong> (p.39)</td>
+<td>소방관서장</td>
+<td><strong>30일 이상</strong> 공개. 관계인 이의신청 <strong>10일 이내</strong>, 심사 결정 <strong>10일 이내</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>화재예방강화지구 화기 금지</strong> (p.40)</td>
+<td>누구든지 (모닥불·흡연, 풍등, 용접·용단)</td>
+<td>—</td>
+<td>위반: <strong>300만원 이하 과태료</strong> / 예방조치 명령 불이행: <strong>300만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>옮긴 물건 보관</strong> (p.41)</td>
+<td>소방관서장</td>
+<td><strong>14일</strong> 홈페이지 공고, 공고 끝난 다음 날부터 <strong>7일</strong>까지 보관</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>화재예방안전진단</strong> (p.51~52)</td>
+<td>공항 여객터미널 <strong>1천 ㎡</strong>, 철도·도시철도 역사·항만·발전소 <strong>5천 ㎡ 이상</strong> 등</td>
+<td>사용승인 후 <strong>5년</strong> 지난 해에 최초 / 이후 등급별 <strong>우수 6년 · 양호·보통 5년 · 미흡·불량 4년</strong> / 결과 보고서 <strong>60일 이내</strong> 제출</td>
+<td>안 받음: <strong>1년/1천만원</strong> / 보수·보강 명령 위반: <strong>3년/3천만원</strong> / 결과 미제출 과태료: 1개월 미만 100만, 1~3개월 200만, 3개월 이상 300만</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="c-소방시설법-설치점검-p5573">C. 소방시설법 (설치·점검) (p.55~73)</h2>
+<h3 class="note-h3" id="c-1-설치관리">C-1. 설치·관리</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상</th>
+<th>기한</th>
+<th>벌칙</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>건축허가등 동의</strong> (p.57)</td>
+<td>건축허가청 → 소방본부장·소방서장</td>
+<td><strong>5일 이내</strong> 회신 (특급은 <strong>10일</strong>), 보완 요구 <strong>4일 이내</strong>, 허가 취소 시 <strong>7일 이내</strong> 통보</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>동의 대상</strong> (p.57~58)</td>
+<td>연면적 <strong>400 ㎡ 이상</strong> (학교 <strong>100</strong>, 노유자·수련 <strong>200</strong>, 정신의료기관·장애인 의료재활 <strong>300 ㎡</strong>) / 지하층·무창층 바닥면적 <strong>150 ㎡</strong>(공연장 <strong>100 ㎡</strong>) 이상 / <strong>6층 이상</strong> / 차고·주차장 등</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>주택용 소방시설</strong> (p.58)</td>
+<td>단독주택·공동주택(아파트·기숙사 제외) 소유자</td>
+<td>—</td>
+<td>소화기 + <strong>단독경보형 감지기</strong></td>
+</tr>
+<tr>
+<td><strong>차량용 소화기</strong> (p.58~59)</td>
+<td><strong>5인승 이상</strong> 승용차, 승합·화물·특수자동차</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>소방시설 설치·관리</strong> (p.59)</td>
+<td>관계인</td>
+<td>—</td>
+<td>미설치·미관리: <strong>300만원 이하 과태료</strong> / 조치명령 위반: <strong>3년/3천만원</strong></td>
+</tr>
+<tr>
+<td><strong>소방시설 폐쇄·차단 금지</strong> (p.59)</td>
+<td>관계인 (점검·정비 때는 가능)</td>
+<td>—</td>
+<td>위반: <strong>5년 이하 징역 또는 5천만원 이하 벌금</strong> / 상해 <strong>7년/7천만</strong> / 사망 <strong>10년/1억</strong></td>
+</tr>
+<tr>
+<td><strong>피난·방화시설 관리</strong> (p.60)</td>
+<td>관계인 (폐쇄·훼손·물건 적치·변경 금지)</td>
+<td>—</td>
+<td>위반: <strong>300만원 이하 과태료</strong> (1차 100 / 2차 200 / 3차 300만) / 조치명령 위반: <strong>3년/3천만원</strong></td>
+</tr>
+<tr>
+<td><strong>방염</strong> (p.60~63)</td>
+<td>의원·조산원·산후조리원·체력단련장·공연장·종교집회장, 문화집회·종교·운동시설(수영장 제외), 의료시설, 합숙소, 노유자·숙박·숙박 가능 수련시설, 방송국·촬영소, 다중이용업소, <strong>11층 이상</strong>(아파트 제외)</td>
+<td>—</td>
+<td>방염 미설치: <strong>300만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>임시소방시설</strong> (p.72)</td>
+<td>공사 현장</td>
+<td>—</td>
+<td>미설치·미관리: <strong>300만원 이하 과태료</strong></td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>방염성능기준 (p.62)</strong>: 잔염 <strong>20초</strong> / 잔신 <strong>30초</strong> / 탄화면적 <strong>50 ㎠</strong>·탄화길이 <strong>20 cm</strong> / 접염 <strong>3회</strong> 이상 / 최대 연기밀도 <strong>400</strong> 이하</p>
+<h3 class="note-h3" id="c-2-자체점검">C-2. 자체점검</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상</th>
+<th>기한·주기</th>
+<th>벌칙</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>자체점검 실시</strong> (p.64~66)</td>
+<td>관계인 (직접 또는 관리업자)</td>
+<td>아래 표</td>
+<td>안 함: <strong>1년 이하 징역 또는 1천만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>최초점검</strong> (p.64)</td>
+<td>소방시설이 신설된 대상물</td>
+<td>사용할 수 있게 된 날부터 <strong>60일 이내</strong></td>
+<td>위와 같음</td>
+</tr>
+<tr>
+<td><strong>점검 결과 관계인에게 제출</strong> (p.68)</td>
+<td>관리업자 → 관계인</td>
+<td>점검이 끝난 날부터 <strong>10일 이내</strong></td>
+<td>미제출: <strong>300만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>점검 결과 보고</strong> (p.68~69)</td>
+<td>관계인 → 소방본부장·소방서장 (이행계획서 첨부)</td>
+<td>점검이 끝난 날부터 <strong>15일 이내</strong>, 보고서 <strong>2년</strong> 보관</td>
+<td>과태료: 지연 <strong>10일 미만 50만</strong> / 10일~1개월 <strong>100만</strong> / 1개월 이상·미보고 <strong>200만</strong> / 거짓 보고 <strong>300만</strong></td>
+</tr>
+<tr>
+<td><strong>중대위반사항 조치</strong> (p.68)</td>
+<td>관계인 (관리업자는 <strong>즉시</strong> 알림)</td>
+<td>지체 없이</td>
+<td>조치 안 함·안 알림: <strong>300만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>이행계획 완료</strong> (p.69)</td>
+<td>관계인</td>
+<td>수리·정비 <strong>10일 이내</strong> / 철거·교체 <strong>20일 이내</strong> / 완료 후 <strong>10일 이내</strong> 완료 보고</td>
+<td>과태료: 10일 미만 50만 / 10일~1개월 100만 / 1개월 이상 200만 / 거짓 300만. 이행명령 위반: <strong>3년/3천만원</strong></td>
+</tr>
+<tr>
+<td><strong>점검기록표 게시</strong> (p.69)</td>
+<td>관계인</td>
+<td>보고한 날부터 <strong>10일 이내</strong>, 다음 기록표 전까지 게시</td>
+<td>미게시: <strong>300만원 이하 과태료</strong> (1차 100 / 2차 200 / 3차 300만)</td>
+</tr>
+<tr>
+<td><strong>아파트 세대별 점검</strong> (p.66~67)</td>
+<td>관리자·입주민</td>
+<td><strong>2년</strong> 주기로 전 세대. 원격 점검이 안 되면 작동점검만 하는 곳은 1회 <strong>50% 이상</strong>, 종합점검 하는 곳은 <strong>30% 이상</strong>. 현황 <strong>2년</strong> 보관</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>공공기관 외관점검</strong> (p.66)</td>
+<td>공공기관의 장</td>
+<td><strong>월 1회 이상</strong>, <strong>2년</strong> 보관</td>
+<td>—</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>작동점검 vs 종합점검 (p.64~66)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>구분</th>
+<th>작동점검</th>
+<th>종합점검</th>
+</tr></thead><tbody>
+<tr>
+<td>대상</td>
+<td>간이SP·자탐 설치 대상 등 (특급, 위험물제조소등, 소방안전관리자를 안 두는 곳은 <strong>제외</strong>)</td>
+<td>신설, <strong>스프링클러</strong> 설치, 물분무등(호스릴 제외) <strong>5천 ㎡ 이상</strong>, 다중이용업소 <strong>2천 ㎡ 이상</strong>, 제연설비 터널, 공공기관 1천 ㎡ 이상 + 옥내소화전·자탐</td>
+</tr>
+<tr>
+<td>횟수</td>
+<td><strong>연 1회</strong> 이상</td>
+<td><strong>연 1회</strong> 이상 (<strong>특급은 반기 1회</strong>)</td>
+</tr>
+<tr>
+<td>시기</td>
+<td>종합점검 대상: 종합점검 받은 달부터 <strong>6개월</strong> 되는 달 / 그 밖: <strong>사용승인일이 속한 달의 말일</strong>까지</td>
+<td><strong>사용승인일이 속한 달</strong> (학교는 1~6월 승인이면 <strong>6월 30일</strong>까지)</td>
+</tr>
+<tr>
+<td>면제</td>
+<td>—</td>
+<td>안전대상 수상: 대통령·국무총리 <strong>3년</strong>, 장관·소방청장 <strong>2년</strong>, 시·도지사 <strong>1년</strong> (작동점검은 계속)</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="d-소방기본법-현장-활동-p2335">D. 소방기본법 (현장 활동) (p.23~35)</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상</th>
+<th>기한</th>
+<th>벌칙</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>화재 등 통지</strong> (p.27)</td>
+<td>화재·사고 현장을 발견한 사람</td>
+<td>지체 없이</td>
+<td>거짓 신고: <strong>500만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>오인 우려 불 피우기·연막소독 신고</strong> (p.27)</td>
+<td>시장, 공장·창고 밀집, 목조건물 밀집, 위험물 시설 밀집, 석유화학 공장 지역</td>
+<td>사전 신고</td>
+<td>신고 안 해서 소방차 출동: <strong>20만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>관계인의 소방활동</strong> (p.28)</td>
+<td>관계인: 소방대 도착 전까지 구출·소화·연소 방지</td>
+<td>소방대 도착 전까지</td>
+<td>안 함: <strong>100만원 이하 벌금</strong> / 소방서에 알리지 않음: <strong>500만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>소방차 출동 방해 금지</strong> (p.29)</td>
+<td>모든 차와 사람</td>
+<td>—</td>
+<td><strong>5년 이하 징역 또는 5천만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>소방활동구역 출입 제한</strong> (p.29~30)</td>
+<td>출입 가능: 소유자·관리자·점유자, 전기·가스·수도·통신·교통 종사자, 의사·간호사, 보도, 수사, 소방대장 허가자</td>
+<td>—</td>
+<td>무단 출입: <strong>200만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>소방활동 종사명령 방해</strong> (p.31)</td>
+<td>—</td>
+<td>—</td>
+<td><strong>5년/5천만원</strong></td>
+</tr>
+<tr>
+<td><strong>강제처분</strong> (p.31~32)</td>
+<td>화재 대상물·토지 / 번질 우려 대상물·토지 / 그 밖의 대상물 / 주정차 차량</td>
+<td>—</td>
+<td>화재·번질 우려 대상물 처분 방해: <strong>3년/3천만원</strong> / 그 밖 대상물·차량 처분 방해: <strong>300만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>피난명령</strong> (p.32)</td>
+<td>구역 안 사람</td>
+<td>—</td>
+<td>위반: <strong>100만원 이하 벌금</strong></td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>소방신호 (p.26~27)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>신호</th>
+<th>타종</th>
+<th>사이렌</th>
+</tr></thead><tbody>
+<tr>
+<td>경계신호</td>
+<td>1타와 연2타 반복</td>
+<td>5초 간격 <strong>30초씩 3회</strong></td>
+</tr>
+<tr>
+<td>발화신호</td>
+<td><strong>난타</strong></td>
+<td>5초 간격 <strong>5초씩 3회</strong></td>
+</tr>
+<tr>
+<td>해제신호</td>
+<td>상당한 간격 1타씩 반복</td>
+<td><strong>1분간 1회</strong></td>
+</tr>
+<tr>
+<td>훈련신호</td>
+<td>연3타 반복</td>
+<td>10초 간격 <strong>1분씩 3회</strong></td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="e-다중이용업소법-p7483">E. 다중이용업소법 (p.74~83)</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상</th>
+<th>기한·주기</th>
+<th>벌칙</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>소방안전교육 · 신규</strong> (p.78)</td>
+<td>다중이용업주·종업원(1명 이상)·하려는 자</td>
+<td>영업 <strong>시작 전</strong> / 종업원은 종사 전 (교육 후 <strong>2년 이내</strong>면 인정)</td>
+<td>미이수: <strong>300만원 이하 과태료</strong> (1차 100 / 2차 200 / 3차 300만)</td>
+</tr>
+<tr>
+<td><strong>소방안전교육 · 수시</strong> (p.78)</td>
+<td>법 위반이 적발된 업주·종업원</td>
+<td>적발일부터 <strong>3개월 이내</strong></td>
+<td>위와 같음</td>
+</tr>
+<tr>
+<td><strong>소방안전교육 · 보수</strong> (p.78)</td>
+<td>업주·종업원</td>
+<td>직전 교육일이 속한 달 말일부터 <strong>2년 이내 1회</strong></td>
+<td>위와 같음</td>
+</tr>
+<tr>
+<td>교육 공고 (p.77~78)</td>
+<td>소방청장·본부장·서장</td>
+<td>교육일 <strong>30일 전</strong> 홈페이지 게재, 수시·보수 대상자에게 <strong>10일 전</strong> 통보. 교육 <strong>4시간 이내</strong>. 사유 있으면 <strong>3개월</strong> 연기</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>피난안내도 비치</strong> (p.79)</td>
+<td>모든 다중이용업소 (<strong>33 ㎡ 이하</strong>, 구획된 실 없이 출입구가 보이는 곳 제외)</td>
+<td>B4 이상 (<strong>400 ㎡ 이상이면 A3</strong>), 한글 + 외국어 1개 이상</td>
+<td>미비치: <strong>300만원 이하 과태료</strong> (100/200/300만)</td>
+</tr>
+<tr>
+<td><strong>피난안내 영상물 상영</strong> (p.79~80)</td>
+<td>영화상영관·비디오물소극장, 노래연습장, 단란·유흥주점 등</td>
+<td>영화관: <strong>매회 상영 전</strong> / 노래방 등: <strong>새 손님이 기기를 켤 때</strong>. <strong>300석 이상</strong> 영화관은 수어·자막</td>
+<td>위와 같음</td>
+</tr>
+<tr>
+<td><strong>안전시설등 정기점검</strong> (p.80~81)</td>
+<td>다중이용업주 (위탁 가능)</td>
+<td><strong>분기별 1회 이상</strong>, 결과서 <strong>1년</strong> 보관 (자체점검한 분기는 생략 가능)</td>
+<td>미점검·미작성·미보관: <strong>300만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>안전시설 고장 방치</strong> (p.82)</td>
+<td>소화펌프 고장, 수신반 전원 차단, 비상전원 차단, 밸브 잠금 등</td>
+<td>—</td>
+<td><strong>200만원</strong> 과태료 / 안전시설 미설치 <strong>300만원</strong> / 비상구 폐쇄 100·200·300만</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>다중이용업 기준: 휴게·일반음식점·제과점 <strong>지하 66 ㎡ 이상, 지상 100 ㎡ 이상</strong> / 목욕장 <strong>수용인원 100명 이상</strong> / 학원 <strong>300명 이상</strong> (100~300명은 조건부)</li>
+</ul>
+<hr class="note-hr">
+<h2 class="note-h2" id="f-초고층지하연계-복합건축물법-p8492">F. 초고층·지하연계 복합건축물법 (p.84~92)</h2>
+<ul class="note-ul">
+<li><strong>초고층 건축물</strong>: <strong>50층 이상 또는 200 m 이상</strong></li>
+<li><strong>지하연계 복합건축물</strong>: 지하역사·지하도상가와 연결 + <strong>11층 이상 또는 수용인원 5천 명 이상</strong> + 문화집회·판매·운수·업무·숙박·유원시설·종합병원·요양병원 중 하나 이상</li>
+</ul>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상</th>
+<th>기한·주기</th>
+<th>비고</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>총괄재난관리자 선임</strong> (p.88)</td>
+<td>관리주체</td>
+<td>사용승인일, 양수일, 해임·퇴직일 등부터 <strong>30일 이내</strong></td>
+<td>대리자 직무대행은 <strong>30일</strong> 넘으면 안 됨</td>
+</tr>
+<tr>
+<td><strong>총괄재난관리자 교육</strong> (p.89)</td>
+<td>총괄재난관리자</td>
+<td>선임 후 <strong>6개월 이내</strong>, 이후 <strong>2년마다</strong> 보수교육</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>교육·훈련 실시</strong> (p.89~90)</td>
+<td>관리주체 → 관계인·상시근무자·거주자</td>
+<td><strong>매년 1회 이상</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>교육훈련계획 제출</strong> (p.90)</td>
+<td>관리주체 → 시장·군수·구청장 → 시·도지사 → 소방청장</td>
+<td><strong>12월 15일</strong>까지 제출 → 시·도지사는 다음 해 <strong>1월 10일</strong>까지 소방청장에게</td>
+<td>소방 훈련이 포함되면 <strong>14일 전</strong>까지 소방서장과 협의</td>
+</tr>
+<tr>
+<td><strong>훈련 결과 제출</strong> (p.90)</td>
+<td>관리주체</td>
+<td>실시 후 <strong>10일 이내</strong> 제출, <strong>1년</strong> 보관 (시장 등은 <strong>10일 이내</strong> 소방서장에게 통보)</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>통합안전점검 신청</strong> (p.90)</td>
+<td>관리주체</td>
+<td>희망일 <strong>30일 전</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>초기대응대</strong> (p.91)</td>
+<td>상주 관계인 <strong>5명 이상</strong> (공동주택 <strong>3명</strong>)</td>
+<td>교육·훈련 <strong>매년 1회</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>피난안전구역</strong> (p.86)</td>
+<td>초고층: 지상층부터 최대 <strong>30개 층마다 1개소</strong> 이상</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="g-위험물안전관리법-p103121">G. 위험물안전관리법 (p.103~121)</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>의무</th>
+<th>대상</th>
+<th>기한</th>
+<th>벌칙</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>위험물안전관리자 선임</strong> (p.106)</td>
+<td>제조소등 관계인</td>
+<td>해임·퇴직일부터 <strong>30일 이내</strong> 재선임</td>
+<td>미선임: <strong>1,500만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>선임 신고</strong> (p.106)</td>
+<td>관계인 → 소방본부장·소방서장</td>
+<td>선임 후 <strong>14일 이내</strong></td>
+<td>지연·허위: <strong>500만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>대리자 지정</strong> (p.108)</td>
+<td>안전관리자가 여행·질병 등으로 못 할 때</td>
+<td>직무대행 <strong>30일 이하</strong></td>
+<td>미지정: <strong>1,500만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>품명·수량·지정수량 배수 변경 신고</strong> (p.111)</td>
+<td>관계인 → 시·도지사(소방서장)</td>
+<td>변경 <strong>1일 전</strong>까지</td>
+<td><strong>500만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>지위승계 신고</strong> (p.111)</td>
+<td>승계자</td>
+<td>승계일부터 <strong>30일 이내</strong></td>
+<td>위와 같음</td>
+</tr>
+<tr>
+<td><strong>용도 폐지 신고</strong> (p.111)</td>
+<td>관계인</td>
+<td>폐지일부터 <strong>14일 이내</strong></td>
+<td>위와 같음</td>
+</tr>
+<tr>
+<td><strong>사용 중지·재개 신고</strong> (p.112)</td>
+<td>관계인</td>
+<td>중지·재개하려는 날 <strong>14일 전</strong></td>
+<td>위와 같음</td>
+</tr>
+<tr>
+<td><strong>임시저장</strong> (p.106)</td>
+<td>소방서장 승인</td>
+<td><strong>90일 이내</strong></td>
+<td>승인 없이: <strong>500만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>정기점검</strong> (p.115~117)</td>
+<td>지정수량 <strong>10배</strong> 이상 제조소·일반취급소, <strong>100배</strong> 옥외저장소, <strong>150배</strong> 옥내저장소, <strong>200배</strong> 옥외탱크저장소, 암반탱크·이송취급소, 지하탱크·이동탱크</td>
+<td><strong>연 1회 이상</strong>, 기록 <strong>3년</strong> 보존, 결과 <strong>30일 이내</strong> 제출</td>
+<td>미실시: <strong>1년 이하 징역 또는 1천만원 이하 벌금</strong> / 미제출: <strong>500만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>무허가 제조소등 설치</strong> (p.117)</td>
+<td>—</td>
+<td>—</td>
+<td><strong>5년 이하 징역 또는 1억원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>허가 없는 장소에 지정수량 이상 저장</strong> (p.118)</td>
+<td>—</td>
+<td>—</td>
+<td><strong>3년 이하 징역 또는 3천만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td><strong>저장·취급 기준</strong> (p.106)</td>
+<td>—</td>
+<td>—</td>
+<td><strong>중요기준</strong> 위반: <strong>1,500만원 이하 벌금</strong> / <strong>세부기준</strong> 위반: <strong>500만원 이하 과태료</strong></td>
+</tr>
+<tr>
+<td><strong>위험물 유출로 위험 발생</strong> (p.117)</td>
+<td>—</td>
+<td>—</td>
+<td><strong>1년 이상 10년 이하 징역</strong> (상해: 무기 또는 3년 이상, 사망: 무기 또는 5년 이상)</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>지정수량 배수 = Σ (저장량 ÷ 지정수량). <strong>1 이상이면 지정수량 이상</strong>입니다. 예: 휘발유 180 L(200 L) + 경유 600 L(1,000 L) = 0.9 + 0.6 = <strong>1.5배</strong> (p.105)</li>
+</ul>
+<hr class="note-hr">
+<h2 class="note-h2" id="h-벌칙-크기-사다리">H. 벌칙 크기 사다리</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>크기</th>
+<th>법</th>
+<th>위반</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>10년 / 1억</strong></td>
+<td>소방시설법</td>
+<td>소방시설 폐쇄·차단으로 <strong>사망</strong></td>
+</tr>
+<tr>
+<td><strong>7년 / 7천만</strong></td>
+<td>소방시설법</td>
+<td>소방시설 폐쇄·차단으로 <strong>상해</strong></td>
+</tr>
+<tr>
+<td><strong>5년 / 1억</strong></td>
+<td>위험물법</td>
+<td>무허가 제조소등 설치</td>
+</tr>
+<tr>
+<td><strong>5년 / 5천만</strong></td>
+<td>소방시설법</td>
+<td>소방시설 <strong>폐쇄·차단</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>소방기본법</td>
+<td>소방대 활동 방해(폭행·협박·장비 파손), <strong>소방차 출동 방해</strong>, 종사명령 방해, 소방용수시설 사용 방해</td>
+</tr>
+<tr>
+<td><strong>3년 / 3천만</strong></td>
+<td>화재예방법</td>
+<td>화재안전조사 <strong>조치명령</strong> 위반, 안전진단 보수·보강 명령 위반</td>
+</tr>
+<tr>
+<td></td>
+<td>소방시설법</td>
+<td>소방시설 조치명령, 피난·방화시설 조치명령, <strong>이행명령</strong> 위반</td>
+</tr>
+<tr>
+<td></td>
+<td>소방기본법</td>
+<td>강제처분(화재·번질 우려 대상물) 방해</td>
+</tr>
+<tr>
+<td></td>
+<td>위험물법</td>
+<td>허가 없는 장소에 지정수량 이상 저장</td>
+</tr>
+<tr>
+<td><strong>1년 / 1천만</strong></td>
+<td>화재예방법</td>
+<td>자격증 <strong>대여</strong>, 화재예방안전진단 미수검</td>
+</tr>
+<tr>
+<td></td>
+<td>소방시설법</td>
+<td><strong>자체점검 미실시</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>위험물법</td>
+<td>정기점검 미실시</td>
+</tr>
+<tr>
+<td><strong>1,500만 벌금</strong></td>
+<td>위험물법</td>
+<td><strong>중요기준</strong> 위반, 안전관리자 <strong>미선임</strong>·대리자 미지정</td>
+</tr>
+<tr>
+<td><strong>300만 벌금</strong></td>
+<td>화재예방법</td>
+<td>소방안전관리자 <strong>미선임</strong>, 조사 거부, 조치요구 안 함, <strong>불이익 처우</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>소방시설법</td>
+<td><strong>중대위반사항</strong> 미조치</td>
+</tr>
+<tr>
+<td></td>
+<td>소방기본법</td>
+<td>강제처분(그 밖 대상물·차량) 방해</td>
+</tr>
+<tr>
+<td><strong>100만 벌금</strong></td>
+<td>소방기본법</td>
+<td>관계인 소방활동 안 함, <strong>피난명령</strong> 위반</td>
+</tr>
+<tr>
+<td><strong>500만 과태료</strong></td>
+<td>소방기본법</td>
+<td>거짓 신고, 관계인이 화재를 알리지 않음</td>
+</tr>
+<tr>
+<td></td>
+<td>위험물법</td>
+<td>각종 신고 지연, 세부기준 위반, 정기점검 결과 미제출</td>
+</tr>
+<tr>
+<td><strong>300만 과태료</strong></td>
+<td>화재예방법</td>
+<td>업무 안 함, 훈련·교육 미실시, 피난정보 미제공, 겸직, 화기 취급</td>
+</tr>
+<tr>
+<td></td>
+<td>소방시설법</td>
+<td>소방시설 미관리, 피난·방화시설 폐쇄, 방염, 점검결과 거짓 보고(300)</td>
+</tr>
+<tr>
+<td></td>
+<td>다중이용업소법</td>
+<td>교육, 안전시설, 피난안내도, 정기점검</td>
+</tr>
+<tr>
+<td><strong>200만 과태료</strong></td>
+<td>화재예방법</td>
+<td>선임 <strong>신고</strong> 지연, 훈련결과 <strong>미제출</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>소방기본법</td>
+<td>소방활동구역 <strong>무단 출입</strong></td>
+</tr>
+<tr>
+<td><strong>100만 과태료</strong></td>
+<td>화재예방법</td>
+<td><strong>실무교육</strong> 미이수 (50만원)</td>
+</tr>
+<tr>
+<td><strong>20만 과태료</strong></td>
+<td>소방기본법</td>
+<td>오인 불 피우기 미신고로 소방차 출동</td>
+</tr>
+</tbody></table></div>
+<blockquote class="note-quote">
+<p>같은 행위라도 <strong>&quot;안 함&quot;</strong>은 과태료, <strong>&quot;명령을 어김&quot;</strong>은 징역형인 경우가 많습니다. 예: 피난·방화시설 폐쇄는 300만 과태료, 그 조치명령 위반은 3년/3천만.</p>
+</blockquote>
+<hr class="note-hr">
+<h2 class="note-h2" id="i-기한-숫자로-거꾸로-찾기">I. 기한 숫자로 거꾸로 찾기</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>기한</th>
+<th>해당 의무</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>1일 전</strong></td>
+<td>위험물 품명·수량 변경 신고</td>
+</tr>
+<tr>
+<td><strong>3일 이내</strong></td>
+<td>선임 연기 시 소방서장이 선임기간 통보</td>
+</tr>
+<tr>
+<td><strong>3개월 이내</strong></td>
+<td>업무대행 감독자 강습교육 / 다중이용업소 수시교육 / 경력 보조자 실무교육 / 교육 연기 범위</td>
+</tr>
+<tr>
+<td><strong>4일 이내</strong></td>
+<td>건축허가 동의 보완 요구</td>
+</tr>
+<tr>
+<td><strong>5일 (특급 10일)</strong></td>
+<td>건축허가 동의 회신</td>
+</tr>
+<tr>
+<td><strong>6개월 이내</strong></td>
+<td>실무교육 / 총괄재난관리자 교육</td>
+</tr>
+<tr>
+<td><strong>7일</strong></td>
+<td>화재안전조사 사전 공개 / 건축허가 취소 통보 / 옮긴 물건 보관</td>
+</tr>
+<tr>
+<td><strong>10일</strong></td>
+<td>관리업자→관계인 점검결과 제출 / 수리 이행 / 이행완료 보고 / 점검기록표 게시 / 불시훈련 통지(전)·평가 결과 / 조사결과 이의신청·심사 / 다중이용 보수·수시교육 통보(전) / 초고층 훈련 결과 제출</td>
+</tr>
+<tr>
+<td><strong>14일</strong></td>
+<td><strong>선임 신고</strong> (소방안전관리자·건설현장·위험물) / 위험물 용도폐지·사용중지(전) / 옮긴 물건 공고 / 초고층 훈련 협의(전)</td>
+</tr>
+<tr>
+<td><strong>15일 이내</strong></td>
+<td>관계인→소방서 <strong>자체점검 결과 보고</strong></td>
+</tr>
+<tr>
+<td><strong>20일</strong></td>
+<td>강습교육 공고(전) / 교체 이행</td>
+</tr>
+<tr>
+<td><strong>30일</strong></td>
+<td><strong>선임</strong> (소방안전관리자·총괄재난관리자·위험물 재선임) / 훈련·교육 결과 제출(특급·1급) / 실무교육 공고(전) / 다중이용 교육 게재(전) / 조사 결과 공개(이상) / 위험물 지위승계 / 위험물 정기점검 결과 / 통합안전점검 신청(전) / 대리자 직무대행 한도</td>
+</tr>
+<tr>
+<td><strong>60일</strong></td>
+<td>최초점검 / 안전진단 결과 보고서</td>
+</tr>
+<tr>
+<td><strong>90일</strong></td>
+<td>위험물 임시저장</td>
+</tr>
+<tr>
+<td><strong>1년</strong></td>
+<td>다중이용 정기점검 결과서 보관 / 초고층 훈련 결과 보관 / 강습·실무교육 후 1년 내 선임 시 인정</td>
+</tr>
+<tr>
+<td><strong>2년</strong></td>
+<td>실무교육 주기 / 업무수행 기록·훈련 기록·점검 보고서 보관 / 다중이용 보수교육 / 자격 취소 후 재발급 제한 / 세대별 점검 주기</td>
+</tr>
+<tr>
+<td><strong>3년</strong></td>
+<td>위험물 정기점검 기록 보존</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="j-함정-모음">J. 함정 모음</h2>
+<ol class="note-ol">
+<li><strong>선임은 30일, 신고는 14일.</strong> 둘을 바꿔 내는 문제가 가장 많습니다.</li>
+<li><strong>점검 결과는 10일(관리업자→관계인) 다음 15일(관계인→소방서).</strong> 15일은 &quot;점검이 끝난 날부터&quot;입니다.</li>
+<li>훈련·교육 <strong>결과 제출(30일)은 특급·1급만</strong> 의무입니다.</li>
+<li>선임 <strong>연기</strong>는 <strong>2·3급</strong>만 가능합니다. 1급은 연기할 수 없습니다.</li>
+<li><strong>겸직 금지는 특급·1급</strong>입니다.</li>
+<li>실무교육 미이수는 <strong>과태료 50만원</strong>(한도 100만원) + 자격정지입니다. 벌금이 아닙니다.</li>
+<li><strong>자격증 대여는 1차에 바로 취소</strong> + 1년/1천만 벌금입니다.</li>
+<li>소방안전관리자 <strong>미선임은 벌금(300만)</strong>, 선임 <strong>신고 지연은 과태료(200만)</strong>입니다.</li>
+<li>작동점검 <strong>제외</strong> 대상: <strong>특급</strong>, 위험물제조소등, 소방안전관리자 미선임 대상. 특급은 종합점검을 <strong>반기 1회</strong> 합니다.</li>
+<li>건축허가 동의 회신은 <strong>5일</strong>, 특급만 <strong>10일</strong>입니다.</li>
+<li>소방차 출동 방해(5년/5천만)와 소방활동구역 무단 출입(과태료 200만)의 차이를 구분하세요.</li>
+<li>위험물: <strong>중요기준은 1,500만 벌금</strong>, <strong>세부기준은 500만 과태료</strong>입니다.</li>
+</ol>
+<h3 class="note-h3" id="교재-학습평가-정답-1권-제2편">교재 학습평가 정답 (1권 제2편)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>장</th>
+<th>문제</th>
+<th>정답</th>
+</tr></thead><tbody>
+<tr>
+<td>1장 Q1</td>
+<td>강제처분 대상이 아닌 것</td>
+<td>② 선박</td>
+</tr>
+<tr>
+<td>1장 Q2</td>
+<td>소방활동구역 출입이 불가한 사람</td>
+<td>④ 보험회사 직원</td>
+</tr>
+<tr>
+<td>3장 Q1</td>
+<td>무창층 개구부 조건으로 틀린 것</td>
+<td>④ 창살 등 장애물 설치 (설치하지 <strong>않아야</strong> 함)</td>
+</tr>
+<tr>
+<td>3장 Q2</td>
+<td>건축허가 동의 설명으로 틀린 것</td>
+<td>③ &quot;보완 4일 범위 내 2회 연장&quot; (보완 요구는 4일 이내 기간)</td>
+</tr>
+<tr>
+<td>4장 Q1</td>
+<td>실내장식물이 아닌 것</td>
+<td>① 종이류 두께 <strong>1 mm 이하</strong> (2 mm 이상이 해당)</td>
+</tr>
+<tr>
+<td>4장 Q2</td>
+<td>피난안내도 내용이 아닌 것</td>
+<td>③ 소방시설 점검 방법</td>
+</tr>
+<tr>
+<td>5장 Q1</td>
+<td>초고층 기준</td>
+<td><strong>50층</strong>, <strong>200 m</strong></td>
+</tr>
+<tr>
+<td>5장 Q2</td>
+<td>총괄재난관리자 업무가 아닌 것</td>
+<td>④ 재난사태 선포</td>
+</tr>
+<tr>
+<td>7장 Q1</td>
+<td>직접 화재를 일으킬 가능성이 큰 기준과 벌칙</td>
+<td><strong>중요기준</strong>, 1,500만원 이하 벌금</td>
+</tr>
+<tr>
+<td>7장 Q2</td>
+<td>정기점검 대상이 아닌 것</td>
+<td>② 지정수량 <strong>50배</strong> 옥내저장소 (150배 이상이 대상)</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<p class="note-p"><em>작성 기준: 교재 1권(2026년 판) 본문. 법령은 자주 개정되니 시험 직전 최신 교재로 숫자를 한 번 더 확인하세요.</em></p>
+    </div>
+
+    <!-- 패널 3: 03_나머지단원_요약 -->
+    <div class="note-panel" id="panel-stage3">
+      <h1 class="note-h1">3단계 · 나머지 단원 요약 (건축 · 소방학개론 · 위험물/전기/가스 · 공사장/화기취급 · 종합방재실)</h1>
+<blockquote class="note-quote">
+<p><strong>출처</strong>: 교재 <strong>1권 제3편~제7편 (p.123~254)</strong>. 쪽수(p.)는 모두 <strong>교재 1권</strong> 기준입니다.</p>
+<p><strong>이 영역의 특징</strong>: 배점은 작지만 <strong>숫자 하나, 용어 하나</strong>를 맞히는 문제가 대부분입니다. 그래서 설명보다 <strong>비교표와 숫자</strong>를 중심으로 정리했습니다.</p>
+</blockquote>
+<h2 class="note-h2" id="목차">목차</h2>
+<ul class="note-ul">
+<li><a href="#1-건축관계법령-p125172" class="note-link">1. 건축관계법령</a></li>
+<li><a href="#2-소방학개론-p175197" class="note-link">2. 소방학개론</a></li>
+<li><a href="#3-위험물전기가스-안전관리-p201212" class="note-link">3. 위험물·전기·가스 안전관리</a></li>
+<li><a href="#4-공사장-안전관리화기취급-감독-p215238" class="note-link">4. 공사장 안전관리·화기취급 감독</a></li>
+<li><a href="#5-종합방재실의-운영-p241254" class="note-link">5. 종합방재실의 운영</a></li>
+<li><a href="#6-이-영역-숫자-한-장-요약" class="note-link">6. 이 영역 숫자 한 장 요약</a></li>
+<li><a href="#7-교재-학습평가-정답" class="note-link">7. 교재 학습평가 정답</a></li>
+</ul>
+<hr class="note-hr">
+<h2 class="note-h2" id="1-건축관계법령-p125172">1. 건축관계법령 (p.125~172)</h2>
+<p class="note-p"><strong>건축법 vs 소방법 (p.126, 152)</strong>: 건축법은 <strong>하드웨어</strong>(마감재, 방화구획, 내화구조, 피난통로)를 다루고, 소방시설법은 <strong>소프트웨어</strong>(소화·경보·소화활동설비)를 다룹니다.</p>
+<h3 class="note-h3" id="1-1-용어-p127133">1-1. 용어 (p.127~133)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>용어</th>
+<th>뜻</th>
+<th>함정</th>
+</tr></thead><tbody>
+<tr>
+<td>지하층</td>
+<td>바닥에서 지표면까지 평균높이가 그 층 높이의 <strong>1/2 이상</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>주요구조부</td>
+<td><strong>내력벽·기둥·바닥·보·지붕틀·주계단</strong></td>
+<td>제외: 사이기둥, <strong>최하층 바닥</strong>, 작은 보, 차양, 옥외계단</td>
+</tr>
+<tr>
+<td>신축</td>
+<td>건축물이 없는 대지에 새로</td>
+<td></td>
+</tr>
+<tr>
+<td>증축</td>
+<td>건축면적·연면적·층수·높이를 <strong>늘림</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>개축</strong></td>
+<td>전부 또는 일부를 해체하고 <strong>종전과 같은 규모</strong>로 다시</td>
+<td>학습평가 단골</td>
+</tr>
+<tr>
+<td>재축</td>
+<td><strong>천재지변 등 재해로 멸실</strong> → 다시</td>
+<td></td>
+</tr>
+<tr>
+<td>이전</td>
+<td>주요구조부를 해체하지 않고 같은 대지 안 다른 위치로</td>
+<td></td>
+</tr>
+<tr>
+<td>대수선</td>
+<td>내력벽·외벽 마감 <strong>30 ㎡ 이상</strong> 수선, 기둥·보·지붕틀 <strong>3개 이상</strong>, 방화벽·방화구획, 주계단·피난계단, 세대 간 경계벽</td>
+<td></td>
+</tr>
+<tr>
+<td>도로</td>
+<td>너비 <strong>4 m 이상</strong>. 대지는 도로에 <strong>2 m 이상</strong> 접해야 함</td>
+<td>막다른 도로: 10 m 미만 2 m / 35 m 미만 3 m / 35 m 이상 6 m</td>
+</tr>
+<tr>
+<td>내화구조</td>
+<td>화재 후 <strong>재사용 가능</strong>한 구조 (철근콘크리트·연와조)</td>
+<td>벽 철근콘크리트 <strong>10 cm</strong>, 벽돌조 <strong>19 cm</strong>, 기둥 지름 <strong>25 cm 이상</strong></td>
+</tr>
+<tr>
+<td>방화구조</td>
+<td>화염 확산을 막는 구조 (내화구조보다 약함)</td>
+<td>철망모르타르 <strong>2 cm</strong>, 석고판 + 모르타르 합계 <strong>2.5 cm</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="1-2-면적높이층수-p137150">1-2. 면적·높이·층수 (p.137~150)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>산정 기준</th>
+</tr></thead><tbody>
+<tr>
+<td>건축면적</td>
+<td>외벽(기둥) <strong>중심선</strong>의 수평투영면적. 처마·차양 <strong>1 m 이상</strong> 돌출 시 끝에서 1 m 후퇴 (한옥 2 m, 축사 3 m, 전통사찰 4 m)</td>
+</tr>
+<tr>
+<td>건축면적 제외</td>
+<td>지표면에서 <strong>1 m 이하</strong> 부분 (하역장 1.5 m), 보행·차량 통로, 지하주차장 경사로, 장애인 승강기 등</td>
+</tr>
+<tr>
+<td>바닥면적</td>
+<td>벽·기둥 <strong>중심선</strong> 수평투영면적. 노대는 길이 × <strong>1.5 m</strong> 공제, 필로티(통행·주차) 제외, 다락 층고 <strong>1.5 m</strong>(경사지붕 1.8 m) 이하 제외</td>
+</tr>
+<tr>
+<td><strong>연면적</strong></td>
+<td><strong>각 층 바닥면적의 합계</strong> (용적률 계산 때는 지하층·부속 주차장·피난안전구역 제외)</td>
+</tr>
+<tr>
+<td>건폐율</td>
+<td>건축면적 ÷ 대지면적 × 100</td>
+</tr>
+<tr>
+<td>용적률</td>
+<td>연면적 ÷ 대지면적 × 100</td>
+</tr>
+<tr>
+<td>높이</td>
+<td>옥탑 등이 건축면적 <strong>1/8 이하</strong>면 <strong>12 m 넘는 부분만</strong> 산입</td>
+</tr>
+<tr>
+<td>층수</td>
+<td>지하층 제외, 옥탑 1/8 이하 제외. 구분이 불명확하면 <strong>4 m마다 1층</strong>. 부분마다 다르면 <strong>가장 많은 층수</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="1-3-피난시설-p155163">1-3. 피난시설 (p.155~163)</h3>
+<p class="note-p"><strong>직통계단 보행거리 (p.155)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>구분</th>
+<th>보행거리</th>
+</tr></thead><tbody>
+<tr>
+<td>일반</td>
+<td><strong>30 m 이하</strong></td>
+</tr>
+<tr>
+<td>주요구조부 내화·불연</td>
+<td><strong>50 m 이하</strong> (16층 이상 공동주택의 16층 이상 층은 <strong>40 m</strong>)</td>
+</tr>
+<tr>
+<td>반도체·디스플레이·이차전지 공장 + 자동식 소화설비</td>
+<td><strong>75 m</strong> (무인화 공장 <strong>100 m</strong>)</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>피난계단 vs 특별피난계단 (p.156~159)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>구분</th>
+<th>피난계단</th>
+<th>특별피난계단</th>
+</tr></thead><tbody>
+<tr>
+<td>동선</td>
+<td>옥내 → 계단실 → 피난층</td>
+<td>옥내 → <strong>노대 또는 부속실</strong> → 계단실 → 피난층</td>
+</tr>
+<tr>
+<td>설치 대상</td>
+<td><strong>5층 이상 또는 지하 2층 이하</strong> 직통계단</td>
+<td><strong>11층 이상</strong>(공동주택 16층) 또는 <strong>지하 3층 이하</strong> (바닥면적 400 ㎡ 미만 층 제외), 판매시설 1개소 이상</td>
+</tr>
+<tr>
+<td>출입구</td>
+<td>60분+ 또는 60분 방화문, 유효너비 <strong>0.9 m 이상</strong>, 피난 방향으로 열림</td>
+<td>옥내→부속실: 60분+/60분 / 부속실→계단실: 60분+/60분/<strong>30분</strong></td>
+</tr>
+<tr>
+<td>창문</td>
+<td>다른 창문에서 <strong>2 m 이상</strong>, 내부 창은 망입유리 <strong>1 ㎡ 이하</strong></td>
+<td>노대: 창문 <strong>1 ㎡ 이상</strong>, 부속실 <strong>3 ㎡ 이상</strong> (배연설비)</td>
+</tr>
+<tr>
+<td>공통</td>
+<td>내화구조 구획, 실내 마감 <strong>불연재료</strong>, 예비전원 조명, 지상까지 직접 연결</td>
+<td></td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>옥상광장·기타</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>옥상광장 난간</td>
+<td><strong>1.2 m 이상</strong></td>
+</tr>
+<tr>
+<td>피난용 옥상광장</td>
+<td><strong>5층 이상</strong> 층이 공연장·종교집회장·게임시설(각 300 ㎡↑), 문화집회, 종교, 판매, 주점, 장례시설</td>
+</tr>
+<tr>
+<td>헬리포트·대피공간</td>
+<td><strong>11층 이상 + 11층 이상 층 바닥면적 합 1만 ㎡ 이상</strong>: 평지붕은 헬리포트, 경사지붕은 대피공간</td>
+</tr>
+<tr>
+<td>대지 안 통로</td>
+<td>단독주택 <strong>0.9 m</strong>, 500 ㎡ 이상 문화집회·의료·장례 등 <strong>3 m</strong>, 그 밖 <strong>1.5 m</strong></td>
+</tr>
+<tr>
+<td>피난용승강기</td>
+<td><strong>고층건축물(30층 또는 120 m 이상)</strong>에 1대 이상. 승강장 1대당 <strong>6 ㎡ 이상</strong>. 예비전원 초고층 <strong>2시간</strong>, 준초고층 <strong>1시간</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="1-4-방화구획방화문-p164167">1-4. 방화구획·방화문 (p.164~167)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>구분</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>대상</td>
+<td>주요구조부 내화·불연 + 연면적 <strong>1,000 ㎡ 초과</strong></td>
+</tr>
+<tr>
+<td>10층 이하</td>
+<td>바닥면적 <strong>1,000 ㎡</strong> 이내마다</td>
+</tr>
+<tr>
+<td>11층 이상</td>
+<td><strong>200 ㎡</strong> 이내마다 (벽·반자 불연 마감이면 <strong>500 ㎡</strong>)</td>
+</tr>
+<tr>
+<td>스프링클러 등 자동식 소화설비</td>
+<td>위 면적의 <strong>3배</strong></td>
+</tr>
+<tr>
+<td>층별</td>
+<td><strong>매층마다</strong> (지하 1층→지상 직결 경사로 제외)</td>
+</tr>
+<tr>
+<td>자동방화셔터</td>
+<td>방화문에서 <strong>3 m 이내</strong> 별도 설치. 불꽃·연기 감지 → <strong>일부 폐쇄</strong>, 열 감지 → <strong>완전 폐쇄</strong></td>
+</tr>
+<tr>
+<td>관통부 틈새</td>
+<td>내화채움구조 / 풍도: 방화댐퍼</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>방화문</th>
+<th>성능</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>60분+</strong></td>
+<td>연기·불꽃 <strong>60분</strong> + 열 차단 <strong>30분</strong></td>
+</tr>
+<tr>
+<td><strong>60분</strong></td>
+<td>연기·불꽃 <strong>60분</strong></td>
+</tr>
+<tr>
+<td><strong>30분</strong></td>
+<td>연기·불꽃 <strong>30분 이상 60분 미만</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="1-5-방화시설-p168172">1-5. 방화시설 (p.168~172)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>배연설비 대상</td>
+<td><strong>6층 이상</strong> + 문화집회·판매·의료·업무·숙박·위락 등 / 층수 무관: 요양병원, 정신병원, 노인요양시설, 장애인 시설, 산후조리원</td>
+</tr>
+<tr>
+<td>배연창</td>
+<td>방화구획마다 1개 이상, 상변이 천장에서 <strong>0.9 m 이내</strong>, 유효면적 <strong>1 ㎡ 이상</strong> + 합계가 바닥면적의 <strong>1/100 이상</strong>, 감지기로 자동 열림 + 수동, 예비전원</td>
+</tr>
+<tr>
+<td><strong>소방관 진입창</strong></td>
+<td><strong>2층 이상 11층 이하</strong> 층마다 1개 이상, 벽면 <strong>40 m</strong>마다 추가, 역삼각형 <strong>지름 20 cm</strong> 붉은 표시, 타격지점 <strong>지름 3 cm</strong>, 폭 <strong>90 cm 이상</strong> × 높이 <strong>1 m 이상</strong>, 하단은 바닥에서 <strong>80 cm 이내</strong>(노대 난간이 있으면 120 cm), 유리 강화 <strong>5 mm</strong>·일반 <strong>6 mm</strong> 이하</td>
+</tr>
+<tr>
+<td>내부 마감</td>
+<td>거실 벽·반자: 불연·준불연·<strong>난연</strong> / 통로·계단: 불연·<strong>준불연</strong></td>
+</tr>
+<tr>
+<td>외벽 마감</td>
+<td>3층 이상 또는 9 m 이상 등: 불연·준불연</td>
+</tr>
+<tr>
+<td>방화유리창</td>
+<td>인접대지경계선에서 <strong>1.5 m 이내</strong> 창호 (스프링클러 헤드가 창에서 60 cm 이내면 제외)</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>피난·방화시설 금지행위 4가지 (p.172)</strong>: ① 폐쇄·훼손 ② 주위에 물건 적치·장애물 설치 ③ 용도 장애·소방활동 지장 ④ 변경</p>
+<hr class="note-hr">
+<h2 class="note-h2" id="2-소방학개론-p175197">2. 소방학개론 (p.175~197)</h2>
+<h3 class="note-h3" id="2-1-연소-p175183">2-1. 연소 (p.175~183)</h3>
+<ul class="note-ul">
+<li>연소 3요소: <strong>가연물 + 산소 + 점화원</strong>. 4요소는 여기에 <strong>연쇄반응</strong>을 더한 것입니다.</li>
+<li><strong>표면연소(무염연소)</strong>에는 연쇄반응이 없습니다. 그래서 <strong>억제소화 효과가 없습니다</strong>.</li>
+</ul>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>가연물 조건 (잘 타는 것)</th>
+<th>내용</th>
+</tr></thead><tbody>
+<tr>
+<td>산소 친화력</td>
+<td><strong>큼</strong></td>
+</tr>
+<tr>
+<td>활성화에너지</td>
+<td><strong>작음</strong></td>
+</tr>
+<tr>
+<td>열전도율</td>
+<td><strong>작음</strong> (열이 쌓임). 단, 기체는 열전도율이 클수록 위험</td>
+</tr>
+<tr>
+<td>연소열·비표면적·건조도</td>
+<td><strong>큼</strong></td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>불연성 물질: 불활성기체(He, Ne, Ar), 완전산화물(H₂O, CO₂), 흡열반응물질(N₂)</li>
+<li>공기 중 산소 약 <strong>21 vol%</strong>, 한계산소지수(LOI) <strong>14~15 vol%</strong></li>
+<li>산화성 물질: 위험물 <strong>제1류</strong>(고체)·<strong>제6류</strong>(액체)</li>
+</ul>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>자연발화 원인</th>
+<th>예</th>
+</tr></thead><tbody>
+<tr>
+<td>분해열</td>
+<td>셀룰로이드, 니트로셀룰로오스</td>
+</tr>
+<tr>
+<td>산화열</td>
+<td>석탄, 건성유</td>
+</tr>
+<tr>
+<td>발효열</td>
+<td>퇴비</td>
+</tr>
+<tr>
+<td>흡착열</td>
+<td>목탄, 활성탄</td>
+</tr>
+<tr>
+<td>중합열</td>
+<td>시안화수소, 산화에틸렌</td>
+</tr>
+<tr>
+<td>예방</td>
+<td>통풍, 주위 온도·습도를 낮게</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>연소범위 (vol%)</th>
+<th></th>
+<th>연소범위 (vol%)</th>
+<th></th>
+</tr></thead><tbody>
+<tr>
+<td>수소</td>
+<td><strong>4.1~75</strong></td>
+<td>메틸알코올</td>
+<td>6~36</td>
+</tr>
+<tr>
+<td>아세틸렌</td>
+<td><strong>2.5~81</strong> (가장 넓음)</td>
+<td>암모니아</td>
+<td>15~28</td>
+</tr>
+<tr>
+<td>중유</td>
+<td>1~5</td>
+<td>아세톤</td>
+<td>2.5~12.8</td>
+</tr>
+<tr>
+<td>등유</td>
+<td>0.7~5</td>
+<td>휘발유</td>
+<td>1.2~7.6</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>연소 형태 (p.180~182)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>상태</th>
+<th>형태</th>
+<th>예</th>
+</tr></thead><tbody>
+<tr>
+<td>고체</td>
+<td>분해연소</td>
+<td>목재, 종이, 석탄</td>
+</tr>
+<tr>
+<td></td>
+<td>증발연소</td>
+<td><strong>고체 파라핀(양초)</strong>, 황, 열가소성수지</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>표면연소</strong></td>
+<td><strong>숯, 코크스, 마그네슘</strong>, 목재 말기</td>
+</tr>
+<tr>
+<td></td>
+<td>자기연소</td>
+<td>제5류(자기반응성), 폭발성 물질</td>
+</tr>
+<tr>
+<td>액체</td>
+<td>증발연소 / 분해연소</td>
+<td>대부분 / 글리세린, 중유</td>
+</tr>
+<tr>
+<td>기체</td>
+<td>확산연소 / 예혼합연소</td>
+<td>황·적색 화염 / <strong>청·백색</strong>, 온도 높음</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>온도</th>
+<th>정의</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>인화점</strong></td>
+<td>외부 에너지로 <strong>착화 가능한 최저온도</strong> (낮을수록 위험, 석유류 분류 기준)</td>
+</tr>
+<tr>
+<td>연소점</td>
+<td>화염이 <strong>5초 이상</strong> 지속. 인화점보다 <strong>5~10 ℃</strong> 높음</td>
+</tr>
+<tr>
+<td>발화점</td>
+<td>외부 에너지 <strong>없이</strong> 착화. 황린 <strong>35 ℃</strong></td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="2-2-화재-p184192">2-2. 화재 (p.184~192)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>등급</th>
+<th>화재</th>
+<th>특징</th>
+<th>소화</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>일반 (면, 목재, 종이, 합성고분자)</td>
+<td>재가 남음, 발생 건수 가장 많음</td>
+<td><strong>냉각</strong> (물)</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>유류 (인화성 액체, 알코올, 인화성 가스)</td>
+<td>재 없음, 연소성 좋음</td>
+<td><strong>질식</strong> (포). 알코올은 <strong>내알코올형 포</strong></td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>전기 (통전 중)</td>
+<td>감전 위험</td>
+<td>비전도성 약제</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>금속 (칼륨, 나트륨, 마그네슘, 알루미늄)</td>
+<td>분말상일 때 위험, 물과 반응해 <strong>수소</strong> 발생</td>
+<td><strong>수계 금지</strong>, 금속화재용 분말·마른모래</td>
+</tr>
+<tr>
+<td><strong>K</strong></td>
+<td>주방 (식용유)</td>
+<td></td>
+<td><strong>비누화 + 냉각</strong></td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>실내화재 진행 (p.186~187)</strong></p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>단계</th>
+<th>외관</th>
+<th>특징</th>
+</tr></thead><tbody>
+<tr>
+<td>초기</td>
+<td><strong>흰 연기</strong></td>
+<td>일부만 연소</td>
+</tr>
+<tr>
+<td>성장기</td>
+<td><strong>검은 연기</strong> 분출</td>
+<td>천장까지 확대, 최성기 전초</td>
+</tr>
+<tr>
+<td>최성기</td>
+<td>연기 줄고 <strong>화염 분출</strong>, 유리 파손</td>
+<td>복사열로 인접 건물 연소, 구조물 낙하</td>
+</tr>
+<tr>
+<td>감쇠기</td>
+<td>연기 <strong>흑색 → 백색</strong></td>
+<td>연소 확산 위험 없음, 붕괴 위험</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>현상</th>
+<th>핵심</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>플래시오버</strong> (전실화재)</td>
+<td>복사열로 실내 가연물이 <strong>일시에 발화</strong>. 내화건물 출화 후 <strong>5~10분</strong></td>
+</tr>
+<tr>
+<td><strong>백드래프트</strong> (연기폭발)</td>
+<td>문을 열 때 <strong>신선한 공기가 유입</strong>되어 폭발. 예방: 문 열기 전 <strong>천장 개방(배연)</strong></td>
+</tr>
+<tr>
+<td><strong>롤오버</strong> (플레임오버)</td>
+<td><strong>미연소가스</strong>를 따라 천장면으로 파도처럼 확산</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>건물</th>
+<th>최고온도</th>
+<th>특징</th>
+</tr></thead><tbody>
+<tr>
+<td>목조</td>
+<td><strong>1,100~1,350 ℃</strong></td>
+<td><strong>고온 단기형</strong>. 출화→최성기 약 10분</td>
+</tr>
+<tr>
+<td>내화조</td>
+<td><strong>800~1,050 ℃</strong></td>
+<td><strong>저온 장기형</strong>. 2~3시간 지속, 발연량 많음</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>열전달</th>
+<th>특징</th>
+</tr></thead><tbody>
+<tr>
+<td>전도</td>
+<td>직접 접촉</td>
+</tr>
+<tr>
+<td>대류</td>
+<td>유체 흐름</td>
+</tr>
+<tr>
+<td><strong>복사</strong></td>
+<td>열 이동에 <strong>가장 크게</strong> 작용, 인접 건물 연소의 주원인</td>
+</tr>
+<tr>
+<td>비화</td>
+<td>불티가 날아가 먼 곳에 발화</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>연기 속도</th>
+<th></th>
+</tr></thead><tbody>
+<tr>
+<td>수평</td>
+<td><strong>0.5~1 m/s</strong> (사람 보행 1.0~1.2 m/s보다 <strong>느림</strong>)</td>
+</tr>
+<tr>
+<td>수직 (계단)</td>
+<td>초기 <strong>2~3 m/s</strong>, 농연 <strong>3~5 m/s</strong></td>
+</tr>
+<tr>
+<td>복도</td>
+<td>플래시오버 전 0.5, 후 0.75 m/s</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="2-3-소화-p193196">2-3. 소화 (p.193~196)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>제거 요소</th>
+<th>소화법</th>
+<th>예</th>
+</tr></thead><tbody>
+<tr>
+<td>가연물</td>
+<td><strong>제거소화</strong></td>
+<td>가스밸브 잠금, 산림 벌목</td>
+</tr>
+<tr>
+<td>산소</td>
+<td><strong>질식소화</strong></td>
+<td>포, CO₂, 모래 (LOI 이하로)</td>
+</tr>
+<tr>
+<td>열</td>
+<td><strong>냉각소화</strong></td>
+<td>물 (비열 <strong>1 cal/g·℃</strong>, 증발잠열 <strong>539 cal/g</strong>)</td>
+</tr>
+<tr>
+<td>연쇄반응</td>
+<td><strong>억제소화</strong></td>
+<td>분말, 할론 → <strong>화학적</strong> 소화 (나머지 셋은 물리적)</td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>알코올 화재는 물을 타서 농도를 <strong>40% 이하</strong>로 낮추면 꺼집니다(희석).</li>
+<li>비수용성 유류 화재는 물을 세게 뿌려 <strong>유화(에멀전)</strong> 효과로 끕니다.</li>
+</ul>
+<hr class="note-hr">
+<h2 class="note-h2" id="3-위험물전기가스-안전관리-p201212">3. 위험물·전기·가스 안전관리 (p.201~212)</h2>
+<h3 class="note-h3" id="3-1-위험물-류별-p201202">3-1. 위험물 류별 (p.201~202)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>류</th>
+<th>성질</th>
+<th>핵심</th>
+</tr></thead><tbody>
+<tr>
+<td>1류</td>
+<td><strong>산화성 고체</strong></td>
+<td>가열·충격으로 분해되어 <strong>산소 방출</strong></td>
+</tr>
+<tr>
+<td>2류</td>
+<td><strong>가연성 고체</strong></td>
+<td>저온 착화, 유독가스</td>
+</tr>
+<tr>
+<td>3류</td>
+<td><strong>자연발화성·금수성</strong></td>
+<td><strong>물과 반응</strong>하거나 자연발화로 가연성 가스</td>
+</tr>
+<tr>
+<td>4류</td>
+<td><strong>인화성 액체</strong></td>
+<td>증기가 <strong>공기보다 무거움</strong>, 물보다 가볍고 물에 녹지 않음 → 주수소화 대부분 불가</td>
+</tr>
+<tr>
+<td>5류</td>
+<td><strong>자기반응성</strong></td>
+<td>산소를 품고 있어 <strong>자기연소</strong>, 연소속도가 매우 빠름</td>
+</tr>
+<tr>
+<td>6류</td>
+<td><strong>산화성 액체</strong></td>
+<td>자체는 불연, 산소를 내 <strong>조연성</strong></td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>유류 취급 주의</strong>: 난로 불을 끈 뒤 주유, 불붙은 채 이동 금지, 빈 드럼통 절단 전 유증기 완전 배출, 연료량 확인은 라이터가 아니라 <strong>손전등</strong>으로</p>
+<h3 class="note-h3" id="3-2-전기-p204207">3-2. 전기 (p.204~207)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>원인</th>
+<th>내용</th>
+</tr></thead><tbody>
+<tr>
+<td>단락(합선)</td>
+<td>피복 손상으로 직접 접촉 → 큰 전류·스파크·<strong>용융흔</strong> (1차: 외력·접촉불량, 2차: 화재 외부열)</td>
+</tr>
+<tr>
+<td>과부하</td>
+<td>허용전류 초과. 이불·장롱 밑, <strong>코드릴 감은 채</strong> 사용, 꼬아 만든 전선</td>
+</tr>
+<tr>
+<td><strong>누전</strong></td>
+<td>3요건: <strong>누전점·출화점(발화점)·접지점</strong></td>
+</tr>
+<tr>
+<td>기타</td>
+<td>반단선, 트래킹·흑연화, 접촉불량(아산화동 증식), 정전기, 낙뢰</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>감전 방지</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>누전차단기</strong></td>
+<td>감도전류 <strong>30 mA 이하</strong>, 동작시간 <strong>0.03초 이하</strong> (욕실 콘센트는 <strong>15 mA</strong>)</td>
+</tr>
+<tr>
+<td>기타</td>
+<td>충전부 방호, 보호절연, 보호접지, 이중절연기기</td>
+</tr>
+<tr>
+<td>예방</td>
+<td>문어발 금지, <strong>누전차단기 월 1~2회</strong> 동작 확인, 비닐전선은 고열기구에 쓰지 않음(고무코드), KS 제품</td>
+</tr>
+</tbody></table></div>
+<h3 class="note-h3" id="3-3-가스-p208212">3-3. 가스 (p.208~212)</h3>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>구분</th>
+<th><strong>LPG</strong> (액화석유가스)</th>
+<th><strong>LNG</strong> (액화천연가스)</th>
+</tr></thead><tbody>
+<tr>
+<td>주성분</td>
+<td>프로판(C₃H₈), 부탄(C₄H₁₀)</td>
+<td><strong>메탄(CH₄)</strong></td>
+</tr>
+<tr>
+<td>용도</td>
+<td>가정, 공업, 자동차</td>
+<td><strong>도시가스</strong></td>
+</tr>
+<tr>
+<td>비중</td>
+<td><strong>1.5~2</strong> → 누출 시 <strong>낮은 곳</strong></td>
+<td><strong>0.6</strong> → 누출 시 <strong>천장</strong></td>
+</tr>
+<tr>
+<td>폭발범위</td>
+<td>프로판 2.1~9.5%, 부탄 1.8~8.4%</td>
+<td><strong>5~15%</strong></td>
+</tr>
+<tr>
+<td><strong>누설경보기</strong></td>
+<td>연소기에서 수평 <strong>4 m</strong> 이내, 탐지기 <strong>상단</strong>이 <strong>바닥에서 30 cm 이내</strong></td>
+<td>연소기에서 수평 <strong>8 m</strong> 이내, 탐지기 <strong>하단</strong>이 <strong>천장에서 30 cm 이내</strong></td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>시점</th>
+<th>주의</th>
+</tr></thead><tbody>
+<tr>
+<td>사용 전</td>
+<td>냄새로 누설 확인·환기 (부취제 <strong>메르캅탄</strong>), 호스 밴드 확인</td>
+</tr>
+<tr>
+<td>사용 중</td>
+<td><strong>파란 불꽃</strong> 유지 (황색·적색은 불완전연소 → <strong>CO</strong>)</td>
+</tr>
+<tr>
+<td>사용 후</td>
+<td>콕 + <strong>중간밸브</strong> 잠금. 장기 외출 시 용기밸브·메인밸브까지</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="4-공사장-안전관리화기취급-감독-p215238">4. 공사장 안전관리·화기취급 감독 (p.215~238)</h2>
+<h3 class="note-h3" id="4-1-공사장-p215224">4-1. 공사장 (p.215~224)</h3>
+<p class="note-p"><strong>임시소방시설 7종 (p.216)</strong>: 소화기, 간이소화장치, 비상경보장치, 가스누설경보기, 간이피난유도선, 비상조명등, <strong>방화포</strong></p>
+<p class="note-p"><strong>화재위험작업 (p.216)</strong>: 인화성·가연성·폭발성 물질 취급 / <strong>용접·용단</strong> / 전열기구 등 열 발생 / 알루미늄·마그네슘 <strong>폭발성 부유분진</strong> / 소방청장 고시 작업</p>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>공사장 화재</th>
+<th>특징</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>전기화재</strong></td>
+<td>공사장 화재 원인 중 <strong>가장 큰 비중</strong>. 지하 수변전실·MCC실, 발화지점이 숨어 있어 초기대응이 늦음</td>
+</tr>
+<tr>
+<td>방화</td>
+<td>야간 보안 취약, 휘발유·시너</td>
+</tr>
+<tr>
+<td>가설건축물</td>
+<td>컨테이너 사무소는 <strong>소방대상물이 아님</strong> → 소방설비 의무 없음</td>
+</tr>
+<tr>
+<td>작업자 부주의</td>
+<td>용접 불티, 담뱃불, 고체연료</td>
+</tr>
+<tr>
+<td>공정별</td>
+<td>초기는 &quot;연료지배형&quot;, 커튼월 이후 &quot;연료지배형 + 환기지배형&quot;, <strong>마감 공정(소방시설 정상작동 전)에 위험 최대</strong></td>
+</tr>
+</tbody></table></div>
+<ul class="note-ul">
+<li>안전관리계획서는 <strong>건설기술진흥법</strong>에 따라 건설업자가 작성하고, 감리 확인 후 <strong>착공 전 발주자</strong>에게 냅니다.</li>
+<li><strong>비화기(cool-work)</strong> 대체: 용접 → 기계적 볼팅, 납땜 → 나사·플랜지, 토치 절단 → 기계적 파이프 절단기</li>
+<li>소화기를 든 <strong>화재감시자</strong>를 배치하고, 작업 종료 후 <strong>최소 30분 이상</strong> 감시합니다.</li>
+</ul>
+<h3 class="note-h3" id="4-2-화기취급작업-p225238">4-2. 화기취급작업 (p.225~238)</h3>
+<ul class="note-ul">
+<li>화기취급작업: <strong>용접, 용단, 연마, 땜, 드릴</strong> 등 불꽃을 내는 작업</li>
+<li>근거 법령: 화재예방법 24조(소방안전관리자 업무 중 <strong>&quot;화기취급의 감독&quot;</strong>), 소방시설법 15조(임시소방시설), 산업안전보건기준 규칙 239~246조</li>
+</ul>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>숫자</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>11 m</strong></td>
+<td>용접 불티 비산거리(실내 무풍). <strong>화재감시자 배치 기준 반경</strong></td>
+</tr>
+<tr>
+<td><strong>1,600 ℃</strong></td>
+<td>불티 온도 (발화온도 약 250~450 ℃)</td>
+</tr>
+<tr>
+<td>0.3~3 mm</td>
+<td>불티 직경</td>
+</tr>
+<tr>
+<td>6,000 ℃</td>
+<td>아크 최고온도 (보통 3,500~5,000 ℃)</td>
+</tr>
+<tr>
+<td><strong>5 m</strong></td>
+<td>작업지점에서 소화기 비치 거리</td>
+</tr>
+<tr>
+<td><strong>30분</strong></td>
+<td>작업 종료 후 화재감시자 추가 상주 (이후 <strong>3시간</strong>까지 순찰)</td>
+</tr>
+<tr>
+<td>20 m</td>
+<td>신청서 1건당 범위: 층별, 같은 층에서 반경 20 m 초과마다 별도 신청</td>
+</tr>
+<tr>
+<td>5분</td>
+<td>밀폐공간: 전화하면 5분 안에 올 수 있는 곳에 구조팀 대기</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>화재감시자를 배치해야 하는 곳 (p.228)</strong></p>
+<ol class="note-ol">
+<li>작업반경 <strong>11 m 이내</strong>에 가연성 물질이 있는 곳</li>
+<li>11 m 이내 바닥 아래쪽 가연물이 11 m 이상 떨어져 있지만 불꽃으로 쉽게 발화할 곳</li>
+<li>금속 칸막이·벽·천장 반대쪽 가연물이 <strong>열전도·복사열</strong>로 발화할 곳</li>
+</ol>
+<p class="note-p"><strong>화기취급작업 절차 (p.234)</strong>: <strong>① 사전허가</strong>(작업요청 → 허가서 발급) → <strong>② 안전조치</strong>(가연물 이동·보호, 소방시설 작동 확인, 장비 점검, 안전교육) → <strong>③ 작업·감독</strong>(화재감시자 입회, 상주 감시, 종료 확인)</p>
+<ul class="note-ul">
+<li>화재감시자는 소방안전관리자, 보조자 또는 안전관리자가 지정한 인력입니다.</li>
+<li>허가서는 <strong>작업현장에 게시</strong>하고 끝나면 <strong>소방안전관리자에게 반납</strong>합니다.</li>
+<li>종료 후 확인: <strong>불티 잔존(30분 후)</strong>, 전원 차단, 인화성 물품 보관</li>
+</ul>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>재해</th>
+<th>원인</th>
+<th>대책</th>
+</tr></thead><tbody>
+<tr>
+<td>화재</td>
+<td>불꽃 비산, 용접부 뒷면 가연물</td>
+<td>불꽃받이·방염시트, 가연물 제거, 소화기</td>
+</tr>
+<tr>
+<td>폭발</td>
+<td>토치·호스 가스 누설, 드럼통 잔류 가스, <strong>역화</strong></td>
+<td>누설 없는 호스, 내부 가스 확인, <strong>역화방지기</strong></td>
+</tr>
+<tr>
+<td>화상</td>
+<td>산소 누설, 산소를 공기 대신 환기에 사용</td>
+<td>산소 위험성 교육</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="5-종합방재실의-운영-p241254">5. 종합방재실의 운영 (p.241~254)</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>법</th>
+<th>명칭</th>
+<th>설치 주체</th>
+</tr></thead><tbody>
+<tr>
+<td>초고층·지하연계 복합건축물법 16조</td>
+<td><strong>종합방재실</strong></td>
+<td><strong>관리주체</strong> (소유자·관리자)</td>
+</tr>
+<tr>
+<td>소방기본법 4조</td>
+<td>119 <strong>종합상황실</strong></td>
+<td>소방청장·본부장·서장</td>
+</tr>
+<tr>
+<td>재난안전법 18조</td>
+<td>재난안전<strong>상황실</strong></td>
+<td>행정안전부장관, 시·도지사 등</td>
+</tr>
+</tbody></table></div>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>항목</th>
+<th>기준</th>
+</tr></thead><tbody>
+<tr>
+<td>대상</td>
+<td><strong>초고층(50층 또는 200 m 이상)</strong>, 지하연계 복합건축물</td>
+</tr>
+<tr>
+<td>개수</td>
+<td><strong>1개</strong> (100층 이상은 추가 설치 또는 보조종합재난관리체제)</td>
+</tr>
+<tr>
+<td>위치</td>
+<td><strong>1층 또는 피난층</strong>이 원칙. 특별피난계단 출입구에서 <strong>5 m 이내</strong>면 <strong>2층 또는 지하 1층</strong>도 가능. 공동주택은 관리사무소 안</td>
+</tr>
+<tr>
+<td>위치 조건</td>
+<td>비상용·피난용 승강장, 특별피난계단으로 이동하기 쉬운 곳 / 소방대가 쉽게 도착 / 화재·침수 피해 우려가 적은 곳</td>
+</tr>
+<tr>
+<td>구조</td>
+<td>다른 부분과 <strong>방화구획</strong> (감시용 망입유리 붙박이창 <strong>4 ㎡ 미만</strong> 가능), 인력 대기·휴식용 <strong>부속실도 방화구획</strong></td>
+</tr>
+<tr>
+<td><strong>면적</strong></td>
+<td><strong>20 ㎡ 이상</strong></td>
+</tr>
+<tr>
+<td>출입문</td>
+<td><strong>출입 제한·통제 장치</strong></td>
+</tr>
+<tr>
+<td><strong>상주 인력</strong></td>
+<td><strong>3명 이상</strong></td>
+</tr>
+<tr>
+<td>설비</td>
+<td>조명(예비전원), 상용·예비전원 전환, 급·배기, 지진계·풍향풍속계(초고층), 무정전 전원, CCTV 등</td>
+</tr>
+<tr>
+<td>설계도서 비치</td>
+<td>미비치 시 <strong>2년 이하 징역 또는 2천만원 이하 벌금</strong></td>
+</tr>
+<tr>
+<td>정기 유지보수</td>
+<td><strong>월 1회</strong> (계획 → 부품 준비 → 현장 이동 → 정비 → 고장 수리 → 보고서)</td>
+</tr>
+</tbody></table></div>
+<p class="note-p"><strong>화재 시 운영 절차 (p.253)</strong>: 감지기·발신기 작동 → 경종·비상방송 → <strong>현장 확인</strong>(CCTV, 운영자 출동) → 비화재면 시스템 복구 / 실화재면 <strong>재실자 피난 유도 + 소화설비 작동 + 소방대 신고</strong> + 소방차 진입로 확보 → 화재 진압 → 시스템 복구</p>
+<hr class="note-hr">
+<h2 class="note-h2" id="6-이-영역-숫자-한-장-요약">6. 이 영역 숫자 한 장 요약</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>숫자</th>
+<th>뜻</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>0.9 m</strong></td>
+<td>계단 출입구 유효너비, 배연창 상변~천장, 단독주택 대지 안 통로</td>
+</tr>
+<tr>
+<td><strong>1.2 m</strong></td>
+<td>옥상광장 난간</td>
+</tr>
+<tr>
+<td><strong>1.5 m</strong></td>
+<td>방화유리창 인접대지 거리, 대지 안 통로(그 밖)</td>
+</tr>
+<tr>
+<td><strong>2 m</strong></td>
+<td>대지가 도로에 접하는 길이, 피난계단 창문 간 거리</td>
+</tr>
+<tr>
+<td><strong>3 m</strong></td>
+<td>자동방화셔터 위치(방화문에서), 대지 안 통로(문화집회 등)</td>
+</tr>
+<tr>
+<td><strong>4 m</strong></td>
+<td>도로 너비, 층 구분 불명확 시 1층 높이, LPG 누설경보기 수평거리</td>
+</tr>
+<tr>
+<td><strong>8 m</strong></td>
+<td>LNG 누설경보기 수평거리</td>
+</tr>
+<tr>
+<td><strong>11 m</strong></td>
+<td>용접 불티 비산거리·화재감시자 반경</td>
+</tr>
+<tr>
+<td><strong>30 / 50 m</strong></td>
+<td>직통계단 보행거리 (일반 / 내화)</td>
+</tr>
+<tr>
+<td><strong>40 m</strong></td>
+<td>소방관 진입창 간격, 16층 이상 공동주택 직통계단</td>
+</tr>
+<tr>
+<td><strong>30 cm</strong></td>
+<td>가스누설 탐지기 (LPG 바닥 위, LNG 천장 아래)</td>
+</tr>
+<tr>
+<td><strong>20 ㎡</strong></td>
+<td>종합방재실 면적</td>
+</tr>
+<tr>
+<td><strong>200 / 500 / 1,000 ㎡</strong></td>
+<td>방화구획 (11층 이상 / 11층 이상 불연마감 / 10층 이하), SP 있으면 <strong>×3</strong></td>
+</tr>
+<tr>
+<td><strong>30 mA, 0.03초</strong></td>
+<td>누전차단기</td>
+</tr>
+<tr>
+<td><strong>5~10분</strong></td>
+<td>플래시오버 (내화건물)</td>
+</tr>
+<tr>
+<td><strong>21 %, 14~15 %</strong></td>
+<td>공기 중 산소, 한계산소지수</td>
+</tr>
+<tr>
+<td><strong>539 cal/g</strong></td>
+<td>물의 증발잠열</td>
+</tr>
+<tr>
+<td><strong>3명</strong></td>
+<td>종합방재실 상주 인력</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<h2 class="note-h2" id="7-교재-학습평가-정답">7. 교재 학습평가 정답</h2>
+<div class="note-table-wrap"><table class="note-table">
+<thead><tr>
+<th>편</th>
+<th>문제</th>
+<th>정답</th>
+</tr></thead><tbody>
+<tr>
+<td>3편 1장 Q1</td>
+<td>전부·일부 해체 후 같은 규모로 다시 짓는 것</td>
+<td><strong>개축</strong></td>
+</tr>
+<tr>
+<td>3편 1장 Q2</td>
+<td>연면적</td>
+<td><strong>각 층 바닥면적의 합계</strong></td>
+</tr>
+<tr>
+<td>4편 Q1</td>
+<td>연소 3요소가 아닌 것</td>
+<td>④ 연쇄반응</td>
+</tr>
+<tr>
+<td>4편 Q2</td>
+<td>표면연소가 아닌 것</td>
+<td>③ 고체 파라핀 (증발연소)</td>
+</tr>
+<tr>
+<td>4편 Q3</td>
+<td>외부 에너지로 착화 가능한 최저온도</td>
+<td>① 인화점</td>
+</tr>
+<tr>
+<td>4편 Q4</td>
+<td>면화류·종이·목재 화재</td>
+<td>① A급</td>
+</tr>
+<tr>
+<td>4편 Q5</td>
+<td>라디칼 제거로 연쇄반응 중단</td>
+<td>④ 억제소화</td>
+</tr>
+<tr>
+<td>5편 Q1</td>
+<td>물과 반응하거나 자연발화하는 위험물</td>
+<td>③ 3류</td>
+</tr>
+<tr>
+<td>5편 Q2</td>
+<td>가스누설경보기 잘못된 위치</td>
+<td>④ (LPG는 탐지기 <strong>상단</strong>이 바닥 위 30 cm 이내)</td>
+</tr>
+<tr>
+<td>7편 Q1</td>
+<td>특별피난계단 출입구에서 ( ) 이내면 2층·지하 1층 가능</td>
+<td>④ <strong>5 m</strong></td>
+</tr>
+<tr>
+<td>7편 Q2</td>
+<td>종합방재실 위치 조건으로 틀린 것</td>
+<td>① 최상층</td>
+</tr>
+<tr>
+<td>7편 Q3</td>
+<td>종합방재실 구조·면적으로 옳은 것</td>
+<td>③ 다른 부분과 방화구획 (부속실도 방화구획, 면적 20 ㎡, 출입 통제 필요)</td>
+</tr>
+</tbody></table></div>
+<hr class="note-hr">
+<p class="note-p"><em>작성 기준: 교재 1권(2026년 판) 본문. 기준은 개정될 수 있으니 시험 직전 최신 교재로 숫자를 한 번 더 확인하세요.</em></p>
+    </div>
+
+  </div>
+
+  <!-- 플로팅 TOP 버튼 -->
+  <button class="btn-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="맨 위로 이동">▲</button>
+
+  <script>
+    // 1. 탭 전환
+    function switchStage(stageNum) {
+      document.querySelectorAll('.stage-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.stage == stageNum);
+      });
+      document.querySelectorAll('.note-panel').forEach((p, idx) => {
+        p.classList.toggle('active', (idx + 1) === stageNum);
+      });
+      window.location.hash = 'stage' + stageNum;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // URL 해시 확인
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash;
+      if (hash === '#stage2') switchStage(2);
+      else if (hash === '#stage3') switchStage(3);
+      else switchStage(1);
+    });
+
+    // 2. 실시간 검색 필터
+    const searchInput = document.getElementById('notes-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        const activePanel = document.querySelector('.note-panel.active');
+        if (!activePanel) return;
+
+        const sections = activePanel.querySelectorAll('.note-h2, .note-h3, .note-table-wrap, .note-quote, .note-ul, .note-ol, .note-p');
+        if (!query) {
+          sections.forEach(el => el.style.display = '');
+          return;
+        }
+
+        sections.forEach(el => {
+          const text = el.textContent.toLowerCase();
+          if (text.includes(query)) {
+            el.style.display = '';
+          } else if (el.tagName === 'H2' || el.tagName === 'H3') {
+            // 헤딩은 본문이 보이면 유지되도록
+            el.style.display = '';
+          } else {
+            el.style.display = 'none';
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>
