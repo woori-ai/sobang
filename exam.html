@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실전 모의고사</title>
+  <meta name="description" content="1급 소방안전관리자 50문항 60분 실전 모의고사 자동 생성기">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1f242c;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --blue: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #f0883e;
+      --purple: #bc8cff;
+      --yellow: #e3b341;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 16px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 16px; }
+    .topbar h1 { font-size: 1.25rem; margin: 0; }
+    .btn {
+      appearance: none; border: 1px solid var(--border); background: var(--panel-2); color: var(--text);
+      padding: 10px 16px; border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer;
+    }
+    .btn:hover { border-color: var(--blue); }
+    .btn-primary { background: #238636; border-color: #2ea043; color: #fff; }
+    .btn-primary:hover { background: #2ea043; }
+    .btn-big { width: 100%; padding: 16px; font-size: 1.1rem; }
+    .btn-small { padding: 6px 10px; font-size: .85rem; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .card h2 { font-size: 1.05rem; margin: 0 0 12px; }
+    .muted { color: var(--muted); font-size: .9rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th, td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: var(--panel-2); }
+    td.num, th.num { text-align: center; white-space: nowrap; }
+    .table-scroll { overflow-x: auto; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    input[type="text"] {
+      background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px;
+      padding: 9px 12px; font: inherit; width: 140px;
+    }
+    .hidden { display: none !important; }
+
+    /* 시험 화면 */
+    .exam-head {
+      position: sticky; top: 0; z-index: 10; background: rgba(13, 17, 23, .96);
+      border-bottom: 1px solid var(--border); padding: 10px 16px;
+    }
+    .exam-head .inner { max-width: 860px; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .timer { font-size: 1.3rem; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--yellow); }
+    .timer.warn { color: var(--red); }
+    .progress { color: var(--muted); font-size: .9rem; }
+    .omr { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin-top: 10px; }
+    .omr button {
+      border: 1px solid var(--border); background: var(--panel-2); color: var(--muted);
+      border-radius: 6px; padding: 4px 0; font: inherit; font-size: .8rem; cursor: pointer;
+    }
+    .omr button.done { background: rgba(88, 166, 255, .18); color: var(--blue); border-color: rgba(88, 166, 255, .5); }
+    .omr button.now { outline: 2px solid var(--yellow); }
+    .omr button.ok { background: rgba(63, 185, 80, .2); color: var(--green); border-color: rgba(63, 185, 80, .5); }
+    .omr button.ng { background: rgba(248, 81, 73, .2); color: var(--red); border-color: rgba(248, 81, 73, .5); }
+    .omr-label { font-size: .8rem; color: var(--muted); margin-top: 8px; }
+
+    .q-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+    .tag { font-size: .75rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+    .tag.subj { color: var(--blue); border-color: rgba(88, 166, 255, .5); }
+    .tag.box3 { color: var(--purple); border-color: rgba(188, 140, 255, .5); }
+    .tag.box4 { color: var(--orange); border-color: rgba(240, 136, 62, .5); }
+    .q-text { font-size: 1.08rem; font-weight: 700; margin: 0 0 12px; }
+    .q-text .no { color: var(--yellow); margin-right: 6px; }
+    .q-image { display: block; max-width: 100%; height: auto; margin: 8px auto 12px; border-radius: 8px; border: 1px solid var(--border); background: #fff; }
+    .box {
+      border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; background: var(--bg);
+    }
+    .box-title { font-size: .8rem; color: var(--muted); margin-bottom: 4px; text-align: center; }
+    .box-item { display: flex; gap: 8px; margin: 4px 0; }
+    .box-item b { color: var(--purple); flex: none; }
+    .opts { display: flex; flex-direction: column; gap: 8px; }
+    .opt {
+      text-align: left; border: 1px solid var(--border); background: var(--panel-2); color: var(--text);
+      border-radius: 8px; padding: 12px; font: inherit; cursor: pointer; display: flex; gap: 10px;
+    }
+    .opt:hover { border-color: var(--blue); }
+    .opt .mark { flex: none; font-weight: 800; color: var(--muted); }
+    .opt.sel { border-color: var(--blue); background: rgba(88, 166, 255, .15); }
+    .opt.sel .mark { color: var(--blue); }
+    .opt.right { border-color: var(--green); background: rgba(63, 185, 80, .15); }
+    .opt.wrong { border-color: var(--red); background: rgba(248, 81, 73, .15); }
+    .nav { display: flex; gap: 8px; justify-content: space-between; margin-top: 16px; }
+
+    /* 결과 화면 */
+    .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .score { background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+    .score .label { font-size: .8rem; color: var(--muted); }
+    .score .val { font-size: 1.6rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .verdict { font-size: 1.3rem; font-weight: 800; text-align: center; margin: 12px 0 4px; }
+    .verdict.pass { color: var(--green); }
+    .verdict.fail { color: var(--red); }
+    .exp { white-space: pre-wrap; font-size: .9rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 10px; }
+    .trap { font-size: .9rem; color: var(--yellow); margin-top: 8px; }
+    .review-item { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 14px; }
+    @media (max-width: 560px) {
+      .omr { grid-template-columns: repeat(10, 1fr); }
+      .score .val { font-size: 1.3rem; }
+      th, td { padding: 5px; font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ① 시작 화면 -->
+<div id="view-start" class="wrap">
+  <div class="topbar">
+    <h1>📝 실전 모의고사</h1>
+    <a href="./index.html" class="btn btn-small">🏠 문제풀이 홈</a>
+  </div>
+
+  <div class="card">
+    <h2>시험 방식 (교재 2권 p.370 기준)</h2>
+    <p class="muted" style="margin:0">
+      4지선다 <b>50문항 · 60분</b> (1과목 25 + 2과목 25, 문항당 4점).<br>
+      합격: <b>과목별 40점 이상</b> + <b>평균 70점 이상</b>. 버튼을 누를 때마다 문제은행에서 새 시험지를 뽑습니다.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>🎲 새 모의고사</h2>
+    <button id="btn-new" class="btn btn-primary btn-big" disabled>문제은행 불러오는 중…</button>
+    <p class="muted" style="margin:8px 0 0">최근 3회 시험에 나온 문제는 되도록 빼고 뽑습니다. 지난 시험지는 아래 응시 기록에서 다시 풀 수 있습니다.</p>
+    <div id="resume-box" class="row hidden" style="margin-top:12px">
+      <span class="muted" id="resume-text"></span>
+      <button id="btn-resume" class="btn btn-small">이어서 풀기</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>출제 기준표</h2>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>과목</th><th>영역</th><th class="num">출제</th><th style="text-align:center">보유 문항<br><span class="muted">일반 / 가나다 /<br>가나다라</span></th></tr>
+        </thead>
+        <tbody id="blueprint-body"></tbody>
+      </table>
+    </div>
+    <p class="muted" style="margin:8px 0 0" id="type-rule"></p>
+  </div>
+
+  <div class="card">
+    <h2>지난 응시 기록</h2>
+    <div id="history" class="muted">아직 응시 기록이 없습니다.</div>
+  </div>
+</div>
+
+<!-- ② 시험 화면 -->
+<div id="view-exam" class="hidden">
+  <div class="exam-head">
+    <div class="inner">
+      <div>
+        <div class="timer" id="timer">60:00</div>
+        <div class="progress" id="progress"></div>
+      </div>
+      <div class="row">
+        <button id="btn-omr" class="btn btn-small">답안지</button>
+        <button id="btn-submit" class="btn btn-primary btn-small">제출</button>
+      </div>
+    </div>
+    <div class="inner" style="display:block">
+      <div id="omr-wrap" class="hidden">
+        <div class="omr-label">1과목 (1~25)</div>
+        <div class="omr" id="omr-1"></div>
+        <div class="omr-label">2과목 (26~50)</div>
+        <div class="omr" id="omr-2"></div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="card" id="q-card"></div>
+    <div class="nav">
+      <button id="btn-prev" class="btn">◀ 이전</button>
+      <button id="btn-next" class="btn">다음 ▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- ③ 결과 화면 -->
+<div id="view-result" class="wrap hidden">
+  <div class="topbar">
+    <h1>📊 채점 결과</h1>
+    <a href="./index.html" class="btn btn-small">🏠 홈</a>
+  </div>
+  <div class="card">
+    <div class="score-grid">
+      <div class="score"><div class="label">1과목</div><div class="val" id="s1"></div></div>
+      <div class="score"><div class="label">2과목</div><div class="val" id="s2"></div></div>
+      <div class="score"><div class="label">평균</div><div class="val" id="savg"></div></div>
+    </div>
+    <div class="verdict" id="verdict"></div>
+    <p class="muted" style="text-align:center;margin:0" id="result-meta"></p>
+  </div>
+  <div class="card">
+    <h2>영역별 정답률 (약한 영역부터 복습하세요)</h2>
+    <div class="table-scroll"><table><thead><tr><th>과목</th><th>영역</th><th class="num">정답</th></tr></thead><tbody id="area-body"></tbody></table></div>
+  </div>
+  <div class="card">
+    <h2>답안지</h2>
+    <div class="omr-label">1과목</div><div class="omr" id="romr-1"></div>
+    <div class="omr-label">2과목</div><div class="omr" id="romr-2"></div>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <h2 style="margin:0">해설</h2>
+      <label class="muted"><input type="checkbox" id="only-wrong" checked> 틀린 문제만</label>
+    </div>
+    <div id="review"></div>
+  </div>
+  <div class="row">
+    <button id="btn-again" class="btn btn-primary">🎲 새 모의고사</button>
+    <button id="btn-retry" class="btn">같은 시험지 다시 풀기</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  // ===== 출제 기준 (과목·영역별 문항 수) =====
+  // 실제 시험: 1과목 25 + 2과목 25. 영역 배분은 교재 분량과 기출 빈도를 반영한 기본값.
+  const BLUEPRINT = [
+    { area: 'A1', subject: 1, name: '소방안전관리제도·소방관계법령', count: 9 },
+    { area: 'A2', subject: 1, name: '건축관계법령·피난/방화시설', count: 4 },
+    { area: 'A3', subject: 1, name: '소방학개론(연소·화재·소화)', count: 3 },
+    { area: 'A4', subject: 1, name: '위험물·전기·가스 안전관리', count: 2 },
+    { area: 'A5', subject: 1, name: '공사장·화기취급·종합방재실', count: 2 },
+    { area: 'A6', subject: 1, name: '소방시설의 종류·구조·기준', count: 5 },
+    { area: 'B1', subject: 2, name: '소방시설 점검·실습', count: 19 },
+    { area: 'B2', subject: 2, name: '소방계획·자위소방대·교육훈련·응급처치', count: 6 },
+  ];
+  // 과목별 <보기> 고르기 문항 목표 (가나다 / 가나다라). 모자라면 일반 4지선다로 채운다.
+  const BOX_TARGET = { 1: { box3: 4, box4: 3 }, 2: { box3: 2, box4: 1 } };
+  const PER_SUBJECT = 25;
+  const EXAM_SECONDS = 60 * 60;
+  const RECENT_KEEP = 3;   // 최근 n회 시험에 나온 문제는 뒤로 미룸
+  const TYPE_LABEL = { mcq: '일반', box3: '보기 가·나·다', box4: '보기 가·나·다·라' };
+  const MARKS = ['①', '②', '③', '④'];
+
+  const LS = {
+    history: 'exam.history.v1',
+    current: 'exam.current.v1',
+  };
+
+  // localStorage 는 막혀 있을 수 있으므로 항상 try/catch
+  const store = {
+    get(key, fallback) {
+      try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
+    },
+    set(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch { /* 무시 */ } },
+    del(key) { try { localStorage.removeItem(key); } catch { /* 무시 */ } },
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  };
+
+  // ===== 시드 난수 (같은 번호 → 같은 시험지) =====
+  function mulberry32(seed) {
+    let a = seed >>> 0;
+    return () => {
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function shuffle(arr, rnd) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // ===== 시험지 생성 =====
+  // 1) 과목별 보기형(가나다/가나다라) 목표만큼 먼저 뽑고
+  // 2) 영역별 남은 칸을 일반 문제로 채우고
+  // 3) 영역에 문제가 모자라면 같은 과목의 다른 영역에서 보충한다.
+  // 최근에 출제된 문제는 후보 목록 뒤로 보내 되도록 새 문제가 나오게 한다.
+  function buildExam(bank, seed, recentSet) {
+    const rnd = mulberry32(seed);
+    const order = (list) => {
+      const s = shuffle(list, rnd);
+      return s.filter((q) => !recentSet.has(q.uid)).concat(s.filter((q) => recentSet.has(q.uid)));
+    };
+    const picked = new Set();
+    const result = { 1: [], 2: [] };
+
+    for (const subject of [1, 2]) {
+      const areas = BLUEPRINT.filter((b) => b.subject === subject);
+      const left = Object.fromEntries(areas.map((b) => [b.area, b.count]));
+      const take = (q) => { picked.add(q.uid); result[subject].push(q); left[q.area]--; };
+
+      for (const type of ['box3', 'box4']) {
+        let need = BOX_TARGET[subject][type];
+        for (const q of order(bank.filter((x) => x.subject === subject && x.type === type))) {
+          if (need === 0) break;
+          if (left[q.area] > 0 && !picked.has(q.uid)) { take(q); need--; }
+        }
+      }
+      for (const b of areas) {
+        for (const q of order(bank.filter((x) => x.area === b.area && x.type === 'mcq'))) {
+          if (left[b.area] <= 0) break;
+          if (!picked.has(q.uid)) take(q);
+        }
+      }
+      // 보충: 같은 과목에서 아직 안 뽑힌 문제(유형 무관)
+      if (result[subject].length < PER_SUBJECT) {
+        for (const q of order(bank.filter((x) => x.subject === subject))) {
+          if (result[subject].length >= PER_SUBJECT) break;
+          if (!picked.has(q.uid)) { picked.add(q.uid); result[subject].push(q); }
+        }
+      }
+      result[subject] = shuffle(result[subject], rnd);
+    }
+    return result[1].concat(result[2]);
+  }
+
+  // ===== 상태 =====
+  let bank = [];
+  let exam = null;      // { seed, uids, answers, startedAt, remain, idx }
+  let questions = [];   // exam.uids 에 해당하는 문제 객체
+  let tick = null;
+
+  function bankByUid() { return new Map(bank.map((q) => [q.uid, q])); }
+
+  function recentUids() {
+    const hist = store.get(LS.history, []);
+    return new Set(hist.slice(0, RECENT_KEEP).flatMap((h) => h.uids || []));
+  }
+
+  function startExam(seed) {
+    const qs = buildExam(bank, seed, recentUids());
+    beginWith(seed, qs);
+  }
+
+  // 정해진 문제 목록으로 시험 시작 (새 시험지·다시 풀기 공용)
+  function beginWith(seed, qs) {
+    exam = { seed, uids: qs.map((q) => q.uid), answers: Array(qs.length).fill(0), remain: EXAM_SECONDS, idx: 0, startedAt: Date.now() };
+    questions = qs;
+    saveCurrent();
+    showExam();
+  }
+
+  function saveCurrent() { if (exam) store.set(LS.current, exam); }
+
+  function show(view) {
+    for (const v of ['view-start', 'view-exam', 'view-result']) $(v).classList.toggle('hidden', v !== view);
+    window.scrollTo(0, 0);
+  }
+
+  // ===== 시작 화면 =====
+  function renderStart() {
+    const counts = {};
+    for (const q of bank) {
+      counts[q.area] = counts[q.area] || { mcq: 0, box3: 0, box4: 0 };
+      counts[q.area][q.type]++;
+    }
+    const tb = $('blueprint-body');
+    tb.textContent = '';
+    for (const b of BLUEPRINT) {
+      const c = counts[b.area] || { mcq: 0, box3: 0, box4: 0 };
+      const tr = el('tr');
+      tr.append(el('td', 'num', `${b.subject}과목`), el('td', '', b.name), el('td', 'num', String(b.count)),
+        el('td', 'num', `${c.mcq} / ${c.box3} / ${c.box4}`));
+      tb.append(tr);
+    }
+    $('type-rule').textContent =
+      `유형 배분: 1과목 보기형 ${BOX_TARGET[1].box3 + BOX_TARGET[1].box4}문항(가나다 ${BOX_TARGET[1].box3} · 가나다라 ${BOX_TARGET[1].box4}), ` +
+      `2과목 보기형 ${BOX_TARGET[2].box3 + BOX_TARGET[2].box4}문항(가나다 ${BOX_TARGET[2].box3} · 가나다라 ${BOX_TARGET[2].box4}), 나머지는 일반 4지선다. ` +
+      `문제은행 총 ${bank.length}문항. 보기형이 모자라면 일반 문제로 채웁니다.`;
+
+    const btn = $('btn-new');
+    btn.disabled = false;
+    btn.textContent = '🎲 새 모의고사 만들기 (50문항 · 60분)';
+
+    const cur = store.get(LS.current, null);
+    if (cur && cur.uids && cur.remain > 0) {
+      const done = cur.answers.filter((a) => a > 0).length;
+      $('resume-text').textContent = `풀던 시험지 #${cur.seed} · ${done}/50 답함 · 남은 시간 ${fmt(cur.remain)}`;
+      $('resume-box').classList.remove('hidden');
+    } else {
+      $('resume-box').classList.add('hidden');
+    }
+
+    const hist = store.get(LS.history, []);
+    const h = $('history');
+    if (hist.length) {
+      h.textContent = '';
+      const t = el('table');
+      const head = el('tr');
+      for (const s of ['날짜', '시험지', '1과목', '2과목', '평균', '결과', '']) head.append(el('th', 'num', s));
+      t.append(head);
+      for (const r of hist.slice(0, 10)) {
+        const tr = el('tr');
+        tr.append(el('td', 'num', new Date(r.at).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' })),
+          el('td', 'num', `#${r.seed}`), el('td', 'num', String(r.s1)), el('td', 'num', String(r.s2)),
+          el('td', 'num', String(r.avg)), el('td', 'num', r.pass ? '합격' : '불합격'));
+        const td = el('td', 'num');
+        const map = bankByUid();
+        if (r.uids && r.uids.every((u) => map.has(u))) {
+          const b = el('button', 'btn btn-small', '다시 풀기');
+          b.addEventListener('click', () => beginWith(r.seed, r.uids.map((u) => map.get(u))));
+          td.append(b);
+        }
+        tr.append(td);
+        t.append(tr);
+      }
+      h.append(t);
+    }
+  }
+
+  // ===== 시험 화면 =====
+  function fmt(sec) {
+    const m = Math.floor(sec / 60), s = sec % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  function showExam() {
+    show('view-exam');
+    buildOmr();
+    renderQuestion();
+    clearInterval(tick);
+    let last = Date.now();
+    tick = setInterval(() => {
+      const now = Date.now();
+      exam.remain -= Math.round((now - last) / 1000);
+      last = now;
+      if (exam.remain <= 0) { exam.remain = 0; updateHead(); submit(true); return; }
+      updateHead();
+      saveCurrent();
+    }, 1000);
+    updateHead();
+  }
+
+  function updateHead() {
+    const t = $('timer');
+    t.textContent = fmt(exam.remain);
+    t.classList.toggle('warn', exam.remain <= 300);
+    const done = exam.answers.filter((a) => a > 0).length;
+    $('progress').textContent = `${exam.idx + 1}번 / 50 · 답함 ${done}`;
+  }
+
+  function buildOmr() {
+    for (const s of [1, 2]) {
+      const box = $(`omr-${s}`);
+      box.textContent = '';
+      for (let i = (s - 1) * 25; i < s * 25; i++) {
+        const b = el('button', '', String(i + 1));
+        b.addEventListener('click', () => { exam.idx = i; renderQuestion(); });
+        box.append(b);
+      }
+    }
+  }
+
+  function refreshOmr() {
+    const all = [...$('omr-1').children, ...$('omr-2').children];
+    all.forEach((b, i) => {
+      b.classList.toggle('done', exam.answers[i] > 0);
+      b.classList.toggle('now', i === exam.idx);
+    });
+  }
+
+  // 문제 한 개를 카드에 그린다 (시험·해설 화면 공용)
+  function drawQuestion(container, q, no, chosen, onPick, reveal) {
+    const meta = el('div', 'q-meta');
+    meta.append(el('span', 'tag subj', `${q.subject}과목`), el('span', 'tag', q.area_name));
+    if (q.type !== 'mcq') meta.append(el('span', `tag ${q.type}`, TYPE_LABEL[q.type]));
+    container.append(meta);
+
+    const qt = el('p', 'q-text');
+    qt.append(el('span', 'no', `${no}.`), document.createTextNode(q.question));
+    container.append(qt);
+
+    if (q.image) {
+      const img = el('img', 'q-image');
+      img.src = q.image;
+      img.alt = '문제 그림';
+      img.loading = 'lazy';
+      container.append(img);
+    }
+    if (q.box && q.box.length) {
+      const bx = el('div', 'box');
+      bx.append(el('div', 'box-title', '< 보 기 >'));
+      for (const line of q.box) {
+        const m = line.match(/^\s*([가-힣A-Za-z])\s*[:.)]\s*(.*)$/);
+        const row = el('div', 'box-item');
+        row.append(el('b', '', m ? m[1] + '.' : '·'), el('span', '', m ? m[2] : line));
+        bx.append(row);
+      }
+      container.append(bx);
+    }
+    const opts = el('div', 'opts');
+    q.options.forEach((o, i) => {
+      const b = el('button', 'opt');
+      b.append(el('span', 'mark', MARKS[i]), el('span', '', o));
+      if (chosen === i + 1) b.classList.add('sel');
+      if (reveal) {
+        if (q.answer === i + 1) b.classList.add('right');
+        else if (chosen === i + 1) b.classList.add('wrong');
+        b.disabled = true;
+      } else {
+        b.addEventListener('click', () => onPick(i + 1));
+      }
+      opts.append(b);
+    });
+    container.append(opts);
+  }
+
+  function renderQuestion() {
+    const card = $('q-card');
+    card.textContent = '';
+    const i = exam.idx;
+    drawQuestion(card, questions[i], i + 1, exam.answers[i], (n) => {
+      exam.answers[i] = exam.answers[i] === n ? 0 : n;  // 같은 보기를 다시 누르면 선택 취소
+      saveCurrent();
+      renderQuestion();
+    }, false);
+    $('btn-prev').disabled = i === 0;
+    $('btn-next').textContent = i === 49 ? '제출 ▶' : '다음 ▶';
+    refreshOmr();
+    updateHead();
+  }
+
+  // ===== 채점 =====
+  function submit(timeUp) {
+    if (!timeUp) {
+      const blank = exam.answers.filter((a) => a === 0).length;
+      const msg = blank ? `아직 ${blank}문항에 답하지 않았습니다. 제출할까요?` : '제출하고 채점할까요?';
+      if (!confirm(msg)) return;
+    }
+    clearInterval(tick);
+    const correct = questions.map((q, i) => exam.answers[i] === q.answer);
+    const s1 = correct.slice(0, 25).filter(Boolean).length * 4;
+    const s2 = correct.slice(25).filter(Boolean).length * 4;
+    const avg = (s1 + s2) / 2;
+    const pass = s1 >= 40 && s2 >= 40 && avg >= 70;
+    const used = EXAM_SECONDS - exam.remain;
+
+    const hist = store.get(LS.history, []);
+    hist.unshift({ at: Date.now(), seed: exam.seed, s1, s2, avg, pass, used, uids: exam.uids });
+    store.set(LS.history, hist.slice(0, 30));
+    store.del(LS.current);
+    renderResult({ correct, s1, s2, avg, pass, used, timeUp });
+  }
+
+  function renderResult(r) {
+    show('view-result');
+    $('s1').textContent = r.s1;
+    $('s2').textContent = r.s2;
+    $('savg').textContent = r.avg;
+    const v = $('verdict');
+    v.className = `verdict ${r.pass ? 'pass' : 'fail'}`;
+    let reason = '';
+    if (!r.pass) {
+      if (r.s1 < 40 || r.s2 < 40) reason = ' (과락: 40점 미만 과목 있음)';
+      else reason = ' (평균 70점 미만)';
+    }
+    v.textContent = r.pass ? '🎉 합격' : `불합격${reason}`;
+    $('result-meta').textContent = `시험지 #${exam.seed} · 풀이 시간 ${fmt(r.used)}${r.timeUp ? ' (시간 종료 자동 제출)' : ''} · 정답 ${r.correct.filter(Boolean).length}/50`;
+
+    // 영역별 정답률
+    const stat = {};
+    questions.forEach((q, i) => {
+      stat[q.area] = stat[q.area] || { ok: 0, n: 0 };
+      stat[q.area].n++;
+      if (r.correct[i]) stat[q.area].ok++;
+    });
+    const rows = BLUEPRINT.filter((b) => stat[b.area])
+      .sort((a, b) => stat[a.area].ok / stat[a.area].n - stat[b.area].ok / stat[b.area].n);
+    const ab = $('area-body');
+    ab.textContent = '';
+    for (const b of rows) {
+      const s = stat[b.area];
+      const tr = el('tr');
+      tr.append(el('td', 'num', `${b.subject}과목`), el('td', '', b.name), el('td', 'num', `${s.ok}/${s.n} (${Math.round(s.ok / s.n * 100)}%)`));
+      ab.append(tr);
+    }
+
+    // 결과 답안지
+    for (const s of [1, 2]) {
+      const box = $(`romr-${s}`);
+      box.textContent = '';
+      for (let i = (s - 1) * 25; i < s * 25; i++) {
+        const b = el('button', r.correct[i] ? 'ok' : 'ng', String(i + 1));
+        b.addEventListener('click', () => {
+          $('only-wrong').checked = false;
+          renderReview(r.correct);
+          const t = document.getElementById(`rv-${i}`);
+          if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        box.append(b);
+      }
+    }
+    renderReview(r.correct);
+    $('only-wrong').onchange = () => renderReview(r.correct);
+  }
+
+  function renderReview(correct) {
+    const onlyWrong = $('only-wrong').checked;
+    const box = $('review');
+    box.textContent = '';
+    questions.forEach((q, i) => {
+      if (onlyWrong && correct[i]) return;
+      const item = el('div', 'review-item');
+      item.id = `rv-${i}`;
+      drawQuestion(item, q, i + 1, exam.answers[i], null, true);
+      const status = exam.answers[i] === 0 ? '미응답' : correct[i] ? '정답' : `오답 (내 답 ${MARKS[exam.answers[i] - 1]})`;
+      item.append(el('p', 'muted', `${status} · 정답 ${MARKS[q.answer - 1]}${q.page_ref ? ' · ' + q.page_ref : ''}`));
+      if (q.explanation) item.append(el('div', 'exp', q.explanation));
+      if (q.trap_tip) item.append(el('div', 'trap', `⚠️ ${q.trap_tip}`));
+      box.append(item);
+    });
+    if (!box.children.length) box.append(el('p', 'muted', '틀린 문제가 없습니다. 👏'));
+  }
+
+  // ===== 이벤트 =====
+  const newSeed = () => 100000 + Math.floor(Math.random() * 900000);
+  $('btn-new').addEventListener('click', () => startExam(newSeed()));
+  $('btn-resume').addEventListener('click', () => {
+    const cur = store.get(LS.current, null);
+    const map = bankByUid();
+    if (!cur || !cur.uids.every((u) => map.has(u))) { alert('이어서 풀 시험지를 찾지 못했습니다. 새로 만들어 주세요.'); return; }
+    exam = cur;
+    questions = cur.uids.map((u) => map.get(u));
+    showExam();
+  });
+  $('btn-prev').addEventListener('click', () => { if (exam.idx > 0) { exam.idx--; renderQuestion(); } });
+  $('btn-next').addEventListener('click', () => {
+    if (exam.idx < 49) { exam.idx++; renderQuestion(); } else submit(false);
+  });
+  $('btn-submit').addEventListener('click', () => submit(false));
+  $('btn-omr').addEventListener('click', () => $('omr-wrap').classList.toggle('hidden'));
+  $('btn-again').addEventListener('click', () => startExam(newSeed()));
+  // 같은 시험지: 방금 푼 문제 목록·순서를 그대로 다시 쓴다
+  $('btn-retry').addEventListener('click', () => {
+    beginWith(exam.seed, questions);
+  });
+  document.addEventListener('keydown', (e) => {
+    if ($('view-exam').classList.contains('hidden')) return;
+    if (e.key === 'ArrowLeft') $('btn-prev').click();
+    else if (e.key === 'ArrowRight') $('btn-next').click();
+    else if (['1', '2', '3', '4'].includes(e.key)) {
+      const b = $('q-card').querySelectorAll('.opt')[Number(e.key) - 1];
+      if (b) b.click();
+    }
+  });
+
+  // ===== 시작 =====
+  fetch('exam_bank.json')
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then((data) => { bank = data; renderStart(); })
+    .catch(() => { $('btn-new').textContent = '문제은행(exam_bank.json)을 불러오지 못했습니다'; });
+})();
+</script>
+</body>
+</html>
