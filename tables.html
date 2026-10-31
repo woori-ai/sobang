@@ -1818,8 +1818,8 @@
       <div class="table-card-header">
         <div class="table-card-title-group">
           <span class="table-id-badge">T-18</span>
-          <h2 class="table-card-title">🔔 화재감지기 부착높이별 기준면적 & 객석유도등 산출식</h2>
-          <span class="table-card-sub">차동식·정온식·연기감지기 내화/기타 바닥면적 기준</span>
+          <h2 class="table-card-title">🔔 감지기 설치유효면적 & 객석유도등 산출식</h2>
+          <span class="table-card-sub">부착높이(4m 미만, 4~8m) 및 구조별 감지기 설치유효면적 (단위: ㎡)</span>
         </div>
         <a href="./index.html?round=2-1-3" class="btn-table-quiz" target="_blank" rel="noopener noreferrer">
           <span>📝 관련 기출 14문항 ▶</span>
@@ -1829,40 +1829,60 @@
         <table class="cheat-table">
           <thead>
             <tr>
-              <th style="width: 25%;">감지기 종류</th>
-              <th style="width: 35%;">부착높이 4m 미만 (내화구조 / 기타)</th>
-              <th style="width: 40%;">부착높이 4m 이상 ~ 8m 미만 (내화구조 / 기타)</th>
+              <th style="width: 18%;">부착높이</th>
+              <th style="width: 14%;">구조</th>
+              <th style="width: 14%;">차동식·보상식<br>1종</th>
+              <th style="width: 14%;">차동식·보상식<br>2종</th>
+              <th style="width: 14%;">정온식<br>특종</th>
+              <th style="width: 13%;">정온식<br>1종</th>
+              <th style="width: 13%;">정온식<br>2종</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>차동식 스포트형 (1종)</strong></td>
-              <td><span class="blur-val num-val">90 ㎡</span> / <span class="blur-val num-val">50 ㎡</span></td>
-              <td><span class="blur-val num-val">45 ㎡</span> / <span class="blur-val num-val">30 ㎡</span></td>
+              <td rowspan="2"><strong>4 m 미만</strong></td>
+              <td><strong>내화구조</strong></td>
+              <td><span class="blur-val num-val">90 ㎡</span></td>
+              <td><span class="blur-val num-val">70 ㎡</span></td>
+              <td><span class="blur-val num-val">70 ㎡</span></td>
+              <td><span class="blur-val num-val">60 ㎡</span></td>
+              <td><span class="blur-val num-val font-semibold text-rose-500">20 ㎡</span></td>
             </tr>
             <tr>
-              <td><strong>차동식 스포트형 (2종)</strong></td>
-              <td><span class="blur-val num-val">70 ㎡</span> / <span class="blur-val num-val">40 ㎡</span></td>
-              <td><span class="blur-val num-val">35 ㎡</span> / <span class="blur-val num-val">25 ㎡</span></td>
+              <td>기타구조</td>
+              <td><span class="blur-val num-val">50 ㎡</span></td>
+              <td><span class="blur-val num-val">40 ㎡</span></td>
+              <td><span class="blur-val num-val">40 ㎡</span></td>
+              <td><span class="blur-val num-val">30 ㎡</span></td>
+              <td><span class="blur-val num-val font-semibold text-rose-500">15 ㎡</span></td>
             </tr>
             <tr>
-              <td><strong>정온식 스포트형 (특종)</strong></td>
-              <td><span class="blur-val num-val">70 ㎡</span> / <span class="blur-val num-val">40 ㎡</span></td>
-              <td><span class="blur-val num-val">35 ㎡</span> / <span class="blur-val num-val">25 ㎡</span></td>
+              <td rowspan="2"><strong>4 m 이상<br>8 m 미만</strong></td>
+              <td><strong>내화구조</strong></td>
+              <td><span class="blur-val num-val">45 ㎡</span></td>
+              <td><span class="blur-val num-val">35 ㎡</span></td>
+              <td><span class="blur-val num-val">35 ㎡</span></td>
+              <td><span class="blur-val num-val">30 ㎡</span></td>
+              <td><span class="badge-red">- (설치불가)</span></td>
             </tr>
             <tr>
-              <td><strong>정온식 스포트형 (1종)</strong></td>
-              <td><span class="blur-val num-val">60 ㎡</span> / <span class="blur-val num-val">30 ㎡</span></td>
-              <td><span class="blur-val num-val">30 ㎡</span> / <span class="blur-val num-val">15 ㎡</span></td>
+              <td>기타구조</td>
+              <td><span class="blur-val num-val">30 ㎡</span></td>
+              <td><span class="blur-val num-val">25 ㎡</span></td>
+              <td><span class="blur-val num-val">25 ㎡</span></td>
+              <td><span class="blur-val num-val">15 ㎡</span></td>
+              <td><span class="badge-red">- (설치불가)</span></td>
             </tr>
             <tr>
-              <td><strong>연기감지기 (1·2종)</strong></td>
-              <td><span class="blur-val num-val">150 ㎡</span> (계단 수직 <span class="blur-val num-val">15m마다</span>)</td>
-              <td><span class="blur-val num-val">75 ㎡</span></td>
+              <td colspan="2"><strong>연기감지기 (1·2종)</strong></td>
+              <td colspan="5">
+                • <strong>바닥면적:</strong> 4m 미만 <span class="blur-val num-val">150 ㎡</span> / 4m 이상 8m 미만 <span class="blur-val num-val">75 ㎡</span><br>
+                • <strong>계단·경사로:</strong> 수직거리 <span class="blur-val num-val">15 m 마다</span> 1개 (1·2종 기준)
+              </td>
             </tr>
             <tr>
-              <td><strong>객석유도등 설치 개수</strong></td>
-              <td colspan="2">
+              <td colspan="2"><strong>객석유도등 설치 개수</strong></td>
+              <td colspan="5">
                 <strong>공식:</strong> $\frac{\text{통로 직선거리 (m)}}{4} - 1$ &nbsp;&nbsp;(계산값에 소수점이 나오면 올림 후 1을 뺌)
               </td>
             </tr>
@@ -1870,7 +1890,7 @@
         </table>
       </div>
       <div class="table-card-footer">
-        💡 <strong>계산 꿀팁:</strong> 가장 흔한 <strong>차동식 2종 내화구조</strong>는 <strong>70㎡</strong>마다 1개, 4~8m는 절반인 <strong>35㎡</strong>입니다!
+        💡 <strong>핵심 암기 공식:</strong> <strong>차동식 2종</strong>과 <strong>정온식 특종</strong>은 기준면적이 완전히 같습니다! (내화 70 / 35, 기타 40 / 25). <strong>정온식 2종은 4m 이상 설치 불가(-)</strong>라는 점이 단골 출제 포인트입니다!
       </div>
     </div>
 
