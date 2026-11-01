@@ -2324,13 +2324,13 @@
       </div>
     </div>
 
-    <!-- C13: 건폐율 & 용적률 산정 -->
+    <!-- C13: 연면적·건폐율 & 용적률 산정 -->
     <div class="calc-card" data-cat="law" id="calc-c13">
       <div class="calc-card-header">
         <div class="calc-title-group">
           <span class="calc-id-badge">C-13</span>
-          <h2 class="calc-card-title">건축법 건폐율 및 용적률 산정 공식</h2>
-          <span class="calc-card-sub">대지면적, 건축면적 및 용적률 산정 시 연면적 제외 4총사</span>
+          <h2 class="calc-card-title">건축법 연면적·건폐율 및 용적률 산정 공식</h2>
+          <span class="calc-card-sub">연면적(지하층 포함) 정의 및 용적률 산정 시 제외 4총사</span>
         </div>
         <a href="./index.html?round=3-1" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
           <span>📝 관련 기출 10문항 풀기 ▶</span>
@@ -2340,6 +2340,8 @@
         <div class="formula-box">
           <div class="formula-title">📌 핵심 산출 공식</div>
           <div class="formula-content">
+            • <strong>연면적 = 하나의 건축물 각 층의 바닥면적 합계 (<span class="badge-blue">지하층 포함!</span>)</strong><br>
+            • <strong>용적률 산정용 연면적 = 전체 연면적 － (<span class="badge-blue">지하층</span> ＋ 지상 부설주차장 ＋ 피난안전구역 ＋ 옥상 대피공간)</strong><br>
             • <strong>건폐율 (%) = ( 건축면적 ÷ 대지면적 ) × 100</strong><br>
             • <strong>용적률 (%) = ( 용적률 산정용 연면적 ÷ 대지면적 ) × 100</strong>
           </div>
@@ -2351,8 +2353,8 @@
         <div class="tip-box">
           <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
           <div class="tip-content">
-            <span class="tip-rule-badge">지하층 삭제의 법칙</span>
-            일반 연면적(총면적)에는 지하층이 당연히 포함되지만, <strong>용적률 계산할 때는 지하층 면적을 무조건 빼버려야 합니다!</strong><br>
+            <span class="tip-rule-badge">지하층 처리의 법칙</span>
+            소방시설 기준 및 일반 <strong>연면적(총면적)에는 지하층이 무조건 포함</strong>되지만, <strong>용적률 계산할 때는 지하층 면적을 반드시 제외</strong>해야 합니다!<br>
             문제에 "연면적 3,000㎡(지하층 1,000㎡ 포함), 대지면적 1,000㎡"로 주어지면 용적률 분자에는 3,000이 아니라 지하를 뺀 <strong>2,000㎡</strong>를 넣어야 정답입니다! (용적률 = 2,000 ÷ 1,000 × 100 = 200%)
           </div>
         </div>
@@ -2360,15 +2362,17 @@
         <div class="example-box">
           <div class="example-header">
             <span class="example-badge">실전 기출 대표 예제</span>
-            <span class="decimal-tag decimal-ceil">지하층 제외 연면적 분자 적용</span>
+            <span class="decimal-tag decimal-ceil">지하층 포함 연면적 vs 용적률</span>
           </div>
           <div class="example-question">
-            [문제] 대지면적 2,500 ㎡, 건축면적 1,000 ㎡, 연면적 2,500 ㎡(지하층 없음)인 건축물의 건폐율과 용적률은?
+            [문제] 대지면적 1,000 ㎡, 건축면적 500 ㎡이고, 각 층 바닥면적이 지하 1층 400 ㎡, 지상 1~4층 각 400 ㎡인 건축물의 연면적, 건폐율, 용적률은?
           </div>
           <div class="example-solution">
-            1) 건폐율 = (1,000 ÷ 2,500) × 100 = <strong>40%</strong><br>
-            2) 용적률 = (2,500 ÷ 2,500) × 100 = <strong>100%</strong><br>
-            ➔ 정답: <strong>건폐율 40%, 용적률 100%</strong>
+            1) <strong>연면적</strong> = 지하 1층(400) ＋ 지상 1~4층(400 × 4) = <strong>2,000 ㎡</strong> (지하층 포함!)<br>
+            2) <strong>건폐율</strong> = (500 ÷ 1,000) × 100 = <strong>50%</strong><br>
+            3) <strong>용적률 산정용 연면적</strong> = 2,000 － 400(지하층 제외) = <strong>1,600 ㎡</strong><br>
+            4) <strong>용적률</strong> = (1,600 ÷ 1,000) × 100 = <strong>160%</strong><br>
+            ➔ 정답: <strong>연면적 2,000 ㎡, 건폐율 50%, 용적률 160%</strong>
           </div>
         </div>
       </div>
