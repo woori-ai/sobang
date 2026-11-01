@@ -1957,15 +1957,67 @@
       </div>
       <div class="calc-card-body">
         <div class="formula-box">
-          <div class="formula-title">📌 핵심 산출 공식</div>
+          <div class="formula-title">📌 핵심 산출 공식 & 감지기 설치유효면적 기준표 (단위: ㎡)</div>
           <div class="formula-content">
             <strong>설치 개수 = 바닥면적(㎡) ÷ 기준면적(㎡) &nbsp;&nbsp;(※ 소수점 발생 시 <span class="blur-calc">무조건 올림</span>)</strong>
           </div>
-          <div class="formula-params">
-            • 차동식 2종 (4m 미만): 내화구조 <span class="blur-calc">70 ㎡</span> / 기타구조 <span class="blur-calc">40 ㎡</span><br>
-            • 차동식 2종 (4m~8m 미만): 내화구조 <span class="blur-calc">35 ㎡</span> / 기타구조 <span class="blur-calc">25 ㎡</span><br>
-            • 차동식 1종 (4m 미만): 내화구조 <span class="blur-calc">90 ㎡</span> / 기타구조 <span class="blur-calc">50 ㎡</span><br>
-            • 연기감지기 (1·2종): 4m 미만 <span class="blur-calc">150 ㎡</span> / 4m~8m 미만 <span class="blur-calc">75 ㎡</span> (계단은 수직 15m마다 1개)
+          <div style="overflow-x: auto; margin-top: 12px;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.85rem; background:#161b22; border-radius:8px; overflow:hidden; border:1px solid #30363d; text-align:center;">
+              <thead>
+                <tr style="background:#21262d; color:#f0f6fc; border-bottom:1px solid #30363d;">
+                  <th style="padding:8px 10px; width:18%;">부착높이</th>
+                  <th style="padding:8px 10px; width:14%;">구조</th>
+                  <th style="padding:8px 10px; width:14%;">차동식·보상식<br>1종</th>
+                  <th style="padding:8px 10px; width:14%;">차동식·보상식<br>2종</th>
+                  <th style="padding:8px 10px; width:14%;">정온식<br>특종</th>
+                  <th style="padding:8px 10px; width:13%;">정온식<br>1종</th>
+                  <th style="padding:8px 10px; width:13%;">정온식<br>2종</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #21262d;">
+                  <td rowspan="2" style="padding:8px 10px; font-weight:700; color:#e6edf3; background:rgba(255,255,255,0.02); border-right:1px solid #21262d;">4 m 미만</td>
+                  <td style="padding:8px 10px; font-weight:700; color:#79c0ff; border-right:1px solid #21262d;">내화구조</td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">90 ㎡</span></td>
+                  <td style="padding:8px 10px; font-weight:700; color:#7ee787;"><span class="blur-calc">70 ㎡</span></td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">70 ㎡</span></td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">60 ㎡</span></td>
+                  <td style="padding:8px 10px; color:#ff7b72; font-weight:700;"><span class="blur-calc">20 ㎡</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #21262d;">
+                  <td style="padding:8px 10px; color:#8b949e; border-right:1px solid #21262d;">기타구조</td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">50 ㎡</span></td>
+                  <td style="padding:8px 10px; font-weight:700; color:#7ee787;"><span class="blur-calc">40 ㎡</span></td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">40 ㎡</span></td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">30 ㎡</span></td>
+                  <td style="padding:8px 10px; color:#ff7b72; font-weight:700;"><span class="blur-calc">15 ㎡</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #21262d;">
+                  <td rowspan="2" style="padding:8px 10px; font-weight:700; color:#e6edf3; background:rgba(255,255,255,0.02); border-right:1px solid #21262d;">4 m 이상<br>8 m 미만</td>
+                  <td style="padding:8px 10px; font-weight:700; color:#79c0ff; border-right:1px solid #21262d;">내화구조</td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">45 ㎡</span></td>
+                  <td style="padding:8px 10px; font-weight:700; color:#7ee787;"><span class="blur-calc">35 ㎡</span></td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">35 ㎡</span></td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">30 ㎡</span></td>
+                  <td style="padding:8px 10px; color:#ff7b72; font-weight:700;">- (설치불가)</td>
+                </tr>
+                <tr style="border-bottom:1px solid #21262d;">
+                  <td style="padding:8px 10px; color:#8b949e; border-right:1px solid #21262d;">기타구조</td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">30 ㎡</span></td>
+                  <td style="padding:8px 10px; font-weight:700; color:#7ee787;"><span class="blur-calc">25 ㎡</span></td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">25 ㎡</span></td>
+                  <td style="padding:8px 10px;"><span class="blur-calc">15 ㎡</span></td>
+                  <td style="padding:8px 10px; color:#ff7b72; font-weight:700;">- (설치불가)</td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="padding:8px 10px; font-weight:700; color:#d2a8ff; border-right:1px solid #21262d;">연기감지기 (1·2종)</td>
+                  <td colspan="5" style="padding:8px 10px; text-align:left; color:#c9d1d9;">
+                    • <strong>바닥면적:</strong> 4m 미만 <span class="blur-calc">150 ㎡</span> / 4m 이상 8m 미만 <span class="blur-calc">75 ㎡</span><br>
+                    • <strong>계단·경사로:</strong> 수직거리 <span class="blur-calc">15 m 마다</span> 1개 (1·2종 기준)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
