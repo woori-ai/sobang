@@ -1951,7 +1951,7 @@
           <h2 class="calc-card-title">화재감지기 적정 설치 개수 산정 (바닥면적 ÷ 기준면적)</h2>
           <span class="calc-card-sub">차동식·정온식·연기감지기 내화/기타 및 높이별 기준</span>
         </div>
-        <a href="./index.html?round=2-1-3" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+        <a href="./index.html?round=2-2-2" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
           <span>📝 관련 기출 14문항 풀기 ▶</span>
         </a>
       </div>
@@ -2224,8 +2224,8 @@
           <h2 class="calc-card-title">특정소방대상물 수용인원 산정 공식</h2>
           <span class="calc-card-sub">숙박시설(침대 유/무), 강의실, 강당 및 반올림 원칙</span>
         </div>
-        <a href="./index.html?round=1-3" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
-          <span>📝 관련 기출 2문항 풀기 ▶</span>
+        <a href="./index.html?id=134" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 (134번 풀기) ▶</span>
         </a>
       </div>
       <div class="calc-card-body">
@@ -2265,6 +2265,121 @@
             1) 객실 인원: 158 ÷ 3 = 52.66 ➔ 반올림하여 53명<br>
             2) 총 수용인원 = 종사자 5명 + 53명 = <strong>58명</strong><br>
             ➔ 정답: <strong>58명</strong>
+          </div>
+        </div>
+
+        <!-- C-10 전용 4문항 집중 드릴 -->
+        <div class="drill-section" id="drill-c10" style="margin-top: 18px; border-top: 1px solid #30363d; padding-top: 16px;">
+          <div class="drill-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="background: #238636; color: #fff; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;">집중 훈련 드릴</span>
+              <h3 style="font-size: 1rem; font-weight: 700; color: #f0f6fc; margin: 0;">수용인원 실전 4문항 30초 컷 드릴</h3>
+            </div>
+            <button type="button" class="btn-toggle-expl" id="btn-drill-c10-toggle-all" onclick="toggleSectionDrillExpl('drill-c10', 'btn-drill-c10-toggle-all')" style="background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; cursor: pointer;">
+              전체 정답·해설 보기
+            </button>
+          </div>
+
+          <div class="drill-list" style="display: flex; flex-direction: column; gap: 14px;">
+            <!-- D1 -->
+            <div class="drill-item" id="drill-c10-q1">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q1</span>
+                <span class="drill-q-text">바닥면적이 <strong>200 ㎡</strong>인 학원 <strong>강의실</strong>의 법정 수용인원은?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q1', 1, 2)">
+                  <span>①</span> <span>100명</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q1', 2, 2)">
+                  <span>②</span> <span>105명</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q1', 3, 2)">
+                  <span>③</span> <span>106명</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q1', 4, 2)">
+                  <span>④</span> <span>110명</span>
+                </button>
+              </div>
+              <div class="drill-feedback">
+                💡 <strong>정답: ② 105명</strong> | 강의실 기준면적 1.9㎡: 200 ÷ 1.9 = 105.26 ➔ <strong>반올림하여 105명</strong>
+              </div>
+            </div>
+
+            <!-- D2 -->
+            <div class="drill-item" id="drill-c10-q2">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q2</span>
+                <span class="drill-q-text">고정식 의자가 없는 <strong>종교시설</strong>로서 바닥면적이 <strong>500 ㎡</strong>인 예배당의 수용인원은?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q2', 1, 2)">
+                  <span>①</span> <span>108명</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q2', 2, 2)">
+                  <span>②</span> <span>109명</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q2', 3, 2)">
+                  <span>③</span> <span>110명</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q2', 4, 2)">
+                  <span>④</span> <span>263명</span>
+                </button>
+              </div>
+              <div class="drill-feedback">
+                💡 <strong>정답: ② 109명</strong> | 강당·종교시설(고정의자X) 기준면적 4.6㎡: 500 ÷ 4.6 = 108.69 ➔ <strong>반올림하여 109명</strong>
+              </div>
+            </div>
+
+            <!-- D3 -->
+            <div class="drill-item" id="drill-c10-q3">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q3</span>
+                <span class="drill-q-text">종사자 <strong>3명</strong>, 1인용 침대 20개, <strong>2인용 침대 10개</strong>가 있는 숙박시설의 수용인원은?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q3', 1, 3)">
+                  <span>①</span> <span>33명</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q3', 2, 3)">
+                  <span>②</span> <span>40명</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q3', 3, 3)">
+                  <span>③</span> <span>43명</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q3', 4, 3)">
+                  <span>④</span> <span>45명</span>
+                </button>
+              </div>
+              <div class="drill-feedback">
+                💡 <strong>정답: ③ 43명</strong> | 침대 있는 숙박시설: 종사자 수(3) ＋ 침대 수[20 ＋ (10 × 2 = 20)] = 3 ＋ 40 = <strong>43명</strong>
+              </div>
+            </div>
+
+            <!-- D4 -->
+            <div class="drill-item" id="drill-c10-q4">
+              <div class="drill-q-head">
+                <span class="drill-q-num">Q4</span>
+                <span class="drill-q-text">소방시설법령상 특정소방대상물의 <strong>수용인원 산정 방법</strong>으로 <strong>옳지 않은</strong> 것은?</span>
+              </div>
+              <div class="drill-options">
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q4', 1, 4)">
+                  <span>①</span> <span>침대 없는 숙박시설: 종사자 수 ＋ (바닥면적 ÷ 3㎡)</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q4', 2, 4)">
+                  <span>②</span> <span>강의실, 교무실, 실습실: 바닥면적 ÷ 1.9㎡</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q4', 3, 4)">
+                  <span>③</span> <span>수용인원 산정 시 소수점 이하는 반올림한다.</span>
+                </button>
+                <button type="button" class="drill-opt-btn" onclick="selectDrill('drill-c10-q4', 4, 4)">
+                  <span>④</span> <span>강당, 문화·집회, 운동시설: 바닥면적 ÷ 1.9㎡</span>
+                </button>
+              </div>
+              <div class="drill-feedback">
+                💡 <strong>정답: ④</strong> | 강당, 집회시설, 운동시설은 <strong>4.6㎡</strong>로 나눕니다! (1.9㎡는 학교·학원 강의실 기준)
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2329,7 +2444,7 @@
           <h2 class="calc-card-title">건축물 방화구획 최소 개수 산정 공식</h2>
           <span class="calc-card-sub">10층 이하(1천㎡) / 11층 이상(200㎡, 500㎡) & 스프링클러 3배</span>
         </div>
-        <a href="./index.html?round=1-3" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+        <a href="./index.html?round=3-1" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
           <span>📝 관련 기출 2문항 풀기 ▶</span>
         </a>
       </div>
@@ -2442,7 +2557,7 @@
           <h2 class="calc-card-title">위험물 저장·취급 지정수량 배수 산출 공식</h2>
           <span class="calc-card-sub">동일 장소 복수 위험물 저장 시 배수 합산 판정</span>
         </div>
-        <a href="./index.html?round=1-2" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+        <a href="./index.html?round=5-1" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
           <span>📝 관련 기출 3문항 풀기 ▶</span>
         </a>
       </div>
@@ -2497,7 +2612,7 @@
           <h2 class="calc-card-title">가연성 가스 연소범위 및 폭발 위험도(H) 산출 공식</h2>
           <span class="calc-card-sub">상한계(U)와 하한계(L)에 따른 위험도 지수 산출</span>
         </div>
-        <a href="./index.html?round=1-3" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+        <a href="./index.html?round=4-1" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
           <span>📝 관련 기출 2문항 풀기 ▶</span>
         </a>
       </div>
