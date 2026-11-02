@@ -1283,26 +1283,77 @@
       </div>
       <div class="calc-card-body">
         <div class="formula-box">
-          <div class="formula-title">📌 핵심 산출 공식</div>
-          <div class="formula-content">
-            • 옥내소화전: <strong>Q = N × <span class="blur-calc">2.6</span> ㎥</strong> (최대 <span class="blur-calc">N = 2</span>개) (30층 이상 고층은 N × 5.2 ㎥)<br>
+          <div class="formula-title">📌 소화설비별 핵심 산출 공식 & 저수량 기준</div>
+          
+          <!-- 1. 옥내소화전 층수별 기준표 (NFTC 102 vs NFTC 604) -->
+          <div style="margin: 8px 0 12px 0;">
+            <div style="font-size: 0.95rem; font-weight: 700; color: #58a6ff; margin-bottom: 6px;">
+              • 옥내소화전: <strong>Q = N × 저수량</strong>
+            </div>
+            <div style="overflow-x: auto;">
+              <table style="width:100%; border-collapse:collapse; font-size:0.86rem; background:#161b22; border-radius:8px; overflow:hidden; border:1px solid #30363d; text-align:center;">
+                <thead>
+                  <tr style="background:#21262d; color:#f0f6fc; border-bottom:1px solid #30363d;">
+                    <th style="padding:7px 10px;">층수 구분</th>
+                    <th style="padding:7px 10px;">적용 기준</th>
+                    <th style="padding:7px 10px;">N의 상한</th>
+                    <th style="padding:7px 10px;">방수시간</th>
+                    <th style="padding:7px 10px;">1대당 저수량</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid #21262d;">
+                    <td style="padding:7px 10px; font-weight:700; color:#e6edf3;">29층 이하 (일반)</td>
+                    <td style="padding:7px 10px; color:#8b949e;">NFTC 102</td>
+                    <td style="padding:7px 10px; color:#79c0ff; font-weight:700;"><span class="blur-calc">최대 2개</span></td>
+                    <td style="padding:7px 10px; color:#c9d1d9;">20분</td>
+                    <td style="padding:7px 10px; color:#58a6ff; font-weight:800;"><span class="blur-calc">2.6 ㎥</span></td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #21262d;">
+                    <td style="padding:7px 10px; font-weight:700; color:#e6edf3;">30층 ~ 49층 (준초고층)</td>
+                    <td style="padding:7px 10px; color:#8b949e;">NFTC 604</td>
+                    <td style="padding:7px 10px; color:#ff7b72; font-weight:700;"><span class="blur-calc">최대 5개</span></td>
+                    <td style="padding:7px 10px; color:#c9d1d9;">40분</td>
+                    <td style="padding:7px 10px; color:#ff7b72; font-weight:800;"><span class="blur-calc">5.2 ㎥</span></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:7px 10px; font-weight:700; color:#e6edf3;">50층 이상 (초고층)</td>
+                    <td style="padding:7px 10px; color:#8b949e;">NFTC 604</td>
+                    <td style="padding:7px 10px; color:#ff7b72; font-weight:700;"><span class="blur-calc">최대 5개</span></td>
+                    <td style="padding:7px 10px; color:#c9d1d9;">60분</td>
+                    <td style="padding:7px 10px; color:#ff7b72; font-weight:800;"><span class="blur-calc">7.8 ㎥</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 2. 옥외소화전, 스프링클러, 옥상수조 -->
+          <div style="font-size:0.92rem; color:#f0f6fc; line-height:1.6; margin-top:8px; border-top:1px dashed #30363d; padding-top:8px;">
             • 옥외소화전: <strong>Q = N × <span class="blur-calc">7.0</span> ㎥</strong> (최대 <span class="blur-calc">N = 2</span>개)<br>
             • 스프링클러: <strong>Q = N × <span class="blur-calc">1.6</span> ㎥</strong> (아파트 10개, 10층이하 20개, 11층이상/지하가 30개)<br>
-            • 옥상수조 저수량: <strong>유효수량의 1/3 이상</strong> (옥내/스프링클러 적용, 옥외는 제외)
+            • 옥상수조 저수량: <strong>유효수량의 1/3 이상</strong> (옥내·스프링클러 적용, 옥외는 제외)
           </div>
           <div class="formula-params">
-            * N은 가장 많이 설치된 층의 소화전 개수 (단, 옥내와 옥외 모두 2개를 초과하면 2개만 적용!)
+            ※ N 산정: 가장 많이 설치된 층의 개수 기준 (일반건축물·옥외소화전은 최대 2개 / 30층 이상 고층건축물은 최대 5개 적용!)
           </div>
         </div>
 
         <div class="tip-box">
           <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
           <div class="tip-content">
-            <span class="tip-rule-badge">최대 2개 함정 킬러</span>
-            건물 전체에 소화전이 50개가 있든, 한 층에 5개가 있든 <strong>N의 최댓값은 무조건 2</strong>입니다!<br>
-            • 옥내소화전 수원은 1개면 <strong>2.6 ㎥</strong>, 2개 이상이면 <strong>무조건 5.2 ㎥</strong>입니다.<br>
-            • 옥외소화전 수원은 1개면 <strong>7.0 ㎥</strong>, 2개 이상이면 <strong>무조건 14.0 ㎥</strong>입니다.<br>
-            (옥상수조를 물어보면 옥내 기준 5.2의 1/3인 <strong>1.74 ㎥</strong>를 찾으면 1초 컷!)
+            <div style="margin-bottom:8px;">
+              <span class="tip-rule-badge">29층 이하 일반 & 옥외</span>
+              한 층에 소화전이 몇 개가 있든 <strong>N의 최댓값은 무조건 2</strong>!<br>
+              • <strong>옥내</strong>: 1개면 <strong>2.6 ㎥</strong>, 2개 이상이면 무조건 <strong>5.2 ㎥</strong> (옥상수조 1/3은 <strong>1.74 ㎥</strong>)<br>
+              • <strong>옥외</strong>: 1개면 <strong>7.0 ㎥</strong>, 2개 이상이면 무조건 <strong>14.0 ㎥</strong>
+            </div>
+            <div style="border-top:1px dashed rgba(255,255,255,0.15); padding-top:6px;">
+              <span class="tip-rule-badge" style="background:rgba(255,123,114,0.25); color:#ff7b72; border:1px solid rgba(255,123,114,0.4);">30층 이상 고층 함정 돌파</span>
+              층수가 30층 이상이면 <strong>N 상한선이 5개</strong>로 풀립니다! (NFTC 604)<br>
+              • <strong>30~49층</strong> (40분 방수): <strong>N × 5.2 ㎥</strong> (ex: 각 층 3개 ➔ 3 × 5.2 = <strong>15.6 ㎥</strong>)<br>
+              • <strong>50층 이상</strong> (60분 방수): <strong>N × 7.8 ㎥</strong> (ex: 각 층 4개 ➔ 4 × 7.8 = <strong>31.2 ㎥</strong>)
+            </div>
           </div>
         </div>
 
