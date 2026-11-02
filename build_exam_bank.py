@@ -1,6 +1,6 @@
 """모의고사용 문제은행(exam_bank.json) 생성 스크립트.
 
-기존 문제 4종(questions_mcq / questions_box / cards_75 / calc_37)을 하나의 형식으로 모으고,
+기존 문제 4종(questions_mcq / questions_box / cards_75 / calc_37)과 교재 기반 보강 문제(questions_extra)를 하나의 형식으로 모으고,
 실제 시험 구성(1과목 25문항 + 2과목 25문항)에 맞춰 과목·영역을 자동 분류한다.
 
 실행: python build_exam_bank.py
@@ -24,7 +24,10 @@ AREAS: dict[str, tuple[int, str]] = {
     "A5": (1, "공사장·화기취급·종합방재실"),
     "A6": (1, "소방시설의 종류·구조·기준"),
     "B1": (2, "소방시설 점검·실습"),
-    "B2": (2, "소방계획·자위소방대·교육훈련·응급처치"),
+    "B2": (2, "소방계획·자위소방대·화재대응·피난"),
+    "B3": (2, "소방안전교육 및 훈련"),
+    "B4": (2, "작동점검표·업무수행기록 작성"),
+    "B5": (2, "구조 및 응급처치"),
 }
 
 # 소방시설 문제 중 '점검·실습'(2과목)으로 보낼 단서
@@ -56,8 +59,10 @@ def classify_mcq(q: dict[str, Any]) -> str:
     # '소화기'에도 '화기'가 들어 있으므로 화기취급은 구체적인 낱말로만 판별한다
     if re.search(r"화기취급|화기 취급|화기작업|용접|용단|비화기|공사장|방재실|특수가연물", meta + body):
         return "A5"
-    if re.search(r"소방계획|자위소방대|교육|훈련|응급|심폐|피난계획", meta):
-        return "B2"
+    if re.search(r"응급|심폐|CPR|화상|지혈", meta + body):
+        return "B5"
+    if re.search(r"소방계획|자위소방대|교육|훈련|피난계획", meta):
+        return "B3" if re.search(r"교육|훈련", body) and not re.search(r"자위소방대|소방계획", body) else "B2"
     if re.search(r"점검표|점검 실습|점검실습|펌프성능|서식|점검실무", meta):
         return "B1"
     if re.search(r"건축|피난방화|방화구획", meta):
@@ -76,7 +81,7 @@ def classify_mcq(q: dict[str, Any]) -> str:
 
 CARD_AREA: dict[str, str] = {
     "01": "A1", "02": "A1", "03": "A1", "04": "A1",
-    "05": "A2", "06": "A3", "07": "A4", "11": "B2",
+    "05": "A2", "06": "A3", "07": "A4", "11": "B5",
 }
 
 
@@ -96,6 +101,12 @@ CALC_AREA: dict[str, str] = {
     "07": "A4",              # 위험물 지정수량 배수
     "02": "A6", "03": "A6", "04": "A6",  # 소화기·감지기·유도등 개수(설치 기준)
     "06": "B1",              # 수계설비·펌프 성능
+}
+
+
+EXTRA_AREA: dict[str, str] = {
+    "B2a": "B2", "B2b": "B2", "B2c": "B4", "B3": "B3", "B4": "B4", "B5": "B5",
+    "A3": "A3", "A4": "A4", "A5": "A5",
 }
 
 
@@ -142,6 +153,8 @@ def main() -> None:
         if q.get("is_duplicate"):
             continue  # 다른 세트와 겹친다고 표시된 문항은 제외
         bank.append(make_item("card", q, classify_card(q)))
+    for q in load("questions_extra.json"):
+        bank.append(make_item("extra", q, EXTRA_AREA[q["area_code"]]))
     for q in load("calc_37.json"):
         bank.append(make_item("calc", q, CALC_AREA.get(q["type_id"], "A1")))
 
