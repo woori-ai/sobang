@@ -297,19 +297,22 @@
   'use strict';
 
   // ===== 출제 기준 (과목·영역별 문항 수) =====
-  // 실제 시험: 1과목 25 + 2과목 25. 영역 배분은 교재 분량과 기출 빈도를 반영한 기본값.
+  // 실제 시험: 1과목 25 + 2과목 25. 영역은 교재 p.370 공식 시험과목을 묶은 것이며, 배분은 교재 분량을 반영한 기본값.
   const BLUEPRINT = [
-    { area: 'A1', subject: 1, name: '소방안전관리제도·소방관계법령', count: 9 },
+    { area: 'A1', subject: 1, name: '소방안전관리제도·소방관계법령', count: 8 },
     { area: 'A2', subject: 1, name: '건축관계법령·피난/방화시설', count: 4 },
     { area: 'A3', subject: 1, name: '소방학개론(연소·화재·소화)', count: 3 },
     { area: 'A4', subject: 1, name: '위험물·전기·가스 안전관리', count: 2 },
-    { area: 'A5', subject: 1, name: '공사장·화기취급·종합방재실', count: 2 },
+    { area: 'A5', subject: 1, name: '공사장·화기취급·종합방재실', count: 3 },
     { area: 'A6', subject: 1, name: '소방시설의 종류·구조·기준', count: 5 },
-    { area: 'B1', subject: 2, name: '소방시설 점검·실습', count: 19 },
-    { area: 'B2', subject: 2, name: '소방계획·자위소방대·교육훈련·응급처치', count: 6 },
+    { area: 'B1', subject: 2, name: '소방시설 점검·실습', count: 12 },
+    { area: 'B2', subject: 2, name: '소방계획·자위소방대·화재대응·피난', count: 5 },
+    { area: 'B3', subject: 2, name: '소방안전교육 및 훈련', count: 3 },
+    { area: 'B4', subject: 2, name: '작동점검표·업무수행기록 작성', count: 3 },
+    { area: 'B5', subject: 2, name: '구조 및 응급처치', count: 2 },
   ];
   // 과목별 <보기> 고르기 문항 목표 (가나다 / 가나다라). 모자라면 일반 4지선다로 채운다.
-  const BOX_TARGET = { 1: { box3: 4, box4: 3 }, 2: { box3: 2, box4: 1 } };
+  const BOX_TARGET = { 1: { box3: 4, box4: 3 }, 2: { box3: 3, box4: 3 } };
   const PER_SUBJECT = 25;
   const EXAM_SECONDS = 60 * 60;
   const RECENT_KEEP = 3;   // 최근 n회 시험에 나온 문제는 뒤로 미룸
