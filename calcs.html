@@ -1940,7 +1940,7 @@
     </div>
 
     <!-- ======================================================== -->
-    <!-- PART 2. 🚨 경보 & 피난설비 계산 (C06 ~ C09) -->
+    <!-- PART 2. 🚨 경보·방화구획 & 소화기 계산 (C06 ~ C09) -->
     <!-- ======================================================== -->
 
     <!-- C06: 감지기 개수 산정 -->
@@ -2101,54 +2101,56 @@
       </div>
     </div>
 
-    <!-- C08: 객석유도등 설치 개수 산정 -->
+    <!-- C08: 방화구획 개수 산정 -->
     <div class="calc-card" data-cat="alarm" id="calc-c08">
       <div class="calc-card-header">
         <div class="calc-title-group">
           <span class="calc-id-badge">C-08</span>
-          <h2 class="calc-card-title">객석유도등 설치 개수 산정 공식</h2>
-          <span class="calc-card-sub">통로 직선거리(L) 기준 4m 간격 배치 공식</span>
+          <h2 class="calc-card-title">건축물 방화구획 최소 개수 산정 공식</h2>
+          <span class="calc-card-sub">10층 이하(1천㎡) / 11층 이상(200㎡, 500㎡) & 스프링클러 3배</span>
         </div>
-        <a href="./index.html?round=2-2-4" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
-          <span>📝 관련 기출 6문항 풀기 ▶</span>
+        <a href="./index.html?round=3-1" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 2문항 풀기 ▶</span>
         </a>
       </div>
       <div class="calc-card-body">
         <div class="formula-box">
           <div class="formula-title">📌 핵심 산출 공식</div>
           <div class="formula-content">
-            <strong>설치 개수 = ( 통로 직선거리 L ÷ <span class="blur-calc">4</span> ) − <span class="blur-calc">1</span></strong>
+            • <strong>10층 이하</strong>: 바닥면적 ÷ <strong><span class="blur-calc">1,000 ㎡</span></strong> (SP 설치 시 <span class="blur-calc">3,000 ㎡</span>)<br>
+            • <strong>11층 이상 (일반)</strong>: 바닥면적 ÷ <strong><span class="blur-calc">200 ㎡</span></strong> (SP 설치 시 <span class="blur-calc">600 ㎡</span>)<br>
+            • <strong>11층 이상 (불연마감)</strong>: 바닥면적 ÷ <strong><span class="blur-calc">500 ㎡</span></strong> (SP 설치 시 <span class="blur-calc">1,500 ㎡</span>)
           </div>
           <div class="formula-params">
-            * L ÷ 4 계산 결과에 소수점이 발생하면 <strong>소수점을 무조건 올림한 후 1을 차감</strong>합니다.
+            * 방화구획 개수 계산 시 발생하는 소수점은 <strong>무조건 올림</strong>합니다.
           </div>
         </div>
 
         <div class="tip-box">
           <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
           <div class="tip-content">
-            <span class="tip-rule-badge">4로 나누고 올린 뒤 -1</span>
-            계산 순서를 절대 잊지 마세요!<br>
-            <strong>1) 길이를 4로 나눈다 ➔ 2) 소수점이 있으면 무조건 올린다 ➔ 3) 마지막에 1을 뺀다!</strong><br>
-            • 통로 길이 58m: 58 ÷ 4 = 14.5 ➔ 올림 15 ➔ 15 − 1 = <strong>14개!</strong><br>
-            • 통로 길이 30m: 30 ÷ 4 = 7.5 ➔ 올림 8 ➔ 8 − 1 = <strong>7개!</strong><br>
-            • 통로 길이 20m: 20 ÷ 4 = 5 (정수) ➔ 5 − 1 = <strong>4개!</strong>
+            <span class="tip-rule-badge">스프링클러 3배 완화 곱셈</span>
+            문제에 <strong>"스프링클러가 설치된..."</strong> 조건이 나오면 나누는 기준면적에 <strong>무조건 3을 곱하세요!</strong><br>
+            • 10층 이하는 1,000 × 3 = <strong>3,000 ㎡</strong><br>
+            • 11층 이상 일반은 200 × 3 = <strong>600 ㎡</strong><br>
+            • 11층 이상 불연마감은 500 × 3 = <strong>1,500 ㎡</strong><br>
+            나눈 결과 1.1개가 나오면 1개가 아니라 무조건 <strong>2개</strong>로 올림합니다!
           </div>
         </div>
 
         <div class="example-box">
           <div class="example-header">
             <span class="example-badge">실전 기출 대표 예제</span>
-            <span class="decimal-tag decimal-ceil">🟢 올림 후 1 차감</span>
+            <span class="decimal-tag decimal-ceil">🟢 무조건 올림</span>
           </div>
           <div class="example-question">
-            [문제] 영화상영관 객석 통로의 직선부분 길이가 58 m일 때 설치해야 할 객석유도등의 최소 개수는?
+            [문제] 바닥면적이 15,000 ㎡인 12층(스프링클러 설치, 내장재는 불연재료 아님)의 최소 방화구획 수는?
           </div>
           <div class="example-solution">
-            1) 58 ÷ 4 = 14.5<br>
-            2) 소수점 올림 ➔ 15<br>
-            3) 1 차감: 15 − 1 = <strong>14개</strong><br>
-            ➔ 정답: <strong>14개</strong>
+            1) 11층 이상 층 기준: 200 ㎡<br>
+            2) 스프링클러 3배 완화: 200 × 3 = 600 ㎡<br>
+            3) 구획 수: 15,000 ÷ 600 = <strong>25개</strong><br>
+            ➔ 정답: <strong>25개</strong>
           </div>
         </div>
       </div>
@@ -2556,56 +2558,54 @@
       </div>
     </div>
 
-    <!-- C12: 방화구획 개수 산정 -->
+    <!-- C12: 객석유도등 설치 개수 산정 -->
     <div class="calc-card" data-cat="law" id="calc-c12">
       <div class="calc-card-header">
         <div class="calc-title-group">
           <span class="calc-id-badge">C-12</span>
-          <h2 class="calc-card-title">건축물 방화구획 최소 개수 산정 공식</h2>
-          <span class="calc-card-sub">10층 이하(1천㎡) / 11층 이상(200㎡, 500㎡) & 스프링클러 3배</span>
+          <h2 class="calc-card-title">객석유도등 설치 개수 산정 공식</h2>
+          <span class="calc-card-sub">통로 직선거리(L) 기준 4m 간격 배치 공식</span>
         </div>
-        <a href="./index.html?round=3-1" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
-          <span>📝 관련 기출 2문항 풀기 ▶</span>
+        <a href="./index.html?round=2-2-4" class="btn-calc-quiz" target="_blank" rel="noopener noreferrer">
+          <span>📝 관련 기출 6문항 풀기 ▶</span>
         </a>
       </div>
       <div class="calc-card-body">
         <div class="formula-box">
           <div class="formula-title">📌 핵심 산출 공식</div>
           <div class="formula-content">
-            • <strong>10층 이하</strong>: 바닥면적 ÷ <strong><span class="blur-calc">1,000 ㎡</span></strong> (SP 설치 시 <span class="blur-calc">3,000 ㎡</span>)<br>
-            • <strong>11층 이상 (일반)</strong>: 바닥면적 ÷ <strong><span class="blur-calc">200 ㎡</span></strong> (SP 설치 시 <span class="blur-calc">600 ㎡</span>)<br>
-            • <strong>11층 이상 (불연마감)</strong>: 바닥면적 ÷ <strong><span class="blur-calc">500 ㎡</span></strong> (SP 설치 시 <span class="blur-calc">1,500 ㎡</span>)
+            <strong>설치 개수 = ( 통로 직선거리 L ÷ <span class="blur-calc">4</span> ) − <span class="blur-calc">1</span></strong>
           </div>
           <div class="formula-params">
-            * 방화구획 개수 계산 시 발생하는 소수점은 <strong>무조건 올림</strong>합니다.
+            * L ÷ 4 계산 결과에 소수점이 발생하면 <strong>소수점을 무조건 올림한 후 1을 차감</strong>합니다.
           </div>
         </div>
 
         <div class="tip-box">
           <div class="tip-title">⚡ 시험장 3초 컷 마스터 꿀팁</div>
           <div class="tip-content">
-            <span class="tip-rule-badge">스프링클러 3배 완화 곱셈</span>
-            문제에 <strong>"스프링클러가 설치된..."</strong> 조건이 나오면 나누는 기준면적에 <strong>무조건 3을 곱하세요!</strong><br>
-            • 10층 이하는 1,000 × 3 = <strong>3,000 ㎡</strong><br>
-            • 11층 이상 일반은 200 × 3 = <strong>600 ㎡</strong><br>
-            • 11층 이상 불연마감은 500 × 3 = <strong>1,500 ㎡</strong><br>
-            나눈 결과 1.1개가 나오면 1개가 아니라 무조건 <strong>2개</strong>로 올림합니다!
+            <span class="tip-rule-badge">4로 나누고 올린 뒤 -1</span>
+            계산 순서를 절대 잊지 마세요!<br>
+            <strong>1) 길이를 4로 나눈다 ➔ 2) 소수점이 있으면 무조건 올린다 ➔ 3) 마지막에 1을 뺀다!</strong><br>
+            • 통로 길이 58m: 58 ÷ 4 = 14.5 ➔ 올림 15 ➔ 15 − 1 = <strong>14개!</strong><br>
+            • 통로 길이 30m: 30 ÷ 4 = 7.5 ➔ 올림 8 ➔ 8 − 1 = <strong>7개!</strong><br>
+            • 통로 길이 20m: 20 ÷ 4 = 5 (정수) ➔ 5 − 1 = <strong>4개!</strong>
           </div>
         </div>
 
         <div class="example-box">
           <div class="example-header">
             <span class="example-badge">실전 기출 대표 예제</span>
-            <span class="decimal-tag decimal-ceil">🟢 무조건 올림</span>
+            <span class="decimal-tag decimal-ceil">🟢 올림 후 1 차감</span>
           </div>
           <div class="example-question">
-            [문제] 바닥면적이 15,000 ㎡인 12층(스프링클러 설치, 내장재는 불연재료 아님)의 최소 방화구획 수는?
+            [문제] 영화상영관 객석 통로의 직선부분 길이가 58 m일 때 설치해야 할 객석유도등의 최소 개수는?
           </div>
           <div class="example-solution">
-            1) 11층 이상 층 기준: 200 ㎡<br>
-            2) 스프링클러 3배 완화: 200 × 3 = 600 ㎡<br>
-            3) 구획 수: 15,000 ÷ 600 = <strong>25개</strong><br>
-            ➔ 정답: <strong>25개</strong>
+            1) 58 ÷ 4 = 14.5<br>
+            2) 소수점 올림 ➔ 15<br>
+            3) 1 차감: 15 − 1 = <strong>14개</strong><br>
+            ➔ 정답: <strong>14개</strong>
           </div>
         </div>
       </div>
