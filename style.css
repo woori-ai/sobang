@@ -1670,3 +1670,20 @@ body {
     padding: 14px 12px 40px;
   }
 }
+
+
+.round-nav-item .tab-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #c9d1d9;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin-left: auto;
+}
+.round-nav-item.active .tab-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border-color: transparent;
+}
