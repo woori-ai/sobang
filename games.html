@@ -144,7 +144,7 @@
 
     /* 3. 게임 리스트 그리드 (슬림 컴팩트화) */
     .games-container {
-      max-width: 1080px;
+      max-width: 1240px;
       margin: 12px auto 40px;
       padding: 0 16px;
       width: 100%;
@@ -547,7 +547,7 @@
       border-color: rgba(63, 185, 80, 0.4);
     }
 
-    .excel-scroll-box {
+        .excel-scroll-box {
       width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -563,7 +563,7 @@
     .excel-table th,
     .excel-table td {
       border: 1px solid #30363d;
-      padding: 10px 14px;
+      padding: 8px 10px;
       vertical-align: middle;
     }
 
@@ -571,7 +571,7 @@
       background: #090d13;
       color: #6e7681;
       font-size: 0.72rem;
-      padding: 4px 10px;
+      padding: 4px 8px;
       text-align: center;
       font-weight: 600;
       letter-spacing: 1px;
@@ -605,35 +605,38 @@
     }
 
     .col-no {
-      width: 52px;
+      width: 44px;
+      min-width: 44px;
       text-align: center;
       font-weight: 700;
       color: #8b949e;
       background: #161b22;
       user-select: none;
       font-variant-numeric: tabular-nums;
+      padding: 6px 2px;
     }
 
     .col-title {
-      min-width: 210px;
+      min-width: 135px;
       font-weight: 700;
       color: #f0f6fc;
-      white-space: nowrap;
+      white-space: normal;
+      word-break: keep-all;
     }
 
     .game-item-title {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .game-item-title .icon {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       background: #21262d;
       border: 1px solid #30363d;
       border-radius: 6px;
@@ -641,10 +644,10 @@
     }
 
     .col-desc {
-      min-width: 300px;
+      min-width: 150px;
       color: #8b949e;
-      font-size: 0.83rem;
-      line-height: 1.45;
+      font-size: 0.82rem;
+      line-height: 1.4;
       word-break: keep-all;
     }
 
@@ -655,39 +658,45 @@
       border: 1px solid #30363d;
       border-radius: 4px;
       color: #c9d1d9;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       margin: 1px 2px;
     }
 
     .col-study {
-      width: 120px;
+      width: 85px;
+      min-width: 75px;
       text-align: center;
       white-space: nowrap;
+      padding: 6px 4px;
     }
 
     .col-action {
-      min-width: 180px;
+      width: 110px;
+      min-width: 95px;
       text-align: center;
       white-space: nowrap;
+      padding: 6px 4px;
     }
 
     .col-status {
-      width: 100px;
+      width: 70px;
+      min-width: 60px;
       text-align: center;
       white-space: nowrap;
+      padding: 6px 4px;
     }
 
     .excel-btn-study {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      padding: 6px 12px;
+      gap: 3px;
+      padding: 5px 8px;
       background: rgba(56, 139, 253, 0.12);
       border: 1px solid rgba(56, 139, 253, 0.4);
       color: #79c0ff;
       border-radius: 6px;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 700;
       text-decoration: none;
       cursor: pointer;
@@ -702,20 +711,22 @@
     }
 
     .excel-btn-play {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      padding: 7px 14px;
+      gap: 4px;
+      padding: 6px 8px;
       background: #238636;
       color: #ffffff;
       border-radius: 6px;
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       font-weight: 800;
       text-decoration: none;
       border: 1px solid rgba(255, 255, 255, 0.12);
       transition: all 0.2s ease;
       white-space: nowrap;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .excel-btn-play:hover {
@@ -724,10 +735,15 @@
       box-shadow: 0 4px 12px rgba(46, 160, 67, 0.35);
     }
 
+    /* A/B 듀얼 버튼: 위아래 세로 2단 배치로 B타입이 무조건 시원하게 보임! */
     .excel-dual-btns {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+      min-width: 90px;
+      max-width: 120px;
+      margin: 0 auto;
     }
 
     .excel-btn-play.btn-b {
@@ -742,41 +758,83 @@
     .excel-status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      font-size: 0.74rem;
+      gap: 4px;
+      font-size: 0.72rem;
       font-weight: 700;
       color: #3fb950;
       background: rgba(35, 134, 54, 0.15);
       border: 1px solid rgba(63, 185, 80, 0.4);
-      padding: 3px 9px;
+      padding: 3px 6px;
       border-radius: 12px;
       white-space: nowrap;
     }
 
     .excel-status-dot {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
       background: #3fb950;
       box-shadow: 0 0 6px #3fb950;
     }
 
-    @media (max-width: 768px) {
-      .excel-toolbar {
-        padding: 10px 12px;
+    @media (max-width: 1024px) {
+      .games-container {
+        padding: 0 8px;
+      }
+      .excel-table th, .excel-table td {
+        padding: 6px 5px;
+      }
+      .col-title {
+        min-width: 115px;
+        font-size: 0.8rem;
       }
       .col-desc {
-        min-width: 240px;
+        min-width: 130px;
+        font-size: 0.77rem;
+      }
+      .col-study {
+        width: 72px;
+        min-width: 68px;
+      }
+      .col-action {
+        width: 96px;
+        min-width: 85px;
       }
       .excel-btn-play {
-        padding: 6px 10px;
-        font-size: 0.78rem;
-      }
-      .excel-btn-study {
-        padding: 5px 8px;
-        font-size: 0.78rem;
+        padding: 5px 4px;
+        font-size: 0.75rem;
       }
     }
+
+    @media (max-width: 768px) {
+      .excel-toolbar {
+        padding: 8px 10px;
+      }
+      .col-status {
+        display: none !important;
+      }
+      .col-title {
+        min-width: 100px;
+        font-size: 0.76rem;
+      }
+      .col-desc {
+        min-width: 110px;
+        font-size: 0.73rem;
+      }
+      .col-action {
+        width: 88px;
+        min-width: 80px;
+      }
+      .excel-btn-play {
+        padding: 4px 4px;
+        font-size: 0.72rem;
+      }
+      .excel-btn-study {
+        padding: 4px 6px;
+        font-size: 0.72rem;
+      }
+    }
+
 
   </style>
 </head>
@@ -859,7 +917,7 @@
               <th>B</th>
               <th>C</th>
               <th>D</th>
-              <th>E</th>
+              <th class="col-status">E</th>
             </tr>
             <!-- 컬럼 명칭 헤더 -->
             <tr>
