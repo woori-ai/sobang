@@ -8,122 +8,212 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=1793666394838">
+  <link rel="stylesheet" href="style.css?v="1793666957457>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚒</text></svg>">
   <script>
-    // 모바일 브라우저 구버전 캐시 및 서비스워커 자동 강제 청소
-    if ('serviceWorker' in navigator) {
+    if ("serviceWorker" in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
-        for (const registration of registrations) {
-          registration.unregister();
-        }
+        for (const registration of registrations) registration.unregister();
       });
     }
-    if ('caches' in window) {
+    if ("caches" in window) {
       caches.keys().then(names => {
-        for (const name of names) {
-          caches.delete(name);
-        }
+        for (const name of names) caches.delete(name);
       });
     }
   </script>
 </head>
 <body>
   <div id="app-container">
-    <!-- 1. 상단 글로벌 헤더 -->
-    <header class="app-header">
-      <div class="header-top">
-        <div class="brand">
-          <span class="brand-icon">🚒</span>
-          <div class="brand-text">
-            <h1>소방안전관리자 1급</h1>
-            <span class="sub-title">합격 핵심 트레이닝 마스터</span>
-          </div>
+
+    <!-- 1. 최상단 고정 헤더 (study.html 규격 100% 동일) -->
+    <header class="app-topbar">
+      <div class="header-inner">
+        <div class="header-left">
+          <button class="btn-sidebar-toggle" id="btn-sidebar-toggle" onclick="toggleSidebar()" aria-label="메뉴 열기">
+            <span>☰</span>
+            <span>메뉴</span>
+          </button>
+          <a href="./index.html" class="brand" title="메인 화면으로 이동" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+            <span class="brand-icon" style="font-size:1.6rem;">🚒</span>
+            <div>
+              <div class="brand-title" style="font-size:0.95rem; font-weight:800; color:#f0f6fc;">소방안전관리자 1급</div>
+              <div class="brand-sub" style="font-size:0.75rem; color:#8b949e;">합격 핵심 트레이닝 마스터</div>
+            </div>
+          </a>
         </div>
-        <div class="header-actions">
+        <div class="header-actions" style="display:flex; align-items:center; gap:8px;">
           <button id="theme-toggle-btn" class="icon-btn" title="테마 변경">🌙</button>
           <button id="settings-btn" class="icon-btn" title="학습 초기화 / 설정">⚙️</button>
         </div>
       </div>
-
-      <!-- 종합 진도율 바 -->
-      <div class="progress-section">
-        <div class="progress-labels">
-          <span id="progress-summary">진도율 <strong id="progress-percent">0%</strong></span>
-          <span class="stats-badge">정답률 <strong id="accuracy-rate">-</strong> (<span id="answered-count">0</span>/<span id="total-pool-count">0</span>)</span>
-        </div>
-        <div class="progress-bar-track">
-          <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
-        </div>
-      </div>
     </header>
 
-    <!-- 2. 핵심 4대 탭 네비게이션 + 우측 게임 링크 -->
-    <nav class="nav-tabs">
-      <button class="nav-tab active" data-tab="mcq">
-        <span class="tab-icon">📝</span>
-        <span class="tab-name">4지선다</span>
-        <span class="tab-badge" id="badge-mcq">0</span>
-      </button>
-      <button class="nav-tab" data-tab="box">
-        <span class="tab-icon">📋</span>
-        <span class="tab-name">보기선택</span>
-        <span class="tab-badge" id="badge-box">0</span>
-      </button>
-      <button class="nav-tab" data-tab="cards">
-        <span class="tab-icon">🎴</span>
-        <span class="tab-name">핵심 75선</span>
-        <span class="tab-badge" id="badge-cards">0</span>
-      </button>
-      <button class="nav-tab" data-tab="calc">
-        <span class="tab-icon">🔢</span>
-        <span class="tab-name">계산 37선</span>
-        <span class="tab-badge" id="badge-calc">0</span>
-      </button>
-      <button class="nav-tab" data-tab="pic">
-        <span class="tab-icon">🖼️</span>
-        <span class="tab-name">그림 문제</span>
-        <span class="tab-badge" id="badge-pic">0</span>
-      </button>
-      <a href="./study.html" class="nav-tab nav-tab-link" title="1분 족집게 합격 요약노트" style="border-color: rgba(46, 160, 67, 0.4);">
-        <span class="tab-icon">📖</span>
-        <span class="tab-name">요약노트</span>
-        <span class="tab-badge link-badge" style="background: #238636;">HOT 🔥</span>
-      </a>
-      <a href="./exam.html" class="nav-tab nav-tab-link" title="50문항 60분 실전 모의고사 자동 생성" style="border-color: rgba(248, 81, 73, 0.5);">
-        <span class="tab-icon">📝</span>
-        <span class="tab-name">모의고사</span>
-        <span class="tab-badge link-badge" style="background: #da3633;">50제 ⏱</span>
-      </a>
-      <a href="./exam.html#notes" class="nav-tab nav-tab-link" title="모의고사에서 틀린 문제 모음 (날짜·시간별 자동 저장)" style="border-color: rgba(248, 81, 73, 0.5);">
-        <span class="tab-icon">📒</span>
-        <span class="tab-name">오답노트</span>
-      </a>
-      <a href="./tables.html" class="nav-tab nav-tab-link" title="한눈에 끝내는 핵심 비교 암기표 19선" style="border-color: rgba(56, 189, 248, 0.4);">
-        <span class="tab-icon">📊</span>
-        <span class="tab-name">비교표</span>
-        <span class="tab-badge link-badge" style="background: #0969da;">19선 ✨</span>
-      </a>
-      <a href="./calcs.html" class="nav-tab nav-tab-link" title="빈출 계산 공식 & 3초 컷 풀이 비법 15선" style="border-color: rgba(210, 153, 34, 0.4);">
-        <span class="tab-icon">🔢</span>
-        <span class="tab-name">계산공식</span>
-        <span class="tab-badge link-badge" style="background: #d29922; color: #0d1117;">15선 ⚡</span>
-      </a>
-      <a href="./notes.html" class="nav-tab nav-tab-link" title="3단계 마스터 합격 비법노트 (설비별 카드·법령 4칸표·단원 요약)" style="border-color: rgba(234, 179, 8, 0.4);">
-        <span class="tab-icon">📑</span>
-        <span class="tab-name">비법노트</span>
-        <span class="tab-badge link-badge" style="background: #eab308; color: #0d1117;">3종 📚</span>
-      </a>
-      <a href="./games.html" class="nav-tab nav-tab-link" title="소방 훈련 게임 센터 (게임 목록)">
-        <span class="tab-icon">🎮</span>
-        <span class="tab-name">소방 게임</span>
-        <span class="tab-badge link-badge">NEW 🎯</span>
-      </a>
-    </nav>
+    <!-- 2. 메인 2단 레이아웃 (좌측 메뉴 + 우측 본문) -->
+    <div class="app-layout">
+      <!-- 모바일 배경 딤 -->
+      <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar(false)"></div>
 
-    <!-- 3. 필터 & 도구 바 -->
-    <!-- 요약노트 라운드 딥링크 집중 훈련 알림 배너 -->
-    <div id="round-filter-banner" class="round-filter-banner" style="display: none;">
+      <!-- 좌측 세로 메뉴 (1번부터 12번까지 순서 완벽 배치) -->
+      <aside class="study-sidebar" id="study-sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">
+            <span>🚒</span>
+            <span>학습 & 목차 메뉴</span>
+          </div>
+          <button class="btn-sidebar-close" onclick="toggleSidebar(false)" aria-label="메뉴 닫기">✕</button>
+        </div>
+
+        <!-- 1단계: 핵심 이론 요약 (1~4번) -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            <span>📚</span>
+            <span>1단계: 핵심 이론 & 공식</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:5px;">
+            <!-- 1. 요약노트 -->
+            <a href="./study.html" class="global-nav-link" title="1분 족집게 합격 요약노트">
+              <div class="global-nav-link-left">
+                <span class="global-nav-icon">📖</span>
+                <span>1. 요약노트</span>
+              </div>
+              <span class="global-nav-badge badge-study">HOT 🔥</span>
+            </a>
+            <!-- 2. 비법노트 -->
+            <a href="./notes.html" class="global-nav-link" title="3단계 마스터 합격 비법노트">
+              <div class="global-nav-link-left">
+                <span class="global-nav-icon">📑</span>
+                <span>2. 비법노트</span>
+              </div>
+              <span class="global-nav-badge badge-notes">3종 📚</span>
+            </a>
+            <!-- 3. 비교표 -->
+            <a href="./tables.html" class="global-nav-link" title="핵심 비교 암기표 19선">
+              <div class="global-nav-link-left">
+                <span class="global-nav-icon">📊</span>
+                <span>3. 비교표</span>
+              </div>
+              <span class="global-nav-badge badge-tables">19선 ✨</span>
+            </a>
+            <!-- 4. 계산공식 -->
+            <a href="./calcs.html" class="global-nav-link" title="빈출 계산 공식 15선 & 3초 컷 풀이 비법">
+              <div class="global-nav-link-left">
+                <span class="global-nav-icon">🔢</span>
+                <span>4. 계산공식</span>
+              </div>
+              <span class="global-nav-badge badge-calcs">15선 ⚡</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="sidebar-section-divider"></div>
+
+        <!-- 2단계: 개념 워밍업 암기 (5~6번) -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            <span>🎴</span>
+            <span>2단계: 개념 워밍업</span>
+          </div>
+          <div class="part-round-list nav-tabs">
+            <!-- 5. 핵심 75선 -->
+            <button class="round-nav-item nav-tab" data-tab="cards">
+              <span class="round-nav-badge">75선</span>
+              <span class="round-nav-label">🎴 5. 핵심 75선</span>
+              <span class="tab-badge" id="badge-cards" style="margin-left:auto; font-size:0.75rem; background:rgba(255,255,255,0.15); padding:2px 7px; border-radius:10px;">0</span>
+            </button>
+            <!-- 6. 그림 문제 -->
+            <button class="round-nav-item nav-tab" data-tab="pic">
+              <span class="round-nav-badge">그림</span>
+              <span class="round-nav-label">🖼️ 6. 그림 문제</span>
+              <span class="tab-badge" id="badge-pic" style="margin-left:auto; font-size:0.75rem; background:rgba(255,255,255,0.15); padding:2px 7px; border-radius:10px;">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section-divider"></div>
+
+        <!-- 3단계: 실전 문제 풀이 (7~9번) -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            <span>📝</span>
+            <span>3단계: 실전 문제 풀이</span>
+          </div>
+          <div class="part-round-list nav-tabs">
+            <!-- 7. 4지선다 -->
+            <button class="round-nav-item nav-tab active" data-tab="mcq">
+              <span class="round-nav-badge">4지</span>
+              <span class="round-nav-label">📝 7. 4지선다</span>
+              <span class="tab-badge" id="badge-mcq" style="margin-left:auto; font-size:0.75rem; background:rgba(255,255,255,0.15); padding:2px 7px; border-radius:10px;">0</span>
+            </button>
+            <!-- 8. 보기선택 -->
+            <button class="round-nav-item nav-tab" data-tab="box">
+              <span class="round-nav-badge">선택</span>
+              <span class="round-nav-label">📋 8. 보기선택</span>
+              <span class="tab-badge" id="badge-box" style="margin-left:auto; font-size:0.75rem; background:rgba(255,255,255,0.15); padding:2px 7px; border-radius:10px;">0</span>
+            </button>
+            <!-- 9. 계산 37선 -->
+            <button class="round-nav-item nav-tab" data-tab="calc">
+              <span class="round-nav-badge">37선</span>
+              <span class="round-nav-label">🔢 9. 계산 37선</span>
+              <span class="tab-badge" id="badge-calc" style="margin-left:auto; font-size:0.75rem; background:rgba(255,255,255,0.15); padding:2px 7px; border-radius:10px;">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section-divider"></div>
+
+        <!-- 4단계: 실전 모의 & 게임 (10~12번) -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            <span>🏆</span>
+            <span>4단계: 모의 & 게임</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:5px;">
+            <!-- 10. 모의고사 -->
+            <a href="./exam.html" class="global-nav-link" title="50문항 60분 실전 모의고사">
+              <div class="global-nav-link-left">
+                <span class="global-nav-icon">⏱️</span>
+                <span>10. 모의고사</span>
+              </div>
+              <span class="global-nav-badge badge-exam">50제</span>
+            </a>
+            <!-- 11. 오답노트 -->
+            <a href="./exam.html#notes" class="global-nav-link" title="틀린 문제 모음">
+              <div class="global-nav-link-left">
+                <span class="global-nav-icon">📒</span>
+                <span>11. 오답노트</span>
+              </div>
+            </a>
+            <!-- 12. 소방 게임 -->
+            <a href="./games.html" class="global-nav-link" title="소방 게임 아케이드">
+              <div class="global-nav-link-left">
+                <span class="global-nav-icon">🎮</span>
+                <span>12. 소방 게임</span>
+              </div>
+              <span class="global-nav-badge badge-games">NEW</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 우측 메인 본문 영역 (1열 2열 가로 버튼 없이 시원하게 문제 노출) -->
+      <main class="study-main">
+        <div class="content-container">
+
+          <!-- 종합 진도율 바 카드 -->
+          <div class="app-header" style="margin-bottom:14px; background:#161b22; border:1px solid #30363d; border-radius:12px; padding:16px;">
+            <div class="progress-section">
+              <div class="progress-labels">
+                <span id="progress-summary">진도율 <strong id="progress-percent">0%</strong></span>
+                <span class="stats-badge">정답률 <strong id="accuracy-rate">-</strong> (<span id="answered-count">0</span>/<span id="total-pool-count">0</span>)</span>
+              </div>
+              <div class="progress-bar-track" style="margin-top:8px;">
+                <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="round-filter-banner" class="round-filter-banner" style="display: none;">
       <!-- JS 동적 주입 -->
     </div>
 
@@ -328,8 +418,28 @@
       </div>
     </div>
 
+        </div>
+      </main>
+    </div>
   </div>
 
-  <script src="app.js?v=20261029_v5"></script>
+  <script>
+    function toggleSidebar(open) {
+      const sidebar = document.getElementById("study-sidebar");
+      const backdrop = document.getElementById("sidebar-backdrop");
+      if (!sidebar || !backdrop) return;
+      if (open === undefined) {
+        sidebar.classList.toggle("open");
+        backdrop.classList.toggle("active");
+      } else if (open) {
+        sidebar.classList.add("open");
+        backdrop.classList.add("active");
+      } else {
+        sidebar.classList.remove("open");
+        backdrop.classList.remove("active");
+      }
+    }
+  </script>
+  <script src="app.js?v="1793666957457></script>
 </body>
 </html>
