@@ -106,7 +106,7 @@ CALC_AREA: dict[str, str] = {
 
 EXTRA_AREA: dict[str, str] = {
     "B2a": "B2", "B2b": "B2", "B2c": "B4", "B3": "B3", "B4": "B4", "B5": "B5",
-    "A3": "A3", "A4": "A4", "A5": "A5",
+    "A3": "A3", "A4": "A4", "A5": "A5", "A6": "A6",
 }
 
 
