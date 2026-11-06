@@ -687,7 +687,7 @@
       background: #0d1117;
       border: 1px solid #30363d;
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 10px 30px 10px 12px;
       font-size: 0.84rem;
       line-height: 1.45;
       color: #e6edf3;
@@ -695,6 +695,54 @@
       transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
       user-select: none;
       position: relative;
+    }
+    /* 카드별 [?] 물어보기 버튼 & 힌트 뱃지 */
+    .btn-card-hint {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #8b949e;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: all 0.2s ease;
+      z-index: 2;
+    }
+    .btn-card-hint:hover {
+      background: rgba(234, 179, 8, 0.25);
+      border-color: #f6e05e;
+      color: #f6e05e;
+      transform: scale(1.12);
+    }
+    .btn-card-hint.active {
+      background: #d29922;
+      border-color: #f6e05e;
+      color: #0d1117;
+    }
+    .penalty-hint-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(234, 179, 8, 0.18);
+      border: 1px solid rgba(234, 179, 8, 0.5);
+      color: #f6e05e;
+      margin-bottom: 6px;
+      animation: fadeInHint 0.2s ease-out;
+    }
+    @keyframes fadeInHint {
+      from { opacity: 0; transform: translateY(-3px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .penalty-item-card:hover:not(.matched) {
       border-color: #58a6ff;
@@ -2919,6 +2967,7 @@
     let selectedPenaltyTarget = null;
     let selectedPenaltyItem = null;
     let matchedPenaltyIds = new Set();
+    let hintRevealedIds = new Set(); // ? 물어보기로 표시된 카드 ID
 
     const PENALTY_TARGETS = [
       { id: "5y50m", label: "5년 / 5,000만 벌금" },
@@ -2995,6 +3044,7 @@
 
     function resetPenaltyGame() {
       matchedPenaltyIds.clear();
+      hintRevealedIds.clear();
       isReverseMode = false;
       selectedPenaltyTarget = null;
       selectedPenaltyItem = null;
@@ -3041,6 +3091,16 @@
 
     let shuffledPenaltyItems = shufflePenaltyArray(PENALTY_ITEMS);
 
+    function toggleCardHint(event, itemId) {
+      if (event) event.stopPropagation();
+      if (hintRevealedIds.has(itemId)) {
+        hintRevealedIds.delete(itemId);
+      } else {
+        hintRevealedIds.add(itemId);
+      }
+      renderPenaltyItems();
+    }
+
     function renderPenaltyItems(reshuffle = false) {
       const grid = document.getElementById('penalty-item-grid');
       if (!grid) return;
@@ -3050,11 +3110,19 @@
       grid.innerHTML = shuffledPenaltyItems.map(item => {
         const isMatched = matchedPenaltyIds.has(item.id);
         const isActive = selectedPenaltyItem === item.id;
+        const isHintOpen = hintRevealedIds.has(item.id);
+        const target = PENALTY_TARGETS.find(t => t.id === item.targetId);
+        const targetLabel = target ? target.label : '';
+
         return `
           <div class="penalty-item-card ${isMatched ? 'matched' : ''} ${isActive ? 'active' : ''}" 
                id="penalty-card-${item.id}"
                onclick="handlePenaltyItemClick(${item.id})">
-            ${item.text}
+            <button type="button" class="btn-card-hint ${isHintOpen ? 'active' : ''}" 
+                    onclick="toggleCardHint(event, ${item.id})" 
+                    title="벌금·과태료 물어보기">?</button>
+            ${isHintOpen ? `<div class="penalty-hint-badge">💡 ${targetLabel}</div>` : ''}
+            <div class="penalty-card-text">${item.text}</div>
           </div>
         `;
       }).join('');
