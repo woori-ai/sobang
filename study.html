@@ -580,6 +580,47 @@
       color: #58a6ff;
       border-color: #58a6ff;
     }
+    .btn-penalty-reverse {
+      background: #21262d;
+      border: 1px solid #d29922;
+      color: #e3b341;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-penalty-reverse:hover {
+      background: rgba(210, 153, 34, 0.2);
+      color: #f6e05e;
+      border-color: #f6e05e;
+    }
+    .btn-penalty-reverse.highlight {
+      background: #d29922;
+      color: #0d1117;
+      border-color: #f6e05e;
+      animation: pulseHighlight 1.5s infinite;
+    }
+    .btn-penalty-reverse.active {
+      background: #1f6feb;
+      color: #ffffff;
+      border-color: #388bfd;
+    }
+    @keyframes pulseHighlight {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(210, 153, 34, 0.4); }
+      50% { transform: scale(1.04); box-shadow: 0 0 14px rgba(210, 153, 34, 0.8); }
+    }
+    .penalty-item-card.unmatched-flash {
+      animation: unmatchFade 0.4s ease-out;
+    }
+    @keyframes unmatchFade {
+      0% { background: rgba(56, 189, 248, 0.35); border-color: #58a6ff; }
+      100% { background: #0d1117; border-color: #30363d; }
+    }
     .penalty-match-desc {
       font-size: 0.86rem;
       color: #8b949e;
@@ -821,7 +862,8 @@
               <span>특별 벌금 맞추기</span>
               <span class="penalty-match-status" id="penalty-match-status">0 / 30</span>
             </div>
-            <div class="penalty-match-actions">
+            <div class="penalty-match-actions" style="display:flex; align-items:center; gap:8px;">
+              <button type="button" class="btn-penalty-reverse" id="btn-penalty-reverse" onclick="togglePenaltyMode()">🔓 반대로 해제하기</button>
               <button type="button" class="btn-penalty-reset" onclick="resetPenaltyGame()">🔄 다시 섞기</button>
             </div>
           </div>
@@ -2870,8 +2912,10 @@
 
     // ----------------------------------------------------
     // 특별 벌금 맞추기 인터랙티브 트레이닝 엔진 (2-2 전용)
+    // (채우기 모드 ➔ 30/30 완성 후 반대로 해제 소거 모드 지원)
     // ----------------------------------------------------
     let penaltyGameInitialized = false;
+    let isReverseMode = false; // true: 초록색을 정답 맞춰 해제하는 소거 훈련
     let selectedPenaltyTarget = null;
     let selectedPenaltyItem = null;
     let matchedPenaltyIds = new Set();
@@ -2943,6 +2987,7 @@
 
     function initPenaltyGame() {
       penaltyGameInitialized = true;
+      isReverseMode = false;
       renderPenaltyTargets();
       renderPenaltyItems();
       updatePenaltyStatus();
@@ -2950,10 +2995,27 @@
 
     function resetPenaltyGame() {
       matchedPenaltyIds.clear();
+      isReverseMode = false;
       selectedPenaltyTarget = null;
       selectedPenaltyItem = null;
       renderPenaltyTargets();
       renderPenaltyItems(true);
+      updatePenaltyStatus();
+    }
+
+    // [방안 A] 반대로 해제하기 모드 토글
+    function togglePenaltyMode() {
+      isReverseMode = !isReverseMode;
+      selectedPenaltyTarget = null;
+      selectedPenaltyItem = null;
+
+      // 만약 해제 모드로 전환했는데 맞춘 항목이 없다면 30개 전체를 채운 후 해제 시작!
+      if (isReverseMode && matchedPenaltyIds.size === 0) {
+        PENALTY_ITEMS.forEach(it => matchedPenaltyIds.add(it.id));
+      }
+
+      renderPenaltyTargets();
+      renderPenaltyItems();
       updatePenaltyStatus();
     }
 
@@ -3000,15 +3062,51 @@
 
     function updatePenaltyStatus() {
       const statusEl = document.getElementById('penalty-match-status');
-      if (!statusEl) return;
+      const descEl = document.querySelector('.penalty-match-desc');
+      const revBtn = document.getElementById('btn-penalty-reverse');
       const count = matchedPenaltyIds.size;
       const total = PENALTY_ITEMS.length;
-      statusEl.textContent = `${count} / ${total} 완료`;
-      if (count === total && total > 0) {
-        statusEl.classList.add('complete');
-        statusEl.textContent = `🎉 전원 정답 완료 (${total}/${total})`;
+
+      if (!statusEl) return;
+
+      if (!isReverseMode) {
+        // [1] 기본 채우기 모드 (0 ➔ 30)
+        statusEl.textContent = `${count} / ${total} 완료`;
+        if (descEl) {
+          descEl.innerHTML = `상단 <b>벌금·과태료 금액</b>과 하단 <b>위반 내용</b>을 각각 클릭하여 짝을 맞춰보세요. (맞춘 항목은 색이 바뀌며 내용은 그대로 남아 계속 읽을 수 있습니다.)`;
+        }
+        if (revBtn) {
+          revBtn.classList.remove('active');
+          revBtn.textContent = '🔓 반대로 해제하기';
+          if (count === total && total > 0) {
+            revBtn.classList.add('highlight');
+          } else {
+            revBtn.classList.remove('highlight');
+          }
+        }
+        if (count === total && total > 0) {
+          statusEl.classList.add('complete');
+          statusEl.textContent = `🎉 전원 정답 완료 (${total}/${total}) - [반대로 해제하기] 가능!`;
+        } else {
+          statusEl.classList.remove('complete');
+        }
       } else {
-        statusEl.classList.remove('complete');
+        // [2] 역방향 소거 해제 모드 (30 ➔ 0)
+        statusEl.textContent = `남은 초록 카드: ${count} / ${total}`;
+        if (descEl) {
+          descEl.innerHTML = `🔓 <b>역방향 해제 훈련 중</b>: 상단 <b>벌금 금액</b>과 하단 <b>초록색 카드</b>를 매칭하여 하나씩 해제(소거)해 보세요! (올바르게 맞춰야만 초록색이 꺼집니다)`;
+        }
+        if (revBtn) {
+          revBtn.classList.remove('highlight');
+          revBtn.classList.add('active');
+          revBtn.textContent = '🔒 채우기 모드로 복귀';
+        }
+        if (count === 0) {
+          statusEl.classList.add('complete');
+          statusEl.textContent = `🏆 전원 해제 완료! 완벽 마스터 달성!`;
+        } else {
+          statusEl.classList.remove('complete');
+        }
       }
     }
 
@@ -3027,7 +3125,15 @@
     }
 
     function handlePenaltyItemClick(itemId) {
-      if (matchedPenaltyIds.has(itemId)) return;
+      const isMatched = matchedPenaltyIds.has(itemId);
+
+      if (!isReverseMode) {
+        // 기본 모드: 이미 맞춘 카드는 다시 누르지 않음
+        if (isMatched) return;
+      } else {
+        // 역방향 모드: 이미 해제된(안 맞춘) 카드는 누르지 않음
+        if (!isMatched) return;
+      }
 
       if (selectedPenaltyItem === itemId) {
         selectedPenaltyItem = null;
@@ -3048,24 +3154,53 @@
 
       const cardEl = document.getElementById(`penalty-card-${item.id}`);
 
-      if (item.targetId === selectedPenaltyTarget) {
-        matchedPenaltyIds.add(item.id);
-        selectedPenaltyTarget = null;
-        selectedPenaltyItem = null;
-        renderPenaltyTargets();
-        renderPenaltyItems();
-        updatePenaltyStatus();
-      } else {
-        if (cardEl) {
-          cardEl.classList.add('wrong');
-          setTimeout(() => {
-            cardEl.classList.remove('wrong');
-          }, 450);
+      if (!isReverseMode) {
+        // [기본 모드]: 맞추면 matched 추가 (초록색 켜기)
+        if (item.targetId === selectedPenaltyTarget) {
+          matchedPenaltyIds.add(item.id);
+          selectedPenaltyTarget = null;
+          selectedPenaltyItem = null;
+          renderPenaltyTargets();
+          renderPenaltyItems();
+          updatePenaltyStatus();
+        } else {
+          if (cardEl) {
+            cardEl.classList.add('wrong');
+            setTimeout(() => {
+              cardEl.classList.remove('wrong');
+            }, 450);
+          }
+          selectedPenaltyItem = null;
+          selectedPenaltyTarget = null;
+          renderPenaltyTargets();
+          renderPenaltyItems();
         }
-        selectedPenaltyItem = null;
-        selectedPenaltyTarget = null;
-        renderPenaltyTargets();
-        renderPenaltyItems();
+      } else {
+        // [역방향 해제 모드]: 맞추면 matched 제거 (초록색 끄기)
+        if (item.targetId === selectedPenaltyTarget) {
+          matchedPenaltyIds.delete(item.id);
+          if (cardEl) {
+            cardEl.classList.add('unmatched-flash');
+          }
+          selectedPenaltyTarget = null;
+          selectedPenaltyItem = null;
+          renderPenaltyTargets();
+          setTimeout(() => {
+            renderPenaltyItems();
+            updatePenaltyStatus();
+          }, 200);
+        } else {
+          if (cardEl) {
+            cardEl.classList.add('wrong');
+            setTimeout(() => {
+              cardEl.classList.remove('wrong');
+            }, 450);
+          }
+          selectedPenaltyItem = null;
+          selectedPenaltyTarget = null;
+          renderPenaltyTargets();
+          renderPenaltyItems();
+        }
       }
     }
 
