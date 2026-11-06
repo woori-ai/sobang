@@ -522,6 +522,161 @@
       color: #ffffff;
     }
 
+    /* ----------------------------------------------------
+       특별 벌금 맞추기 (인터랙티브 암기 트레이닝) 스타일
+    ---------------------------------------------------- */
+    .penalty-match-section {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+    .penalty-match-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .penalty-match-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #e6edf3;
+    }
+    .penalty-match-status {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid rgba(88, 166, 255, 0.4);
+      color: #58a6ff;
+    }
+    .penalty-match-status.complete {
+      background: rgba(46, 160, 67, 0.25);
+      border-color: #2ea043;
+      color: #7ee787;
+    }
+    .btn-penalty-reset {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-penalty-reset:hover {
+      background: #30363d;
+      color: #58a6ff;
+      border-color: #58a6ff;
+    }
+    .penalty-match-desc {
+      font-size: 0.86rem;
+      color: #8b949e;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .penalty-match-desc b {
+      color: #f0f6fc;
+    }
+
+    /* 상단: 벌금/형벌 선택 버튼군 */
+    .penalty-target-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .penalty-target-btn {
+      background: #161b22;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .penalty-target-btn:hover {
+      border-color: #8b949e;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .penalty-target-btn.active {
+      background: rgba(88, 166, 255, 0.2);
+      border-color: #58a6ff;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(88, 166, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* 하단: 무작위 셔플된 위반 내용 카드 그리드 */
+    .penalty-item-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 10px;
+    }
+    .penalty-item-card {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #e6edf3;
+      cursor: pointer;
+      transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+      user-select: none;
+      position: relative;
+    }
+    .penalty-item-card:hover:not(.matched) {
+      border-color: #58a6ff;
+      transform: translateY(-1px);
+    }
+    .penalty-item-card.active {
+      background: rgba(88, 166, 255, 0.15);
+      border-color: #58a6ff;
+      box-shadow: 0 0 10px rgba(88, 166, 255, 0.35);
+      transform: translateY(-1px);
+    }
+
+    /* 맞았을 때: 내용은 그대로 유지되며 색상만 확실하게 전환 */
+    .penalty-item-card.matched {
+      background: linear-gradient(135deg, rgba(35, 134, 54, 0.25) 0%, rgba(46, 160, 67, 0.18) 100%);
+      border: 1px solid #2ea043;
+      border-left: 4px solid #3fb950;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(46, 160, 67, 0.25);
+      cursor: default;
+    }
+    .penalty-item-card.wrong {
+      background: rgba(248, 81, 73, 0.2);
+      border-color: #f85149;
+      animation: penaltyShake 0.4s ease-in-out;
+    }
+
+    @keyframes penaltyShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
     @media (max-width: 768px) {
       .quiz-cta-inner {
         flex-direction: column;
@@ -644,6 +799,33 @@
           <h1 class="study-title" id="hero-title">로딩 중...</h1>
           <p class="study-desc" id="hero-desc">핵심 암기 요점을 숙지한 뒤, 실전 게임으로 완벽하게 체화하세요!</p>
           <div class="hero-play-buttons" id="hero-play-buttons">
+            <!-- 동적 주입 -->
+          </div>
+        </div>
+
+        <!-- 특별 벌금 맞추기 섹션 (2-2 벌칙·과태료 라운드 전용) -->
+        <div class="penalty-match-section" id="penalty-match-section" style="display: none;">
+          <div class="penalty-match-header">
+            <div class="penalty-match-title">
+              <span class="icon">⚖️</span>
+              <span>특별 벌금 맞추기</span>
+              <span class="penalty-match-status" id="penalty-match-status">0 / 16</span>
+            </div>
+            <div class="penalty-match-actions">
+              <button type="button" class="btn-penalty-reset" onclick="resetPenaltyGame()">🔄 다시 섞기</button>
+            </div>
+          </div>
+          <p class="penalty-match-desc">
+            상단 <b>벌금·과태료 금액</b>과 하단 <b>위반 내용</b>을 각각 클릭하여 짝을 맞춰보세요. (맞춘 항목은 색이 바뀌며 내용은 그대로 남아 계속 읽을 수 있습니다.)
+          </p>
+          
+          <!-- 상단: 벌금/형벌 선택 버튼군 -->
+          <div class="penalty-target-group" id="penalty-target-group">
+            <!-- 동적 주입 -->
+          </div>
+
+          <!-- 하단: 무작위 셔플된 위반 내용 카드 그리드 -->
+          <div class="penalty-item-grid" id="penalty-item-grid">
             <!-- 동적 주입 -->
           </div>
         </div>
@@ -2586,6 +2768,19 @@
       });
       grid.innerHTML = html;
 
+      // 특별 벌금 맞추기 섹션 제어 (2-2 라운드 전용)
+      const penaltySection = document.getElementById('penalty-match-section');
+      if (penaltySection) {
+        if (currentRound === '2-2') {
+          penaltySection.style.display = 'block';
+          if (!penaltyGameInitialized) {
+            initPenaltyGame();
+          }
+        } else {
+          penaltySection.style.display = 'none';
+        }
+      }
+
       // 상단 히어로 게임 & 실전 기출 액션 버튼 갱신
       const qCount = ROUND_MCQ_COUNTS[currentRound] || 0;
       const qCountText = qCount > 0 ? ` (${qCount}문항)` : '';
@@ -2594,7 +2789,16 @@
       const btnContainer = document.getElementById('hero-play-buttons');
       if (btnContainer) {
         let btnsHtml = '';
-        if (data.playUrlB) {
+        if (currentRound === '2-2') {
+          btnsHtml = `
+            <button type="button" class="btn-play-action" style="background:#1f6feb; border-color:#388bfd; color:#ffffff; cursor:pointer;" onclick="document.getElementById('penalty-match-section').scrollIntoView({behavior:'smooth'})">
+              <span>⚖️ 특별 벌금 맞추기 ▼</span>
+            </button>
+            <a href="${data.playUrl}" class="btn-play-action btn-b" title="블록 요격 낙하형 아케이드 게임">
+              <span>🎮 A 낙하 격추형 ▶</span>
+            </a>
+          `;
+        } else if (data.playUrlB) {
           btnsHtml = `
             <a href="${data.playUrl}" class="btn-play-action">
               <span>🎯 A 실전 요격형 ▶</span>
@@ -2652,6 +2856,174 @@
       const backdrop = document.getElementById('sidebar-backdrop');
       if (sidebar) sidebar.classList.remove('open');
       if (backdrop) backdrop.classList.remove('active');
+    }
+
+    // ----------------------------------------------------
+    // 특별 벌금 맞추기 인터랙티브 트레이닝 엔진 (2-2 전용)
+    // ----------------------------------------------------
+    let penaltyGameInitialized = false;
+    let selectedPenaltyTarget = null;
+    let selectedPenaltyItem = null;
+    let matchedPenaltyIds = new Set();
+
+    const PENALTY_TARGETS = [
+      { id: "5y50m", label: "5년 / 5,000만 벌금" },
+      { id: "3y30m", label: "3년 / 3,000만 벌금" },
+      { id: "1y10m", label: "1년 / 1,000만 벌금" },
+      { id: "500f",  label: "500만원 이하 과태료" },
+      { id: "300p",  label: "★300만원 벌금(형벌)" },
+      { id: "300f",  label: "300만원 이하 과태료" },
+      { id: "200f",  label: "★200만원 이하 과태료" },
+      { id: "100p",  label: "100만원 이하 벌금" },
+      { id: "100f",  label: "★100만원 이하 과태료" },
+      { id: "20f",   label: "20만원 이하 과태료" }
+    ];
+
+    const PENALTY_ITEMS = [
+      { id: 1, targetId: "5y50m", text: "소방대의 화재진압, 인명구조 또는 구급활동을 방해한 자" },
+      { id: 2, targetId: "5y50m", text: "소방용수시설 또는 비상소화장치의 효용을 해치거나 정당한 사유 없이 사용한 자" },
+      { id: 3, targetId: "5y50m", text: "소방시설을 폐쇄·차단하여 사람을 '사망'에 이르게 한 때" },
+      { id: 4, targetId: "3y30m", text: "소방관서장의 조치명령(보완, 개수, 철거 등)을 정당한 사유 없이 위반한 자" },
+      { id: 5, targetId: "3y30m", text: "소방활동을 위한 강제처분(주차차량 이동·파손 등)을 방해한 자" },
+      { id: 6, targetId: "3y30m", text: "소방시설을 폐쇄·차단하여 사람을 '상해(부상)'에 이르게 한 때" },
+      { id: 7, targetId: "1y10m", text: "소방시설등의 자체점검(작동/종합)을 전혀 실시하지 아니한 관계인" },
+      { id: 8, targetId: "1y10m", text: "소방안전관리자 업무 태만 과실로 화재를 발생시켜 공공의 위험을 발생하게 한 자" },
+      { id: 9, targetId: "500f",  text: "화재 또는 구조·구급이 필요한 상황을 119에 거짓(허위)으로 알린 자" },
+      { id: 10, targetId: "300p", text: "소방안전관리자 또는 보조자를 아예 선임하지 아니한 관계인 (미선임)" },
+      { id: 11, targetId: "300p", text: "정당한 사유 없이 소방관서의 화재안전조사를 거부·방해 또는 기피한 자" },
+      { id: 12, targetId: "300f", text: "피난시설, 방화구획 또는 방화문을 폐쇄·훼손하거나 물건을 적치한 자 (3차)" },
+      { id: 13, targetId: "200f", text: "소방안전관리자 선임 후 14일 이내에 선임신고를 하지 아니한 자" },
+      { id: 14, targetId: "200f", text: "소방시설 자체점검 결과를 지연 보고하거나 거짓으로 보고한 자" },
+      { id: 15, targetId: "100f", text: "정당한 사유 없이 소방안전관리자 실무교육을 받지 아니한 자" },
+      { id: 16, targetId: "20f",  text: "연막소독 또는 불피움을 사전 신고하지 않아 소방자동차를 오인 출동하게 한 자" }
+    ];
+
+    function initPenaltyGame() {
+      penaltyGameInitialized = true;
+      renderPenaltyTargets();
+      renderPenaltyItems();
+      updatePenaltyStatus();
+    }
+
+    function resetPenaltyGame() {
+      matchedPenaltyIds.clear();
+      selectedPenaltyTarget = null;
+      selectedPenaltyItem = null;
+      renderPenaltyTargets();
+      renderPenaltyItems(true);
+      updatePenaltyStatus();
+    }
+
+    function renderPenaltyTargets() {
+      const container = document.getElementById('penalty-target-group');
+      if (!container) return;
+      container.innerHTML = PENALTY_TARGETS.map(t => `
+        <button type="button" class="penalty-target-btn ${selectedPenaltyTarget === t.id ? 'active' : ''}" 
+                onclick="handlePenaltyTargetClick('${t.id}')">
+          ${t.label}
+        </button>
+      `).join('');
+    }
+
+    function shufflePenaltyArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    let shuffledPenaltyItems = shufflePenaltyArray(PENALTY_ITEMS);
+
+    function renderPenaltyItems(reshuffle = false) {
+      const grid = document.getElementById('penalty-item-grid');
+      if (!grid) return;
+      if (reshuffle) {
+        shuffledPenaltyItems = shufflePenaltyArray(PENALTY_ITEMS);
+      }
+      grid.innerHTML = shuffledPenaltyItems.map(item => {
+        const isMatched = matchedPenaltyIds.has(item.id);
+        const isActive = selectedPenaltyItem === item.id;
+        return `
+          <div class="penalty-item-card ${isMatched ? 'matched' : ''} ${isActive ? 'active' : ''}" 
+               id="penalty-card-${item.id}"
+               onclick="handlePenaltyItemClick(${item.id})">
+            ${item.text}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updatePenaltyStatus() {
+      const statusEl = document.getElementById('penalty-match-status');
+      if (!statusEl) return;
+      const count = matchedPenaltyIds.size;
+      const total = PENALTY_ITEMS.length;
+      statusEl.textContent = `${count} / ${total} 완료`;
+      if (count === total && total > 0) {
+        statusEl.classList.add('complete');
+        statusEl.textContent = `🎉 전원 정답 완료 (${total}/${total})`;
+      } else {
+        statusEl.classList.remove('complete');
+      }
+    }
+
+    function handlePenaltyTargetClick(targetId) {
+      if (selectedPenaltyTarget === targetId) {
+        selectedPenaltyTarget = null;
+        renderPenaltyTargets();
+        return;
+      }
+      selectedPenaltyTarget = targetId;
+      renderPenaltyTargets();
+
+      if (selectedPenaltyItem !== null) {
+        checkPenaltyMatch();
+      }
+    }
+
+    function handlePenaltyItemClick(itemId) {
+      if (matchedPenaltyIds.has(itemId)) return;
+
+      if (selectedPenaltyItem === itemId) {
+        selectedPenaltyItem = null;
+        renderPenaltyItems();
+        return;
+      }
+      selectedPenaltyItem = itemId;
+      renderPenaltyItems();
+
+      if (selectedPenaltyTarget !== null) {
+        checkPenaltyMatch();
+      }
+    }
+
+    function checkPenaltyMatch() {
+      const item = PENALTY_ITEMS.find(it => it.id === selectedPenaltyItem);
+      if (!item) return;
+
+      const cardEl = document.getElementById(`penalty-card-${item.id}`);
+
+      if (item.targetId === selectedPenaltyTarget) {
+        matchedPenaltyIds.add(item.id);
+        selectedPenaltyTarget = null;
+        selectedPenaltyItem = null;
+        renderPenaltyTargets();
+        renderPenaltyItems();
+        updatePenaltyStatus();
+      } else {
+        if (cardEl) {
+          cardEl.classList.add('wrong');
+          setTimeout(() => {
+            cardEl.classList.remove('wrong');
+          }, 450);
+        }
+        selectedPenaltyItem = null;
+        selectedPenaltyTarget = null;
+        renderPenaltyTargets();
+        renderPenaltyItems();
+      }
     }
 
     // 초기화
