@@ -629,16 +629,26 @@
     /* 하단: 무작위 셔플된 위반 내용 카드 그리드 */
     .penalty-item-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
+    }
+    @media (min-width: 768px) {
+      .penalty-item-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (min-width: 1100px) {
+      .penalty-item-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
     .penalty-item-card {
       background: #0d1117;
       border: 1px solid #30363d;
       border-radius: 8px;
-      padding: 12px 14px;
-      font-size: 0.88rem;
-      line-height: 1.5;
+      padding: 10px 12px;
+      font-size: 0.84rem;
+      line-height: 1.45;
       color: #e6edf3;
       cursor: pointer;
       transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
@@ -809,7 +819,7 @@
             <div class="penalty-match-title">
               <span class="icon">⚖️</span>
               <span>특별 벌금 맞추기</span>
-              <span class="penalty-match-status" id="penalty-match-status">0 / 16</span>
+              <span class="penalty-match-status" id="penalty-match-status">0 / 30</span>
             </div>
             <div class="penalty-match-actions">
               <button type="button" class="btn-penalty-reset" onclick="resetPenaltyGame()">🔄 다시 섞기</button>
@@ -2880,22 +2890,55 @@
     ];
 
     const PENALTY_ITEMS = [
+      // 1. [5년 / 5,000만 벌금] (최고형벌)
       { id: 1, targetId: "5y50m", text: "소방대의 화재진압, 인명구조 또는 구급활동을 방해한 자" },
       { id: 2, targetId: "5y50m", text: "소방용수시설 또는 비상소화장치의 효용을 해치거나 정당한 사유 없이 사용한 자" },
       { id: 3, targetId: "5y50m", text: "소방시설을 폐쇄·차단하여 사람을 '사망'에 이르게 한 때" },
-      { id: 4, targetId: "3y30m", text: "소방관서장의 조치명령(보완, 개수, 철거 등)을 정당한 사유 없이 위반한 자" },
-      { id: 5, targetId: "3y30m", text: "소방활동을 위한 강제처분(주차차량 이동·파손 등)을 방해한 자" },
-      { id: 6, targetId: "3y30m", text: "소방시설을 폐쇄·차단하여 사람을 '상해(부상)'에 이르게 한 때" },
-      { id: 7, targetId: "1y10m", text: "소방시설등의 자체점검(작동/종합)을 전혀 실시하지 아니한 관계인" },
-      { id: 8, targetId: "1y10m", text: "소방안전관리자 업무 태만 과실로 화재를 발생시켜 공공의 위험을 발생하게 한 자" },
-      { id: 9, targetId: "500f",  text: "화재 또는 구조·구급이 필요한 상황을 119에 거짓(허위)으로 알린 자" },
-      { id: 10, targetId: "300p", text: "소방안전관리자 또는 보조자를 아예 선임하지 아니한 관계인 (미선임)" },
-      { id: 11, targetId: "300p", text: "정당한 사유 없이 소방관서의 화재안전조사를 거부·방해 또는 기피한 자" },
-      { id: 12, targetId: "300f", text: "피난시설, 방화구획 또는 방화문을 폐쇄·훼손하거나 물건을 적치한 자 (3차)" },
-      { id: 13, targetId: "200f", text: "소방안전관리자 선임 후 14일 이내에 선임신고를 하지 아니한 자" },
-      { id: 14, targetId: "200f", text: "소방시설 자체점검 결과를 지연 보고하거나 거짓으로 보고한 자" },
-      { id: 15, targetId: "100f", text: "정당한 사유 없이 소방안전관리자 실무교육을 받지 아니한 자" },
-      { id: 16, targetId: "20f",  text: "연막소독 또는 불피움을 사전 신고하지 않아 소방자동차를 오인 출동하게 한 자" }
+      { id: 4, targetId: "5y50m", text: "출동한 소방대원에게 폭행 또는 협박을 행사하여 소방활동을 방해한 자" },
+
+      // 2. [3년 / 3,000만 벌금] (중대명령 위반)
+      { id: 5, targetId: "3y30m", text: "소방관서장의 조치명령(보완, 개수, 철거 등)을 정당한 사유 없이 위반한 자" },
+      { id: 6, targetId: "3y30m", text: "소방활동을 위한 강제처분(주차차량 이동·파손 등)을 방해한 자" },
+      { id: 7, targetId: "3y30m", text: "소방시설을 폐쇄·차단하여 사람을 '상해(부상)'에 이르게 한 때" },
+
+      // 3. [1년 / 1,000만 벌금] (자체점검 & 업무태만)
+      { id: 8, targetId: "1y10m", text: "소방시설등의 자체점검(작동/종합)을 전혀 실시하지 아니한 관계인" },
+      { id: 9, targetId: "1y10m", text: "소방안전관리자 업무 태만 과실로 화재를 발생시켜 공공의 위험을 발생하게 한 자" },
+      { id: 10, targetId: "1y10m", text: "소방시설 점검능력 평가를 받지 않고 자체점검을 대행한 관리업자" },
+
+      // 4. [500만원 이하 과태료] (허위신고 & 위험물)
+      { id: 11, targetId: "500f", text: "화재 또는 구조·구급이 필요한 상황을 119에 거짓(허위)으로 알린 자" },
+      { id: 12, targetId: "500f", text: "위험물 제조소등의 임시저장 승인을 받지 않고 지정수량 이상을 저장한 자" },
+      { id: 13, targetId: "500f", text: "위험물안전관리법상 저장·취급 세부기준을 위반한 자의 과태료" },
+
+      // 5. [★300만원 벌금 (형벌)] (사람 안 뽑음 & 조사거부)
+      { id: 14, targetId: "300p", text: "소방안전관리자 또는 보조자를 아예 선임하지 아니한 관계인 (미선임)" },
+      { id: 15, targetId: "300p", text: "정당한 사유 없이 소방관서의 화재안전조사를 거부·방해 또는 기피한 자" },
+      { id: 16, targetId: "300p", text: "화재안전조사 결과에 따른 조치명령(보완/제거)을 정당한 사유 없이 위반한 자" },
+
+      // 6. [300만원 이하 과태료] (방화문 폐쇄 3차 & 보험)
+      { id: 17, targetId: "300f", text: "피난시설, 방화구획 또는 방화문을 폐쇄·훼손하거나 물건을 적치한 자 (3차 위반)" },
+      { id: 18, targetId: "300f", text: "다중이용업소의 화재배상책임보험에 가입하지 아니한 다중이용업주" },
+      { id: 19, targetId: "300f", text: "방화구획용 방화문 주위에 물건을 쌓아 피난에 장애를 준 자 (3차 위반)" },
+
+      // 7. [★200만원 이하 과태료] (행정절차 & 태만)
+      { id: 20, targetId: "200f", text: "소방안전관리자 선임 후 14일 이내에 선임신고를 하지 아니한 자" },
+      { id: 21, targetId: "200f", text: "소방시설 자체점검 결과를 지연 보고하거나 거짓으로 보고한 자" },
+      { id: 22, targetId: "200f", text: "소방안전관리대상물의 소방계획서를 작성하지 아니한 관계인" },
+      { id: 23, targetId: "200f", text: "자위소방대 및 초기대응체계를 구성·운영하지 아니한 관계인" },
+      { id: 24, targetId: "200f", text: "소방안전관리대상물의 소방훈련 및 교육을 정당한 사유 없이 실시하지 아니한 자" },
+      { id: 25, targetId: "200f", text: "피난유도 안내정보를 정기적으로 근무자/거주자에게 제공하지 아니한 자" },
+
+      // 8. [100만원 이하 벌금] (생활안전방해 & 거짓진술)
+      { id: 26, targetId: "100p", text: "소방대의 생활안전활동(벌집 제거, 고드름 제거, 동물 포획 등)을 방해한 자" },
+      { id: 27, targetId: "100p", text: "화재조사 시 거짓 진술을 하거나 정당한 사유 없이 조사를 거부·방해한 자" },
+
+      // 9. [★100만원 이하 과태료] (실무교육 & 전용구역)
+      { id: 28, targetId: "100f", text: "정당한 사유 없이 소방안전관리자 실무교육을 받지 아니한 자" },
+      { id: 29, targetId: "100f", text: "소방자동차 전용구역에 차를 주차하거나 물건을 쌓아 가로막은 자" },
+
+      // 10. [20만원 이하 과태료] (연막소독 오인출동)
+      { id: 30, targetId: "20f",  text: "연막소독 또는 불피움을 사전 신고하지 않아 소방자동차를 오인 출동하게 한 자" }
     ];
 
     function initPenaltyGame() {
